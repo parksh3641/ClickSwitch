@@ -52,6 +52,28 @@ public class GameStateManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+
+        LoadData();
+    }
+    private void LoadData()
+    {
+        try
+        {
+            string stjs = FileIO.LoadData(DEVICESETTINGFILENAME, true);
+
+            if (!string.IsNullOrEmpty(stjs))
+            {
+                gameSettings = JsonUtility.FromJson<GameSettings>(stjs);
+            }
+            else
+            {
+                gameSettings = new GameSettings();
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Load Error \n" + e.Message);
+        }
     }
 
     public void SaveFile()

@@ -163,6 +163,27 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void OnGameStart()
+    {
+        GameStart();
+
+
+    }
+
+    public void OnGamePause()
+    {
+        GamePause();
+
+
+    }
+
+    public void OnGameEnd()
+    {
+        GameEnd();
+
+
+    }
+
     #endregion
 
     #region Corution

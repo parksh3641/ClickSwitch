@@ -2,10 +2,15 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour, IGameEvent
 {
+    [Title("Event")]
+    public UnityEvent eGamePause;
+    public UnityEvent eGameEnd;
+
     public Text timerText;
     public Text scoreText;
 
@@ -33,6 +38,10 @@ public class UIManager : MonoBehaviour, IGameEvent
     [SerializeField]
     private float score = 0;
 
+    [Title("Bool")]
+    [SerializeField]
+    private bool pause = false;
+
     [Title("Corution")]
     public IEnumerator readyTimerCorution;
     public IEnumerator timerCoroutine;
@@ -53,8 +62,9 @@ public class UIManager : MonoBehaviour, IGameEvent
         scoreText.text = "";
 
         gameMenuUI.SetActive(false);
+        gameOptionUI.SetActive(false);
 
-        for(int i = 0; i < gamePlayUI.Length; i ++)
+        for (int i = 0; i < gamePlayUI.Length; i ++)
         {
             gamePlayUI[i].SetActive(false);
         }
@@ -79,6 +89,8 @@ public class UIManager : MonoBehaviour, IGameEvent
         GameManager.MinusScore -= this.MinusScore;
     }
 
+
+    #region Button
     public void OpenMenu()
     {
         gameMenuUI.SetActive(true);
@@ -94,6 +106,21 @@ public class UIManager : MonoBehaviour, IGameEvent
         gamePlayUI[(int)type].SetActive(true);
     }
 
+    public void OpenOption()
+    {
+        eGamePause.Invoke();
+
+        if(gameOptionUI.activeSelf)
+        {
+            gameOptionUI.SetActive(false);
+        }
+        else
+        {
+            gameOptionUI.SetActive(true);
+        }
+    }
+
+    #endregion
     public void GameStart()
     {
         StartCoroutine(readyTimerCorution);
@@ -101,7 +128,14 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void GamePause()
     {
-
+        if(pause)
+        {
+            pause = false;
+        }
+        else
+        {
+            pause = true;
+        }
     }
 
     public void GameEnd()
@@ -131,13 +165,17 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         while (number > 0)
         {
-            number -= 1;
-            gameReadyText.text = number.ToString();
+            if (!pause)
+            {
+                number -= 1;
+                gameReadyText.text = number.ToString();
+            }
 
             yield return waitForSeconds;
         }
 
         gameReadyUI.SetActive(false);
+        PlusScore(0);
 
         StartCoroutine(timerCoroutine);
     }
@@ -148,8 +186,11 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         while(number > 0)
         {
-            number -= 1;
-            timerText.text = number.ToString();
+            if (!pause)
+            {
+                number -= 1;
+                timerText.text = number.ToString();
+            }
 
             yield return waitForSeconds;
         }
