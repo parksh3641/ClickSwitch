@@ -14,6 +14,7 @@ public class NormalContent : MonoBehaviour, IContentEvent
     public UnityEvent clickEvent;
 
     public Image backgroundImg;
+    public Sprite[] backgroundImgList;
     public int index = 0;
     public Text numberText;
 
@@ -29,9 +30,15 @@ public class NormalContent : MonoBehaviour, IContentEvent
         index = number;
         numberText.text = index.ToString();
 
+        backgroundImg.sprite = backgroundImgList[0];
         backgroundImg.enabled = true;
 
         isActive = true;
+    }
+
+    public void First()
+    {
+        backgroundImg.sprite = backgroundImgList[1];
     }
 
 

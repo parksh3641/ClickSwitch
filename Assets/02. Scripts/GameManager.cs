@@ -107,6 +107,8 @@ public class GameManager : MonoBehaviour
             setIndex++;
         }
 
+        normalContentList[0].First();
+
         countIndex = setIndex;
     }
 

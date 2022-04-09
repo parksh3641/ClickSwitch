@@ -9,7 +9,9 @@ public class InterfaceManager : MonoBehaviour
 public interface IContentEvent
 {
     void Reset(int number);
+    void First();
     void Choice();
+    void ChoiceAction(bool check);
 }
 
 public interface IGameEvent

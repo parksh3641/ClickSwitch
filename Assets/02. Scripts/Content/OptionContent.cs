@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,19 +10,22 @@ public class OptionContent : MonoBehaviour
     public OptionType optionType;
 
     public Image iconImg;
-    public Sprite[] iconList;
     public Text iconText;
 
     public Image buttonImg;
-    public Sprite[] buttonList;
     public Text buttonText;
+
+    [Title("SpriteList")]
+    public Sprite[] iconList;
+    public Sprite[] buttonList;
+    public Sprite[] languageList;
 
     private void Start()
     {
         switch (optionType)
         {
             case OptionType.Music:
-                if(GameStateManager.instance.Music)
+                if (GameStateManager.instance.Music)
                 {
                     iconImg.sprite = iconList[0];
                     iconText.text = "Music";
@@ -51,6 +55,12 @@ public class OptionContent : MonoBehaviour
                     buttonImg.sprite = buttonList[1];
                     buttonText.text = "OFF";
                 }
+                break;
+            case OptionType.Language:
+                iconImg.sprite = languageList[(int)GameStateManager.instance.Language];
+                iconText.text = GameStateManager.instance.Language.ToString();
+                buttonImg.sprite = buttonList[0];
+                buttonText.text = LocalizationManager.instance.GetLocalization("Change");
                 break;
         }
     }

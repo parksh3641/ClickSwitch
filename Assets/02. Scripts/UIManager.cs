@@ -34,6 +34,10 @@ public class UIManager : MonoBehaviour, IGameEvent
     public GameObject gameOptionUI;
 
     [Space]
+    [Title("OptionUI")]
+    public GameObject loginUI;
+
+    [Space]
     [Title("Value")]
     [SerializeField]
     private float score = 0;
@@ -77,6 +81,8 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         readyTimerCorution = ReadyTimerCorution(ValueManager.instance.GetReadyTimer());
         timerCoroutine = TimerCorution(ValueManager.instance.GetTimer());
+
+        loginUI.SetActive(!GameStateManager.instance.AutoLogin);
     }
 
     private void OnApplicationQuit()
@@ -118,6 +124,11 @@ public class UIManager : MonoBehaviour, IGameEvent
         {
             gameOptionUI.SetActive(true);
         }
+    }
+
+    public void OnLoginSuccess()
+    {
+        loginUI.SetActive(false);
     }
 
     #endregion

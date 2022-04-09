@@ -15,5 +15,20 @@ public enum GamePlayType
 public enum OptionType
 {
     Music = 0,
-    SFX
+    SFX,
+    Language
+}
+
+public enum LanguageType
+{
+    Korean = 0,
+    English
+}
+
+public enum LoginType
+{
+    None = 0,
+    Guest,
+    Google,
+    Facebook
 }
