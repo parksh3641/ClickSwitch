@@ -2,10 +2,13 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class LocalizationManager : MonoBehaviour
 {
     public static LocalizationManager instance;
+
+    public UnityEvent eChangeLanguage;
 
     public LocalizationDataBase localizationDataBase;
 
@@ -56,12 +59,16 @@ public class LocalizationManager : MonoBehaviour
     public void ChangeKorean()
     {
         ChangeLanguage(LanguageType.Korean);
+
+        eChangeLanguage.Invoke();
     }
 
     [Button]
     public void ChangeEnglish()
     {
         ChangeLanguage(LanguageType.English);
+
+        eChangeLanguage.Invoke();
     }
 
     public void ChangeLanguage(LanguageType type)

@@ -19,6 +19,11 @@ public class GoogleSheetDownloader : MonoBehaviour
 
             SyncFile();
         }
+
+        if(localizationDataBase.localizationDatas.Count <= 0)
+        {
+            SyncFile();
+        }
     }
 
     IEnumerator DownloadFile()

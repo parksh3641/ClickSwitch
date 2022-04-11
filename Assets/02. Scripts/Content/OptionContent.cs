@@ -9,6 +9,9 @@ public class OptionContent : MonoBehaviour
 {
     public OptionType optionType;
 
+    public UnityEvent eChangeLanguage;
+    public UnityEvent eLogout;
+
     public Image iconImg;
     public Text iconText;
 
@@ -19,8 +22,14 @@ public class OptionContent : MonoBehaviour
     public Sprite[] iconList;
     public Sprite[] buttonList;
     public Sprite[] languageList;
+    public Sprite[] loginList;
 
     private void Start()
+    {
+        InitState();
+    }
+
+    public void InitState()
     {
         switch (optionType)
         {
@@ -28,14 +37,12 @@ public class OptionContent : MonoBehaviour
                 if (GameStateManager.instance.Music)
                 {
                     iconImg.sprite = iconList[0];
-                    iconText.text = "Music";
                     buttonImg.sprite = buttonList[0];
                     buttonText.text = "ON";
                 }
                 else
                 {
                     iconImg.sprite = iconList[1];
-                    iconText.text = "Music";
                     buttonImg.sprite = buttonList[1];
                     buttonText.text = "OFF";
                 }
@@ -44,14 +51,12 @@ public class OptionContent : MonoBehaviour
                 if (GameStateManager.instance.Sfx)
                 {
                     iconImg.sprite = iconList[2];
-                    iconText.text = "Sfx";
                     buttonImg.sprite = buttonList[0];
                     buttonText.text = "ON";
                 }
                 else
                 {
                     iconImg.sprite = iconList[3];
-                    iconText.text = "Sfx";
                     buttonImg.sprite = buttonList[1];
                     buttonText.text = "OFF";
                 }
@@ -62,6 +67,12 @@ public class OptionContent : MonoBehaviour
                 buttonImg.sprite = buttonList[0];
                 buttonText.text = LocalizationManager.instance.GetLocalization("Change");
                 break;
+            case OptionType.Logout:
+                iconImg.sprite = loginList[(int)GameStateManager.instance.Login - 1];
+                iconText.text = GameStateManager.instance.Login.ToString();
+                buttonImg.sprite = buttonList[1];
+                buttonText.text = LocalizationManager.instance.GetLocalization("Logout");
+                break;
         }
     }
 
@@ -70,12 +81,11 @@ public class OptionContent : MonoBehaviour
         switch (optionType)
         {
             case OptionType.Music:
-                if(GameStateManager.instance.Music)
+                if (GameStateManager.instance.Music)
                 {
                     GameStateManager.instance.Music = false;
 
                     iconImg.sprite = iconList[1];
-                    iconText.text = "Music";
                     buttonImg.sprite = buttonList[1];
                     buttonText.text = "OFF";
 
@@ -85,7 +95,6 @@ public class OptionContent : MonoBehaviour
                     GameStateManager.instance.Music = true;
 
                     iconImg.sprite = iconList[0];
-                    iconText.text = "Music";
                     buttonImg.sprite = buttonList[0];
                     buttonText.text = "ON";
                 }
@@ -96,7 +105,6 @@ public class OptionContent : MonoBehaviour
                     GameStateManager.instance.Sfx = false;
 
                     iconImg.sprite = iconList[3];
-                    iconText.text = "Sfx";
                     buttonImg.sprite = buttonList[1];
                     buttonText.text = "OFF";
                 }
@@ -105,10 +113,17 @@ public class OptionContent : MonoBehaviour
                     GameStateManager.instance.Sfx = true;
 
                     iconImg.sprite = iconList[2];
-                    iconText.text = "Sfx";
                     buttonImg.sprite = buttonList[0];
                     buttonText.text = "ON";
                 }
+                break;
+            case OptionType.Language:
+                eChangeLanguage.Invoke();
+
+                break;
+            case OptionType.Logout:
+                eLogout.Invoke();
+
                 break;
         }
     }

@@ -26,6 +26,8 @@ public class PlayfabManager : MonoBehaviour
 
 #endif
 
+    public PlayerDataBase playerDataBase;
+
     [Header("Entity")]
     private string entityId;
     private string entityType;
@@ -43,6 +45,8 @@ public class PlayfabManager : MonoBehaviour
 #elif UNITY_IOS
         IOSActivate();
 #endif
+
+        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
     }
 
     private void Start()
@@ -340,23 +344,29 @@ public class PlayfabManager : MonoBehaviour
         jsonResult.TryGetValue("OnCloudUpdateStats() messageValue", out messageValue);
         SetEditorOnlyMessage((string)messageValue);
 
-        GetUserInventory();
+        //GetUserInventory();
     }
 
 
     IEnumerator LoadDataCoroutine()
     {
         Debug.Log("Load Data...");
+
+        yield return GetUserInventory();
+
         loginSuccessEvent.Invoke();
-        yield return null;
     }
 
-    public void GetUserInventory()
+    public bool GetUserInventory()
     {
         PlayFabClientAPI.GetUserInventory(new GetUserInventoryRequest(), result =>
         {
             var Inventory = result.Inventory;
-            int money = result.VirtualCurrency["GO"]; //Get Money
+            int gold = result.VirtualCurrency["GO"]; //Get Money
+            int crystal = result.VirtualCurrency["ST"]; //Get Money
+
+            playerDataBase.Gold = gold;
+            playerDataBase.Crystal = crystal;
 
             if (Inventory != null)
             {
@@ -371,5 +381,7 @@ public class PlayfabManager : MonoBehaviour
             }
 
         }, DisplayPlayfabError);
+
+        return true;
     }
 }

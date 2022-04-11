@@ -14,6 +14,11 @@ public class UIManager : MonoBehaviour, IGameEvent
     public Text timerText;
     public Text scoreText;
 
+    [Title("CurrneyUI")]
+    public GameObject virtualCurrencyUI;
+    public Text goldText;
+    public Text crystalText;
+
     public GameObject gameMenuUI;
     public GameObject[] gamePlayUI;
 
@@ -32,9 +37,10 @@ public class UIManager : MonoBehaviour, IGameEvent
     [Space]
     [Title("OptionUI")]
     public GameObject gameOptionUI;
+    public GameObject languageUI;
 
     [Space]
-    [Title("OptionUI")]
+    [Title("LoginUI")]
     public GameObject loginUI;
 
     [Space]
@@ -50,11 +56,16 @@ public class UIManager : MonoBehaviour, IGameEvent
     public IEnumerator readyTimerCorution;
     public IEnumerator timerCoroutine;
 
+    [Title("DataBase")]
+    public PlayerDataBase playerDataBase;
+
     WaitForSeconds waitForSeconds = new WaitForSeconds(1);
 
 
     private void Awake()
     {
+        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+
         GameManager.GameStart += this.GameStart;
         GameManager.GamePause += this.GamePause;
         GameManager.GameEnd += this.GameEnd;
@@ -67,6 +78,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         gameMenuUI.SetActive(false);
         gameOptionUI.SetActive(false);
+        languageUI.SetActive(false);
 
         for (int i = 0; i < gamePlayUI.Length; i ++)
         {
@@ -83,6 +95,8 @@ public class UIManager : MonoBehaviour, IGameEvent
         timerCoroutine = TimerCorution(ValueManager.instance.GetTimer());
 
         loginUI.SetActive(!GameStateManager.instance.AutoLogin);
+
+        VirtualCurrency();
     }
 
     private void OnApplicationQuit()
@@ -93,6 +107,22 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         GameManager.PlusScore -= this.PlusScore;
         GameManager.MinusScore -= this.MinusScore;
+    }
+
+    void VirtualCurrency()
+    {
+        goldText.text = playerDataBase.Gold.ToString();
+        crystalText.text = playerDataBase.Crystal.ToString();
+    }
+
+    void AddVirtualCurrency(MoneyType type)
+    {
+
+    }
+
+    void OnVirtualCurrency(bool check)
+    {
+        virtualCurrencyUI.SetActive(check);
     }
 
 
@@ -126,15 +156,31 @@ public class UIManager : MonoBehaviour, IGameEvent
         }
     }
 
+    public void OpenLanguage()
+    {
+        if (languageUI.activeSelf)
+        {
+            languageUI.SetActive(false);
+        }
+        else
+        {
+            languageUI.SetActive(true);
+        }
+    }
+
     public void OnLoginSuccess()
     {
         loginUI.SetActive(false);
+
+        VirtualCurrency();
     }
 
     #endregion
     public void GameStart()
     {
         StartCoroutine(readyTimerCorution);
+
+        OnVirtualCurrency(false);
     }
 
     public void GamePause()
@@ -152,6 +198,8 @@ public class UIManager : MonoBehaviour, IGameEvent
     public void GameEnd()
     {
         StopCoroutine(timerCoroutine);
+
+        OnVirtualCurrency(true);
     }
 
     public void PlusScore(int index)

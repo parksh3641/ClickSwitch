@@ -16,7 +16,8 @@ public enum OptionType
 {
     Music = 0,
     SFX,
-    Language
+    Language,
+    Logout
 }
 
 public enum LanguageType
@@ -31,4 +32,10 @@ public enum LoginType
     Guest,
     Google,
     Facebook
+}
+
+public enum MoneyType
+{
+    Gold = 0,
+    Crystal
 }
