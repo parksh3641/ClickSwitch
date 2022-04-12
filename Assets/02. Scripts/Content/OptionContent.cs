@@ -65,13 +65,13 @@ public class OptionContent : MonoBehaviour
                 iconImg.sprite = languageList[(int)GameStateManager.instance.Language];
                 iconText.text = GameStateManager.instance.Language.ToString();
                 buttonImg.sprite = buttonList[0];
-                buttonText.text = LocalizationManager.instance.GetLocalization("Change");
+                buttonText.text = LocalizationManager.instance.GetString("Change");
                 break;
             case OptionType.Logout:
                 iconImg.sprite = loginList[(int)GameStateManager.instance.Login - 1];
                 iconText.text = GameStateManager.instance.Login.ToString();
                 buttonImg.sprite = buttonList[1];
-                buttonText.text = LocalizationManager.instance.GetLocalization("Logout");
+                buttonText.text = LocalizationManager.instance.GetString("Logout");
                 break;
         }
     }

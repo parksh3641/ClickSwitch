@@ -44,6 +44,10 @@ public class UIManager : MonoBehaviour, IGameEvent
     public GameObject loginUI;
 
     [Space]
+    [Title("NotionUI")]
+    public Notion scoreNotion;
+
+    [Space]
     [Title("Value")]
     [SerializeField]
     private float score = 0;
@@ -52,9 +56,12 @@ public class UIManager : MonoBehaviour, IGameEvent
     [SerializeField]
     private bool pause = false;
 
+    [Title("Manager")]
+    public ComboManager comboManager;
+
     [Title("Corution")]
-    public IEnumerator readyTimerCorution;
-    public IEnumerator timerCoroutine;
+    IEnumerator readyTimerCorution;
+    IEnumerator timerCoroutine;
 
     [Title("DataBase")]
     public PlayerDataBase playerDataBase;
@@ -206,12 +213,26 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         score += index;
         scoreText.text = "SCORE : " + score.ToString();
+
+        scoreNotion.gameObject.SetActive(false);
+        scoreNotion.txt.color = new Color(0, 1, 0);
+        scoreNotion.txt.text = "+" + index.ToString();
+        scoreNotion.gameObject.SetActive(true);
+
+        comboManager.OnStartCombo();
     }
 
     public void MinusScore(int index)
     {
         score = (score - index >= 0) ? score -= index : score = 0;
         scoreText.text = "SCORE : " + score.ToString();
+
+        scoreNotion.gameObject.SetActive(false);
+        scoreNotion.txt.color = new Color(1, 0, 0);
+        scoreNotion.txt.text = "-" + index.ToString();
+        scoreNotion.gameObject.SetActive(true);
+
+        comboManager.OnStopCombo();
     }
 
     #region Corution
@@ -234,7 +255,7 @@ public class UIManager : MonoBehaviour, IGameEvent
         }
 
         gameReadyUI.SetActive(false);
-        PlusScore(0);
+        //PlusScore(0);
 
         StartCoroutine(timerCoroutine);
     }

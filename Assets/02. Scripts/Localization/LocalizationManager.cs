@@ -27,7 +27,7 @@ public class LocalizationManager : MonoBehaviour
         localizationContentList.Add(content);
     }
 
-    public string GetLocalization(string name)
+    public string GetString(string name)
     {
         string str = "";
 

@@ -12,6 +12,9 @@ public class ValueManager : MonoBehaviour
     [SerializeField]
     private float timer = 30;
 
+    [SerializeField]
+    private float comboTimer = 0.5f;
+
 
 
     private void Awake()
@@ -28,5 +31,10 @@ public class ValueManager : MonoBehaviour
     public float GetTimer()
     {
         return timer;
+    }
+
+    public float GetComboTimer()
+    {
+        return comboTimer;
     }
 }

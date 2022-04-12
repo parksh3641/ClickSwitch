@@ -16,13 +16,13 @@ public class LocalizationContent : MonoBehaviour
 
     private void Start()
     {
-        text.text = LocalizationManager.instance.GetLocalization(name);
+        text.text = LocalizationManager.instance.GetString(name);
 
         LocalizationManager.instance.AddContent(this);
     }
 
     public void ReLoad()
     {
-        text.text = LocalizationManager.instance.GetLocalization(name);
+        text.text = LocalizationManager.instance.GetString(name);
     }
 }
