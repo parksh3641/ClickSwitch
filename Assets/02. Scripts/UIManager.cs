@@ -29,9 +29,10 @@ public class UIManager : MonoBehaviour, IGameEvent
     [Space]
     [Title("EndUI")]
     public GameObject gameEndUI;
-    public Text newRecordText;
+    public GameObject newRecordObj;
     public Text nowScoreText;
     public Text bestScoreText;
+    public Text getGoldText;
     public Text rankText;
 
     [Space]
@@ -94,6 +95,8 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         gameReadyUI.SetActive(false);
 
+        gameEndUI.SetActive(false);
+
     }
 
     private void Start()
@@ -149,6 +152,14 @@ public class UIManager : MonoBehaviour, IGameEvent
         gamePlayUI[(int)type].SetActive(true);
     }
 
+    public void CloseGamePlayUI()
+    {
+        for(int i = 0; i < gamePlayUI.Length; i ++)
+        {
+            gamePlayUI[i].SetActive(false);
+        }
+    }
+
     public void OpenOption()
     {
         eGamePause.Invoke();
@@ -185,7 +196,9 @@ public class UIManager : MonoBehaviour, IGameEvent
     #endregion
     public void GameStart()
     {
-        StartCoroutine(readyTimerCorution);
+        Debug.Log("Game Start");
+
+        StartCoroutine("ReadyTimerCorution", ValueManager.instance.GetReadyTimer());
 
         OnVirtualCurrency(false);
     }
@@ -204,10 +217,64 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void GameEnd()
     {
-        StopCoroutine(timerCoroutine);
+        Debug.Log("Game End");
+
+        comboManager.OnStopCombo();
 
         OnVirtualCurrency(true);
+
+        scoreText.text = "";
+
+        CloseGamePlayUI();
+
+        gameEndUI.SetActive(true);
+
+        int bestScore = playerDataBase.BestScore;
+
+        if(Comparison(score,bestScore))
+        {
+            Debug.Log("High Score !");
+            newRecordObj.SetActive(true);
+
+            playerDataBase.BestScore = (int)score;
+
+            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Score", (int)score);
+        }
+        else
+        {
+            newRecordObj.SetActive(false);
+        }
+
+        nowScoreText.text = "SCORE" + "\n" + score.ToString();
+        bestScoreText.text = "BEST" + "\n" + bestScore.ToString();
+        getGoldText.text = "Coin" + "\n" + (score / 10).ToString();
+        rankText.text = "µî¼ö" + "\n" + "99 ¡æ 99";
+
+        GameReset();
     }
+
+    void GameReset()
+    {
+        score = 0;
+    }
+
+    public bool Comparison(float A, float B)
+    {
+        bool check = false;
+
+        if(A > B)
+        {
+            check = true;
+        }
+
+        return check;
+    }
+
+    public void CloseGameEnd()
+    {
+        gameEndUI.SetActive(false);
+    }
+
 
     public void PlusScore(int index)
     {
@@ -257,7 +324,7 @@ public class UIManager : MonoBehaviour, IGameEvent
         gameReadyUI.SetActive(false);
         //PlusScore(0);
 
-        StartCoroutine(timerCoroutine);
+        StartCoroutine("TimerCorution", ValueManager.instance.GetTimer());
     }
 
     private IEnumerator TimerCorution(float time)
@@ -274,6 +341,10 @@ public class UIManager : MonoBehaviour, IGameEvent
 
             yield return waitForSeconds;
         }
+
+        timerText.text = "";
+
+        GameEnd();
     }
 
     #endregion

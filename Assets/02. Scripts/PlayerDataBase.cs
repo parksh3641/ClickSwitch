@@ -11,6 +11,9 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private int crystal = 0;
 
+    [SerializeField]
+    private int bestScore = 0;
+
     public int Gold
     {
         get
@@ -32,6 +35,18 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             crystal = value;
+        }
+    }
+
+    public int BestScore
+    {
+        get
+        {
+            return bestScore;
+        }
+        set
+        {
+            bestScore = value;
         }
     }
 

@@ -5,6 +5,7 @@ using PlayFab.ClientModels;
 using PlayFab.Json;
 using PlayFab.ProfilesModels;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -354,6 +355,10 @@ public class PlayfabManager : MonoBehaviour
 
         yield return GetUserInventory();
 
+        yield return GetStatistics();
+
+        Debug.Log("Load Data Complete");
+
         loginSuccessEvent.Invoke();
     }
 
@@ -383,5 +388,77 @@ public class PlayfabManager : MonoBehaviour
         }, DisplayPlayfabError);
 
         return true;
+    }
+
+    public bool GetStatistics()
+    {
+        PlayFabClientAPI.GetPlayerStatistics(
+           new GetPlayerStatisticsRequest(),
+           (Action<GetPlayerStatisticsResult>)((result) =>
+           {
+               foreach (var statistics in result.Statistics)
+               {
+                   switch (statistics.StatisticName)
+                   {
+                       //case "":
+                       //    string text = statistics.Value.ToString();
+                       //    break;
+                       case "Score":
+                           playerDataBase.BestScore = statistics.Value;
+                           break;
+                   }
+               }
+           })
+           , (error) =>
+           {
+
+           });
+
+        return true;
+    }
+
+    public void UpdatePlayerStatistics(List<StatisticUpdate> data)
+    {
+        if (NetworkConnect.instance.CheckConnectInternet())
+        {
+            try
+            {
+                PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+                {
+                    FunctionName = "UpdatePlayerStatistics",
+                    FunctionParameter = new
+                    {
+                        Statistics = data
+                    },
+                    GeneratePlayStreamEvent = true,
+                }, OnCloudUpdateStats
+                , DisplayPlayfabError);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
+        }
+        else
+        {
+            Debug.LogError("Error : Internet Disconnected\nCheck Internet State");
+        }
+    }
+
+    public void UpdatePlayerStatisticsInsert(string name, int value)
+    {
+        PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+        {
+            FunctionName = "UpdatePlayerStatistics",
+            FunctionParameter = new
+            {
+                Statistics = new List<StatisticUpdate>
+                {
+                    new StatisticUpdate {StatisticName = name, Value = value}
+                }
+            },
+            GeneratePlayStreamEvent = true,
+        }, OnCloudUpdateStats
+, DisplayPlayfabError);
     }
 }

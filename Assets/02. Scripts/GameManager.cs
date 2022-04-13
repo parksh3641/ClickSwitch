@@ -119,6 +119,10 @@ public class GameManager : MonoBehaviour
     {
         uiManager.OpenGamePlayUI(gamePlayType);
 
+        nowIndex = 0;
+        setIndex = 1;
+        countIndex = 0;
+
         CreateUnDuplicateRandom();
 
         GameStart();

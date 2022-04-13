@@ -35,7 +35,7 @@ public class ComboManager : MonoBehaviour
 
     public void OnStartCombo()
     {
-        Debug.Log("Combo Up");
+        Debug.Log("Combo");
         value += 1;
 
         timer = comboTimer;
@@ -49,8 +49,6 @@ public class ComboManager : MonoBehaviour
 
     public void OnStopCombo()
     {
-        Debug.Log("Combo Stop");
-
         value = 0;
 
         timer = 0;
