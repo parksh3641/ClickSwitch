@@ -15,6 +15,8 @@ public class ValueManager : MonoBehaviour
     [SerializeField]
     private float comboTimer = 0.5f;
 
+    [SerializeField]
+    private float moleTimer = 3.0f;
 
 
     private void Awake()
@@ -36,5 +38,10 @@ public class ValueManager : MonoBehaviour
     public float GetComboTimer()
     {
         return comboTimer;
+    }
+
+    public float GetMoleTimer()
+    {
+        return moleTimer;
     }
 }

@@ -14,7 +14,8 @@ public class GameManager : MonoBehaviour
 
 
     [Title("GridTransform")]
-    public Transform normalContentTransform;
+    public Transform normalTransform;
+    public Transform moleCatchTransform;
 
 
 
@@ -36,6 +37,7 @@ public class GameManager : MonoBehaviour
     [Title("List")]
     private List<int> numberList = new List<int>();
     private List<NormalContent> normalContentList = new List<NormalContent>();
+    private List<NormalContent> moleCatchContentList = new List<NormalContent>();
 
 
     [Title("Manager")]
@@ -58,9 +60,19 @@ public class GameManager : MonoBehaviour
             NormalContent content = Instantiate(normalContent);
             content.transform.localPosition = new Vector3(0, 0, 0);
             content.transform.localScale = new Vector3(1, 1, 1);
-            content.transform.parent = normalContentTransform;
+            content.transform.parent = normalTransform;
             content.gameObject.SetActive(false);
             normalContentList.Add(content);
+        }
+
+        for (int i = 0; i < 9; i++)
+        {
+            NormalContent content = Instantiate(normalContent);
+            content.transform.localPosition = new Vector3(0, 0, 0);
+            content.transform.localScale = new Vector3(1, 1, 1);
+            content.transform.parent = moleCatchTransform;
+            content.gameObject.SetActive(false);
+            moleCatchContentList.Add(content);
         }
     }
 
@@ -123,7 +135,16 @@ public class GameManager : MonoBehaviour
         setIndex = 1;
         countIndex = 0;
 
-        CreateUnDuplicateRandom();
+        switch (gamePlayType)
+        {
+            case GamePlayType.Normal:
+                CreateUnDuplicateRandom();
+                break;
+            case GamePlayType.MoleCatch:
+                break;
+            case GamePlayType.BreakStone:
+                break;
+        }
 
         GameStart();
     }
@@ -133,9 +154,23 @@ public class GameManager : MonoBehaviour
         uiManager.OpenMenu();
     }
 
-    public void OnSetGameType1() //모드 선택 창에서 옵션 선택
+    public void OnSetGameType(int number) //모드 선택 창에서 옵션 선택
     {
-        gamePlayType = GamePlayType.Normal;
+        switch(number)
+        {
+            case 0:
+                gamePlayType = GamePlayType.Normal;
+
+                break;
+            case 1:
+                gamePlayType = GamePlayType.MoleCatch;
+
+                break;
+            case 2:
+                gamePlayType = GamePlayType.BreakStone;
+
+                break;
+        }
 
         uiManager.CloseMenu();
     }

@@ -59,6 +59,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     [Title("Manager")]
     public ComboManager comboManager;
+    public RankingManager rankingManager;
 
     [Title("Corution")]
     IEnumerator readyTimerCorution;
@@ -132,6 +133,8 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     void OnVirtualCurrency(bool check)
     {
+        VirtualCurrency();
+
         virtualCurrencyUI.SetActive(check);
     }
 
@@ -186,6 +189,11 @@ public class UIManager : MonoBehaviour, IGameEvent
         }
     }
 
+    public void OpenRanking()
+    {
+        rankingManager.OpenRanking();
+    }
+
     public void OnLoginSuccess()
     {
         loginUI.SetActive(false);
@@ -238,11 +246,19 @@ public class UIManager : MonoBehaviour, IGameEvent
 
             playerDataBase.BestScore = (int)score;
 
-            PlayfabManager.instance.UpdatePlayerStatisticsInsert("Score", (int)score);
+
+            if(PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Score", (int)score);
         }
         else
         {
             newRecordObj.SetActive(false);
+        }
+
+        int money = (int)(score / 10);
+
+        if (PlayfabManager.instance.isActive)
+        {
+            PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, money);
         }
 
         nowScoreText.text = "SCORE" + "\n" + score.ToString();

@@ -18,11 +18,12 @@ public class NormalContent : MonoBehaviour, IContentEvent
     public int index = 0;
     public Text numberText;
 
-
     void Awake()
     {
         clickSoundEvent.AddListener(() => { GameObject.FindWithTag("ClickSound").GetComponent<AudioSource>().Play(); });
         clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().CheckNumber(index, ChoiceAction); });
+
+        numberText.text = "";
     }
 
     public void Reset(int number)

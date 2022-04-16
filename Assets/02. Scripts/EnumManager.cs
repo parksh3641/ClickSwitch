@@ -9,7 +9,9 @@ public class EnumManager : MonoBehaviour
 
 public enum GamePlayType
 {
-    Normal = 0
+    Normal = 0,
+    MoleCatch,
+    BreakStone
 }
 
 public enum OptionType

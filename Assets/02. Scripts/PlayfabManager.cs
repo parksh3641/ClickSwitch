@@ -22,6 +22,8 @@ public class PlayfabManager : MonoBehaviour
     [ShowInInspector]
     string customId = "";
 
+    public bool isActive = false;
+
 #if UNITY_IOS
     private string AppleUserIdKey = "";
 
@@ -359,6 +361,8 @@ public class PlayfabManager : MonoBehaviour
 
         Debug.Log("Load Data Complete");
 
+        isActive = true;
+
         loginSuccessEvent.Invoke();
     }
 
@@ -460,5 +464,118 @@ public class PlayfabManager : MonoBehaviour
             GeneratePlayStreamEvent = true,
         }, OnCloudUpdateStats
 , DisplayPlayfabError);
+    }
+
+    public void UpdateAddCurrency(MoneyType type ,int number)
+    {
+        string currentType = "";
+
+        switch (type)
+        {
+            case MoneyType.Gold:
+                currentType = "GO";
+                break;
+            case MoneyType.Crystal:
+                currentType = "ST";
+                break;
+        }
+
+        if (NetworkConnect.instance.CheckConnectInternet())
+        {
+            try
+            {
+                PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+                {
+                    FunctionName = "AddMoney",
+                    FunctionParameter = new { currencyType = currentType, currencyAmount = number },
+                    GeneratePlayStreamEvent = true,
+                }, OnCloudUpdateStats, DisplayPlayfabError);
+
+                playerDataBase.Gold += number;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
+        }
+        else
+        {
+            Debug.LogError("Error : Internet Disconnected\nCheck Internet State");
+        }
+
+    }
+
+    public void UpdateSubtractCurrency(MoneyType type, int number)
+    {
+        string currentType = "";
+
+        switch (type)
+        {
+            case MoneyType.Gold:
+                currentType = "GO";
+                break;
+            case MoneyType.Crystal:
+                currentType = "ST";
+                break;
+        }
+
+        if (NetworkConnect.instance.CheckConnectInternet())
+        {
+            try
+            {
+                PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+                {
+                    FunctionName = "SubtractMoney",
+                    FunctionParameter = new { currencyType = currentType, currencyAmount = number },
+                    GeneratePlayStreamEvent = true,
+                }, OnCloudUpdateStats, DisplayPlayfabError);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
+        }
+        else
+        {
+            Debug.LogError("Error : Internet Disconnected\nCheck Internet State");
+        }
+
+    }
+
+    public void GetLeaderboarder(string name, Action<GetLeaderboardResult> successCalback)
+    {
+        var requestLeaderboard = new GetLeaderboardRequest
+        {
+            StartPosition = 0,
+            StatisticName = name,
+            MaxResultsCount = 100,
+
+            ProfileConstraints = new PlayerProfileViewConstraints()
+            {
+                ShowLocations = true,
+                ShowDisplayName = true,
+                ShowStatistics = true
+            }
+        };
+
+        PlayFabClientAPI.GetLeaderboard(requestLeaderboard, successCalback, DisplayPlayfabError);
+    }
+
+    public void SetProfileLanguage(string language)
+    {
+        EntityKey entity = new EntityKey();
+        entity.Id = entityId;
+        entity.Type = entityType;
+
+        var request = new SetProfileLanguageRequest
+        {
+            Language = language,
+            ExpectedVersion = 0,
+            Entity = entity
+        };
+        PlayFabProfilesAPI.SetProfileLanguage(request, res =>
+        {
+            Debug.Log("The language on the entity's profile has been updated.");
+        }, FailureCallback);
     }
 }
