@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
 
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(1);
+    WaitForSeconds waitForHalfSeconds = new WaitForSeconds(0.5f);
+    WaitForSeconds waitForMoleCatchSeconds;
 
 
 
@@ -32,6 +34,7 @@ public class GameManager : MonoBehaviour
     private int nowIndex = 0; //현재 값
     private int setIndex = 1; //세팅용 값
     private int countIndex = 0; //카운팅 값
+    private int moleIndex = 0; //두더지 위치 값
 
 
     [Title("List")]
@@ -46,7 +49,7 @@ public class GameManager : MonoBehaviour
 
 
     public delegate void GameEvent();
-    public static event GameEvent GameStart, GamePause, GameEnd;
+    public static event GameEvent eGameStart, eGamePause, eGameEnd;
 
     public delegate void ScoreEvent(int number);
     public static event ScoreEvent PlusScore, MinusScore;
@@ -112,7 +115,7 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < normalContentList.Count; i++)
         {
-            normalContentList[i].Reset(setIndex);
+            normalContentList[i].NormalReset(setIndex);
             normalContentList[i].gameObject.SetActive(false);
             normalContentList[i].gameObject.SetActive(true);
 
@@ -122,6 +125,18 @@ public class GameManager : MonoBehaviour
         normalContentList[0].First();
 
         countIndex = setIndex;
+    }
+
+    private void CreateMoleRandom()
+    {
+        for (int i = 0; i < moleCatchContentList.Count; i++)
+        {
+            moleCatchContentList[i].OnReset();
+            moleCatchContentList[i].gameObject.SetActive(false);
+            moleCatchContentList[i].gameObject.SetActive(true);
+        }
+
+        waitForMoleCatchSeconds = new WaitForSeconds(ValueManager.instance.GetMoleTimer());
     }
 
     #endregion
@@ -135,18 +150,29 @@ public class GameManager : MonoBehaviour
         setIndex = 1;
         countIndex = 0;
 
+        for(int i = 0; i< normalContentList.Count; i ++)
+        {
+            normalContentList[i].Initialize(gamePlayType);
+        }
+
+        for (int i = 0; i < moleCatchContentList.Count; i++)
+        {
+            moleCatchContentList[i].Initialize(gamePlayType);
+        }
+
         switch (gamePlayType)
         {
             case GamePlayType.Normal:
                 CreateUnDuplicateRandom();
                 break;
             case GamePlayType.MoleCatch:
+                CreateMoleRandom();
                 break;
             case GamePlayType.BreakStone:
                 break;
         }
 
-        GameStart();
+        eGameStart();
     }
 
     public void OpenGameMenuButton() //게임 시작전 모드 선택 창 열기
@@ -171,6 +197,8 @@ public class GameManager : MonoBehaviour
 
                 break;
         }
+
+        GameStateManager.instance.GamePlayType = gamePlayType;
 
         uiManager.CloseMenu();
     }
@@ -204,23 +232,50 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void CheckMole(int index, System.Action<bool> action)
+    {
+        Debug.Log("Click");
+
+        if(index == moleIndex)
+        {
+            Debug.Log("Success");
+            action(true);
+
+            PlusScore(10);
+        }
+        else
+        {
+            Debug.Log("Failure");
+            action(false);
+
+            MinusScore(5);
+        }
+    }
+
     public void OnGameStart()
     {
-        GameStart();
+        switch (gamePlayType)
+        {
+            case GamePlayType.Normal:
 
-
+                break;
+            case GamePlayType.MoleCatch:
+                StartCoroutine("MoleCatchCorution");
+                break;
+            case GamePlayType.BreakStone:
+                break;
+        }
     }
 
     public void OnGamePause()
     {
-        GamePause();
-
+        eGamePause();
 
     }
 
     public void OnGameEnd()
     {
-        GameEnd();
+        StopCoroutine("MoleCatchCorution");
 
 
     }
@@ -228,7 +283,24 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Corution
+    IEnumerator MoleCatchCorution()
+    {
+        ShuffleList(moleCatchContentList);
 
+        moleIndex = 0;
+
+        moleCatchContentList[0].First();
+
+        yield return waitForHalfSeconds;
+
+        moleIndex = -1;
+
+        moleCatchContentList[0].OnReset();
+
+        yield return waitForMoleCatchSeconds;
+
+        StartCoroutine(MoleCatchCorution());
+    }
 
     #endregion
 }

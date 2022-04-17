@@ -4,15 +4,51 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public AudioSource musicAudio;
+
+    public AudioSource[] sfxAudio;
+
+    public void Awake()
     {
-        
+        GameStateManager.eMusic += OnSwitchMusic;
+        GameStateManager.eSfx += OnSwitchSFX;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Start()
     {
-        
+        OnSwitchMusic(GameStateManager.instance.Music);
+        OnSwitchSFX(GameStateManager.instance.Sfx);
     }
+
+
+    public void OnSwitchMusic(bool check)
+    {
+        if(check)
+        {
+            musicAudio.Play();
+        }
+        else
+        {
+            musicAudio.Pause();
+        }
+    }
+
+    public void OnSwitchSFX(bool check)
+    {
+        if (check)
+        {
+            for(int i = 0; i < sfxAudio.Length; i ++)
+            {
+                sfxAudio[i].volume = 1;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < sfxAudio.Length; i++)
+            {
+                sfxAudio[i].volume = 0;
+            }
+        }
+    }
+
 }

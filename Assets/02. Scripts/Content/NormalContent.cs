@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class NormalContent : MonoBehaviour, IContentEvent
 {
+    GamePlayType gamePlayType = GamePlayType.Normal;
+
     [SerializeField]
     private bool isActive = false;
 
@@ -21,12 +23,37 @@ public class NormalContent : MonoBehaviour, IContentEvent
     void Awake()
     {
         clickSoundEvent.AddListener(() => { GameObject.FindWithTag("ClickSound").GetComponent<AudioSource>().Play(); });
-        clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().CheckNumber(index, ChoiceAction); });
 
         numberText.text = "";
     }
 
-    public void Reset(int number)
+    public void Initialize(GamePlayType type)
+    {
+        gamePlayType = type;
+
+        clickEvent.RemoveAllListeners();
+
+        switch (type)
+        {
+            case GamePlayType.Normal:
+                clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().CheckNumber(index, ChoiceAction); });
+                break;
+            case GamePlayType.MoleCatch:
+                clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().CheckMole(index, ChoiceMoleAction); });
+                break;
+            case GamePlayType.BreakStone:
+                break;
+        }
+    }
+
+    public void OnReset()
+    {
+        backgroundImg.sprite = backgroundImgList[0];
+
+        isActive = true;
+    }
+
+    public void NormalReset(int number)
     {
         index = number;
         numberText.text = index.ToString();
@@ -62,5 +89,20 @@ public class NormalContent : MonoBehaviour, IContentEvent
             backgroundImg.enabled = false;
             numberText.text = "";
         }
+    }
+
+    public void ChoiceMoleAction(bool check)
+    {
+        if (check)
+        {
+            isActive = false;
+
+            backgroundImg.sprite = backgroundImgList[0];
+        }
+    }
+
+    public int GetIndex()
+    {
+        return index;
     }
 }

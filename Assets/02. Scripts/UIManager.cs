@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour, IGameEvent
 {
     [Title("Event")]
+    public UnityEvent eGameStart;
     public UnityEvent eGamePause;
     public UnityEvent eGameEnd;
 
@@ -32,6 +33,8 @@ public class UIManager : MonoBehaviour, IGameEvent
     public GameObject newRecordObj;
     public Text nowScoreText;
     public Text bestScoreText;
+    public Text nowComboText;
+    public Text bestComboText;
     public Text getGoldText;
     public Text rankText;
 
@@ -75,9 +78,9 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
 
-        GameManager.GameStart += this.GameStart;
-        GameManager.GamePause += this.GamePause;
-        GameManager.GameEnd += this.GameEnd;
+        GameManager.eGameStart += this.GameStart;
+        GameManager.eGamePause += this.GamePause;
+        GameManager.eGameEnd += this.GameEnd;
 
         GameManager.PlusScore += this.PlusScore;
         GameManager.MinusScore += this.MinusScore;
@@ -112,9 +115,9 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     private void OnApplicationQuit()
     {
-        GameManager.GameStart -= this.GameStart;
-        GameManager.GamePause -= this.GamePause;
-        GameManager.GameEnd -= this.GameEnd;
+        GameManager.eGameStart -= this.GameStart;
+        GameManager.eGamePause -= this.GamePause;
+        GameManager.eGameEnd -= this.GameEnd;
 
         GameManager.PlusScore -= this.PlusScore;
         GameManager.MinusScore -= this.MinusScore;
@@ -229,41 +232,95 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         comboManager.OnStopCombo();
 
-        OnVirtualCurrency(true);
-
         scoreText.text = "";
 
         CloseGamePlayUI();
 
         gameEndUI.SetActive(true);
 
-        int bestScore = playerDataBase.BestScore;
+        int bestScore = 0;
+        int bestCombo = 0;
+        int combo = comboManager.GetCombo();
+
+        switch (GameStateManager.instance.GamePlayType)
+        {
+            case GamePlayType.Normal:
+                bestScore = playerDataBase.BestScore;
+                bestCombo = playerDataBase.BestCombo;
+                break;
+            case GamePlayType.MoleCatch:
+                bestScore = playerDataBase.BestMoleCatchScore;
+                bestCombo = playerDataBase.BestMoleCatchCombo;
+                break;
+            case GamePlayType.BreakStone:
+                break;
+        }
 
         if(Comparison(score,bestScore))
         {
-            Debug.Log("High Score !");
+            Debug.Log("Best Score !");
             newRecordObj.SetActive(true);
 
-            playerDataBase.BestScore = (int)score;
+            switch (GameStateManager.instance.GamePlayType)
+            {
+                case GamePlayType.Normal:
+                    playerDataBase.BestScore = (int)score;
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Score", (int)score);
+                    break;
+                case GamePlayType.MoleCatch:
+                    playerDataBase.BestMoleCatchScore = (int)score;
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("MoleCatchScore", (int)score);
+                    break;
+                case GamePlayType.BreakStone:
+                    break;
+            }
 
-
-            if(PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Score", (int)score);
+            bestScore = (int)score;
         }
         else
         {
             newRecordObj.SetActive(false);
         }
 
+
+        if(Comparison(combo, bestCombo))
+        {
+            Debug.Log("Best Combo !");
+
+            switch (GameStateManager.instance.GamePlayType)
+            {
+                case GamePlayType.Normal:
+                    playerDataBase.BestCombo = combo;
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Combo", combo);
+                    break;
+                case GamePlayType.MoleCatch:
+                    playerDataBase.BestMoleCatchCombo = combo;
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("MoleCatchCombo", combo);
+                    break;
+                case GamePlayType.BreakStone:
+                    break;
+            }
+
+            bestCombo = combo;
+        }
+
+
         int money = (int)(score / 10);
 
         if (PlayfabManager.instance.isActive)
         {
             PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, money);
+
+            playerDataBase.Gold += money;
         }
 
         nowScoreText.text = "SCORE" + "\n" + score.ToString();
         bestScoreText.text = "BEST" + "\n" + bestScore.ToString();
-        getGoldText.text = "Coin" + "\n" + (score / 10).ToString();
+
+        nowComboText.text = "COMBO" + "\n" + combo.ToString();
+        bestComboText.text = "BEST" + "\n" + bestCombo.ToString();
+
+        getGoldText.text = "Coin" + "\n" + ((int)(score / 10)).ToString();
         rankText.text = "µî¼ö" + "\n" + "99 ¡æ 99";
 
         GameReset();
@@ -272,6 +329,10 @@ public class UIManager : MonoBehaviour, IGameEvent
     void GameReset()
     {
         score = 0;
+
+        OnVirtualCurrency(true);
+
+        eGameEnd.Invoke();
     }
 
     public bool Comparison(float A, float B)
@@ -339,6 +400,8 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         gameReadyUI.SetActive(false);
         //PlusScore(0);
+
+        eGameStart.Invoke();
 
         StartCoroutine("TimerCorution", ValueManager.instance.GetTimer());
     }

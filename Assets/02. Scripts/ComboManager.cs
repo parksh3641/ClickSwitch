@@ -12,18 +12,21 @@ public class ComboManager : MonoBehaviour
 
     public Notion notion;
 
-    private float value = 0;
+    private int comboIndex = 0;
     [SerializeField]
     private float timer = 0;
     private float comboTimer = 0;
 
+    bool pause = false;
 
     private void Awake()
     {
         comboText.text = "";
         fillamount.fillAmount = 0;
 
-        value = 0;
+        comboIndex = 0;
+
+        GameManager.eGamePause += GamePause;
     }
 
     private void Start()
@@ -36,11 +39,14 @@ public class ComboManager : MonoBehaviour
     public void OnStartCombo()
     {
         Debug.Log("Combo");
-        value += 1;
+
+        if (timer == 0) comboIndex = 0;
+
+        comboIndex += 1;
 
         timer = comboTimer;
         fillamount.fillAmount = 1;
-        comboText.text = "Combo : " + value.ToString();
+        comboText.text = "COMBO : " + comboIndex.ToString();
 
         notion.gameObject.SetActive(false);
         notion.txt.text = "+" + 1.ToString();
@@ -49,28 +55,46 @@ public class ComboManager : MonoBehaviour
 
     public void OnStopCombo()
     {
-        value = 0;
-
         timer = 0;
         fillamount.fillAmount = 0;
-
-        comboText.text = "";
     }
 
     IEnumerator TimerCoroutine()
     {
-        if(timer > 0)
+        if (!pause)
         {
-            timer -= 0.01f;
+            if (timer > 0)
+            {
+                timer -= 0.01f;
 
-            fillamount.fillAmount = timer / comboTimer;
-        }
-        else
-        {
-            OnStopCombo();
+                fillamount.fillAmount = timer / comboTimer;
+            }
+            else
+            {
+                OnStopCombo();
+            }
         }
 
         yield return new WaitForSeconds(0.01f);
         StartCoroutine(TimerCoroutine());
+    }
+
+    public int GetCombo()
+    {
+        comboText.text = "";
+
+        return comboIndex;
+    }
+
+    void GamePause()
+    {
+        if(pause)
+        {
+            pause = false;
+        }
+        else
+        {
+            pause = true;
+        }
     }
 }

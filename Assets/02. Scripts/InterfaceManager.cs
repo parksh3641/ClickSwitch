@@ -8,10 +8,14 @@ public class InterfaceManager : MonoBehaviour
 
 public interface IContentEvent
 {
-    void Reset(int number);
+    void Initialize(GamePlayType type);
+    void OnReset();
+    void NormalReset(int number);
     void First();
     void Choice();
     void ChoiceAction(bool check);
+
+    int GetIndex();
 }
 
 public interface IGameEvent

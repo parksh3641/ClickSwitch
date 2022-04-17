@@ -14,6 +14,9 @@ public class GameStateManager : MonoBehaviour
     [NonSerialized]
     public const string DEVICESETTINGFILENAME = "DeviceSetting.bin";
 
+    public delegate void ChangeEvent(bool check);
+    public static event ChangeEvent eMusic, eSfx;
+
     [Serializable]
     public class GameSettings
     {
@@ -33,6 +36,7 @@ public class GameStateManager : MonoBehaviour
 
         [Space]
         [Title("Setting")]
+        public GamePlayType gamePlayType = GamePlayType.Normal;
         public bool music = false;
         public bool sfx = false;
     }
@@ -116,6 +120,19 @@ public class GameStateManager : MonoBehaviour
         }
     }
 
+    public GamePlayType GamePlayType
+    {
+        get
+        {
+            return gameSettings.gamePlayType;
+        }
+        set
+        {
+            gameSettings.gamePlayType = value;
+            SaveFile();
+        }
+    }
+
     public bool Music
     {
         get
@@ -125,6 +142,7 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.music = value;
+            eMusic(value);
             SaveFile();
         }
     }
@@ -138,6 +156,7 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.sfx = value;
+            eSfx(value);
             SaveFile();
         }
     }

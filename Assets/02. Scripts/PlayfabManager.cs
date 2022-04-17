@@ -355,6 +355,8 @@ public class PlayfabManager : MonoBehaviour
     {
         Debug.Log("Load Data...");
 
+        playerDataBase.Initialize();
+
         yield return GetUserInventory();
 
         yield return GetStatistics();
@@ -409,6 +411,15 @@ public class PlayfabManager : MonoBehaviour
                        //    break;
                        case "Score":
                            playerDataBase.BestScore = statistics.Value;
+                           break;
+                       case "Combo":
+                           playerDataBase.BestCombo = statistics.Value;
+                           break;
+                       case "MoleCatchScore":
+                           playerDataBase.BestMoleCatchScore = statistics.Value;
+                           break;
+                       case "MoleCatchCombo":
+                           playerDataBase.BestMoleCatchCombo = statistics.Value;
                            break;
                    }
                }
