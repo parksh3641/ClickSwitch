@@ -42,6 +42,8 @@ public class UIManager : MonoBehaviour, IGameEvent
     [Title("OptionUI")]
     public GameObject gameOptionUI;
     public GameObject languageUI;
+    public GameObject[] etcUI;
+    public GameObject cancleUI;
 
     [Space]
     [Title("LoginUI")]
@@ -63,6 +65,8 @@ public class UIManager : MonoBehaviour, IGameEvent
     [Title("Manager")]
     public ComboManager comboManager;
     public RankingManager rankingManager;
+    public CoinAnimation goldAnimation;
+    public CoinAnimation crystalAnimation;
 
     [Title("Corution")]
     IEnumerator readyTimerCorution;
@@ -101,6 +105,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         gameEndUI.SetActive(false);
 
+        cancleUI.SetActive(false);
     }
 
     private void Start()
@@ -139,6 +144,13 @@ public class UIManager : MonoBehaviour, IGameEvent
         VirtualCurrency();
 
         virtualCurrencyUI.SetActive(check);
+
+        for(int i = 0; i < etcUI.Length; i ++)
+        {
+            etcUI[i].SetActive(check);
+        }
+
+        cancleUI.SetActive(!check);
     }
 
 
@@ -230,12 +242,10 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         Debug.Log("Game End");
 
+        scoreText.text = "";
         comboManager.OnStopCombo();
 
-        scoreText.text = "";
-
         CloseGamePlayUI();
-
         gameEndUI.SetActive(true);
 
         int bestScore = 0;
@@ -307,11 +317,15 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         int money = (int)(score / 10);
 
-        if (PlayfabManager.instance.isActive)
+        if(money > 0)
         {
-            PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, money);
-
+            if (PlayfabManager.instance.isActive)
+            {
+                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, money);
+            }
             playerDataBase.Gold += money;
+
+            goldAnimation.OnPlay(playerDataBase.Gold, money);
         }
 
         nowScoreText.text = "SCORE" + "\n" + score.ToString();
@@ -322,6 +336,22 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         getGoldText.text = "Coin" + "\n" + ((int)(score / 10)).ToString();
         rankText.text = "µî¼ö" + "\n" + "99 ¡æ 99";
+
+        GameReset();
+    }
+
+    public void GameStop()
+    {
+        Debug.Log("Game Stop");
+
+        StopAllCoroutines();
+
+        timerText.text = "";
+        scoreText.text = "";
+        int number = comboManager.GetCombo();
+        comboManager.OnStopCombo();
+
+        CloseGamePlayUI();
 
         GameReset();
     }
