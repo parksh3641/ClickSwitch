@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     public Text timerText;
     public Text scoreText;
 
+
     [Title("CurrneyUI")]
     public GameObject virtualCurrencyUI;
     public Text goldText;
@@ -68,10 +69,6 @@ public class UIManager : MonoBehaviour, IGameEvent
     public CoinAnimation goldAnimation;
     public CoinAnimation crystalAnimation;
 
-    [Title("Corution")]
-    IEnumerator readyTimerCorution;
-    IEnumerator timerCoroutine;
-
     [Title("DataBase")]
     public PlayerDataBase playerDataBase;
 
@@ -102,17 +99,12 @@ public class UIManager : MonoBehaviour, IGameEvent
         }
 
         gameReadyUI.SetActive(false);
-
         gameEndUI.SetActive(false);
-
         cancleUI.SetActive(false);
     }
 
     private void Start()
     {
-        readyTimerCorution = ReadyTimerCorution(ValueManager.instance.GetReadyTimer());
-        timerCoroutine = TimerCorution(ValueManager.instance.GetTimer());
-
         loginUI.SetActive(!GameStateManager.instance.AutoLogin);
 
         VirtualCurrency();
@@ -262,7 +254,9 @@ public class UIManager : MonoBehaviour, IGameEvent
                 bestScore = playerDataBase.BestMoleCatchScore;
                 bestCombo = playerDataBase.BestMoleCatchCombo;
                 break;
-            case GamePlayType.BreakStone:
+            case GamePlayType.FlipCard:
+                bestScore = playerDataBase.BestFilpCardScore;
+                bestCombo = playerDataBase.BestFilpCardCombo;
                 break;
         }
 
@@ -281,7 +275,9 @@ public class UIManager : MonoBehaviour, IGameEvent
                     playerDataBase.BestMoleCatchScore = (int)score;
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("MoleCatchScore", (int)score);
                     break;
-                case GamePlayType.BreakStone:
+                case GamePlayType.FlipCard:
+                    playerDataBase.BestFilpCardScore = (int)score;
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("FilpCardScore", (int)score);
                     break;
             }
 
@@ -307,7 +303,9 @@ public class UIManager : MonoBehaviour, IGameEvent
                     playerDataBase.BestMoleCatchCombo = combo;
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("MoleCatchCombo", combo);
                     break;
-                case GamePlayType.BreakStone:
+                case GamePlayType.FlipCard:
+                    playerDataBase.BestFilpCardCombo = combo;
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("FilpCardCombo", combo);
                     break;
             }
 
@@ -350,6 +348,8 @@ public class UIManager : MonoBehaviour, IGameEvent
         scoreText.text = "";
         int number = comboManager.GetCombo();
         comboManager.OnStopCombo();
+
+        eGameEnd.Invoke();
 
         CloseGamePlayUI();
 

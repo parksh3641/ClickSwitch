@@ -23,6 +23,12 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private int bestMoleCatchCombo = 0;
 
+    [SerializeField]
+    private int bestFilpCardScore = 0;
+
+    [SerializeField]
+    private int bestFilpCardCombo = 0;
+
     public void Initialize()
     {
         gold = 0;
@@ -31,6 +37,8 @@ public class PlayerDataBase : ScriptableObject
         bestCombo = 0;
         bestMoleCatchScore = 0;
         bestMoleCatchCombo = 0;
+        bestFilpCardScore = 0;
+        bestFilpCardCombo = 0;
     }
 
     public int Gold
@@ -102,6 +110,30 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             bestMoleCatchCombo = value;
+        }
+    }
+
+    public int BestFilpCardCombo
+    {
+        get
+        {
+            return bestFilpCardCombo;
+        }
+        set
+        {
+            bestFilpCardCombo = value;
+        }
+    }
+
+    public int BestFilpCardScore
+    {
+        get
+        {
+            return bestFilpCardScore;
+        }
+        set
+        {
+            bestFilpCardScore = value;
         }
     }
 

@@ -2,6 +2,7 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,7 +17,11 @@ public class GameManager : MonoBehaviour
     [Title("GridTransform")]
     public Transform normalTransform;
     public Transform moleCatchTransform;
+    public Transform filpCardTransform;
 
+
+    [Title("UI")]
+    public Text gameModeText;
 
 
     [Title("Corution")]
@@ -34,13 +39,19 @@ public class GameManager : MonoBehaviour
     private int nowIndex = 0; //현재 값
     private int setIndex = 1; //세팅용 값
     private int countIndex = 0; //카운팅 값
+
     private int moleIndex = 0; //두더지 위치 값
 
+    private int saveIndex = 0; //세이브 값
+
+    [Title("bool")]
+    private bool isActive = false;
 
     [Title("List")]
     private List<int> numberList = new List<int>();
     private List<NormalContent> normalContentList = new List<NormalContent>();
     private List<NormalContent> moleCatchContentList = new List<NormalContent>();
+    private List<NormalContent> filpCardList = new List<NormalContent>();
 
 
     [Title("Manager")]
@@ -77,11 +88,21 @@ public class GameManager : MonoBehaviour
             content.gameObject.SetActive(false);
             moleCatchContentList.Add(content);
         }
+
+        for (int i = 0; i < 16; i++)
+        {
+            NormalContent content = Instantiate(normalContent);
+            content.transform.localPosition = new Vector3(0, 0, 0);
+            content.transform.localScale = new Vector3(1, 1, 1);
+            content.transform.parent = filpCardTransform;
+            content.gameObject.SetActive(false);
+            filpCardList.Add(content);
+        }
     }
 
     private void Start()
     {
-
+        gameModeText.text = LocalizationManager.instance.GetString(gamePlayType.ToString());
     }
 
     private void OnApplicationFocus(bool focus)
@@ -139,6 +160,28 @@ public class GameManager : MonoBehaviour
         waitForMoleCatchSeconds = new WaitForSeconds(ValueManager.instance.GetMoleTimer());
     }
 
+    private void CreateFilpCardRandom()
+    {
+        ShuffleList(filpCardList);
+
+        int j = 1;
+        int k = 0;
+
+        for(int i = 0; i < filpCardList.Count; i ++)
+        {
+            filpCardList[i].FilpCardReset(k);
+            filpCardList[i].gameObject.SetActive(false);
+            filpCardList[i].gameObject.SetActive(true);
+
+            if (j % 2 == 0)
+            {
+                k++;
+            }
+
+            j++;
+        }
+    }
+
     #endregion
 
     #region Button
@@ -160,6 +203,11 @@ public class GameManager : MonoBehaviour
             moleCatchContentList[i].Initialize(gamePlayType);
         }
 
+        for (int i = 0; i < filpCardList.Count; i++)
+        {
+            filpCardList[i].Initialize(gamePlayType);
+        }
+
         switch (gamePlayType)
         {
             case GamePlayType.Normal:
@@ -168,7 +216,9 @@ public class GameManager : MonoBehaviour
             case GamePlayType.MoleCatch:
                 CreateMoleRandom();
                 break;
-            case GamePlayType.BreakStone:
+            case GamePlayType.FlipCard:
+                saveIndex = -1;
+                CreateFilpCardRandom();
                 break;
         }
 
@@ -193,12 +243,14 @@ public class GameManager : MonoBehaviour
 
                 break;
             case 2:
-                gamePlayType = GamePlayType.BreakStone;
+                gamePlayType = GamePlayType.FlipCard;
 
                 break;
         }
 
         GameStateManager.instance.GamePlayType = gamePlayType;
+
+        gameModeText.text = LocalizationManager.instance.GetString(gamePlayType.ToString());
 
         uiManager.CloseMenu();
     }
@@ -234,8 +286,6 @@ public class GameManager : MonoBehaviour
 
     public void CheckMole(int index, System.Action<bool> action)
     {
-        Debug.Log("Click");
-
         if(index == moleIndex)
         {
             Debug.Log("Success");
@@ -252,6 +302,59 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    System.Action<int> saveAction;
+
+    public void CheckFilpCard(int index, bool isactive, System.Action<int> action)
+    {
+        if (!isActive || !isactive) return;
+
+        Debug.Log("Click");
+
+        if(saveIndex == -1)
+        {
+            Debug.Log("Choice");
+            saveIndex = index;
+
+            action?.Invoke(0);
+
+            saveAction = action;
+        }
+        else
+        {
+            if(saveIndex == index)
+            {
+                Debug.Log("Success");
+                action?.Invoke(1);
+                saveAction?.Invoke(1);
+
+                PlusScore(10);
+
+                saveIndex = -1;
+                nowIndex++;
+
+                if(nowIndex >= filpCardList.Count / 2)
+                {
+                    Debug.Log("Card Reset");
+
+                    saveIndex = -1;
+                    nowIndex = 0;
+                    CreateFilpCardRandom();
+                    StartCoroutine("FilpCardCorution");
+                }
+            }
+            else
+            {
+                Debug.Log("Failure");
+                action?.Invoke(2);
+                saveAction?.Invoke(2);
+
+                saveIndex = -1;
+
+                MinusScore(5);
+            }
+        }
+    }
+
     public void OnGameStart()
     {
         switch (gamePlayType)
@@ -262,7 +365,8 @@ public class GameManager : MonoBehaviour
             case GamePlayType.MoleCatch:
                 StartCoroutine("MoleCatchCorution");
                 break;
-            case GamePlayType.BreakStone:
+            case GamePlayType.FlipCard:
+                StartCoroutine("FilpCardCorution");
                 break;
         }
     }
@@ -275,7 +379,7 @@ public class GameManager : MonoBehaviour
 
     public void OnGameEnd()
     {
-        StopCoroutine("MoleCatchCorution");
+        StopAllCoroutines();
 
 
     }
@@ -300,6 +404,27 @@ public class GameManager : MonoBehaviour
         yield return waitForMoleCatchSeconds;
 
         StartCoroutine(MoleCatchCorution());
+    }
+
+    IEnumerator FilpCardCorution()
+    {
+        isActive = false;
+        eGamePause();
+
+        for (int i = 0; i < filpCardList.Count; i ++ )
+        {
+            filpCardList[i].filpCardImg.enabled = true;
+        }
+
+        yield return new WaitForSeconds(ValueManager.instance.GetCardTimer());
+
+        for (int i = 0; i < filpCardList.Count; i++)
+        {
+            filpCardList[i].filpCardImg.enabled = false;
+        }
+
+        isActive = true;
+        eGamePause();
     }
 
     #endregion

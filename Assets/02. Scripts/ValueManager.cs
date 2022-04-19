@@ -18,6 +18,9 @@ public class ValueManager : MonoBehaviour
     [SerializeField]
     private float moleTimer = 3.0f;
 
+    [SerializeField]
+    private float cardTimer = 2.0f;
+
 
     private void Awake()
     {
@@ -43,5 +46,10 @@ public class ValueManager : MonoBehaviour
     public float GetMoleTimer()
     {
         return moleTimer;
+    }
+
+    public float GetCardTimer()
+    {
+        return cardTimer;
     }
 }

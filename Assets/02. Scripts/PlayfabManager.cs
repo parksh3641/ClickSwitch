@@ -421,6 +421,12 @@ public class PlayfabManager : MonoBehaviour
                        case "MoleCatchCombo":
                            playerDataBase.BestMoleCatchCombo = statistics.Value;
                            break;
+                       case "FilpCardScore":
+                           playerDataBase.BestFilpCardScore = statistics.Value;
+                           break;
+                       case "FilpCardCombo":
+                           playerDataBase.BestFilpCardCombo = statistics.Value;
+                           break;
                    }
                }
            })

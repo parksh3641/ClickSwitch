@@ -58,8 +58,7 @@ public class CoinAnimation : MonoBehaviour
             }
         }
 
-
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.0f);
 
         if (plus >= goldPrefabList.Count)
         {

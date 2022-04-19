@@ -11,6 +11,7 @@ public interface IContentEvent
     void Initialize(GamePlayType type);
     void OnReset();
     void NormalReset(int number);
+    void FilpCardReset(int number);
     void First();
     void Choice();
     void ChoiceAction(bool check);

@@ -28,7 +28,7 @@ public class CoinContent : MonoBehaviour
 
     IEnumerator RandomMoveCorution()
     {
-        transform.localPosition = Vector3.SmoothDamp(transform.localPosition, pos, ref vel, 0.25f);
+        transform.localPosition = Vector3.SmoothDamp(transform.localPosition, pos, ref vel, 0.5f);
 
         yield return new WaitForSeconds(0.01f);
 
@@ -44,7 +44,7 @@ public class CoinContent : MonoBehaviour
 
     IEnumerator GoToTargetCorution(Vector3 target)
     {
-        transform.localPosition = Vector3.SmoothDamp(transform.localPosition, target, ref vel, 0.25f);
+        transform.localPosition = Vector3.SmoothDamp(transform.localPosition, target, ref vel, 0.5f);
 
         if (transform.localPosition.y >= target.y - 2f)
         {

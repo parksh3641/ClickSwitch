@@ -11,7 +11,7 @@ public enum GamePlayType
 {
     Normal = 0,
     MoleCatch,
-    BreakStone
+    FlipCard
 }
 
 public enum OptionType

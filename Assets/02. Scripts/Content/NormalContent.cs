@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,11 +21,17 @@ public class NormalContent : MonoBehaviour, IContentEvent
     public int index = 0;
     public Text numberText;
 
+    [Title("FilpCard")]
+    public Image filpCardImg;
+    public Sprite[] filpCardImgList;
+
     void Awake()
     {
         clickSoundEvent.AddListener(() => { GameObject.FindWithTag("ClickSound").GetComponent<AudioSource>().Play(); });
 
         numberText.text = "";
+
+        filpCardImg.enabled = false;
     }
 
     public void Initialize(GamePlayType type)
@@ -41,7 +48,8 @@ public class NormalContent : MonoBehaviour, IContentEvent
             case GamePlayType.MoleCatch:
                 clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().CheckMole(index, ChoiceMoleAction); });
                 break;
-            case GamePlayType.BreakStone:
+            case GamePlayType.FlipCard:
+                clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().CheckFilpCard(index, isActive, ChoiceCardAction); });
                 break;
         }
     }
@@ -60,6 +68,15 @@ public class NormalContent : MonoBehaviour, IContentEvent
 
         backgroundImg.sprite = backgroundImgList[0];
         backgroundImg.enabled = true;
+
+        isActive = true;
+    }
+
+    public void FilpCardReset(int number)
+    {
+        filpCardImg.sprite = filpCardImgList[number];
+        filpCardImg.enabled = false;
+        index = number;
 
         isActive = true;
     }
@@ -98,6 +115,29 @@ public class NormalContent : MonoBehaviour, IContentEvent
             isActive = false;
 
             backgroundImg.sprite = backgroundImgList[0];
+        }
+    }
+
+    public void ChoiceCardAction(int check)
+    {
+        switch(check)
+        {
+            case 0:
+                isActive = false;
+
+                filpCardImg.enabled = true;
+                break;
+            case 1:
+                isActive = false;
+
+                filpCardImg.enabled = true;
+
+                break;
+            case 2:
+                isActive = true;
+
+                filpCardImg.enabled = false;
+                break;
         }
     }
 

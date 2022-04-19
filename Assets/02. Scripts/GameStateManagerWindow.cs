@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using Sirenix.OdinInspector.Editor;
 using System.Linq;
 using UnityEngine;
@@ -67,3 +69,5 @@ public class GameStateManagerWindow : OdinMenuEditorWindow
         }
     }
 }
+
+#endif
