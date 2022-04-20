@@ -78,11 +78,11 @@ public class RankingManager : MonoBehaviour
             switch (number)
             {
                 case 0:
-                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("Score", SetRanking);
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("TotalScore", SetRanking);
 
                     break;
                 case 1:
-                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("Score", SetRanking);
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("SpeedTouchScore", SetRanking);
 
                     break;
                 case 2:
@@ -105,7 +105,7 @@ public class RankingManager : MonoBehaviour
 
 
         var curBoard = result.Leaderboard;
-        //var location = curBoard[index - 1].Profile.Locations[0].CountryCode.Value.ToString().ToLower();
+        var location = curBoard[index - 1].Profile.Locations[0].CountryCode.Value.ToString().ToLower();
         int num = 0;
 
         for(int i = 0; i < rankContentList.Count; i ++)
@@ -126,16 +126,16 @@ public class RankingManager : MonoBehaviour
                 nickName = player.DisplayName;
             }
 
-            myRankContent.InitState(999, null, GameStateManager.instance.PlayfabId, playerDataBase.BestScore, false);
+            myRankContent.InitState(999, location, GameStateManager.instance.PlayfabId, playerDataBase.BestSpeedTouchScore, false);
 
             if (player.PlayFabId.Equals(GameStateManager.instance.PlayfabId))
             {
                 checkMy = true;
 
-                myRankContent.InitState(index, null, nickName, player.StatValue, false);
+                myRankContent.InitState(index, location, nickName, player.StatValue, false);
             }
 
-            rankContentList[num].InitState(index, null, nickName, player.StatValue, checkMy);
+            rankContentList[num].InitState(index, location, nickName, player.StatValue, checkMy);
             rankContentList[num].gameObject.SetActive(true);
 
             index++;

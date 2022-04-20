@@ -247,8 +247,8 @@ public class UIManager : MonoBehaviour, IGameEvent
         switch (GameStateManager.instance.GamePlayType)
         {
             case GamePlayType.Normal:
-                bestScore = playerDataBase.BestScore;
-                bestCombo = playerDataBase.BestCombo;
+                bestScore = playerDataBase.BestSpeedTouchScore;
+                bestCombo = playerDataBase.BestSpeedTouchCombo;
                 break;
             case GamePlayType.MoleCatch:
                 bestScore = playerDataBase.BestMoleCatchScore;
@@ -268,7 +268,7 @@ public class UIManager : MonoBehaviour, IGameEvent
             switch (GameStateManager.instance.GamePlayType)
             {
                 case GamePlayType.Normal:
-                    playerDataBase.BestScore = (int)score;
+                    playerDataBase.BestSpeedTouchScore = (int)score;
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Score", (int)score);
                     break;
                 case GamePlayType.MoleCatch:
@@ -296,7 +296,7 @@ public class UIManager : MonoBehaviour, IGameEvent
             switch (GameStateManager.instance.GamePlayType)
             {
                 case GamePlayType.Normal:
-                    playerDataBase.BestCombo = combo;
+                    playerDataBase.BestSpeedTouchCombo = combo;
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Combo", combo);
                     break;
                 case GamePlayType.MoleCatch:
@@ -312,6 +312,7 @@ public class UIManager : MonoBehaviour, IGameEvent
             bestCombo = combo;
         }
 
+        UpdateTotalScore();
 
         int money = (int)(score / 10);
 
@@ -336,6 +337,17 @@ public class UIManager : MonoBehaviour, IGameEvent
         rankText.text = "µî¼ö" + "\n" + "99 ¡æ 99";
 
         GameReset();
+    }
+
+    void UpdateTotalScore()
+    {
+        int nowTotalScore = playerDataBase.BestSpeedTouchScore + playerDataBase.BestMoleCatchScore + playerDataBase.BestFilpCardScore;
+
+        if (Comparison(nowTotalScore, playerDataBase.TotalScore))
+        {
+            Debug.Log("Best Total Score");
+            if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("TotalScore", nowTotalScore);
+        }
     }
 
     public void GameStop()

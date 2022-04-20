@@ -19,7 +19,7 @@ public class RankContent : MonoBehaviour
         scoreText.text = "";
     }
 
-    public void InitState(int index, Image country, string nickName, int score, bool checkMy)
+    public void InitState(int index, string country, string nickName, int score, bool checkMy)
     {
         if(index <= 3)
         {
@@ -33,6 +33,7 @@ public class RankContent : MonoBehaviour
 
         indexText.text = index.ToString();
         nickNameText.text = nickName;
+        countryImg.sprite = Resources.Load<Sprite>(country);
         scoreText.text = score.ToString();
 
 

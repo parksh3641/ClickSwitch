@@ -12,10 +12,13 @@ public class PlayerDataBase : ScriptableObject
     private int crystal = 0;
 
     [SerializeField]
-    private int bestScore = 0;
+    private int totalScore = 0;
 
     [SerializeField]
-    private int bestCombo = 0;
+    private int bestSpeedTouchScore = 0;
+
+    [SerializeField]
+    private int bestSpeedTouchCombo = 0;
 
     [SerializeField]
     private int bestMoleCatchScore = 0;
@@ -33,12 +36,25 @@ public class PlayerDataBase : ScriptableObject
     {
         gold = 0;
         crystal = 0;
-        bestScore = 0;
-        bestCombo = 0;
+        totalScore = 0;
+        bestSpeedTouchScore = 0;
+        bestSpeedTouchCombo = 0;
         bestMoleCatchScore = 0;
         bestMoleCatchCombo = 0;
         bestFilpCardScore = 0;
         bestFilpCardCombo = 0;
+    }
+
+    public int TotalScore
+    {
+        get
+        {
+            return totalScore;
+        }
+        set
+        {
+            totalScore = value;
+        }
     }
 
     public int Gold
@@ -65,27 +81,27 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
-    public int BestScore
+    public int BestSpeedTouchScore
     {
         get
         {
-            return bestScore;
+            return bestSpeedTouchScore;
         }
         set
         {
-            bestScore = value;
+            bestSpeedTouchScore = value;
         }
     }
 
-    public int BestCombo
+    public int BestSpeedTouchCombo
     {
         get
         {
-            return bestCombo;
+            return bestSpeedTouchCombo;
         }
         set
         {
-            bestCombo = value;
+            bestSpeedTouchCombo = value;
         }
     }
 

@@ -409,11 +409,14 @@ public class PlayfabManager : MonoBehaviour
                        //case "":
                        //    string text = statistics.Value.ToString();
                        //    break;
-                       case "Score":
-                           playerDataBase.BestScore = statistics.Value;
+                       case "TotalScore":
+                           playerDataBase.TotalScore = statistics.Value;
                            break;
-                       case "Combo":
-                           playerDataBase.BestCombo = statistics.Value;
+                       case "SpeedTouchScore":
+                           playerDataBase.BestSpeedTouchScore = statistics.Value;
+                           break;
+                       case "SpeedTouchCombo":
+                           playerDataBase.BestSpeedTouchCombo = statistics.Value;
                            break;
                        case "MoleCatchScore":
                            playerDataBase.BestMoleCatchScore = statistics.Value;
