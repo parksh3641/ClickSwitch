@@ -32,6 +32,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     [Title("EndUI")]
     public GameObject gameEndUI;
     public GameObject newRecordObj;
+    public GameObject newComboObj;
     public Text nowScoreText;
     public Text bestScoreText;
     public Text nowComboText;
@@ -44,6 +45,10 @@ public class UIManager : MonoBehaviour, IGameEvent
     public GameObject gameOptionUI;
     public GameObject languageUI;
     public GameObject[] etcUI;
+
+    [Space]
+    [Title("CancleUI")]
+    public GameObject cancleWindowUI;
     public GameObject cancleUI;
 
     [Space]
@@ -100,6 +105,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         gameReadyUI.SetActive(false);
         gameEndUI.SetActive(false);
+        cancleWindowUI.SetActive(false);
         cancleUI.SetActive(false);
     }
 
@@ -118,6 +124,21 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         GameManager.PlusScore -= this.PlusScore;
         GameManager.MinusScore -= this.MinusScore;
+    }
+
+    private void OnApplicationFocus(bool focus)
+    {
+        if (focus)
+        {
+
+        }
+        else
+        {
+            if(cancleUI.activeSelf)
+            {
+                OpenGameStop();
+            }
+        }
     }
 
     void VirtualCurrency()
@@ -213,6 +234,8 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         Debug.Log("Game Start");
 
+        pause = false;
+
         StartCoroutine("ReadyTimerCorution", ValueManager.instance.GetReadyTimer());
 
         OnVirtualCurrency(false);
@@ -239,6 +262,9 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         CloseGamePlayUI();
         gameEndUI.SetActive(true);
+
+        newRecordObj.SetActive(false);
+        newComboObj.SetActive(false);
 
         int bestScore = 0;
         int bestCombo = 0;
@@ -293,6 +319,8 @@ public class UIManager : MonoBehaviour, IGameEvent
         {
             Debug.Log("Best Combo !");
 
+            newComboObj.SetActive(true);
+
             switch (GameStateManager.instance.GamePlayType)
             {
                 case GamePlayType.Normal:
@@ -328,10 +356,10 @@ public class UIManager : MonoBehaviour, IGameEvent
         }
 
         nowScoreText.text = "SCORE" + "\n" + score.ToString();
-        bestScoreText.text = "BEST" + "\n" + bestScore.ToString();
+        bestScoreText.text = "BEST SCORE" + "\n" + bestScore.ToString();
 
         nowComboText.text = "COMBO" + "\n" + combo.ToString();
-        bestComboText.text = "BEST" + "\n" + bestCombo.ToString();
+        bestComboText.text = "BEST COMBO" + "\n" + bestCombo.ToString();
 
         getGoldText.text = "Coin" + "\n" + ((int)(score / 10)).ToString();
         rankText.text = "µî¼ö" + "\n" + "99 ¡æ 99";
@@ -350,11 +378,27 @@ public class UIManager : MonoBehaviour, IGameEvent
         }
     }
 
+    public void OpenGameStop()
+    {
+        eGamePause.Invoke();
+
+        if(cancleWindowUI.activeSelf)
+        {
+            cancleWindowUI.SetActive(false);
+        }
+        else
+        {
+            cancleWindowUI.SetActive(true);
+        }
+    }
+
     public void GameStop()
     {
         Debug.Log("Game Stop");
 
         StopAllCoroutines();
+
+        cancleWindowUI.SetActive(false);
 
         timerText.text = "";
         scoreText.text = "";

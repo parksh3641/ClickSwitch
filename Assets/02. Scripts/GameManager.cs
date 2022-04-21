@@ -105,11 +105,6 @@ public class GameManager : MonoBehaviour
         gameModeText.text = LocalizationManager.instance.GetString(gamePlayType.ToString());
     }
 
-    private void OnApplicationFocus(bool focus)
-    {
-        
-    }
-
     #region Setting
     private List<T> ShuffleList<T>(List<T> list)
     {
