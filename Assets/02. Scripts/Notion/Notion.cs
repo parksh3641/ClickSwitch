@@ -26,8 +26,6 @@ public class Notion : MonoBehaviour
     void Awake()
     {
         trans = GetComponent<Transform>();
-
-        txt.text = "";
     }
 
     void OnEnable()

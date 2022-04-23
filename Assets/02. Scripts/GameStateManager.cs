@@ -29,6 +29,7 @@ public class GameStateManager : MonoBehaviour
         public string customId = "";
         public bool autoLogin = false;
         public LoginType login = LoginType.None;
+        public string nickName = "";
 
         [Space]
         [Title("Language")]
@@ -36,7 +37,7 @@ public class GameStateManager : MonoBehaviour
 
         [Space]
         [Title("Setting")]
-        public GamePlayType gamePlayType = GamePlayType.Normal;
+        public GamePlayType gamePlayType = GamePlayType.GameChoice1;
         public bool music = false;
         public bool sfx = false;
     }
@@ -78,6 +79,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.customId = value;
+            SaveFile();
+        }
+    }
+
+    public string NickName
+    {
+        get
+        {
+            return gameSettings.nickName;
+        }
+        set
+        {
+            gameSettings.nickName = value;
             SaveFile();
         }
     }

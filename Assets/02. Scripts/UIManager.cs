@@ -67,10 +67,15 @@ public class UIManager : MonoBehaviour, IGameEvent
     [Title("Bool")]
     [SerializeField]
     private bool pause = false;
+    private bool checkUI = false;
 
     [Title("Manager")]
     public ComboManager comboManager;
     public RankingManager rankingManager;
+    public ProfileManager profileManager;
+    public NickNameManager nickNameManager;
+
+    [Title("Animation")]
     public CoinAnimation goldAnimation;
     public CoinAnimation crystalAnimation;
 
@@ -222,6 +227,16 @@ public class UIManager : MonoBehaviour, IGameEvent
         rankingManager.OpenRanking();
     }
 
+    public void OpenProfile()
+    {
+        profileManager.OpenProfile();
+    }
+
+    public void OpenNickName()
+    {
+        nickNameManager.OpenNickName();
+    }
+
     public void OnLoginSuccess()
     {
         loginUI.SetActive(false);
@@ -272,15 +287,15 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         switch (GameStateManager.instance.GamePlayType)
         {
-            case GamePlayType.Normal:
+            case GamePlayType.GameChoice1:
                 bestScore = playerDataBase.BestSpeedTouchScore;
                 bestCombo = playerDataBase.BestSpeedTouchCombo;
                 break;
-            case GamePlayType.MoleCatch:
+            case GamePlayType.GameChoice2:
                 bestScore = playerDataBase.BestMoleCatchScore;
                 bestCombo = playerDataBase.BestMoleCatchCombo;
                 break;
-            case GamePlayType.FlipCard:
+            case GamePlayType.GameChoice3:
                 bestScore = playerDataBase.BestFilpCardScore;
                 bestCombo = playerDataBase.BestFilpCardCombo;
                 break;
@@ -293,15 +308,15 @@ public class UIManager : MonoBehaviour, IGameEvent
 
             switch (GameStateManager.instance.GamePlayType)
             {
-                case GamePlayType.Normal:
+                case GamePlayType.GameChoice1:
                     playerDataBase.BestSpeedTouchScore = (int)score;
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Score", (int)score);
                     break;
-                case GamePlayType.MoleCatch:
+                case GamePlayType.GameChoice2:
                     playerDataBase.BestMoleCatchScore = (int)score;
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("MoleCatchScore", (int)score);
                     break;
-                case GamePlayType.FlipCard:
+                case GamePlayType.GameChoice3:
                     playerDataBase.BestFilpCardScore = (int)score;
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("FilpCardScore", (int)score);
                     break;
@@ -323,15 +338,15 @@ public class UIManager : MonoBehaviour, IGameEvent
 
             switch (GameStateManager.instance.GamePlayType)
             {
-                case GamePlayType.Normal:
+                case GamePlayType.GameChoice1:
                     playerDataBase.BestSpeedTouchCombo = combo;
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Combo", combo);
                     break;
-                case GamePlayType.MoleCatch:
+                case GamePlayType.GameChoice2:
                     playerDataBase.BestMoleCatchCombo = combo;
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("MoleCatchCombo", combo);
                     break;
-                case GamePlayType.FlipCard:
+                case GamePlayType.GameChoice3:
                     playerDataBase.BestFilpCardCombo = combo;
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("FilpCardCombo", combo);
                     break;
@@ -355,13 +370,13 @@ public class UIManager : MonoBehaviour, IGameEvent
             goldAnimation.OnPlay(playerDataBase.Gold, money);
         }
 
-        nowScoreText.text = "SCORE" + "\n" + score.ToString();
-        bestScoreText.text = "BEST SCORE" + "\n" + bestScore.ToString();
+        nowScoreText.text = LocalizationManager.instance.GetString("Score") + "\n" + score.ToString();
+        bestScoreText.text = LocalizationManager.instance.GetString("BestScore") + "\n" + bestScore.ToString();
 
-        nowComboText.text = "COMBO" + "\n" + combo.ToString();
-        bestComboText.text = "BEST COMBO" + "\n" + bestCombo.ToString();
+        nowComboText.text = LocalizationManager.instance.GetString("Combo") + "\n" + combo.ToString();
+        bestComboText.text = LocalizationManager.instance.GetString("BestCombo") + "\n" + bestCombo.ToString();
 
-        getGoldText.text = "Coin" + "\n" + ((int)(score / 10)).ToString();
+        getGoldText.text = LocalizationManager.instance.GetString("Gold") + "\n" + ((int)(score / 10)).ToString();
         rankText.text = "µî¼ö" + "\n" + "99 ¡æ 99";
 
         GameReset();
@@ -398,6 +413,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         StopAllCoroutines();
 
+        gameReadyUI.SetActive(false);
         cancleWindowUI.SetActive(false);
 
         timerText.text = "";
@@ -442,7 +458,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     public void PlusScore(int index)
     {
         score += index;
-        scoreText.text = "SCORE : " + score.ToString();
+        scoreText.text = LocalizationManager.instance.GetString("Score") + " : " + score.ToString();
 
         scoreNotion.gameObject.SetActive(false);
         scoreNotion.txt.color = new Color(0, 1, 0);
@@ -455,7 +471,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     public void MinusScore(int index)
     {
         score = (score - index >= 0) ? score -= index : score = 0;
-        scoreText.text = "SCORE : " + score.ToString();
+        scoreText.text = LocalizationManager.instance.GetString("Score") + " : " + score.ToString();
 
         scoreNotion.gameObject.SetActive(false);
         scoreNotion.txt.color = new Color(1, 0, 0);

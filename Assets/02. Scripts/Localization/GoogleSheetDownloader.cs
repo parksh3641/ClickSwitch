@@ -9,6 +9,8 @@ public class GoogleSheetDownloader : MonoBehaviour
 {
     const string URL = "https://docs.google.com/spreadsheets/d/1nTQjgAQ631ayvzsWQeXt0PwTpneVV5sPs173vgpg05w/export?format=tsv";
 
+    public bool isActive = false;
+
     public LocalizationDataBase localizationDataBase;
 
     private void Awake()
@@ -16,14 +18,14 @@ public class GoogleSheetDownloader : MonoBehaviour
         if(!Directory.Exists(SystemPath.GetPath()))
         {
             Directory.CreateDirectory(SystemPath.GetPath());
-
-            SyncFile();
         }
 
-        if(localizationDataBase.localizationDatas.Count <= 0)
-        {
-            SyncFile();
-        }
+        //if(localizationDataBase.localizationDatas.Count <= 0)
+        //{
+        //    SyncFile();
+        //}
+
+        SyncFile();
     }
 
     IEnumerator DownloadFile()
@@ -47,11 +49,13 @@ public class GoogleSheetDownloader : MonoBehaviour
             LocalizationData content = new LocalizationData();
 
             content.key = column[0];
-            content.korean = column[1];
+            content.korean = column[1].Replace('$','\n');
             content.english = column[2];
 
             localizationDataBase.SetLocalization(content);
         }
+
+        isActive = true;
 
         Debug.Log("Localization File Download Complete!");
     }
@@ -60,6 +64,8 @@ public class GoogleSheetDownloader : MonoBehaviour
     public void SyncFile()
     {
         Debug.Log("Localization File Downloading...");
+
+        isActive = false;
 
         localizationDataBase.OnReset();
         StartCoroutine(DownloadFile());

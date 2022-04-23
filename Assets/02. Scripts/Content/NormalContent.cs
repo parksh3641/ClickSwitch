@@ -7,14 +7,15 @@ using UnityEngine.UI;
 
 public class NormalContent : MonoBehaviour, IContentEvent
 {
-    GamePlayType gamePlayType = GamePlayType.Normal;
+    GamePlayType gamePlayType = GamePlayType.GameChoice1;
 
     [SerializeField]
     private bool isActive = false;
 
 
-    public UnityEvent clickSoundEvent;
     public UnityEvent clickEvent;
+    public UnityEvent clickSoundEvent;
+    public UnityEvent failSoundEvent;
 
     public Image backgroundImg;
     public Sprite[] backgroundImgList;
@@ -28,6 +29,7 @@ public class NormalContent : MonoBehaviour, IContentEvent
     void Awake()
     {
         clickSoundEvent.AddListener(() => { GameObject.FindWithTag("ClickSound").GetComponent<AudioSource>().Play(); });
+        failSoundEvent.AddListener(() => { GameObject.FindWithTag("FailSound").GetComponent<AudioSource>().Play(); });
 
         numberText.text = "";
 
@@ -42,13 +44,13 @@ public class NormalContent : MonoBehaviour, IContentEvent
 
         switch (type)
         {
-            case GamePlayType.Normal:
+            case GamePlayType.GameChoice1:
                 clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().CheckNumber(index, ChoiceAction); });
                 break;
-            case GamePlayType.MoleCatch:
+            case GamePlayType.GameChoice2:
                 clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().CheckMole(index, ChoiceMoleAction); });
                 break;
-            case GamePlayType.FlipCard:
+            case GamePlayType.GameChoice3:
                 clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().CheckFilpCard(index, isActive, ChoiceCardAction); });
                 break;
         }
@@ -106,6 +108,10 @@ public class NormalContent : MonoBehaviour, IContentEvent
             backgroundImg.enabled = false;
             numberText.text = "";
         }
+        else
+        {
+            failSoundEvent.Invoke();
+        }
     }
 
     public void ChoiceMoleAction(bool check)
@@ -115,6 +121,10 @@ public class NormalContent : MonoBehaviour, IContentEvent
             isActive = false;
 
             backgroundImg.sprite = backgroundImgList[0];
+        }
+        else
+        {
+            failSoundEvent.Invoke();
         }
     }
 
@@ -137,6 +147,8 @@ public class NormalContent : MonoBehaviour, IContentEvent
                 isActive = true;
 
                 filpCardImg.enabled = false;
+
+                failSoundEvent.Invoke();
                 break;
         }
     }

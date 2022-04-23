@@ -8,6 +8,9 @@ public class GameManager : MonoBehaviour
 {
     public GamePlayType gamePlayType;
 
+    [Title("Mode")]
+    public ModeContent[] modeContentArray;
+
 
     [Title("Prefab")]
     public NormalContent normalContent;
@@ -182,13 +185,24 @@ public class GameManager : MonoBehaviour
     #region Button
     public void OnGameStartButton() //게임 시작 버튼
     {
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData(gamePlayType.ToString(), GameStart);
+    }
+
+    public void GameStart(bool check)
+    {
+        if(!check)
+        {
+            Debug.Log("해당 게임모드가 열려있지 않습니다.");
+            return;
+        }
+
         uiManager.OpenGamePlayUI(gamePlayType);
 
         nowIndex = 0;
         setIndex = 1;
         countIndex = 0;
 
-        for(int i = 0; i< normalContentList.Count; i ++)
+        for (int i = 0; i < normalContentList.Count; i++)
         {
             normalContentList[i].Initialize(gamePlayType);
         }
@@ -205,13 +219,13 @@ public class GameManager : MonoBehaviour
 
         switch (gamePlayType)
         {
-            case GamePlayType.Normal:
+            case GamePlayType.GameChoice1:
                 CreateUnDuplicateRandom();
                 break;
-            case GamePlayType.MoleCatch:
+            case GamePlayType.GameChoice2:
                 CreateMoleRandom();
                 break;
-            case GamePlayType.FlipCard:
+            case GamePlayType.GameChoice3:
                 saveIndex = -1;
                 CreateFilpCardRandom();
                 break;
@@ -230,15 +244,15 @@ public class GameManager : MonoBehaviour
         switch(number)
         {
             case 0:
-                gamePlayType = GamePlayType.Normal;
+                gamePlayType = GamePlayType.GameChoice1;
 
                 break;
             case 1:
-                gamePlayType = GamePlayType.MoleCatch;
+                gamePlayType = GamePlayType.GameChoice2;
 
                 break;
             case 2:
-                gamePlayType = GamePlayType.FlipCard;
+                gamePlayType = GamePlayType.GameChoice3;
 
                 break;
         }
@@ -354,13 +368,13 @@ public class GameManager : MonoBehaviour
     {
         switch (gamePlayType)
         {
-            case GamePlayType.Normal:
+            case GamePlayType.GameChoice1:
 
                 break;
-            case GamePlayType.MoleCatch:
+            case GamePlayType.GameChoice2:
                 StartCoroutine("MoleCatchCorution");
                 break;
-            case GamePlayType.FlipCard:
+            case GamePlayType.GameChoice3:
                 StartCoroutine("FilpCardCorution");
                 break;
         }

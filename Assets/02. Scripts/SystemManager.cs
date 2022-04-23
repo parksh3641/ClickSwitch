@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class SystemManager : MonoBehaviour
 {
+    public GoogleSheetDownloader googleSheetDownloader;
+
 
     void Start()
     {
@@ -15,6 +17,16 @@ public class SystemManager : MonoBehaviour
         else
         {
             GameStateManager.instance.Language = LanguageType.English;
+        }
+
+        StartCoroutine(WaitCorution());
+    }
+
+    IEnumerator WaitCorution()
+    {
+        while(!googleSheetDownloader.isActive)
+        {
+            yield return new WaitForSeconds(0.01f);
         }
 
         SceneManager.LoadScene("MainScene");

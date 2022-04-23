@@ -79,7 +79,7 @@ public class NotionManager : MonoBehaviour
         {
             if (list.notionType.Equals(type))
             {
-                notion.txt.text = LocalizationManager.instance.GetString("Notion" + list.notionType.ToString());
+                notion.txt.text = LocalizationManager.instance.GetString(list.notionType.ToString());
                 SetColor(list.colorType);
                 SetEffect(list.effectType);
             }
@@ -131,5 +131,11 @@ public enum EffectType
 
 public enum NotionType
 {
-    Test
+    Test,
+    NickNameNotion1,
+    NickNameNotion2,
+    NickNameNotion3,
+    NickNameNotion4,
+    NickNameNotion5,
+    NickNameNotion6
 }

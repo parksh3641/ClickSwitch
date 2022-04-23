@@ -36,6 +36,8 @@ public class RankingManager : MonoBehaviour
         }
 
         rankingView.SetActive(false);
+
+        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
     }
 
     public void OpenRanking()

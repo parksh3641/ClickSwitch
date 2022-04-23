@@ -330,6 +330,24 @@ public class PlayfabManager : MonoBehaviour
         }, FailureCallback);
     }
 
+    public void GetPlayerNickName()
+    {
+        PlayFabClientAPI.GetPlayerProfile(new GetPlayerProfileRequest()
+        {
+            PlayFabId = customId,
+            ProfileConstraints = new PlayerProfileViewConstraints()
+            {
+                ShowDisplayName = true
+            }
+        },
+        (result) =>
+        {
+            GameStateManager.instance.NickName = result.PlayerProfile.DisplayName;
+            // GameStateManager.Instance.SavePlayerData();
+        },
+        DisplayPlayfabError);
+    }
+
     void FailureCallback(PlayFabError error)
     {
         Debug.LogWarning("Something went wrong with your API call. Here's some debug information:");
@@ -356,6 +374,8 @@ public class PlayfabManager : MonoBehaviour
         Debug.Log("Load Data...");
 
         playerDataBase.Initialize();
+
+        GetPlayerNickName();
 
         yield return GetUserInventory();
 
@@ -560,6 +580,54 @@ public class PlayfabManager : MonoBehaviour
             Debug.LogError("Error : Internet Disconnected\nCheck Internet State");
         }
 
+    }
+
+    public void UpdateDisplayName(string nickname, Action successAction, Action failAction)
+    {
+        PlayFabClientAPI.UpdateUserTitleDisplayName(new UpdateUserTitleDisplayNameRequest
+        {
+            DisplayName = nickname
+        },
+        result =>
+        {
+            Debug.Log("Update NickName : " + result.DisplayName);
+
+            GameStateManager.instance.NickName = result.DisplayName;
+            successAction?.Invoke();
+        }
+        , error =>
+        {
+            string report = error.GenerateErrorReport();
+            if (report.Contains("Name not available"))
+            {
+                failAction?.Invoke();
+            }
+            Debug.LogError(error.GenerateErrorReport());
+        });
+    }
+
+    public void GetTitleInternalData(string name, Action<bool> action) //true ï¿½Ï°ï¿½ï¿?ï¿½Ø´ï¿½ ï¿½ï¿½ï¿?ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.
+    {
+        PlayFabServerAPI.GetTitleInternalData(new PlayFab.ServerModels.GetTitleDataRequest(),
+            result =>
+            {
+                if (result.Data[name].Equals("ON"))
+                {
+                    action?.Invoke(true);
+                }
+                else
+                {
+                    action?.Invoke(false);
+                }
+            },
+            error =>
+            {
+                Debug.Log("Got error getting titleData:");
+                Debug.Log(error.GenerateErrorReport());
+
+                action?.Invoke(false);
+            }
+        );
     }
 
     public void GetLeaderboarder(string name, Action<GetLeaderboardResult> successCalback)

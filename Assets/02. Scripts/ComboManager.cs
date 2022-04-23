@@ -46,7 +46,7 @@ public class ComboManager : MonoBehaviour
 
         timer = comboTimer;
         fillamount.fillAmount = 1;
-        comboText.text = "COMBO : " + comboIndex.ToString();
+        comboText.text = LocalizationManager.instance.GetString("Combo") + " : " + comboIndex.ToString();
 
         notion.gameObject.SetActive(false);
         notion.txt.text = "+" + 1.ToString();

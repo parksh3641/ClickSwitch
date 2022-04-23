@@ -9,9 +9,9 @@ public class EnumManager : MonoBehaviour
 
 public enum GamePlayType
 {
-    Normal = 0,
-    MoleCatch,
-    FlipCard
+    GameChoice1 = 0,
+    GameChoice2,
+    GameChoice3
 }
 
 public enum OptionType
