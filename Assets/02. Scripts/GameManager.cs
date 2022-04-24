@@ -14,13 +14,15 @@ public class GameManager : MonoBehaviour
 
     [Title("Prefab")]
     public NormalContent normalContent;
-
+    public ButtonActionContent buttonActionContent;
 
 
     [Title("GridTransform")]
     public Transform normalTransform;
     public Transform moleCatchTransform;
     public Transform filpCardTransform;
+    public Transform buttonActionUpTransform;
+    public Transform buttonActionDownTransform;
 
 
     [Title("UI")]
@@ -45,17 +47,21 @@ public class GameManager : MonoBehaviour
 
     private int moleIndex = 0; //두더지 위치 값
 
-    private int saveIndex = 0; //세이브 값
+    private int filpCardIndex = 0; //세이브 값
+
+    private int buttonActionLevelIndex = 0;
+    private int buttonActionIndex = 0;
 
     [Title("bool")]
     private bool isActive = false;
 
     [Title("List")]
-    private List<int> numberList = new List<int>();
+    private Queue<int> numberList = new Queue<int>();
     private List<NormalContent> normalContentList = new List<NormalContent>();
     private List<NormalContent> moleCatchContentList = new List<NormalContent>();
     private List<NormalContent> filpCardList = new List<NormalContent>();
-
+    private List<ButtonActionContent> buttonActionUpList = new List<ButtonActionContent>();
+    private List<NormalContent> buttonActionDownList = new List<NormalContent>();
 
     [Title("Manager")]
     public UIManager uiManager;
@@ -101,11 +107,37 @@ public class GameManager : MonoBehaviour
             content.gameObject.SetActive(false);
             filpCardList.Add(content);
         }
+
+        for (int i = 0; i < 6; i++)
+        {
+            ButtonActionContent content = Instantiate(buttonActionContent);
+            content.transform.localPosition = new Vector3(0, 0, 0);
+            content.transform.localScale = new Vector3(1, 1, 1);
+            content.transform.parent = buttonActionUpTransform;
+            content.gameObject.SetActive(false);
+            buttonActionUpList.Add(content);
+        }
+
+        for (int i = 0; i < 6; i++)
+        {
+            NormalContent content = Instantiate(normalContent);
+            content.transform.localPosition = new Vector3(0, 0, 0);
+            content.transform.localScale = new Vector3(1, 1, 1);
+            content.transform.parent = buttonActionDownTransform;
+            content.gameObject.SetActive(false);
+            buttonActionDownList.Add(content);
+        }
     }
 
     private void Start()
     {
         gameModeText.text = LocalizationManager.instance.GetString(gamePlayType.ToString());
+    }
+
+    [Button]
+    public void GetServerTime()
+    {
+        PlayfabManager.instance.GetServerTime();
     }
 
     #region Setting
@@ -180,58 +212,36 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void CreateButtonActionRandom()
+    {
+        for(int i = 0; i < buttonActionUpList.Count; i ++)
+        {
+            buttonActionUpList[i].gameObject.SetActive(false);
+        }
+
+        //ShuffleList(buttonActionUpList);
+
+        numberList.Clear();
+
+        int number = 0;
+
+        for (int i = 0; i < buttonActionLevelIndex; i++)
+        {
+            number = Random.Range(0, buttonActionUpList.Count);
+            numberList.Enqueue(number);
+            buttonActionUpList[i].Initialize(number);
+            buttonActionUpList[i].gameObject.SetActive(true);
+        }
+
+        buttonActionIndex = numberList.Dequeue();
+    }
+
     #endregion
 
     #region Button
     public void OnGameStartButton() //게임 시작 버튼
     {
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData(gamePlayType.ToString(), GameStart);
-    }
-
-    public void GameStart(bool check)
-    {
-        if(!check)
-        {
-            Debug.Log("해당 게임모드가 열려있지 않습니다.");
-            return;
-        }
-
-        uiManager.OpenGamePlayUI(gamePlayType);
-
-        nowIndex = 0;
-        setIndex = 1;
-        countIndex = 0;
-
-        for (int i = 0; i < normalContentList.Count; i++)
-        {
-            normalContentList[i].Initialize(gamePlayType);
-        }
-
-        for (int i = 0; i < moleCatchContentList.Count; i++)
-        {
-            moleCatchContentList[i].Initialize(gamePlayType);
-        }
-
-        for (int i = 0; i < filpCardList.Count; i++)
-        {
-            filpCardList[i].Initialize(gamePlayType);
-        }
-
-        switch (gamePlayType)
-        {
-            case GamePlayType.GameChoice1:
-                CreateUnDuplicateRandom();
-                break;
-            case GamePlayType.GameChoice2:
-                CreateMoleRandom();
-                break;
-            case GamePlayType.GameChoice3:
-                saveIndex = -1;
-                CreateFilpCardRandom();
-                break;
-        }
-
-        eGameStart();
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData(gamePlayType.ToString(), InitializeGame);
     }
 
     public void OpenGameMenuButton() //게임 시작전 모드 선택 창 열기
@@ -239,7 +249,7 @@ public class GameManager : MonoBehaviour
         uiManager.OpenMenu();
     }
 
-    public void OnSetGameType(int number) //모드 선택 창에서 옵션 선택
+    public void ChoiceGameType(int number) //모드 선택 창에서 옵션 선택
     {
         switch(number)
         {
@@ -255,6 +265,26 @@ public class GameManager : MonoBehaviour
                 gamePlayType = GamePlayType.GameChoice3;
 
                 break;
+            case 3:
+                gamePlayType = GamePlayType.GameChoice4;
+
+                break;
+            case 4:
+                gamePlayType = GamePlayType.GameChoice5;
+
+                break;
+            case 5:
+                gamePlayType = GamePlayType.GameChoice6;
+
+                break;
+            case 6:
+                gamePlayType = GamePlayType.GameChoice7;
+
+                break;
+            case 7:
+                gamePlayType = GamePlayType.GameChoice8;
+
+                break;
         }
 
         GameStateManager.instance.GamePlayType = gamePlayType;
@@ -267,6 +297,81 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Game
+    public void InitializeGame(bool check)
+    {
+        if (!check)
+        {
+            Debug.Log("해당 게임모드가 열려있지 않습니다.");
+            return;
+        }
+
+        uiManager.OpenGamePlayUI(gamePlayType);
+
+        switch (gamePlayType)
+        {
+            case GamePlayType.GameChoice1:
+
+                nowIndex = 0;
+                setIndex = 1;
+                countIndex = 0;
+
+                for (int i = 0; i < normalContentList.Count; i++)
+                {
+                    normalContentList[i].Initialize(gamePlayType);
+                }
+
+                CreateUnDuplicateRandom();
+
+                break;
+            case GamePlayType.GameChoice2:
+
+                for (int i = 0; i < moleCatchContentList.Count; i++)
+                {
+                    moleCatchContentList[i].Initialize(gamePlayType);
+                }
+
+                CreateMoleRandom();
+
+                break;
+            case GamePlayType.GameChoice3:
+
+                for (int i = 0; i < filpCardList.Count; i++)
+                {
+                    filpCardList[i].Initialize(gamePlayType);
+                }
+
+                filpCardIndex = -1;
+                CreateFilpCardRandom();
+
+                break;
+            case GamePlayType.GameChoice4:
+
+                buttonActionLevelIndex = 1;
+                buttonActionIndex = 0;
+
+                for (int i = 0; i < buttonActionDownList.Count; i++)
+                {
+                    buttonActionDownList[i].Initialize(gamePlayType);
+                    buttonActionDownList[i].ButtonActionReset(i);
+                    buttonActionDownList[i].gameObject.SetActive(true);
+                }
+
+                CreateButtonActionRandom();
+
+                break;
+            case GamePlayType.GameChoice5:
+                break;
+            case GamePlayType.GameChoice6:
+                break;
+            case GamePlayType.GameChoice7:
+                break;
+            case GamePlayType.GameChoice8:
+                break;
+        }
+
+        eGameStart();
+    }
+
     public void CheckNumber(int index, System.Action<bool> action)
     {
         if(nowIndex + 1 == index)
@@ -300,7 +405,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("Success");
             action(true);
 
-            PlusScore(10);
+            PlusScore(20);
         }
         else
         {
@@ -319,10 +424,10 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("Click");
 
-        if(saveIndex == -1)
+        if(filpCardIndex == -1)
         {
             Debug.Log("Choice");
-            saveIndex = index;
+            filpCardIndex = index;
 
             action?.Invoke(0);
 
@@ -330,7 +435,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            if(saveIndex == index)
+            if(filpCardIndex == index)
             {
                 Debug.Log("Success");
                 action?.Invoke(1);
@@ -338,14 +443,14 @@ public class GameManager : MonoBehaviour
 
                 PlusScore(10);
 
-                saveIndex = -1;
+                filpCardIndex = -1;
                 nowIndex++;
 
                 if(nowIndex >= filpCardList.Count / 2)
                 {
                     Debug.Log("Card Reset");
 
-                    saveIndex = -1;
+                    filpCardIndex = -1;
                     nowIndex = 0;
                     CreateFilpCardRandom();
                     StartCoroutine("FilpCardCorution");
@@ -357,13 +462,49 @@ public class GameManager : MonoBehaviour
                 action?.Invoke(2);
                 saveAction?.Invoke(2);
 
-                saveIndex = -1;
+                filpCardIndex = -1;
 
                 MinusScore(5);
             }
         }
     }
 
+    public void CheckButtonAction(int index, System.Action<bool> action)
+    {
+        if (buttonActionIndex.Equals(index))
+        {
+            Debug.Log("Success");
+            action?.Invoke(true);
+
+            PlusScore(10);
+
+            if (numberList.Count == 0)
+            {
+                if(buttonActionLevelIndex < 6)
+                {
+                    buttonActionLevelIndex += 1;
+                }
+
+                CreateButtonActionRandom();
+            }
+            else
+            {
+                buttonActionIndex = numberList.Dequeue();
+            }
+        }
+        else
+        {
+            Debug.Log("Failure");
+            action?.Invoke(false);
+
+            MinusScore(5);
+        }
+
+    }
+
+    #endregion
+
+    #region Event
     public void OnGameStart()
     {
         switch (gamePlayType)
@@ -376,6 +517,16 @@ public class GameManager : MonoBehaviour
                 break;
             case GamePlayType.GameChoice3:
                 StartCoroutine("FilpCardCorution");
+                break;
+            case GamePlayType.GameChoice4:
+                break;
+            case GamePlayType.GameChoice5:
+                break;
+            case GamePlayType.GameChoice6:
+                break;
+            case GamePlayType.GameChoice7:
+                break;
+            case GamePlayType.GameChoice8:
                 break;
         }
     }

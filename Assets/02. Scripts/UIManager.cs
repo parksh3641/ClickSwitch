@@ -22,6 +22,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     public Text crystalText;
 
     public GameObject gameMenuUI;
+    public GameObject gamePlayView;
     public GameObject[] gamePlayUI;
 
     [Title("ReadyUI")]
@@ -102,6 +103,8 @@ public class UIManager : MonoBehaviour, IGameEvent
         gameMenuUI.SetActive(false);
         gameOptionUI.SetActive(false);
         languageUI.SetActive(false);
+
+        gamePlayView.SetActive(false);
 
         for (int i = 0; i < gamePlayUI.Length; i ++)
         {
@@ -185,12 +188,16 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void OpenGamePlayUI(GamePlayType type)
     {
+        gamePlayView.SetActive(true);
+
         gamePlayUI[(int)type].SetActive(true);
     }
 
     public void CloseGamePlayUI()
     {
-        for(int i = 0; i < gamePlayUI.Length; i ++)
+        gamePlayView.SetActive(false);
+
+        for (int i = 0; i < gamePlayUI.Length; i ++)
         {
             gamePlayUI[i].SetActive(false);
         }
@@ -377,7 +384,7 @@ public class UIManager : MonoBehaviour, IGameEvent
         bestComboText.text = LocalizationManager.instance.GetString("BestCombo") + "\n" + bestCombo.ToString();
 
         getGoldText.text = LocalizationManager.instance.GetString("Gold") + "\n" + ((int)(score / 10)).ToString();
-        rankText.text = "등수" + "\n" + "99 → 99";
+        //rankText.text = "등수" + "\n" + "99 → 99";
 
         GameReset();
     }

@@ -92,7 +92,7 @@ public class RankingManager : MonoBehaviour
 
                     break;
                 case 3:
-                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("BreakStoneScore", SetRanking);
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("FilpCardScore", SetRanking);
 
                     break;
             }

@@ -18,7 +18,7 @@ public class ModeContent : MonoBehaviour
     {
         localizationContent.name = gamePlayType.ToString();
 
-        clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().OnSetGameType((int)gamePlayType); });
+        clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().ChoiceGameType((int)gamePlayType); });
     }
 
     public void OnClick()

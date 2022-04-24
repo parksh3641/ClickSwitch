@@ -11,7 +11,12 @@ public enum GamePlayType
 {
     GameChoice1 = 0,
     GameChoice2,
-    GameChoice3
+    GameChoice3,
+    GameChoice4,
+    GameChoice5,
+    GameChoice6,
+    GameChoice7,
+    GameChoice8
 }
 
 public enum OptionType

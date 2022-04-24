@@ -7,24 +7,30 @@ using UnityEngine.UI;
 
 public class NormalContent : MonoBehaviour, IContentEvent
 {
-    GamePlayType gamePlayType = GamePlayType.GameChoice1;
+    public GamePlayType gamePlayType = GamePlayType.GameChoice1;
 
     [SerializeField]
     private bool isActive = false;
+    public int index = 0;
+    public Text numberText;
 
-
+    [Space]
     public UnityEvent clickEvent;
     public UnityEvent clickSoundEvent;
     public UnityEvent failSoundEvent;
 
+    [Space]
     public Image backgroundImg;
     public Sprite[] backgroundImgList;
-    public int index = 0;
-    public Text numberText;
 
+    [Space]
     [Title("FilpCard")]
     public Image filpCardImg;
     public Sprite[] filpCardImgList;
+
+    [Space]
+    [Title("ButtonAction")]
+    public string[] buttonActionStrArray;
 
     void Awake()
     {
@@ -53,6 +59,17 @@ public class NormalContent : MonoBehaviour, IContentEvent
             case GamePlayType.GameChoice3:
                 clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().CheckFilpCard(index, isActive, ChoiceCardAction); });
                 break;
+            case GamePlayType.GameChoice4:
+                clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().CheckButtonAction(index, ChoiceButtonAction); });
+                break;
+            case GamePlayType.GameChoice5:
+                break;
+            case GamePlayType.GameChoice6:
+                break;
+            case GamePlayType.GameChoice7:
+                break;
+            case GamePlayType.GameChoice8:
+                break;
         }
     }
 
@@ -78,6 +95,15 @@ public class NormalContent : MonoBehaviour, IContentEvent
     {
         filpCardImg.sprite = filpCardImgList[number];
         filpCardImg.enabled = false;
+        index = number;
+
+        isActive = true;
+    }
+
+    public void ButtonActionReset(int number)
+    {
+        backgroundImg.sprite = backgroundImgList[0];
+        numberText.text = buttonActionStrArray[number];
         index = number;
 
         isActive = true;
@@ -150,6 +176,18 @@ public class NormalContent : MonoBehaviour, IContentEvent
 
                 failSoundEvent.Invoke();
                 break;
+        }
+    }
+
+    public void ChoiceButtonAction(bool check)
+    {
+        if(check)
+        {
+
+        }
+        else
+        {
+            failSoundEvent.Invoke();
         }
     }
 

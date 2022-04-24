@@ -666,4 +666,43 @@ public class PlayfabManager : MonoBehaviour
             Debug.Log("The language on the entity's profile has been updated.");
         }, FailureCallback);
     }
+
+    public void GetServerTime()
+    {
+        if (NetworkConnect.instance.CheckConnectInternet())
+        {
+            try
+            {
+                PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+                {
+                    FunctionName = "GetServerTime",
+                    GeneratePlayStreamEvent = true,
+                }, OnCloudGetServerTime, DisplayPlayfabError);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
+        }
+        else
+        {
+            Debug.LogError("Error : Internet Disconnected\nCheck Internet State");
+        }
+    }
+
+    //"2022-04-24T22:17:04.548Z"
+
+    public void OnCloudGetServerTime(ExecuteCloudScriptResult result)
+    {
+        string date = PlayFabSimpleJson.SerializeObject(result.FunctionResult);
+
+        string year = date.Substring(1, 4);
+        string month = date.Substring(6, 2);
+        string day = date.Substring(9, 2);
+        string hour = date.Substring(12, 2);
+        string minute = date.Substring(15, 2);
+        string second = date.Substring(18, 2);
+
+        DateTime time = new DateTime(int.Parse(year), int.Parse(month), int.Parse(day), int.Parse(hour), int.Parse(minute), int.Parse(second));
+    }
 }
