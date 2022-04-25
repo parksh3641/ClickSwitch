@@ -7,6 +7,13 @@ public class EnumManager : MonoBehaviour
 
 }
 
+public enum GameModeType
+{
+    Normal,
+    Hard,
+    Expert,
+    Perfect
+}
 public enum GamePlayType
 {
     GameChoice1 = 0,

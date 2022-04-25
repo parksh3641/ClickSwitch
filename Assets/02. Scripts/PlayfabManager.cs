@@ -667,7 +667,7 @@ public class PlayfabManager : MonoBehaviour
         }, FailureCallback);
     }
 
-    public void GetServerTime()
+    public void GetServerTime(Action<DateTime> action)
     {
         if (NetworkConnect.instance.CheckConnectInternet())
         {
@@ -677,7 +677,27 @@ public class PlayfabManager : MonoBehaviour
                 {
                     FunctionName = "GetServerTime",
                     GeneratePlayStreamEvent = true,
-                }, OnCloudGetServerTime, DisplayPlayfabError);
+                }, result =>
+                {
+                    string date = PlayFabSimpleJson.SerializeObject(result.FunctionResult);
+
+                    string year = date.Substring(1, 4);
+                    string month = date.Substring(6, 2);
+                    string day = date.Substring(9, 2);
+                    string hour = date.Substring(12, 2);
+                    string minute = date.Substring(15, 2);
+                    string second = date.Substring(18, 2);
+
+                    DateTime serverTime = new DateTime(int.Parse(year), int.Parse(month), int.Parse(day), 0, 0, 0);
+
+                    serverTime = serverTime.AddDays(1);
+
+                    DateTime time = new DateTime(int.Parse(year), int.Parse(month), int.Parse(day), int.Parse(hour), int.Parse(minute), int.Parse(second));
+
+                    TimeSpan span = serverTime - time;
+
+                    action?.Invoke(DateTime.Parse(span.ToString()));
+                }, DisplayPlayfabError);
             }
             catch (Exception e)
             {
@@ -691,18 +711,4 @@ public class PlayfabManager : MonoBehaviour
     }
 
     //"2022-04-24T22:17:04.548Z"
-
-    public void OnCloudGetServerTime(ExecuteCloudScriptResult result)
-    {
-        string date = PlayFabSimpleJson.SerializeObject(result.FunctionResult);
-
-        string year = date.Substring(1, 4);
-        string month = date.Substring(6, 2);
-        string day = date.Substring(9, 2);
-        string hour = date.Substring(12, 2);
-        string minute = date.Substring(15, 2);
-        string second = date.Substring(18, 2);
-
-        DateTime time = new DateTime(int.Parse(year), int.Parse(month), int.Parse(day), int.Parse(hour), int.Parse(minute), int.Parse(second));
-    }
 }
