@@ -53,3 +53,10 @@ public enum MoneyType
     Gold = 0,
     Crystal
 }
+
+public enum GameSoundType
+{
+    Lobby = 0,
+    Main,
+    End
+}

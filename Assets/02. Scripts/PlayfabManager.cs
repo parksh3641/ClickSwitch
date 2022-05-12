@@ -381,6 +381,8 @@ public class PlayfabManager : MonoBehaviour
 
         yield return GetStatistics();
 
+        yield return GetPlayerData();
+
         Debug.Log("Load Data Complete");
 
         isActive = true;
@@ -457,6 +459,43 @@ public class PlayfabManager : MonoBehaviour
            {
 
            });
+
+        return true;
+    }
+
+    public void SetPlayerData(Dictionary<string, string> data)
+    {
+        var request = new UpdateUserDataRequest() { Data = data, Permission = UserDataPermission.Public };
+        try
+        {
+            PlayFabClientAPI.UpdateUserData(request, (result) =>
+            {
+                Debug.Log("Update Player Data!");
+
+            }, DisplayPlayfabError);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e.Message);
+        }
+    }
+
+    public bool GetPlayerData()
+    {
+        var request = new GetUserDataRequest() { PlayFabId = GameStateManager.instance.PlayfabId };
+        PlayFabClientAPI.GetUserData(request, (result) =>
+        {
+            AchievementData content = new AchievementData();
+
+            foreach (var eachData in result.Data)
+            {
+                string key = eachData.Key;
+
+                content = JsonUtility.FromJson<AchievementData>(eachData.Value.Value);
+                playerDataBase.OnSetAchievementContent(content);
+            }
+
+        }, DisplayPlayfabError);
 
         return true;
     }

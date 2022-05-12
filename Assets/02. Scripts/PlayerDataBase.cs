@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,6 +33,9 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private int bestFilpCardCombo = 0;
 
+    [Title("Achievement")]
+    public List<AchievementData> achievementList = new List<AchievementData>();
+
     public void Initialize()
     {
         gold = 0;
@@ -43,6 +47,8 @@ public class PlayerDataBase : ScriptableObject
         bestMoleCatchCombo = 0;
         bestFilpCardScore = 0;
         bestFilpCardCombo = 0;
+
+        achievementList.Clear();
     }
 
     public int TotalScore
@@ -151,6 +157,12 @@ public class PlayerDataBase : ScriptableObject
         {
             bestFilpCardScore = value;
         }
+    }
+
+
+    public void OnSetAchievementContent(AchievementData content)
+    {
+        achievementList.Add(content);
     }
 
 }

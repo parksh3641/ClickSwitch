@@ -544,8 +544,6 @@ public class GameManager : MonoBehaviour
     public void OnGameEnd()
     {
         StopAllCoroutines();
-
-
     }
 
     #endregion

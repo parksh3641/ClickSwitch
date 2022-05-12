@@ -75,6 +75,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     public RankingManager rankingManager;
     public ProfileManager profileManager;
     public NickNameManager nickNameManager;
+    public SoundManager soundManager;
 
     [Title("Animation")]
     public CoinAnimation goldAnimation;
@@ -92,7 +93,6 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         GameManager.eGameStart += this.GameStart;
         GameManager.eGamePause += this.GamePause;
-        GameManager.eGameEnd += this.GameEnd;
 
         GameManager.PlusScore += this.PlusScore;
         GameManager.MinusScore += this.MinusScore;
@@ -128,7 +128,6 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         GameManager.eGameStart -= this.GameStart;
         GameManager.eGamePause -= this.GamePause;
-        GameManager.eGameEnd -= this.GameEnd;
 
         GameManager.PlusScore -= this.PlusScore;
         GameManager.MinusScore -= this.MinusScore;
@@ -279,6 +278,8 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         Debug.Log("Game End");
 
+        soundManager.PlaySound(GameSoundType.End);
+
         scoreText.text = "";
         comboManager.OnStopCombo();
 
@@ -418,6 +419,8 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         Debug.Log("Game Stop");
 
+        soundManager.PlaySound(GameSoundType.Lobby);
+
         StopAllCoroutines();
 
         gameReadyUI.SetActive(false);
@@ -427,8 +430,6 @@ public class UIManager : MonoBehaviour, IGameEvent
         scoreText.text = "";
         int number = comboManager.GetCombo();
         comboManager.OnStopCombo();
-
-        eGameEnd.Invoke();
 
         CloseGamePlayUI();
 
@@ -458,6 +459,8 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void CloseGameEnd()
     {
+        soundManager.PlaySound(GameSoundType.Lobby);
+
         gameEndUI.SetActive(false);
     }
 
