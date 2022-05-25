@@ -25,11 +25,17 @@ public class ModeContent : MonoBehaviour
 
     DateTime serverTime;
 
+    public ImageDataBase imageDataBase;
+
     private void Awake()
     {
         titleText.name = gamePlayType.ToString();
 
         clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().ChoiceGameType((int)gamePlayType); });
+
+        if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+
+        iconImgArray = imageDataBase.GetIconArray();
     }
 
     private void Start()

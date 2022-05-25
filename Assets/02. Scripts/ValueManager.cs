@@ -16,7 +16,9 @@ public class ValueManager : MonoBehaviour
     private float comboTimer = 0.5f;
 
     [SerializeField]
-    private float moleTimer = 3.0f;
+    private float moleNextTimer = 3.0f;
+    [SerializeField]
+    private float moleCatchTimer = 1.0f;
 
     [SerializeField]
     private float cardTimer = 2.0f;
@@ -43,9 +45,14 @@ public class ValueManager : MonoBehaviour
         return comboTimer;
     }
 
-    public float GetMoleTimer()
+    public float GetMoleNextTimer()
     {
-        return moleTimer;
+        return moleNextTimer;
+    }
+
+    public float GetMoleCatchTimer()
+    {
+        return moleCatchTimer;
     }
 
     public float GetCardTimer()

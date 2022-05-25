@@ -452,6 +452,12 @@ public class PlayfabManager : MonoBehaviour
                        case "FilpCardCombo":
                            playerDataBase.BestFilpCardCombo = statistics.Value;
                            break;
+                       case "ButtonActionScore":
+                           playerDataBase.BestButtonActionScore = statistics.Value;
+                           break;
+                       case "ButtonActionCombo":
+                           playerDataBase.BestButtonActionCombo = statistics.Value;
+                           break;
                    }
                }
            })

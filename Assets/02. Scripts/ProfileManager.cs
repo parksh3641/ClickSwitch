@@ -28,7 +28,7 @@ public class ProfileManager : MonoBehaviour
     {
         profileContentList.Clear();
 
-        for (int i = 0; i < 3; i ++)
+        for (int i = 0; i < 4; i ++)
         {
             ProfileContent monster = Instantiate(profileContent);
             monster.transform.parent = profileTransform;
@@ -70,8 +70,9 @@ public class ProfileManager : MonoBehaviour
             nickNameText.text = GameStateManager.instance.CustomId;
         }
 
-        profileContentList[0].InitState(LocalizationManager.instance.GetString("GameChoice1"),playerDataBase.BestSpeedTouchScore, playerDataBase.BestSpeedTouchCombo);
+        profileContentList[0].InitState(LocalizationManager.instance.GetString("GameChoice1"), playerDataBase.BestSpeedTouchScore, playerDataBase.BestSpeedTouchCombo);
         profileContentList[1].InitState(LocalizationManager.instance.GetString("GameChoice2"), playerDataBase.BestMoleCatchScore, playerDataBase.BestMoleCatchCombo);
         profileContentList[2].InitState(LocalizationManager.instance.GetString("GameChoice3"), playerDataBase.BestFilpCardScore, playerDataBase.BestFilpCardCombo);
+        profileContentList[3].InitState(LocalizationManager.instance.GetString("GameChoice4"), playerDataBase.BestButtonActionScore, playerDataBase.BestButtonActionCombo);
     }
 }

@@ -24,6 +24,11 @@ public class NormalContent : MonoBehaviour, IContentEvent
     public Sprite[] backgroundImgList;
 
     [Space]
+    [Title("MoleCatch")]
+    public Image moleImg;
+    public Sprite[] moleImgList;
+
+    [Space]
     [Title("FilpCard")]
     public Image filpCardImg;
     public Sprite[] filpCardImgList;
@@ -39,6 +44,7 @@ public class NormalContent : MonoBehaviour, IContentEvent
 
         numberText.text = "";
 
+        moleImg.enabled = false;
         filpCardImg.enabled = false;
     }
 
@@ -73,13 +79,6 @@ public class NormalContent : MonoBehaviour, IContentEvent
         }
     }
 
-    public void OnReset()
-    {
-        backgroundImg.sprite = backgroundImgList[0];
-
-        isActive = true;
-    }
-
     public void NormalReset(int number)
     {
         index = number;
@@ -87,6 +86,16 @@ public class NormalContent : MonoBehaviour, IContentEvent
 
         backgroundImg.sprite = backgroundImgList[0];
         backgroundImg.enabled = true;
+
+        moleImg.enabled = false;
+
+        isActive = true;
+    }
+
+    public void MoleReset()
+    {
+        moleImg.sprite = moleImgList[0];
+        moleImg.enabled = false;
 
         isActive = true;
     }
@@ -102,16 +111,20 @@ public class NormalContent : MonoBehaviour, IContentEvent
 
     public void ButtonActionReset(int number)
     {
-        backgroundImg.sprite = backgroundImgList[0];
         numberText.text = buttonActionStrArray[number];
         index = number;
 
         isActive = true;
     }
 
-    public void First()
+    public void NormalFirst()
     {
         backgroundImg.sprite = backgroundImgList[1];
+    }
+
+    public void SetMole()
+    {
+        moleImg.enabled = true;
     }
 
 
@@ -146,13 +159,14 @@ public class NormalContent : MonoBehaviour, IContentEvent
         {
             isActive = false;
 
-            backgroundImg.sprite = backgroundImgList[0];
+            moleImg.sprite = moleImgList[1];
         }
         else
         {
             failSoundEvent.Invoke();
         }
     }
+
 
     public void ChoiceCardAction(int check)
     {

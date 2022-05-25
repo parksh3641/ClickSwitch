@@ -33,8 +33,15 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private int bestFilpCardCombo = 0;
 
+    [SerializeField]
+    private int bestButtonActionScore = 0;
+
+    [SerializeField]
+    private int bestButtonActionCombo = 0;
+
     [Title("Achievement")]
-    public List<AchievementData> achievementList = new List<AchievementData>();
+    [ShowInInspector]
+    public List<AchievementData> achievementDataList = new List<AchievementData>();
 
     public void Initialize()
     {
@@ -47,8 +54,10 @@ public class PlayerDataBase : ScriptableObject
         bestMoleCatchCombo = 0;
         bestFilpCardScore = 0;
         bestFilpCardCombo = 0;
+        bestButtonActionScore = 0;
+        bestButtonActionCombo = 0;
 
-        achievementList.Clear();
+        achievementDataList.Clear();
     }
 
     public int TotalScore
@@ -134,6 +143,17 @@ public class PlayerDataBase : ScriptableObject
             bestMoleCatchCombo = value;
         }
     }
+    public int BestFilpCardScore
+    {
+        get
+        {
+            return bestFilpCardScore;
+        }
+        set
+        {
+            bestFilpCardScore = value;
+        }
+    }
 
     public int BestFilpCardCombo
     {
@@ -147,22 +167,53 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
-    public int BestFilpCardScore
+    public int BestButtonActionScore
     {
         get
         {
-            return bestFilpCardScore;
+            return bestButtonActionScore;
         }
         set
         {
-            bestFilpCardScore = value;
+            bestButtonActionScore = value;
+        }
+    }
+
+    public int BestButtonActionCombo
+    {
+        get
+        {
+            return bestButtonActionCombo;
+        }
+        set
+        {
+            bestButtonActionCombo = value;
         }
     }
 
 
     public void OnSetAchievementContent(AchievementData content)
     {
-        achievementList.Add(content);
+        achievementDataList.Add(content);
     }
 
+    public bool GetPerfectMode(GamePlayType type)
+    {
+        int index = 0;
+        bool check = false;
+
+        for(int i = 0; i < achievementDataList.Count; i ++)
+        {
+            if(achievementDataList[i].achievementType.Equals(type))
+            {
+                index = achievementDataList[i].achievementList[0];        
+            }
+        }
+
+        if (index == 0) check = false;
+        else check = true;
+
+        return check;
+
+    }
 }

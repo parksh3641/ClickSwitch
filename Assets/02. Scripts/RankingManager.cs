@@ -95,6 +95,10 @@ public class RankingManager : MonoBehaviour
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("FilpCardScore", SetRanking);
 
                     break;
+                case 4:
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("ButtonActionScore", SetRanking);
+
+                    break;
             }
         }
     }

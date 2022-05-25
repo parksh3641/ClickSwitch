@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
     WaitForSeconds waitForSeconds = new WaitForSeconds(1);
     WaitForSeconds waitForHalfSeconds = new WaitForSeconds(0.5f);
     WaitForSeconds waitForMoleCatchSeconds;
+    WaitForSeconds waitForMoleNextSeconds;
 
 
 
@@ -49,6 +50,7 @@ public class GameManager : MonoBehaviour
 
     private int filpCardIndex = 0; //세이브 값
 
+    private int buttonActionNumber = 0;
     private int buttonActionLevelIndex = 0;
     private int buttonActionIndex = 0;
 
@@ -167,7 +169,7 @@ public class GameManager : MonoBehaviour
             setIndex++;
         }
 
-        normalContentList[0].First();
+        normalContentList[0].NormalFirst();
 
         countIndex = setIndex;
     }
@@ -176,12 +178,13 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < moleCatchContentList.Count; i++)
         {
-            moleCatchContentList[i].OnReset();
+            moleCatchContentList[i].MoleReset();
             moleCatchContentList[i].gameObject.SetActive(false);
             moleCatchContentList[i].gameObject.SetActive(true);
         }
 
-        waitForMoleCatchSeconds = new WaitForSeconds(ValueManager.instance.GetMoleTimer());
+        waitForMoleCatchSeconds = new WaitForSeconds(ValueManager.instance.GetMoleCatchTimer());
+        waitForMoleNextSeconds = new WaitForSeconds(ValueManager.instance.GetMoleNextTimer());
     }
 
     private void CreateFilpCardRandom()
@@ -226,6 +229,8 @@ public class GameManager : MonoBehaviour
             buttonActionUpList[i].Initialize(number);
             buttonActionUpList[i].gameObject.SetActive(true);
         }
+
+        buttonActionNumber = 0;
 
         buttonActionIndex = numberList.Dequeue();
     }
@@ -350,6 +355,7 @@ public class GameManager : MonoBehaviour
                 break;
             case GamePlayType.GameChoice4:
 
+                nowIndex = 0;
                 buttonActionLevelIndex = 1;
                 buttonActionIndex = 0;
 
@@ -426,11 +432,8 @@ public class GameManager : MonoBehaviour
     {
         if (!isActive || !isactive) return;
 
-        Debug.Log("Click");
-
         if(filpCardIndex == -1)
         {
-            Debug.Log("Choice");
             filpCardIndex = index;
 
             action?.Invoke(0);
@@ -493,6 +496,9 @@ public class GameManager : MonoBehaviour
             }
             else
             {
+                buttonActionUpList[buttonActionNumber].OnCheck();
+                buttonActionNumber++;
+
                 buttonActionIndex = numberList.Dequeue();
             }
         }
@@ -538,7 +544,6 @@ public class GameManager : MonoBehaviour
     public void OnGamePause()
     {
         eGamePause();
-
     }
 
     public void OnGameEnd()
@@ -555,15 +560,15 @@ public class GameManager : MonoBehaviour
 
         moleIndex = 0;
 
-        moleCatchContentList[0].First();
+        moleCatchContentList[0].SetMole();
 
-        yield return waitForHalfSeconds;
+        yield return waitForMoleCatchSeconds;
 
         moleIndex = -1;
 
-        moleCatchContentList[0].OnReset();
+        moleCatchContentList[0].MoleReset();
 
-        yield return waitForMoleCatchSeconds;
+        yield return waitForMoleNextSeconds;
 
         StartCoroutine(MoleCatchCorution());
     }

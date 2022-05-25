@@ -204,15 +204,15 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void OpenOption()
     {
-        eGamePause.Invoke();
-
         if(gameOptionUI.activeSelf)
         {
             gameOptionUI.SetActive(false);
+            Time.timeScale = 1;
         }
         else
         {
             gameOptionUI.SetActive(true);
+            Time.timeScale = 0;
         }
     }
 
@@ -307,6 +307,10 @@ public class UIManager : MonoBehaviour, IGameEvent
                 bestScore = playerDataBase.BestFilpCardScore;
                 bestCombo = playerDataBase.BestFilpCardCombo;
                 break;
+            case GamePlayType.GameChoice4:
+                bestScore = playerDataBase.BestButtonActionScore;
+                bestCombo = playerDataBase.BestButtonActionCombo;
+                break;
         }
 
         if(Comparison(score,bestScore))
@@ -327,6 +331,10 @@ public class UIManager : MonoBehaviour, IGameEvent
                 case GamePlayType.GameChoice3:
                     playerDataBase.BestFilpCardScore = (int)score;
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("FilpCardScore", (int)score);
+                    break;
+                case GamePlayType.GameChoice4:
+                    playerDataBase.BestButtonActionScore = (int)score;
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("ButtonActionScore", (int)score);
                     break;
             }
 
@@ -357,6 +365,10 @@ public class UIManager : MonoBehaviour, IGameEvent
                 case GamePlayType.GameChoice3:
                     playerDataBase.BestFilpCardCombo = combo;
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("FilpCardCombo", combo);
+                    break;
+                case GamePlayType.GameChoice4:
+                    playerDataBase.BestButtonActionCombo = combo;
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("ButtonActionCombo", combo);
                     break;
             }
 
@@ -392,7 +404,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     void UpdateTotalScore()
     {
-        int nowTotalScore = playerDataBase.BestSpeedTouchScore + playerDataBase.BestMoleCatchScore + playerDataBase.BestFilpCardScore;
+        int nowTotalScore = playerDataBase.BestSpeedTouchScore + playerDataBase.BestMoleCatchScore + playerDataBase.BestFilpCardScore + playerDataBase.BestButtonActionScore;
 
         if (Comparison(nowTotalScore, playerDataBase.TotalScore))
         {
@@ -403,21 +415,23 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void OpenGameStop()
     {
-        eGamePause.Invoke();
-
         if(cancleWindowUI.activeSelf)
         {
             cancleWindowUI.SetActive(false);
+            Time.timeScale = 1;
         }
         else
         {
             cancleWindowUI.SetActive(true);
+            Time.timeScale = 0;
         }
     }
 
     public void GameStop()
     {
         Debug.Log("Game Stop");
+
+        Time.timeScale = 1;
 
         soundManager.PlaySound(GameSoundType.Lobby);
 
