@@ -55,6 +55,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     [Space]
     [Title("LoginUI")]
     public GameObject loginUI;
+    public GameObject[] loginButtonList;
 
     [Space]
     [Title("NotionUI")]
@@ -76,6 +77,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     public ProfileManager profileManager;
     public NickNameManager nickNameManager;
     public SoundManager soundManager;
+    public GoogleAdsManager googldAdsManager;
 
     [Title("Animation")]
     public CoinAnimation goldAnimation;
@@ -120,6 +122,20 @@ public class UIManager : MonoBehaviour, IGameEvent
     private void Start()
     {
         loginUI.SetActive(!GameStateManager.instance.AutoLogin);
+
+        for(int i = 0; i < loginButtonList.Length; i ++)
+        {
+            loginButtonList[i].SetActive(false);
+        }
+
+
+#if UNITY_EDITOR || UNITY_WEBGL
+        loginButtonList[0].SetActive(true);
+#elif UNITY_ANDROID
+        loginButtonList[1].SetActive(true);
+#elif UNITY_IOS
+        loginButtonList[2].SetActive(true);
+#endif
 
         VirtualCurrency();
     }
@@ -174,7 +190,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     }
 
 
-    #region Button
+#region Button
     public void OpenMenu()
     {
         gameMenuUI.SetActive(true);
@@ -250,7 +266,7 @@ public class UIManager : MonoBehaviour, IGameEvent
         VirtualCurrency();
     }
 
-    #endregion
+#endregion
     public void GameStart()
     {
         Debug.Log("Game Start");
@@ -273,6 +289,8 @@ public class UIManager : MonoBehaviour, IGameEvent
             pause = true;
         }
     }
+
+    int money = 0;
 
     public void GameEnd()
     {
@@ -377,7 +395,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         UpdateTotalScore();
 
-        int money = (int)(score / 10);
+        money = (int)(score / 10);
 
         if(money > 0)
         {
@@ -396,10 +414,26 @@ public class UIManager : MonoBehaviour, IGameEvent
         nowComboText.text = LocalizationManager.instance.GetString("Combo") + "\n" + combo.ToString();
         bestComboText.text = LocalizationManager.instance.GetString("BestCombo") + "\n" + bestCombo.ToString();
 
-        getGoldText.text = LocalizationManager.instance.GetString("Gold") + "\n" + ((int)(score / 10)).ToString();
+        getGoldText.text = LocalizationManager.instance.GetString("Gold") + "\n" + money.ToString();
         //rankText.text = "등수" + "\n" + "99 → 99";
 
         GameReset();
+    }
+
+    public void WatchAd()
+    {
+        Debug.Log("광고 보상 : 코인 2배 지급!");
+
+        if (PlayfabManager.instance.isActive)
+        {
+            PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, money);
+        }
+        playerDataBase.Gold += money;
+
+        goldAnimation.OnPlay(playerDataBase.Gold, money);
+
+        getGoldText.text = LocalizationManager.instance.GetString("Gold") + "\n" + money.ToString() + " + " + money.ToString();
+
     }
 
     void UpdateTotalScore()
@@ -505,7 +539,12 @@ public class UIManager : MonoBehaviour, IGameEvent
         comboManager.OnStopCombo();
     }
 
-    #region Corution
+    public void WaitNotionUI(GamePlayType type)
+    {
+        comboManager.WaitNotionUI(type);
+    }
+
+#region Corution
 
     private IEnumerator ReadyTimerCorution(float time)
     {
@@ -552,5 +591,5 @@ public class UIManager : MonoBehaviour, IGameEvent
         GameEnd();
     }
 
-    #endregion
+#endregion
 }

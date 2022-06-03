@@ -21,7 +21,7 @@ public class ValueManager : MonoBehaviour
     private float moleCatchTimer = 1.0f;
 
     [SerializeField]
-    private float cardTimer = 2.0f;
+    private float cardTimer = 5.0f;
 
 
     private void Awake()

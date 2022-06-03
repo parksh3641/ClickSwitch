@@ -134,6 +134,8 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         gameModeText.text = LocalizationManager.instance.GetString(gamePlayType.ToString());
+
+        ChoiceGameType((int)GameStateManager.instance.GamePlayType);
     }
 
     #region Setting
@@ -582,6 +584,8 @@ public class GameManager : MonoBehaviour
         {
             filpCardList[i].filpCardImg.enabled = true;
         }
+
+        uiManager.WaitNotionUI(gamePlayType);
 
         yield return new WaitForSeconds(ValueManager.instance.GetCardTimer());
 

@@ -6,16 +6,25 @@ using Sirenix.OdinInspector;
 
 public class ComboManager : MonoBehaviour
 {
+    GamePlayType gamePlayType = GamePlayType.GameChoice1;
+
+    [Title("Main")]
     public Image fillamount;
-
     public Text comboText;
-
     public Notion notion;
 
+    [Title("WaitUI")]
+    public GameObject waitObject;
+    public Text waitNotionText;
+    public Image waitFillAmount;
+
     private int comboIndex = 0;
-    [SerializeField]
+
     private float timer = 0;
     private float comboTimer = 0;
+
+    private float waitTimer = 0;
+    private float waitSaveTimer = 0;
 
     bool pause = false;
 
@@ -31,6 +40,8 @@ public class ComboManager : MonoBehaviour
 
     private void Start()
     {
+        waitObject.SetActive(false);
+
         comboTimer = ValueManager.instance.GetComboTimer();
 
         StartCoroutine(TimerCoroutine());
@@ -38,7 +49,7 @@ public class ComboManager : MonoBehaviour
 
     public void OnStartCombo()
     {
-        Debug.Log("Combo");
+        Debug.Log("Combo Start!");
 
         if (timer == 0) comboIndex = 0;
 
@@ -59,6 +70,35 @@ public class ComboManager : MonoBehaviour
         fillamount.fillAmount = 0;
     }
 
+
+    public int GetCombo()
+    {
+        comboText.text = "";
+
+        return comboIndex;
+    }
+
+    void GamePause()
+    {
+        if(pause)
+        {
+            pause = false;
+        }
+        else
+        {
+            pause = true;
+        }
+    }
+
+    public void WaitNotionUI(GamePlayType type)
+    {
+        gamePlayType = type;
+
+        StartCoroutine(WaitNotionUICorution());
+    }
+
+
+    #region Corution
     IEnumerator TimerCoroutine()
     {
         if (!pause)
@@ -79,22 +119,27 @@ public class ComboManager : MonoBehaviour
         StartCoroutine(TimerCoroutine());
     }
 
-    public int GetCombo()
+    IEnumerator WaitNotionUICorution()
     {
-        comboText.text = "";
+        waitTimer = ValueManager.instance.GetCardTimer();
+        waitSaveTimer =  waitTimer;
 
-        return comboIndex;
+        waitFillAmount.fillAmount = 1;
+        waitObject.SetActive(true);
+        waitNotionText.text = LocalizationManager.instance.GetString("WaitNotion_" + gamePlayType);
+
+        while (waitTimer > 0)
+        {
+            waitTimer -= 0.0167f;
+
+            waitFillAmount.fillAmount = waitTimer / waitSaveTimer;
+
+            yield return new WaitForSeconds(0.01f);
+        }
+
+        waitObject.SetActive(false);
     }
 
-    void GamePause()
-    {
-        if(pause)
-        {
-            pause = false;
-        }
-        else
-        {
-            pause = true;
-        }
-    }
+
+    #endregion
 }
