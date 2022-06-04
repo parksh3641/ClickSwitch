@@ -15,6 +15,9 @@ public class GoogleSheetDownloader : MonoBehaviour
 
     private void Awake()
     {
+        Application.targetFrameRate = 60;
+        Screen.sleepTimeout = SleepTimeout.SystemSetting;
+
         if(!Directory.Exists(SystemPath.GetPath()))
         {
             Directory.CreateDirectory(SystemPath.GetPath());

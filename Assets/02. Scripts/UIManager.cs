@@ -56,6 +56,8 @@ public class UIManager : MonoBehaviour, IGameEvent
     [Title("LoginUI")]
     public GameObject loginUI;
     public GameObject[] loginButtonList;
+    public Text platformText;
+    public Text versionText;
 
     [Space]
     [Title("NotionUI")]
@@ -102,6 +104,9 @@ public class UIManager : MonoBehaviour, IGameEvent
         timerText.text = "";
         scoreText.text = "";
 
+        goldText.text = "";
+        crystalText.text = "";
+
         gameMenuUI.SetActive(false);
         gameOptionUI.SetActive(false);
         languageUI.SetActive(false);
@@ -123,17 +128,26 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         loginUI.SetActive(!GameStateManager.instance.AutoLogin);
 
-        for(int i = 0; i < loginButtonList.Length; i ++)
+        versionText.text = "v" + Application.version;
+
+        platformText.text = LocalizationManager.instance.GetString("Platform");
+
+        for (int i = 0; i < loginButtonList.Length; i ++)
         {
             loginButtonList[i].SetActive(false);
         }
 
-
-#if UNITY_EDITOR || UNITY_WEBGL
+#if UNITY_EDITOR
+        platformText.text += " : " + "Editor";
+        loginButtonList[0].SetActive(true);
+#elif UNITY_WEBGL
+        platformText.text += " : " + "WebGL";
         loginButtonList[0].SetActive(true);
 #elif UNITY_ANDROID
+        platformText.text += " : " + "Android";
         loginButtonList[1].SetActive(true);
 #elif UNITY_IOS
+        platformText.text += " : " + "IOS";
         loginButtonList[2].SetActive(true);
 #endif
 
@@ -340,7 +354,7 @@ public class UIManager : MonoBehaviour, IGameEvent
             {
                 case GamePlayType.GameChoice1:
                     playerDataBase.BestSpeedTouchScore = (int)score;
-                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Score", (int)score);
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("SpeedTouchScore", (int)score);
                     break;
                 case GamePlayType.GameChoice2:
                     playerDataBase.BestMoleCatchScore = (int)score;
@@ -374,7 +388,7 @@ public class UIManager : MonoBehaviour, IGameEvent
             {
                 case GamePlayType.GameChoice1:
                     playerDataBase.BestSpeedTouchCombo = combo;
-                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Combo", combo);
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("SpeedTouchCombo", combo);
                     break;
                 case GamePlayType.GameChoice2:
                     playerDataBase.BestMoleCatchCombo = combo;
@@ -444,6 +458,8 @@ public class UIManager : MonoBehaviour, IGameEvent
         {
             Debug.Log("Best Total Score");
             if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("TotalScore", nowTotalScore);
+
+            playerDataBase.TotalScore = nowTotalScore;
         }
     }
 

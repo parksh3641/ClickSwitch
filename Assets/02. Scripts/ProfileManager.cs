@@ -11,6 +11,7 @@ public class ProfileManager : MonoBehaviour
     [Title("Player")]
     public Text nickNameText;
     public Image iconImg;
+    public Text totalScoreText;
 
 
     [Title("Infomation")]
@@ -74,5 +75,8 @@ public class ProfileManager : MonoBehaviour
         profileContentList[1].InitState(LocalizationManager.instance.GetString("GameChoice2"), playerDataBase.BestMoleCatchScore, playerDataBase.BestMoleCatchCombo);
         profileContentList[2].InitState(LocalizationManager.instance.GetString("GameChoice3"), playerDataBase.BestFilpCardScore, playerDataBase.BestFilpCardCombo);
         profileContentList[3].InitState(LocalizationManager.instance.GetString("GameChoice4"), playerDataBase.BestButtonActionScore, playerDataBase.BestButtonActionCombo);
+
+        totalScoreText.text = " : " + playerDataBase.TotalScore.ToString();
+
     }
 }

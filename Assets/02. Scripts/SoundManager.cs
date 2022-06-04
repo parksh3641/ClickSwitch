@@ -44,11 +44,14 @@ public class SoundManager : MonoBehaviour
     {
         if(check)
         {
+            musicAudio.volume = 1;
+
+            musicAudio.Stop();
             musicAudio.Play();
         }
         else
         {
-            musicAudio.Pause();
+            musicAudio.volume = 0;
         }
     }
 
@@ -72,7 +75,6 @@ public class SoundManager : MonoBehaviour
 
     public void PlaySound(GameSoundType type)
     {
-        Debug.Log(type.ToString());
         int random = 0;
 
         musicAudio.Stop();

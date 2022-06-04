@@ -38,8 +38,8 @@ public class GameStateManager : MonoBehaviour
         [Space]
         [Title("Setting")]
         public GamePlayType gamePlayType = GamePlayType.GameChoice1;
-        public bool music = false;
-        public bool sfx = false;
+        public bool music = true;
+        public bool sfx = true;
     }
 
     #region Data

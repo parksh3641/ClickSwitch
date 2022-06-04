@@ -16,7 +16,6 @@ public class NormalContent : MonoBehaviour, IContentEvent
 
     [Space]
     public UnityEvent clickEvent;
-    public UnityEvent clickSoundEvent;
     public UnityEvent failSoundEvent;
 
     [Space]
@@ -39,7 +38,6 @@ public class NormalContent : MonoBehaviour, IContentEvent
 
     void Awake()
     {
-        clickSoundEvent.AddListener(() => { GameObject.FindWithTag("ClickSound").GetComponent<AudioSource>().Play(); });
         failSoundEvent.AddListener(() => { GameObject.FindWithTag("FailSound").GetComponent<AudioSource>().Play(); });
 
         numberText.text = "";
@@ -130,8 +128,6 @@ public class NormalContent : MonoBehaviour, IContentEvent
 
     public void Choice()
     {
-        clickSoundEvent.Invoke();
-
         if(isActive)
         {
             clickEvent.Invoke();

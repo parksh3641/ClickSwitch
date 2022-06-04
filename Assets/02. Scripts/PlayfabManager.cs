@@ -54,12 +54,6 @@ public class PlayfabManager : MonoBehaviour
 
     private void Start()
     {
-        if (!GameStateManager.instance.IsLogin)
-        {
-            loginSuccessEvent.Invoke();
-            return;
-        }
-
         if(GameStateManager.instance.AutoLogin)
         {
             switch (GameStateManager.instance.Login)
@@ -212,17 +206,19 @@ public class PlayfabManager : MonoBehaviour
     private void LoginGoogleAuthenticate()
     {
 #if UNITY_ANDROID
+
+        Debug.Log("구글 로그인 시도중");
+
         if (Social.localUser.authenticated)
         {
-            SetEditorOnlyMessage("Google Login Local");
+            Debug.Log("이미 구글 로그인 되어있는 상태입니다.");
             return;
         }
         Social.localUser.Authenticate((bool success) =>
         {
             if (!success)
             {
-                SetEditorOnlyMessage("Google Login Fail");
-                //TODO: Login Fail Code ADD
+                Debug.Log("구글 사용자 인증 실패!");
                 return;
             }
 
@@ -235,7 +231,7 @@ public class PlayfabManager : MonoBehaviour
             },
             result =>
             {
-                Debug.Log("Google Login Success");
+                Debug.Log("플레이팹 구글 로그인 성공!");
 
                 GameStateManager.instance.AutoLogin = true;
                 GameStateManager.instance.Login = LoginType.Google;
@@ -244,6 +240,8 @@ public class PlayfabManager : MonoBehaviour
             },
             error =>
             {
+                Debug.Log("플레이팹 구글 로그인 실패!");
+
                 DisplayPlayfabError(error);
             });
         });

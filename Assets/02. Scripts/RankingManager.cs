@@ -49,7 +49,7 @@ public class RankingManager : MonoBehaviour
             OpenView(-1);
             openNumber = 0;
 
-            if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("Score", SetRanking);
+            if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("TotalScore", SetRanking);
         }
         else
         {

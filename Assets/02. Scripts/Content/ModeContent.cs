@@ -30,6 +30,7 @@ public class ModeContent : MonoBehaviour
     private void Awake()
     {
         titleText.name = gamePlayType.ToString();
+        nextEventText.text = "";
 
         clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().ChoiceGameType((int)gamePlayType); });
 
