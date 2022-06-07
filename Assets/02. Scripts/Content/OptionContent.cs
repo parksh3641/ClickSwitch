@@ -15,6 +15,7 @@ public class OptionContent : MonoBehaviour
     public Image iconImg;
     public Text iconText;
 
+    public GameObject button;
     public Image buttonImg;
     public Text buttonText;
 
@@ -72,6 +73,15 @@ public class OptionContent : MonoBehaviour
                 iconText.text = GameStateManager.instance.Login.ToString();
                 buttonImg.sprite = buttonList[1];
                 buttonText.text = LocalizationManager.instance.GetString("Logout");
+
+                if (GameStateManager.instance.Login == LoginType.Google)
+                {
+                    button.SetActive(true);
+                }
+                else
+                {
+                    button.SetActive(false);
+                }
                 break;
         }
     }

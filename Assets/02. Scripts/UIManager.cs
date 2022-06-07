@@ -54,6 +54,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     [Space]
     [Title("LoginUI")]
+    public FadeInOut loadingUI;
     public GameObject loginUI;
     public GameObject[] loginButtonList;
     public Text platformText;
@@ -104,8 +105,8 @@ public class UIManager : MonoBehaviour, IGameEvent
         timerText.text = "";
         scoreText.text = "";
 
-        goldText.text = "";
-        crystalText.text = "";
+        goldText.text = "0";
+        crystalText.text = "0";
 
         gameMenuUI.SetActive(false);
         gameOptionUI.SetActive(false);
@@ -126,13 +127,20 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     private void Start()
     {
+        loadingUI.gameObject.SetActive(true);
+
         loginUI.SetActive(!GameStateManager.instance.AutoLogin);
 
+        SetLoginUI();
+    }
+
+    public void SetLoginUI()
+    {
         versionText.text = "v" + Application.version;
 
         platformText.text = LocalizationManager.instance.GetString("Platform");
 
-        for (int i = 0; i < loginButtonList.Length; i ++)
+        for (int i = 0; i < loginButtonList.Length; i++)
         {
             loginButtonList[i].SetActive(false);
         }
@@ -150,9 +158,8 @@ public class UIManager : MonoBehaviour, IGameEvent
         platformText.text += " : " + "IOS";
         loginButtonList[2].SetActive(true);
 #endif
-
-        VirtualCurrency();
     }
+
 
     private void OnApplicationQuit()
     {
@@ -180,6 +187,8 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     void VirtualCurrency()
     {
+        Debug.Log("È­Æó °»½Å");
+
         goldText.text = playerDataBase.Gold.ToString();
         crystalText.text = playerDataBase.Crystal.ToString();
     }
@@ -275,9 +284,18 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void OnLoginSuccess()
     {
+        loadingUI.FadeIn();
+
         loginUI.SetActive(false);
 
         VirtualCurrency();
+    }
+
+    public void OnLogout()
+    {
+        loginUI.SetActive(true);
+
+        SetLoginUI();
     }
 
 #endregion

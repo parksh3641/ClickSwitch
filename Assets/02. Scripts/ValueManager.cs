@@ -16,9 +16,10 @@ public class ValueManager : MonoBehaviour
     private float comboTimer = 0.5f;
 
     [SerializeField]
-    private float moleNextTimer = 3.0f;
+    private float moleNextTimer = 1.5f;
+
     [SerializeField]
-    private float moleCatchTimer = 1.0f;
+    private float moleCatchTimer = 0.75f;
 
     [SerializeField]
     private float cardTimer = 5.0f;

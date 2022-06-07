@@ -336,6 +336,8 @@ public class GameManager : MonoBehaviour
                 break;
             case GamePlayType.GameChoice2:
 
+                countIndex = 0;
+
                 for (int i = 0; i < moleCatchContentList.Count; i++)
                 {
                     moleCatchContentList[i].Initialize(gamePlayType);
@@ -346,12 +348,14 @@ public class GameManager : MonoBehaviour
                 break;
             case GamePlayType.GameChoice3:
 
+                nowIndex = 0;
+                filpCardIndex = -1;
+
                 for (int i = 0; i < filpCardList.Count; i++)
                 {
                     filpCardList[i].Initialize(gamePlayType);
                 }
 
-                filpCardIndex = -1;
                 CreateFilpCardRandom();
 
                 break;
@@ -425,6 +429,8 @@ public class GameManager : MonoBehaviour
             action(false);
 
             MinusScore(5);
+
+            countIndex = 0;
         }
     }
 
@@ -450,7 +456,7 @@ public class GameManager : MonoBehaviour
                 action?.Invoke(1);
                 saveAction?.Invoke(1);
 
-                PlusScore(10);
+                PlusScore(20);
 
                 filpCardIndex = -1;
                 nowIndex++;
@@ -560,6 +566,13 @@ public class GameManager : MonoBehaviour
     {
         ShuffleList(moleCatchContentList);
 
+        if(countIndex <= 10)
+        {
+            Debug.Log("두더지 잡기 속도 증가 : " + countIndex);
+            waitForMoleCatchSeconds = new WaitForSeconds(ValueManager.instance.GetMoleCatchTimer() - (0.025f * countIndex));
+            waitForMoleNextSeconds = new WaitForSeconds(ValueManager.instance.GetMoleNextTimer() - (0.05f * countIndex));
+        }
+
         moleIndex = 0;
 
         moleCatchContentList[0].SetMole();
@@ -571,6 +584,8 @@ public class GameManager : MonoBehaviour
         moleCatchContentList[0].MoleReset();
 
         yield return waitForMoleNextSeconds;
+
+        countIndex += 1;
 
         StartCoroutine(MoleCatchCorution());
     }

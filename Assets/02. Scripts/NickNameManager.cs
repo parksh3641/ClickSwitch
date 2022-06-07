@@ -46,7 +46,16 @@ public class NickNameManager : MonoBehaviour
             if (inputField.text.Equals(Check) == true)
             {
                 string newNickName = ((inputField.text.Trim()).Replace(" ", ""));
-                string oldNickName = GameStateManager.instance.NickName.Trim().Replace(" ", "");
+                string oldNickName = "";
+
+                if(GameStateManager.instance.NickName != null)
+                {
+                    oldNickName = GameStateManager.instance.NickName.Trim().Replace(" ", "");
+                }
+                else
+                {
+                    oldNickName = "";
+                }
 
                 if (newNickName.Length > 2)
                 {

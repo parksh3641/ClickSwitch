@@ -9,6 +9,7 @@ public class ComboManager : MonoBehaviour
     GamePlayType gamePlayType = GamePlayType.GameChoice1;
 
     [Title("Main")]
+    public GameObject comboObject;
     public Image fillamount;
     public Text comboText;
     public Notion notion;
@@ -35,6 +36,8 @@ public class ComboManager : MonoBehaviour
 
         comboIndex = 0;
 
+        comboObject.SetActive(false);
+
         GameManager.eGamePause += GamePause;
     }
 
@@ -51,6 +54,8 @@ public class ComboManager : MonoBehaviour
     {
         Debug.Log("Combo Start!");
 
+        comboObject.SetActive(true);
+
         if (timer == 0) comboIndex = 0;
 
         comboIndex += 1;
@@ -66,6 +71,8 @@ public class ComboManager : MonoBehaviour
 
     public void OnStopCombo()
     {
+        comboObject.SetActive(false);
+
         timer = 0;
         fillamount.fillAmount = 0;
     }

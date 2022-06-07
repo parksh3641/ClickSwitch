@@ -18,6 +18,7 @@ public class PlayfabManager : MonoBehaviour
     public static PlayfabManager instance;
 
     public UnityEvent loginSuccessEvent;
+    public UnityEvent logoutEvent;
 
     [ShowInInspector]
     string customId = "";
@@ -108,6 +109,10 @@ public class PlayfabManager : MonoBehaviour
 
     void LogOut()
     {
+        Debug.Log("로그아웃 되었습니다.");
+
+        logoutEvent.Invoke();
+
         GameStateManager.instance.PlayfabId = "";
         GameStateManager.instance.CustomId = "";
         GameStateManager.instance.AutoLogin = false;
@@ -209,11 +214,11 @@ public class PlayfabManager : MonoBehaviour
 
         Debug.Log("구글 로그인 시도중");
 
-        if (Social.localUser.authenticated)
-        {
-            Debug.Log("이미 구글 로그인 되어있는 상태입니다.");
-            return;
-        }
+        //if (Social.localUser.authenticated)
+        //{
+        //    Debug.Log("이미 구글 로그인 되어있는 상태입니다.");
+        //    return;
+        //}
         Social.localUser.Authenticate((bool success) =>
         {
             if (!success)
@@ -341,6 +346,11 @@ public class PlayfabManager : MonoBehaviour
         (result) =>
         {
             GameStateManager.instance.NickName = result.PlayerProfile.DisplayName;
+
+            if (GameStateManager.instance.NickName == null)
+            {
+                UpdateDisplayName(GameStateManager.instance.PlayfabId);
+            }
             // GameStateManager.Instance.SavePlayerData();
         },
         DisplayPlayfabError);
@@ -375,11 +385,15 @@ public class PlayfabManager : MonoBehaviour
 
         GetPlayerNickName();
 
+        yield return new WaitForSeconds(0.5f);
+
         yield return GetUserInventory();
 
         yield return GetStatistics();
 
         yield return GetPlayerData();
+
+        yield return new WaitForSeconds(1.0f);
 
         Debug.Log("Load Data Complete");
 
@@ -645,6 +659,24 @@ public class PlayfabManager : MonoBehaviour
             {
                 failAction?.Invoke();
             }
+            Debug.LogError(error.GenerateErrorReport());
+        });
+    }
+
+    public void UpdateDisplayName(string nickname)
+    {
+        PlayFabClientAPI.UpdateUserTitleDisplayName(new UpdateUserTitleDisplayNameRequest
+        {
+            DisplayName = nickname
+        },
+        result =>
+        {
+            Debug.Log("Update First NickName : " + result.DisplayName);
+
+            GameStateManager.instance.NickName = result.DisplayName;
+        }
+        , error =>
+        {
             Debug.LogError(error.GenerateErrorReport());
         });
     }
