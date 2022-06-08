@@ -60,3 +60,8 @@ public enum GameSoundType
     Main,
     End
 }
+
+public enum ShopType
+{
+    RemoveAds = 0,
+}

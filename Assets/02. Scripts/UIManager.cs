@@ -15,6 +15,9 @@ public class UIManager : MonoBehaviour, IGameEvent
     public Text timerText;
     public Text scoreText;
 
+    public Text infoBestScoreText;
+    public Text infoBestComboText;
+
 
     [Title("CurrneyUI")]
     public GameObject virtualCurrencyUI;
@@ -66,8 +69,9 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     [Space]
     [Title("Value")]
-    [SerializeField]
     private float score = 0;
+    private int bestScore = 0;
+    private int bestCombo = 0;
 
     [Title("Bool")]
     [SerializeField]
@@ -81,6 +85,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     public NickNameManager nickNameManager;
     public SoundManager soundManager;
     public GoogleAdsManager googldAdsManager;
+    public ShopManager shopManager;
 
     [Title("Animation")]
     public CoinAnimation goldAnimation;
@@ -104,6 +109,9 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         timerText.text = "";
         scoreText.text = "";
+
+        infoBestScoreText.text = "";
+        infoBestComboText.text = "";
 
         goldText.text = "0";
         crystalText.text = "0";
@@ -229,11 +237,53 @@ public class UIManager : MonoBehaviour, IGameEvent
         gamePlayView.SetActive(true);
 
         gamePlayUI[(int)type].SetActive(true);
+
+        infoBestScoreText.text = "";
+        infoBestComboText.text = "";
+
+        infoBestScoreText.text = LocalizationManager.instance.GetString("BestScore") + " : ";
+        infoBestComboText.text = LocalizationManager.instance.GetString("BestCombo") + " : ";
+
+        switch (type)
+        {
+            case GamePlayType.GameChoice1:
+                bestScore = playerDataBase.BestSpeedTouchScore;
+                bestCombo = playerDataBase.BestSpeedTouchCombo;
+                break;
+            case GamePlayType.GameChoice2:
+                bestScore = playerDataBase.BestMoleCatchScore;
+                bestCombo = playerDataBase.BestMoleCatchCombo;
+                break;
+            case GamePlayType.GameChoice3:
+                bestScore = playerDataBase.BestFilpCardScore;
+                bestCombo = playerDataBase.BestFilpCardCombo;
+                break;
+            case GamePlayType.GameChoice4:
+                bestScore = playerDataBase.BestButtonActionScore;
+                bestCombo = playerDataBase.BestButtonActionCombo;
+                break;
+            case GamePlayType.GameChoice5:
+                break;
+            case GamePlayType.GameChoice6:
+                break;
+            case GamePlayType.GameChoice7:
+                break;
+            case GamePlayType.GameChoice8:
+                break;
+        }
+
+        comboManager.SetBestCombo(bestCombo);
+
+        infoBestScoreText.text += bestScore.ToString();
+        infoBestComboText.text += bestCombo.ToString();
     }
 
     public void CloseGamePlayUI()
     {
         gamePlayView.SetActive(false);
+
+        infoBestScoreText.text = "";
+        infoBestComboText.text = "";
 
         for (int i = 0; i < gamePlayUI.Length; i ++)
         {
@@ -280,6 +330,11 @@ public class UIManager : MonoBehaviour, IGameEvent
     public void OpenNickName()
     {
         nickNameManager.OpenNickName();
+    }
+
+    public void OpenShop()
+    {
+        shopManager.OpenShop();
     }
 
     public void OnLoginSuccess()
@@ -552,6 +607,17 @@ public class UIManager : MonoBehaviour, IGameEvent
         score += index;
         scoreText.text = LocalizationManager.instance.GetString("Score") + " : " + score.ToString();
 
+        if(score > bestScore)
+        {
+            scoreText.resizeTextMaxSize = 90;
+            scoreText.color = new Color(1, 0, 0);
+        }
+        else
+        {
+            scoreText.resizeTextMaxSize = 70;
+            scoreText.color = new Color(1, 1, 0);
+        }
+
         scoreNotion.gameObject.SetActive(false);
         scoreNotion.txt.color = new Color(0, 1, 0);
         scoreNotion.txt.text = "+" + index.ToString();
@@ -564,6 +630,17 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         score = (score - index >= 0) ? score -= index : score = 0;
         scoreText.text = LocalizationManager.instance.GetString("Score") + " : " + score.ToString();
+
+        if (score > bestScore)
+        {
+            scoreText.resizeTextMaxSize = 90;
+            scoreText.color = new Color(1, 0, 0);
+        }
+        else
+        {
+            scoreText.resizeTextMaxSize = 70;
+            scoreText.color = new Color(1, 1, 0);
+        }
 
         scoreNotion.gameObject.SetActive(false);
         scoreNotion.txt.color = new Color(1, 0, 0);
@@ -625,5 +702,5 @@ public class UIManager : MonoBehaviour, IGameEvent
         GameEnd();
     }
 
-#endregion
+    #endregion
 }

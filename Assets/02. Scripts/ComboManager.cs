@@ -19,7 +19,8 @@ public class ComboManager : MonoBehaviour
     public Text waitNotionText;
     public Image waitFillAmount;
 
-    private int comboIndex = 0;
+    private int combo = 0;
+    private int bestCombo = 0;
 
     private float timer = 0;
     private float comboTimer = 0;
@@ -34,7 +35,7 @@ public class ComboManager : MonoBehaviour
         comboText.text = "";
         fillamount.fillAmount = 0;
 
-        comboIndex = 0;
+        combo = 0;
 
         comboObject.SetActive(false);
 
@@ -50,19 +51,35 @@ public class ComboManager : MonoBehaviour
         StartCoroutine(TimerCoroutine());
     }
 
+    public void SetBestCombo(int number)
+    {
+        bestCombo = number;
+    }
+
     public void OnStartCombo()
     {
         Debug.Log("Combo Start!");
 
         comboObject.SetActive(true);
 
-        if (timer == 0) comboIndex = 0;
+        if (timer == 0) combo = 0;
 
-        comboIndex += 1;
+        combo += 1;
 
         timer = comboTimer;
         fillamount.fillAmount = 1;
-        comboText.text = LocalizationManager.instance.GetString("Combo") + " : " + comboIndex.ToString();
+        comboText.text = LocalizationManager.instance.GetString("Combo") + " : " + combo.ToString();
+
+        if (combo > bestCombo)
+        {
+            comboText.resizeTextMaxSize = 90;
+            comboText.color = new Color(1, 0, 0);
+        }
+        else
+        {
+            comboText.resizeTextMaxSize = 70;
+            comboText.color = new Color(1, 1, 0);
+        }
 
         notion.gameObject.SetActive(false);
         notion.txt.text = "+" + 1.ToString();
@@ -82,7 +99,7 @@ public class ComboManager : MonoBehaviour
     {
         comboText.text = "";
 
-        return comboIndex;
+        return combo;
     }
 
     void GamePause()
