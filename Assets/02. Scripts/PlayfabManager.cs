@@ -786,4 +786,16 @@ public class PlayfabManager : MonoBehaviour
     }
 
     //"2022-04-24T22:17:04.548Z"
+
+
+    #region PurchaseItem
+    public void PurchaseRemoveAd()
+    {
+        Debug.Log("광고 제거 구매 완료");
+
+        playerDataBase.removeAd = true;
+
+    }
+
+    #endregion
 }

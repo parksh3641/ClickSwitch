@@ -55,7 +55,6 @@ public class LocalizationManager : MonoBehaviour
         return str;
     }
 
-    [Button]
     public void ChangeKorean()
     {
         ChangeLanguage(LanguageType.Korean);
@@ -63,10 +62,23 @@ public class LocalizationManager : MonoBehaviour
         eChangeLanguage.Invoke();
     }
 
-    [Button]
     public void ChangeEnglish()
     {
         ChangeLanguage(LanguageType.English);
+
+        eChangeLanguage.Invoke();
+    }
+
+    public void ChangeJapanese()
+    {
+        ChangeLanguage(LanguageType.Japenese);
+
+        eChangeLanguage.Invoke();
+    }
+
+    public void ChangeChinese()
+    {
+        ChangeLanguage(LanguageType.Chinese);
 
         eChangeLanguage.Invoke();
     }
@@ -80,5 +92,10 @@ public class LocalizationManager : MonoBehaviour
         {
             localizationContentList[i].ReLoad();
         }
+    }
+
+    public void CloseLanguage()
+    {
+        eChangeLanguage.Invoke();
     }
 }

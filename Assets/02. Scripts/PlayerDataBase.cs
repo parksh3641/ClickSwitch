@@ -39,6 +39,9 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private int bestButtonActionCombo = 0;
 
+    [Title("Purchase")]
+    public bool removeAd = false;
+
     [Title("Achievement")]
     [ShowInInspector]
     public List<AchievementData> achievementDataList = new List<AchievementData>();
@@ -56,6 +59,8 @@ public class PlayerDataBase : ScriptableObject
         bestFilpCardCombo = 0;
         bestButtonActionScore = 0;
         bestButtonActionCombo = 0;
+
+        removeAd = false;
 
         achievementDataList.Clear();
     }
@@ -188,6 +193,18 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             bestButtonActionCombo = value;
+        }
+    }
+
+    public bool RemoveAd
+    {
+        get
+        {
+            return removeAd;
+        }
+        set
+        {
+            removeAd = value;
         }
     }
 

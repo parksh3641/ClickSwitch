@@ -37,6 +37,8 @@ public class UIManager : MonoBehaviour, IGameEvent
     public GameObject gameEndUI;
     public GameObject newRecordObj;
     public GameObject newComboObj;
+    public GameObject doubleCoinObj;
+    public GameObject watchAdButton;
     public Text nowScoreText;
     public Text bestScoreText;
     public Text nowComboText;
@@ -44,11 +46,13 @@ public class UIManager : MonoBehaviour, IGameEvent
     public Text getGoldText;
     public Text rankText;
 
+
     [Space]
     [Title("OptionUI")]
     public GameObject gameOptionUI;
     public GameObject languageUI;
     public GameObject[] etcUI;
+    public LanguageContent[] languageContentArray;
 
     [Space]
     [Title("CancleUI")]
@@ -314,6 +318,13 @@ public class UIManager : MonoBehaviour, IGameEvent
         else
         {
             languageUI.SetActive(true);
+
+            for (int i = 0; i < languageContentArray.Length; i++)
+            {
+                languageContentArray[i].OnFrame(false);
+            }
+
+            languageContentArray[(int)GameStateManager.instance.Language].OnFrame(true);
         }
     }
 
@@ -482,27 +493,42 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         UpdateTotalScore();
 
+
         money = (int)(score / 10);
 
         if(money > 0)
         {
-            if (PlayfabManager.instance.isActive)
+            if (playerDataBase.removeAd)
             {
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, money);
-            }
-            playerDataBase.Gold += money;
+                doubleCoinObj.SetActive(true);
+                watchAdButton.SetActive(false);
 
-            goldAnimation.OnPlay(playerDataBase.Gold, money);
+                if (PlayfabManager.instance.isActive)
+                {
+                    PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, money * 2);
+                }
+                playerDataBase.Gold += (money * 2);
+
+                goldAnimation.OnPlay(playerDataBase.Gold, money * 2);
+
+                getGoldText.text = (money * 2).ToString();
+            }
+            else
+            {
+                if (PlayfabManager.instance.isActive)
+                {
+                    PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, money);
+                }
+                playerDataBase.Gold += money;
+
+                goldAnimation.OnPlay(playerDataBase.Gold, money);
+
+                getGoldText.text = money.ToString();
+            }
         }
 
-        nowScoreText.text = LocalizationManager.instance.GetString("Score") + "\n" + score.ToString();
-        bestScoreText.text = LocalizationManager.instance.GetString("BestScore") + "\n" + bestScore.ToString();
-
-        nowComboText.text = LocalizationManager.instance.GetString("Combo") + "\n" + combo.ToString();
-        bestComboText.text = LocalizationManager.instance.GetString("BestCombo") + "\n" + bestCombo.ToString();
-
-        getGoldText.text = LocalizationManager.instance.GetString("Gold") + "\n" + money.ToString();
-        //rankText.text = "µî¼ö" + "\n" + "99 ¡æ 99";
+        nowScoreText.text = score.ToString();
+        nowComboText.text = combo.ToString();
 
         GameReset();
     }
@@ -515,11 +541,12 @@ public class UIManager : MonoBehaviour, IGameEvent
         {
             PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, money);
         }
+
         playerDataBase.Gold += money;
 
         goldAnimation.OnPlay(playerDataBase.Gold, money);
 
-        getGoldText.text = LocalizationManager.instance.GetString("Gold") + "\n" + money.ToString() + " + " + money.ToString();
+        getGoldText.text = (money * 2).ToString();
 
     }
 
@@ -609,17 +636,17 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         if(score > bestScore)
         {
-            scoreText.resizeTextMaxSize = 90;
+            scoreText.resizeTextMaxSize = 80;
             scoreText.color = new Color(1, 0, 0);
         }
         else
         {
-            scoreText.resizeTextMaxSize = 70;
+            scoreText.resizeTextMaxSize = 60;
             scoreText.color = new Color(1, 1, 0);
         }
 
         scoreNotion.gameObject.SetActive(false);
-        scoreNotion.txt.color = new Color(0, 1, 0);
+        scoreNotion.txt.color = new Color(1, 1, 0);
         scoreNotion.txt.text = "+" + index.ToString();
         scoreNotion.gameObject.SetActive(true);
 
@@ -631,14 +658,9 @@ public class UIManager : MonoBehaviour, IGameEvent
         score = (score - index >= 0) ? score -= index : score = 0;
         scoreText.text = LocalizationManager.instance.GetString("Score") + " : " + score.ToString();
 
-        if (score > bestScore)
+        if (score < bestScore)
         {
-            scoreText.resizeTextMaxSize = 90;
-            scoreText.color = new Color(1, 0, 0);
-        }
-        else
-        {
-            scoreText.resizeTextMaxSize = 70;
+            scoreText.resizeTextMaxSize = 60;
             scoreText.color = new Color(1, 1, 0);
         }
 

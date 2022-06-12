@@ -10,6 +10,7 @@ public class ImageDataBase : ScriptableObject
     [Title("Image")]
     public Sprite[] iconArray;
 
+    public Sprite[] countryArray;
 
 
 
@@ -18,5 +19,8 @@ public class ImageDataBase : ScriptableObject
         return iconArray;
     }
 
-
+    public Sprite[] GetCountryArray()
+    {
+        return countryArray;
+    }
 }

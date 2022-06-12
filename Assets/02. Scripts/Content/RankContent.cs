@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class RankContent : MonoBehaviour
 {
+    public GameObject frame;
+
     public Text indexText;
     public Image indexRankImg; //3위 안에 들경우 아이콘으로 표시
     public Sprite[] rankIconList;
@@ -41,6 +43,8 @@ public class RankContent : MonoBehaviour
         {
             indexText.text = "-";
         }
+
+        frame.SetActive(checkMy);
     }
 
 }

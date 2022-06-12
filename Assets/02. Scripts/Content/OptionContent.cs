@@ -22,8 +22,17 @@ public class OptionContent : MonoBehaviour
     [Title("SpriteList")]
     public Sprite[] iconList;
     public Sprite[] buttonList;
-    public Sprite[] languageList;
+    Sprite[] languageList;
     public Sprite[] loginList;
+
+    ImageDataBase imageDataBase;
+
+    private void Awake()
+    {
+        if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+
+        languageList = imageDataBase.GetCountryArray();
+    }
 
     private void Start()
     {
@@ -35,44 +44,29 @@ public class OptionContent : MonoBehaviour
         switch (optionType)
         {
             case OptionType.Music:
-                if (GameStateManager.instance.Music)
-                {
-                    iconImg.sprite = iconList[0];
-                    buttonImg.sprite = buttonList[0];
-                    buttonText.text = "ON";
-                }
-                else
-                {
-                    iconImg.sprite = iconList[1];
-                    buttonImg.sprite = buttonList[1];
-                    buttonText.text = "OFF";
-                }
+                OnBGM();
                 break;
             case OptionType.SFX:
-                if (GameStateManager.instance.Sfx)
-                {
-                    iconImg.sprite = iconList[2];
-                    buttonImg.sprite = buttonList[0];
-                    buttonText.text = "ON";
-                }
-                else
-                {
-                    iconImg.sprite = iconList[3];
-                    buttonImg.sprite = buttonList[1];
-                    buttonText.text = "OFF";
-                }
+                OnSFX();
                 break;
             case OptionType.Language:
                 iconImg.sprite = languageList[(int)GameStateManager.instance.Language];
                 iconText.text = GameStateManager.instance.Language.ToString();
+
                 buttonImg.sprite = buttonList[0];
+
                 buttonText.text = LocalizationManager.instance.GetString("Change");
+                buttonText.color = new Color(39 / 255f, 220 / 255f, 149 / 255f);
+
                 break;
             case OptionType.Logout:
                 iconImg.sprite = loginList[(int)GameStateManager.instance.Login - 1];
                 iconText.text = GameStateManager.instance.Login.ToString();
+
                 buttonImg.sprite = buttonList[1];
+
                 buttonText.text = LocalizationManager.instance.GetString("Logout");
+                buttonText.color = new Color(225 / 255f, 34 / 255f, 12 / 255f);
 
                 if (GameStateManager.instance.Login == LoginType.Google)
                 {
@@ -94,38 +88,25 @@ public class OptionContent : MonoBehaviour
                 if (GameStateManager.instance.Music)
                 {
                     GameStateManager.instance.Music = false;
-
-                    iconImg.sprite = iconList[1];
-                    buttonImg.sprite = buttonList[1];
-                    buttonText.text = "OFF";
-
                 }
                 else
                 {
                     GameStateManager.instance.Music = true;
-
-                    iconImg.sprite = iconList[0];
-                    buttonImg.sprite = buttonList[0];
-                    buttonText.text = "ON";
                 }
+
+                OnBGM();
                 break;
             case OptionType.SFX:
                 if (GameStateManager.instance.Sfx)
                 {
                     GameStateManager.instance.Sfx = false;
-
-                    iconImg.sprite = iconList[3];
-                    buttonImg.sprite = buttonList[1];
-                    buttonText.text = "OFF";
                 }
                 else
                 {
                     GameStateManager.instance.Sfx = true;
-
-                    iconImg.sprite = iconList[2];
-                    buttonImg.sprite = buttonList[0];
-                    buttonText.text = "ON";
                 }
+
+                OnSFX();
                 break;
             case OptionType.Language:
                 eChangeLanguage.Invoke();
@@ -138,4 +119,40 @@ public class OptionContent : MonoBehaviour
         }
     }
 
+    public void OnBGM()
+    {
+        if (GameStateManager.instance.Music)
+        {
+            iconImg.sprite = iconList[0];
+            buttonImg.sprite = buttonList[0];
+            buttonText.text = "ON";
+            buttonText.color = new Color(39 / 255f, 220 / 255f, 149 / 255f);
+
+        }
+        else
+        {
+            iconImg.sprite = iconList[1];
+            buttonImg.sprite = buttonList[1];
+            buttonText.text = "OFF";
+            buttonText.color = new Color(225 / 255f, 34 / 255f, 12 / 255f);
+        }
+    }
+
+    public void OnSFX()
+    {
+        if (GameStateManager.instance.Sfx)
+        {
+            iconImg.sprite = iconList[2];
+            buttonImg.sprite = buttonList[0];
+            buttonText.text = "ON";
+            buttonText.color = new Color(39 / 255f, 220 / 255f, 149 / 255f);
+        }
+        else
+        {
+            iconImg.sprite = iconList[3];
+            buttonImg.sprite = buttonList[1];
+            buttonText.text = "OFF";
+            buttonText.color = new Color(225 / 255f, 34 / 255f, 12 / 255f);
+        }
+    }
 }

@@ -1,8 +1,10 @@
 using PlayFab.ClientModels;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RankingManager : MonoBehaviour
 {
@@ -13,6 +15,9 @@ public class RankingManager : MonoBehaviour
     public GameObject[] scrollViewList;
     public RectTransform[] rankContentParent;
     [Space]
+    [Title("Content")]
+    public Image[] contentImgArray;
+    public Sprite[] contentSpriteArray;
 
     public int openNumber = 0;
     public bool isActive = false;
@@ -46,10 +51,8 @@ public class RankingManager : MonoBehaviour
         {
             rankingView.SetActive(true);
 
-            OpenView(-1);
             openNumber = 0;
-
-            if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("TotalScore", SetRanking);
+            OpenRankingView(0);
         }
         else
         {
@@ -100,6 +103,12 @@ public class RankingManager : MonoBehaviour
 
                     break;
             }
+
+            for(int i = 0; i < contentImgArray.Length; i ++)
+            {
+                contentImgArray[i].sprite = contentSpriteArray[0];
+            }
+            contentImgArray[number].sprite = contentSpriteArray[1];
         }
     }
 
@@ -132,17 +141,15 @@ public class RankingManager : MonoBehaviour
                 nickName = player.DisplayName;
             }
 
-            myRankContent.InitState(999, location, GameStateManager.instance.PlayfabId, playerDataBase.BestSpeedTouchScore, false);
-
-            if (player.PlayFabId.Equals(GameStateManager.instance.PlayfabId))
+            if (player.PlayFabId.Equals(GameStateManager.instance.PlayfabId) || player.DisplayName.Equals(GameStateManager.instance.NickName))
             {
                 checkMy = true;
-
-                myRankContent.InitState(index, location, nickName, player.StatValue, false);
             }
 
             rankContentList[num].InitState(index, location, nickName, player.StatValue, checkMy);
             rankContentList[num].gameObject.SetActive(true);
+
+            myRankContent.InitState(index, location, nickName, player.StatValue, false);
 
             index++;
             num++;

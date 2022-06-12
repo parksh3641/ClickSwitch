@@ -37,7 +37,9 @@ public enum OptionType
 public enum LanguageType
 {
     Korean = 0,
-    English
+    English,
+    Japenese,
+    Chinese
 }
 
 public enum LoginType

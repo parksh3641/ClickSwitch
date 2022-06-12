@@ -23,9 +23,4 @@ public class ShopManager : MonoBehaviour
             shopView.SetActive(false);
         }
     }
-
-    public void BuyRemoveAds()
-    {
-        //playfab에 아이템 넣어주기
-    }
 }

@@ -21,7 +21,7 @@ public class ModeContent : MonoBehaviour
     public Image iconImg;
 
     public Sprite[] backgroundImgArray;
-    public Sprite[] iconImgArray;
+    Sprite[] iconImgArray;
 
     DateTime serverTime;
 

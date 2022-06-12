@@ -72,13 +72,13 @@ public class ComboManager : MonoBehaviour
 
         if (combo > bestCombo)
         {
-            comboText.resizeTextMaxSize = 90;
+            comboText.resizeTextMaxSize = 80;
             comboText.color = new Color(1, 0, 0);
         }
         else
         {
-            comboText.resizeTextMaxSize = 70;
-            comboText.color = new Color(1, 1, 0);
+            comboText.resizeTextMaxSize = 60;
+            comboText.color = new Color(1, 150/255f, 0);
         }
 
         notion.gameObject.SetActive(false);
