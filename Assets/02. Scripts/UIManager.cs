@@ -112,6 +112,7 @@ public class UIManager : MonoBehaviour, IGameEvent
         GameManager.MinusScore += this.MinusScore;
 
         timerText.text = "";
+        timerText.color = new Color(1, 1, 0);
         scoreText.text = "";
 
         infoBestScoreText.text = "";
@@ -507,24 +508,31 @@ public class UIManager : MonoBehaviour, IGameEvent
                 {
                     PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, money * 2);
                 }
-                playerDataBase.Gold += (money * 2);
-
                 goldAnimation.OnPlay(playerDataBase.Gold, money * 2);
+
+                playerDataBase.Gold += (money * 2);
 
                 getGoldText.text = (money * 2).ToString();
             }
             else
             {
+                doubleCoinObj.SetActive(false);
+                watchAdButton.SetActive(true);
+
                 if (PlayfabManager.instance.isActive)
                 {
                     PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, money);
                 }
-                playerDataBase.Gold += money;
-
                 goldAnimation.OnPlay(playerDataBase.Gold, money);
+
+                playerDataBase.Gold += money;
 
                 getGoldText.text = money.ToString();
             }
+        }
+        else
+        {
+            getGoldText.text = "0";
         }
 
         nowScoreText.text = score.ToString();
@@ -591,6 +599,7 @@ public class UIManager : MonoBehaviour, IGameEvent
         cancleWindowUI.SetActive(false);
 
         timerText.text = "";
+        timerText.color = new Color(1, 1, 0);
         scoreText.text = "";
         int number = comboManager.GetCombo();
         comboManager.OnStopCombo();
@@ -634,15 +643,18 @@ public class UIManager : MonoBehaviour, IGameEvent
         score += index;
         scoreText.text = LocalizationManager.instance.GetString("Score") + " : " + score.ToString();
 
-        if(score > bestScore)
+        if (bestScore != 0)
         {
-            scoreText.resizeTextMaxSize = 80;
-            scoreText.color = new Color(1, 0, 0);
-        }
-        else
-        {
-            scoreText.resizeTextMaxSize = 60;
-            scoreText.color = new Color(1, 1, 0);
+            if (score > bestScore)
+            {
+                scoreText.resizeTextMaxSize = 80;
+                scoreText.color = new Color(1, 0, 0);
+            }
+            else
+            {
+                scoreText.resizeTextMaxSize = 60;
+                scoreText.color = new Color(1, 1, 0);
+            }
         }
 
         scoreNotion.gameObject.SetActive(false);
@@ -658,10 +670,13 @@ public class UIManager : MonoBehaviour, IGameEvent
         score = (score - index >= 0) ? score -= index : score = 0;
         scoreText.text = LocalizationManager.instance.GetString("Score") + " : " + score.ToString();
 
-        if (score < bestScore)
+        if (bestScore != 0)
         {
-            scoreText.resizeTextMaxSize = 60;
-            scoreText.color = new Color(1, 1, 0);
+            if (score < bestScore)
+            {
+                scoreText.resizeTextMaxSize = 60;
+                scoreText.color = new Color(1, 1, 0);
+            }
         }
 
         scoreNotion.gameObject.SetActive(false);
@@ -714,12 +729,24 @@ public class UIManager : MonoBehaviour, IGameEvent
             {
                 number -= 1;
                 timerText.text = number.ToString();
+
+                if (number < 11)
+                {
+                    timerText.color = new Color(225 / 255f, 34 / 255f, 12 / 255f);
+                    soundManager.LowTimer();
+                }
+                else
+                {
+                    timerText.color = new Color(1, 1, 0);
+                    soundManager.HighTimer();
+                }
             }
 
             yield return waitForSeconds;
         }
 
         timerText.text = "";
+        soundManager.HighTimer();
 
         GameEnd();
     }

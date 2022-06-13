@@ -64,14 +64,14 @@ public class CoinAnimation : MonoBehaviour
         {
             for (int i = 0; i < goldPrefabList.Count; i++)
             {
-                goldPrefabList[i].GoToTarget(target.localPosition);
+                goldPrefabList[i].GoToTarget(target.localPosition - new Vector3(350, 35, 0));
             }
         }
         else
         {
             for (int i = 0; i < plus; i++)
             {
-                goldPrefabList[i].GoToTarget(target.localPosition);
+                goldPrefabList[i].GoToTarget(target.localPosition - new Vector3(350, 35, 0));
             }
         }
 

@@ -1,18 +1,42 @@
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShopDataBase : MonoBehaviour
+[System.Serializable]
+public class ShopClass
 {
-    // Start is called before the first frame update
-    void Start()
+    public string catalogVersion = "";
+    public string itemClass = "";
+    public string itemId = "";
+    public string virtualCurrency = "";
+    public uint price = 0;
+}
+
+[CreateAssetMenu(fileName = "ShopDataBase", menuName = "ScriptableObjects/ShopDataBase")]
+public class ShopDataBase : ScriptableObject
+{
+    [Title("ItemId")]
+    [ShowInInspector]
+    private ShopClass removeAds;
+
+
+
+    public void Initialize()
     {
-        
+
     }
 
-    // Update is called once per frame
-    void Update()
+
+    public ShopClass RemoveAds
     {
-        
+        get
+        {
+            return removeAds;
+        }
+        set
+        {
+            removeAds = value;
+        }
     }
 }

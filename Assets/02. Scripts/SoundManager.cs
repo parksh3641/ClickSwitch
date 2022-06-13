@@ -23,6 +23,8 @@ public class SoundManager : MonoBehaviour
     {
         GameManager.eGameStart += this.GameStart;
 
+        HighTimer();
+
         OnSwitchMusic(GameStateManager.instance.Music);
         OnSwitchSFX(GameStateManager.instance.Sfx);
 
@@ -38,7 +40,6 @@ public class SoundManager : MonoBehaviour
     {
         GameManager.eGameStart -= this.GameStart;
     }
-
 
     public void OnSwitchMusic(bool check)
     {
@@ -116,6 +117,19 @@ public class SoundManager : MonoBehaviour
         }
 
         musicAudio.Play();
+    }
+
+
+    public void HighTimer()
+    {
+        musicAudio.pitch = 1;
+    }
+    public void LowTimer()
+    {
+        if(musicAudio.pitch != 1.05f)
+        {
+            musicAudio.pitch = 1.05f;
+        }
     }
 
 }

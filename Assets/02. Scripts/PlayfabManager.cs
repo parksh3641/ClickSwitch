@@ -31,6 +31,7 @@ public class PlayfabManager : MonoBehaviour
 #endif
 
     public PlayerDataBase playerDataBase;
+    public ShopDataBase shopDataBase;
 
     [Header("Entity")]
     private string entityId;
@@ -51,6 +52,7 @@ public class PlayfabManager : MonoBehaviour
 #endif
 
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+        if (shopDataBase == null) shopDataBase = Resources.Load("ShopDataBase") as ShopDataBase;
     }
 
     private void Start()
@@ -382,12 +384,15 @@ public class PlayfabManager : MonoBehaviour
         Debug.Log("Load Data...");
 
         playerDataBase.Initialize();
+        shopDataBase.Initialize();
 
         GetPlayerNickName();
 
         yield return new WaitForSeconds(0.5f);
 
         yield return GetUserInventory();
+
+        yield return GetCatalog();
 
         yield return GetStatistics();
 
@@ -419,6 +424,14 @@ public class PlayfabManager : MonoBehaviour
                 {
                     inventoryList.Add(Inventory[i]);
                 }
+
+                foreach (ItemInstance list in inventoryList)
+                {
+                    if(list.ItemId.Equals("RemoveAds"))
+                    {
+                        playerDataBase.removeAd = true;
+                    }
+                }
             }
             else
             {
@@ -426,6 +439,44 @@ public class PlayfabManager : MonoBehaviour
             }
 
         }, DisplayPlayfabError);
+
+        return true;
+    }
+
+    public bool GetCatalog()
+    {
+        PlayFabClientAPI.GetCatalogItems(new GetCatalogItemsRequest() { CatalogVersion = "Shop" }, shop =>
+        {
+            for (int i = 0; i < shop.Catalog.Count; i++)
+            {
+                var catalog = shop.Catalog[i];
+
+                ShopClass shopClass = new ShopClass();
+
+                shopClass.catalogVersion = catalog.CatalogVersion;
+                shopClass.itemClass = catalog.ItemClass;
+                shopClass.itemId = catalog.ItemId;
+
+                foreach(string item in catalog.VirtualCurrencyPrices.Keys)
+                {
+                    shopClass.virtualCurrency = item;
+                }
+
+                foreach (uint item in catalog.VirtualCurrencyPrices.Values)
+                {
+                    shopClass.price = item;
+                }
+
+                if (catalog.ItemId.Equals("RemoveAds"))
+                {
+                    shopDataBase.RemoveAds = shopClass;
+                }
+
+            }
+        }, (error) =>
+        {
+
+        });
 
         return true;
     }
@@ -795,6 +846,25 @@ public class PlayfabManager : MonoBehaviour
 
         playerDataBase.removeAd = true;
 
+        PurchaseItem(shopDataBase.RemoveAds);
+    }
+
+    public void PurchaseItem(ShopClass shopClass)
+    {
+        var request = new PurchaseItemRequest()
+        {
+            CatalogVersion = shopClass.catalogVersion,
+            ItemId = shopClass.itemId,
+            VirtualCurrency = shopClass.virtualCurrency,
+            Price = (int)shopClass.price
+        };
+        PlayFabClientAPI.PurchaseItem(request, (result) =>
+        {
+            Debug.Log(shopClass.itemId + " 구매 성공!");
+        }, error =>
+        {
+            Debug.Log(shopClass.itemId + " 구매 실패!");
+        });
     }
 
     #endregion

@@ -11,8 +11,6 @@ public class NickNameManager : MonoBehaviour
     public Text nickNameText;
     public InputField inputField;
 
-    public NotionManager notionManager;
-
     public PlayerDataBase playerDataBase;
 
     private void Awake()
@@ -65,25 +63,25 @@ public class NickNameManager : MonoBehaviour
                     }
                     else
                     {
-                        notionManager.UseNotion(NotionType.NickNameNotion1);
+                        NotionManager.instance.UseNotion(NotionType.NickNameNotion1);
                         Debug.Log("중복된 닉네임 입니다.");
                     }
                 }
                 else
                 {
-                    notionManager.UseNotion(NotionType.NickNameNotion2);
+                    NotionManager.instance.UseNotion(NotionType.NickNameNotion2);
                     Debug.Log("2글자 이상이어야 합니다.");
                 }
             }
             else
             {
-                notionManager.UseNotion(NotionType.NickNameNotion3);
+                NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
                 Debug.Log("특수문자는 사용할 수 없습니다.");
             }
         }
         else
         {
-            notionManager.UseNotion(NotionType.NickNameNotion4);
+            NotionManager.instance.UseNotion(NotionType.NickNameNotion4);
             Debug.Log("골드가 부족합니다.");
         }
     }
@@ -92,7 +90,7 @@ public class NickNameManager : MonoBehaviour
     {
         Debug.Log("닉네임 변경 성공!");
 
-        notionManager.UseNotion(NotionType.NickNameNotion6);
+        NotionManager.instance.UseNotion(NotionType.NickNameNotion6);
 
         nickNameText.text = GameStateManager.instance.NickName;
 
@@ -105,7 +103,7 @@ public class NickNameManager : MonoBehaviour
 
     public void Failure()
     {
-        notionManager.UseNotion(NotionType.NickNameNotion5);
+        NotionManager.instance.UseNotion(NotionType.NickNameNotion5);
         Debug.Log("이미 존재하는 닉네임 입니다.");
     }
 }

@@ -242,6 +242,12 @@ public class GameManager : MonoBehaviour
     #region Button
     public void OnGameStartButton() //게임 시작 버튼
     {
+        if(!NetworkConnect.instance.CheckConnectInternet())
+        {
+            NotionManager.instance.UseNotion(NotionType.NetworkConnectNotion);
+            return;
+        }
+
         if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData(gamePlayType.ToString(), InitializeGame);
     }
 
@@ -313,6 +319,7 @@ public class GameManager : MonoBehaviour
         if (!check)
         {
             Debug.Log("해당 게임모드가 열려있지 않습니다.");
+            NotionManager.instance.UseNotion(NotionType.GameModeRockNotion);
             return;
         }
 

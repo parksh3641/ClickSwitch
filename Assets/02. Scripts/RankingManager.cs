@@ -51,7 +51,7 @@ public class RankingManager : MonoBehaviour
         {
             rankingView.SetActive(true);
 
-            openNumber = 0;
+            openNumber = -1;
             OpenRankingView(0);
         }
         else
@@ -144,12 +144,12 @@ public class RankingManager : MonoBehaviour
             if (player.PlayFabId.Equals(GameStateManager.instance.PlayfabId) || player.DisplayName.Equals(GameStateManager.instance.NickName))
             {
                 checkMy = true;
+
+                myRankContent.InitState(index, location, nickName, player.StatValue, false);
             }
 
             rankContentList[num].InitState(index, location, nickName, player.StatValue, checkMy);
             rankContentList[num].gameObject.SetActive(true);
-
-            myRankContent.InitState(index, location, nickName, player.StatValue, false);
 
             index++;
             num++;

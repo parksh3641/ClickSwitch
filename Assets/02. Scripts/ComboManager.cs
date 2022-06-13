@@ -70,15 +70,18 @@ public class ComboManager : MonoBehaviour
         fillamount.fillAmount = 1;
         comboText.text = LocalizationManager.instance.GetString("Combo") + " : " + combo.ToString();
 
-        if (combo > bestCombo)
+        if (bestCombo != 0)
         {
-            comboText.resizeTextMaxSize = 80;
-            comboText.color = new Color(1, 0, 0);
-        }
-        else
-        {
-            comboText.resizeTextMaxSize = 60;
-            comboText.color = new Color(1, 150/255f, 0);
+            if (combo > bestCombo)
+            {
+                comboText.resizeTextMaxSize = 80;
+                comboText.color = new Color(1, 0, 0);
+            }
+            else
+            {
+                comboText.resizeTextMaxSize = 60;
+                comboText.color = new Color(1, 150 / 255f, 0);
+            }
         }
 
         notion.gameObject.SetActive(false);

@@ -137,5 +137,7 @@ public enum NotionType
     NickNameNotion3,
     NickNameNotion4,
     NickNameNotion5,
-    NickNameNotion6
+    NickNameNotion6,
+    NetworkConnectNotion,
+    GameModeRockNotion
 }

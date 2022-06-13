@@ -18,9 +18,9 @@ public class GoogleAdsManager : MonoBehaviour
     public void Start()
     {
 #if UNITY_ANDROID
-        adUnitId = "ca-app-pub-3940256099942544/5224354917";
+        adUnitId = "ca-app-pub-6754544778509872/8238444835";
 #elif UNITY_IOS
-            adUnitId = "ca-app-pub-3940256099942544/1712485313";
+            adUnitId = "ca-app-pub-6754544778509872/7165886378";
 #else
             adUnitId = "unexpected_platform";
 #endif
@@ -63,9 +63,9 @@ public class GoogleAdsManager : MonoBehaviour
     public void ReloadAd()
     {
 #if UNITY_ANDROID
-        adUnitId = "ca-app-pub-3940256099942544/5224354917";
+        adUnitId = "ca-app-pub-6754544778509872/8238444835";
 #elif UNITY_IOS
-            adUnitId = "ca-app-pub-3940256099942544/1712485313";
+            adUnitId = "ca-app-pub-6754544778509872/7165886378";
 #else
             adUnitId = "unexpected_platform";
 #endif
