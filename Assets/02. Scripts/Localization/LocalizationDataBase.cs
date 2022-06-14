@@ -26,4 +26,6 @@ public class LocalizationData
     public string key = "";
     public string korean = "";
     public string english = "";
+    public string japanese = "";
+    public string chinese = "";
 }

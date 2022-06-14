@@ -28,12 +28,12 @@ public class SoundManager : MonoBehaviour
         OnSwitchMusic(GameStateManager.instance.Music);
         OnSwitchSFX(GameStateManager.instance.Sfx);
 
-        PlaySound(GameSoundType.Lobby);
+        PlayBGM(GameBGMType.Lobby);
     }
 
     void GameStart()
     {
-        PlaySound(GameSoundType.Main);
+        PlayBGM(GameBGMType.Main);
     }
 
     private void OnApplicationQuit()
@@ -74,7 +74,7 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    public void PlaySound(GameSoundType type)
+    public void PlayBGM(GameBGMType type)
     {
         int random = 0;
 
@@ -82,7 +82,7 @@ public class SoundManager : MonoBehaviour
 
         switch (type)
         {
-            case GameSoundType.Lobby:
+            case GameBGMType.Lobby:
                 if (soundDataBase.lobbyAudioClipList.Count == 0)
                 {
                     return;
@@ -92,7 +92,7 @@ public class SoundManager : MonoBehaviour
 
                 musicAudio.clip = soundDataBase.lobbyAudioClipList[random];
                 break;
-            case GameSoundType.Main:
+            case GameBGMType.Main:
                 if (soundDataBase.mainAudioClipList.Count == 0)
                 {
                     return;
@@ -103,7 +103,7 @@ public class SoundManager : MonoBehaviour
                 musicAudio.clip = soundDataBase.mainAudioClipList[random];
 
                 break;
-            case GameSoundType.End:
+            case GameBGMType.End:
                 if (soundDataBase.endAudioClipList.Count == 0)
                 {
                     return;
@@ -117,6 +117,17 @@ public class SoundManager : MonoBehaviour
         }
 
         musicAudio.Play();
+    }
+
+    public void PlaySFX(GameSfxType type)
+    {
+        for(int i = 0; i < sfxAudio.Length; i ++)
+        {
+            if(sfxAudio[i].name.Equals(type.ToString()))
+            {
+                sfxAudio[i].Play();
+            }
+        }
     }
 
 

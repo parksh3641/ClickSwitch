@@ -246,8 +246,8 @@ public class UIManager : MonoBehaviour, IGameEvent
         infoBestScoreText.text = "";
         infoBestComboText.text = "";
 
-        infoBestScoreText.text = LocalizationManager.instance.GetString("BestScore") + " : ";
-        infoBestComboText.text = LocalizationManager.instance.GetString("BestCombo") + " : ";
+        infoBestScoreText.text = LocalizationManager.instance.GetString("BestScore") + " : \n";
+        infoBestComboText.text = LocalizationManager.instance.GetString("BestCombo") + " : \n";
 
         switch (type)
         {
@@ -395,7 +395,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         Debug.Log("Game End");
 
-        soundManager.PlaySound(GameSoundType.End);
+        soundManager.PlayBGM(GameBGMType.End);
 
         scoreText.text = "";
         comboManager.OnStopCombo();
@@ -576,7 +576,11 @@ public class UIManager : MonoBehaviour, IGameEvent
         if(cancleWindowUI.activeSelf)
         {
             cancleWindowUI.SetActive(false);
-            Time.timeScale = 1;
+
+            if(!gameOptionUI.activeInHierarchy)
+            {
+                            Time.timeScale = 1;
+            }
         }
         else
         {
@@ -591,7 +595,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         Time.timeScale = 1;
 
-        soundManager.PlaySound(GameSoundType.Lobby);
+        soundManager.PlayBGM(GameBGMType.Lobby);
 
         StopAllCoroutines();
 
@@ -632,7 +636,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void CloseGameEnd()
     {
-        soundManager.PlaySound(GameSoundType.Lobby);
+        soundManager.PlayBGM(GameBGMType.Lobby);
 
         gameEndUI.SetActive(false);
     }
