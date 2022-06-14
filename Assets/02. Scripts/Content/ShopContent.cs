@@ -31,12 +31,7 @@ public class ShopContent : MonoBehaviour
                 break;
             case LanguageType.English:
                 priceText.text = "USD $ 1";
-                break;
-            case LanguageType.Japenese:
-                priceText.text = "130 円";
-                break;
-            case LanguageType.Chinese:
-                priceText.text = "6 元";
+
                 break;
             default:
 

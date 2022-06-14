@@ -43,12 +43,6 @@ public class LocalizationManager : MonoBehaviour
                     case LanguageType.English:
                         str = item.english;
                         break;
-                    case LanguageType.Japenese:
-                        str = item.japanese;
-                        break;
-                    case LanguageType.Chinese:
-                        str = item.chinese;
-                        break;
                 }
             }
         }

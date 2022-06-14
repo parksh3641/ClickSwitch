@@ -56,16 +56,11 @@ public enum MoneyType
     Crystal
 }
 
-public enum GameBGMType
+public enum GameSoundType
 {
     Lobby = 0,
     Main,
     End
-}
-
-public enum GameSfxType
-{
-    Success
 }
 
 public enum ShopType
