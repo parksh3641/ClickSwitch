@@ -53,7 +53,9 @@ public class GoogleSheetDownloader : MonoBehaviour
 
             content.key = column[0];
             content.korean = column[1].Replace('$','\n');
-            content.english = column[2];
+            content.english = column[2].Replace('$', '\n');
+            content.japanese = column[3].Replace('$', '\n');
+            content.chinese = column[4].Replace('$', '\n');
 
             localizationDataBase.SetLocalization(content);
         }

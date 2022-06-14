@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
 
 
     [Title("UI")]
-    public Text gameModeText;
+    public LocalizationContent gameModeText;
 
 
     [Title("Corution")]
@@ -133,7 +133,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        gameModeText.text = LocalizationManager.instance.GetString(gamePlayType.ToString());
+        gameModeText.name = LocalizationManager.instance.GetString(gamePlayType.ToString());
 
         ChoiceGameType((int)GameStateManager.instance.GamePlayType);
     }
@@ -306,7 +306,8 @@ public class GameManager : MonoBehaviour
 
         GameStateManager.instance.GamePlayType = gamePlayType;
 
-        gameModeText.text = LocalizationManager.instance.GetString(gamePlayType.ToString());
+        gameModeText.name = LocalizationManager.instance.GetString(gamePlayType.ToString());
+        gameModeText.ReLoad();
 
         uiManager.CloseMenu();
     }
@@ -408,7 +409,7 @@ public class GameManager : MonoBehaviour
             if(nowIndex >= countIndex - 1)
             {
                 Debug.Log("Reset");
-
+                soundManager.PlaySFX(GameSfxType.Success);
                 CreateUnDuplicateRandom();
             }
         }
@@ -470,11 +471,13 @@ public class GameManager : MonoBehaviour
 
                 if(nowIndex >= filpCardList.Count / 2)
                 {
-                    Debug.Log("Card Reset");
-
                     filpCardIndex = -1;
                     nowIndex = 0;
+
+                    Debug.Log("Reset");
+                    soundManager.PlaySFX(GameSfxType.Success);
                     CreateFilpCardRandom();
+
                     StartCoroutine("FilpCardCorution");
                 }
             }
@@ -507,6 +510,7 @@ public class GameManager : MonoBehaviour
                     buttonActionLevelIndex += 1;
                 }
 
+                Debug.Log("Reset");
                 CreateButtonActionRandom();
             }
             else

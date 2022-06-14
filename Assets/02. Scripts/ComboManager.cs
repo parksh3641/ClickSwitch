@@ -95,8 +95,10 @@ public class ComboManager : MonoBehaviour
 
         timer = 0;
         fillamount.fillAmount = 0;
-    }
 
+        StopAllCoroutines();
+        waitObject.SetActive(false);
+    }
 
     public int GetCombo()
     {
