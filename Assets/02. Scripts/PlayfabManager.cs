@@ -19,6 +19,7 @@ public class PlayfabManager : MonoBehaviour
 
     public UnityEvent loginSuccessEvent;
     public UnityEvent logoutEvent;
+    public UnityEvent updateEvent;
 
     [ShowInInspector]
     string customId = "";
@@ -314,7 +315,33 @@ public class PlayfabManager : MonoBehaviour
 
         GameStateManager.instance.PlayfabId = result.PlayFabId;
 
-        StartCoroutine(LoadDataCoroutine());
+        GetTitleInternalData("CheckVersion", CheckVersion);
+    }
+
+    public void CheckVersion(bool check)
+    {
+        if(check)
+        {
+            GetTitleInternalData("GameVersion", CheckUpdate);
+        }
+        else
+        {
+            StartCoroutine(LoadDataCoroutine());
+        }
+    }
+
+    public void CheckUpdate(bool check)
+    {
+        Debug.Log("Checking Version...");
+
+        if (check)
+        {
+            StartCoroutine(LoadDataCoroutine());
+        }
+        else
+        {
+            updateEvent.Invoke();
+        }
     }
 
     public void SetProfileLanguage(LanguageType type)
@@ -732,18 +759,32 @@ public class PlayfabManager : MonoBehaviour
         });
     }
 
-    public void GetTitleInternalData(string name, Action<bool> action) //true ï¿½Ï°ï¿½ï¿?ï¿½Ø´ï¿½ ï¿½ï¿½ï¿?ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.
+    public void GetTitleInternalData(string name, Action<bool> action)
     {
         PlayFabServerAPI.GetTitleInternalData(new PlayFab.ServerModels.GetTitleDataRequest(),
             result =>
             {
-                if (result.Data[name].Equals("ON"))
+                if (name.Equals("GameVersion"))
                 {
-                    action?.Invoke(true);
+                    if (result.Data[name].Equals(Application.version))
+                    {
+                        action?.Invoke(true);
+                    }
+                    else
+                    {
+                        action?.Invoke(false);
+                    }
                 }
                 else
                 {
-                    action?.Invoke(false);
+                    if (result.Data[name].Equals("ON"))
+                    {
+                        action?.Invoke(true);
+                    }
+                    else
+                    {
+                        action?.Invoke(false);
+                    }
                 }
             },
             error =>

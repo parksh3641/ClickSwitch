@@ -83,8 +83,8 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 9; i ++)
         {
             NormalContent content = Instantiate(normalContent);
-            content.transform.localPosition = new Vector3(0, 0, 0);
-            content.transform.localScale = new Vector3(1, 1, 1);
+            content.transform.localPosition = Vector3.zero;
+            content.transform.localScale = Vector3.one;
             content.transform.parent = normalTransform;
             content.gameObject.SetActive(false);
             normalContentList.Add(content);
@@ -93,8 +93,8 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 9; i++)
         {
             NormalContent content = Instantiate(normalContent);
-            content.transform.localPosition = new Vector3(0, 0, 0);
-            content.transform.localScale = new Vector3(1, 1, 1);
+            content.transform.localPosition = Vector3.zero;
+            content.transform.localScale = Vector3.one;
             content.transform.parent = moleCatchTransform;
             content.gameObject.SetActive(false);
             moleCatchContentList.Add(content);
@@ -103,8 +103,8 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 16; i++)
         {
             NormalContent content = Instantiate(normalContent);
-            content.transform.localPosition = new Vector3(0, 0, 0);
-            content.transform.localScale = new Vector3(1, 1, 1);
+            content.transform.localPosition = Vector3.zero;
+            content.transform.localScale = Vector3.one;
             content.transform.parent = filpCardTransform;
             content.gameObject.SetActive(false);
             filpCardList.Add(content);
@@ -113,8 +113,8 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 6; i++)
         {
             ButtonActionContent content = Instantiate(buttonActionContent);
-            content.transform.localPosition = new Vector3(0, 0, 0);
-            content.transform.localScale = new Vector3(1, 1, 1);
+            content.transform.localPosition = Vector3.zero;
+            content.transform.localScale = Vector3.one;
             content.transform.parent = buttonActionUpTransform;
             content.gameObject.SetActive(false);
             buttonActionUpList.Add(content);
@@ -123,8 +123,8 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 6; i++)
         {
             NormalContent content = Instantiate(normalContent);
-            content.transform.localPosition = new Vector3(0, 0, 0);
-            content.transform.localScale = new Vector3(1, 1, 1);
+            content.transform.localPosition = Vector3.zero;
+            content.transform.localScale = Vector3.one;
             content.transform.parent = buttonActionDownTransform;
             content.gameObject.SetActive(false);
             buttonActionDownList.Add(content);

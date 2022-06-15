@@ -67,6 +67,9 @@ public class UIManager : MonoBehaviour, IGameEvent
     public Text platformText;
     public Text versionText;
 
+    public GameObject updateUI;
+
+
     [Space]
     [Title("NotionUI")]
     public Notion scoreNotion;
@@ -104,6 +107,8 @@ public class UIManager : MonoBehaviour, IGameEvent
     private void Awake()
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+
+        updateUI.SetActive(false);
 
         GameManager.eGameStart += this.GameStart;
         GameManager.eGamePause += this.GamePause;
@@ -365,7 +370,21 @@ public class UIManager : MonoBehaviour, IGameEvent
         SetLoginUI();
     }
 
-#endregion
+    public void OnNeedUpdate()
+    {
+        updateUI.SetActive(true);
+    }
+
+    public void OnUpdate()
+    {
+#if UNITY_ANDROID
+        Application.OpenURL("https://play.google.com/store/apps/details?id=com.unity3d.toucharcade");
+#elif UNITY_IOS
+        Application.OpenURL("https://play.google.com/store/apps/details?id=com.unity3d.toucharcade");
+#endif
+    }
+
+    #endregion
     public void GameStart()
     {
         Debug.Log("Game Start");
