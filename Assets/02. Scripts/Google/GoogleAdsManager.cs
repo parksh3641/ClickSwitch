@@ -48,11 +48,15 @@ public class GoogleAdsManager : MonoBehaviour
 
     public void Show()
     {
+        if (!GameStateManager.instance.WatchAd) return;
+
         StartCoroutine(ShowRewardAd());
     }
 
     IEnumerator ShowRewardAd()
     {
+        Debug.Log("Show Reward Ad");
+
         while (!rewardedAd.IsLoaded())
         {
             yield return null;
@@ -119,6 +123,6 @@ public class GoogleAdsManager : MonoBehaviour
 
     public void HandleUserEarnedReward(object sender, Reward args)
     {
-        uIManager.WatchAd();
+        uIManager.SuccessWatchAd();
     }
 }

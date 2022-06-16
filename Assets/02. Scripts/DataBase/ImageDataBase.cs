@@ -12,6 +12,10 @@ public class ImageDataBase : ScriptableObject
 
     public Sprite[] countryArray;
 
+    public Sprite[] shopArray;
+
+    public Sprite[] itemBackgroundArray;
+    public Sprite[] itemArray;
 
 
     public Sprite[] GetIconArray()
@@ -22,5 +26,20 @@ public class ImageDataBase : ScriptableObject
     public Sprite[] GetCountryArray()
     {
         return countryArray;
+    }
+
+    public Sprite[] GetShopArray()
+    {
+        return shopArray;
+    }
+
+    public Sprite[] GetItemBackgroundArray()
+    {
+        return itemBackgroundArray;
+    }
+
+    public Sprite[] GetItemArray()
+    {
+        return itemArray;
     }
 }

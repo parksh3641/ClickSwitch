@@ -8,7 +8,7 @@ public class LocalizationDataBase : ScriptableObject
     public List<LocalizationData> localizationDatas = new List<LocalizationData>();
 
 
-    public void OnReset()
+    public void Initialize()
     {
         localizationDatas.Clear();
     }

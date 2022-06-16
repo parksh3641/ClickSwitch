@@ -80,6 +80,8 @@ public class GameManager : MonoBehaviour
     {
         numberList.Clear();
 
+        Time.timeScale = 1;
+
         for (int i = 0; i < 9; i ++)
         {
             NormalContent content = Instantiate(normalContent);
@@ -185,8 +187,8 @@ public class GameManager : MonoBehaviour
             moleCatchContentList[i].gameObject.SetActive(true);
         }
 
-        waitForMoleCatchSeconds = new WaitForSeconds(ValueManager.instance.GetMoleCatchTimer());
-        waitForMoleNextSeconds = new WaitForSeconds(ValueManager.instance.GetMoleNextTimer());
+        waitForMoleCatchSeconds = new WaitForSeconds(ValueManager.instance.GetMoleCatchTime());
+        waitForMoleNextSeconds = new WaitForSeconds(ValueManager.instance.GetMoleNextTime());
     }
 
     private void CreateFilpCardRandom()
@@ -580,8 +582,8 @@ public class GameManager : MonoBehaviour
         if(countIndex <= 10)
         {
             Debug.Log("두더지 잡기 속도 증가 : " + countIndex);
-            waitForMoleCatchSeconds = new WaitForSeconds(ValueManager.instance.GetMoleCatchTimer() - (0.025f * countIndex));
-            waitForMoleNextSeconds = new WaitForSeconds(ValueManager.instance.GetMoleNextTimer() - (0.05f * countIndex));
+            waitForMoleCatchSeconds = new WaitForSeconds(ValueManager.instance.GetMoleCatchTime() - (0.025f * countIndex));
+            waitForMoleNextSeconds = new WaitForSeconds(ValueManager.instance.GetMoleNextTime() - (0.05f * countIndex));
         }
 
         moleIndex = 0;
@@ -613,7 +615,7 @@ public class GameManager : MonoBehaviour
 
         uiManager.WaitNotionUI(gamePlayType);
 
-        yield return new WaitForSeconds(ValueManager.instance.GetCardTimer());
+        yield return new WaitForSeconds(ValueManager.instance.GetFilpCardRememberTime());
 
         for (int i = 0; i < filpCardList.Count; i++)
         {

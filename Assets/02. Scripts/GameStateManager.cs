@@ -40,6 +40,12 @@ public class GameStateManager : MonoBehaviour
         public GamePlayType gamePlayType = GamePlayType.GameChoice1;
         public bool music = true;
         public bool sfx = true;
+        public bool watchAd = true;
+
+        [Space]
+        [Title("Item")]
+        public bool clock = false;
+        public bool shield = false;
     }
 
     #region Data
@@ -174,6 +180,44 @@ public class GameStateManager : MonoBehaviour
             SaveFile();
         }
     }
+
+    public bool WatchAd
+    {
+        get
+        {
+            return gameSettings.watchAd;
+        }
+        set
+        {
+            gameSettings.watchAd = value;
+            SaveFile();
+        }
+    }
+
+    public bool Clock
+    {
+        get
+        {
+            return gameSettings.clock;
+        }
+        set
+        {
+            gameSettings.clock = value;
+        }
+    }
+
+    public bool Shield
+    {
+        get
+        {
+            return gameSettings.shield;
+        }
+        set
+        {
+            gameSettings.shield = value;
+        }
+    }
+
 
     #endregion
 

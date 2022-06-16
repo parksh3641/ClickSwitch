@@ -17,9 +17,9 @@ public class PlayfabManager : MonoBehaviour
 {
     public static PlayfabManager instance;
 
-    public UnityEvent loginSuccessEvent;
-    public UnityEvent logoutEvent;
-    public UnityEvent updateEvent;
+    public StateManager stateManager;
+
+    public UIManager uiManager;
 
     [ShowInInspector]
     string customId = "";
@@ -54,6 +54,7 @@ public class PlayfabManager : MonoBehaviour
 
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
         if (shopDataBase == null) shopDataBase = Resources.Load("ShopDataBase") as ShopDataBase;
+        if (stateManager == null) stateManager = GameObject.Find("StateManager").GetComponent<StateManager>() as StateManager;
     }
 
     private void Start()
@@ -114,7 +115,7 @@ public class PlayfabManager : MonoBehaviour
     {
         Debug.Log("로그아웃 되었습니다.");
 
-        logoutEvent.Invoke();
+        uiManager.OnLogout();
 
         GameStateManager.instance.PlayfabId = "";
         GameStateManager.instance.CustomId = "";
@@ -340,7 +341,7 @@ public class PlayfabManager : MonoBehaviour
         }
         else
         {
-            updateEvent.Invoke();
+            uiManager.OnNeedUpdate();
         }
     }
 
@@ -431,7 +432,9 @@ public class PlayfabManager : MonoBehaviour
 
         isActive = true;
 
-        loginSuccessEvent.Invoke();
+        uiManager.OnLoginSuccess();
+
+        stateManager.Initialize();
     }
 
     public bool GetUserInventory()
@@ -442,7 +445,7 @@ public class PlayfabManager : MonoBehaviour
             int gold = result.VirtualCurrency["GO"]; //Get Money
             int crystal = result.VirtualCurrency["ST"]; //Get Money
 
-            playerDataBase.Gold = gold;
+            playerDataBase.Coin = gold;
             playerDataBase.Crystal = crystal;
 
             if (Inventory != null)
@@ -456,7 +459,17 @@ public class PlayfabManager : MonoBehaviour
                 {
                     if(list.ItemId.Equals("RemoveAds"))
                     {
-                        playerDataBase.removeAd = true;
+                        playerDataBase.RemoveAd = true;
+                    }
+
+                    if(list.ItemId.Equals("Clock"))
+                    {
+                        playerDataBase.Clock = (int)list.RemainingUses;
+                    }
+
+                    if (list.ItemId.Equals("Shield"))
+                    {
+                        playerDataBase.Shield = (int)list.RemainingUses;
                     }
                 }
             }
@@ -497,6 +510,10 @@ public class PlayfabManager : MonoBehaviour
                 if (catalog.ItemId.Equals("RemoveAds"))
                 {
                     shopDataBase.RemoveAds = shopClass;
+                }
+                else if(catalog.ItemClass.Equals("Item"))
+                {
+                    shopDataBase.SetItem(shopClass);
                 }
 
             }
@@ -647,7 +664,7 @@ public class PlayfabManager : MonoBehaviour
 
         switch (type)
         {
-            case MoneyType.Gold:
+            case MoneyType.Coin:
                 currentType = "GO";
                 break;
             case MoneyType.Crystal:
@@ -666,7 +683,9 @@ public class PlayfabManager : MonoBehaviour
                     GeneratePlayStreamEvent = true,
                 }, OnCloudUpdateStats, DisplayPlayfabError);
 
-                playerDataBase.Gold += number;
+                uiManager.goldAnimation.OnPlay(playerDataBase.Coin, number);
+
+                playerDataBase.Coin += number;
             }
             catch (Exception e)
             {
@@ -686,7 +705,7 @@ public class PlayfabManager : MonoBehaviour
 
         switch (type)
         {
-            case MoneyType.Gold:
+            case MoneyType.Coin:
                 currentType = "GO";
                 break;
             case MoneyType.Crystal:
@@ -885,9 +904,16 @@ public class PlayfabManager : MonoBehaviour
     {
         Debug.Log("광고 제거 구매 완료");
 
-        playerDataBase.removeAd = true;
-
         PurchaseItem(shopDataBase.RemoveAds);
+
+        playerDataBase.RemoveAd = true;
+    }
+
+    public void PurchaseCoin(int number)
+    {
+        Debug.Log("코인 구매 : " + number);
+
+        UpdateAddCurrency(MoneyType.Coin, number);
     }
 
     public void PurchaseItem(ShopClass shopClass)

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class CoinAnimation : MonoBehaviour
 {
     public Transform target;
-    public MoneyType moneyType = MoneyType.Gold;
+    public MoneyType moneyType = MoneyType.Coin;
 
     public Text goldText;
 
@@ -81,7 +81,15 @@ public class CoinAnimation : MonoBehaviour
 
         while(money < max)
         {
-            money += 1;
+            if(money + 100 < max)
+            {
+                money += 100;
+            }
+            else
+            {
+                money += 1;
+            }
+
             goldText.text = money.ToString();
 
             yield return new WaitForSeconds(0.01f);

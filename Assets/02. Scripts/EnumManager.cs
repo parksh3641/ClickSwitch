@@ -52,7 +52,7 @@ public enum LoginType
 
 public enum MoneyType
 {
-    Gold = 0,
+    Coin = 0,
     Crystal
 }
 
@@ -71,4 +71,11 @@ public enum GameSfxType
 public enum ShopType
 {
     RemoveAds = 0,
+    Coin1000
+}
+
+public enum ItemType
+{
+    Clock = 0,
+    Shield
 }

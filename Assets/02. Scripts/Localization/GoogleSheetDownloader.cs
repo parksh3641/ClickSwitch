@@ -7,18 +7,25 @@ using UnityEngine.Networking;
 
 public class GoogleSheetDownloader : MonoBehaviour
 {
-    const string URL = "https://docs.google.com/spreadsheets/d/1nTQjgAQ631ayvzsWQeXt0PwTpneVV5sPs173vgpg05w/export?format=tsv";
+    const string LocalizationURL = "https://docs.google.com/spreadsheets/d/1nTQjgAQ631ayvzsWQeXt0PwTpneVV5sPs173vgpg05w/export?format=tsv&gid=0";
+    const string ValueURL = "https://docs.google.com/spreadsheets/d/1nTQjgAQ631ayvzsWQeXt0PwTpneVV5sPs173vgpg05w/export?format=tsv&gid=1957583039";
 
     public bool isActive = false;
 
-    public LocalizationDataBase localizationDataBase;
+    LocalizationDataBase localizationDataBase;
+    ValueDataBase valueDataBase;
 
     private void Awake()
     {
         Application.targetFrameRate = 60;
         Screen.sleepTimeout = SleepTimeout.SystemSetting;
+        Time.timeScale = 1;
 
-        if(!Directory.Exists(SystemPath.GetPath()))
+        if(localizationDataBase == null) localizationDataBase = Resources.Load("LocalizationDataBase") as LocalizationDataBase;
+        if (valueDataBase == null) valueDataBase = Resources.Load("ValueDataBase") as ValueDataBase;
+
+
+        if (!Directory.Exists(SystemPath.GetPath()))
         {
             Directory.CreateDirectory(SystemPath.GetPath());
         }
@@ -33,9 +40,13 @@ public class GoogleSheetDownloader : MonoBehaviour
 
     IEnumerator DownloadFile()
     {
-        UnityWebRequest www = UnityWebRequest.Get(URL);
+        UnityWebRequest www = UnityWebRequest.Get(LocalizationURL);
         yield return www.SendWebRequest();
         SetLocalization(www.downloadHandler.text);
+
+        UnityWebRequest www2 = UnityWebRequest.Get(ValueURL);
+        yield return www2.SendWebRequest();
+        SetValue(www2.downloadHandler.text);
     }
 
     void SetLocalization(string tsv)
@@ -44,7 +55,7 @@ public class GoogleSheetDownloader : MonoBehaviour
 
         string[] row = tsv.Split('\n');
         int rowSize = row.Length;
-        int columnSize = row[0].Split('\t').Length;
+        //int columnSize = row[0].Split('\t').Length;
 
         for (int i = 1; i < rowSize; i ++)
         {
@@ -60,9 +71,54 @@ public class GoogleSheetDownloader : MonoBehaviour
             localizationDataBase.SetLocalization(content);
         }
 
+        Debug.Log("Localization File Download Complete!");
+    }
+
+    void SetValue(string tsv)
+    {
+        File.WriteAllText(SystemPath.GetPath() + "Value.txt", tsv);
+
+        string[] row = tsv.Split('\n');
+        int rowSize = row.Length;
+
+        for (int i = 1; i < rowSize; i++)
+        {
+            string[] column = row[i].Split('\t');
+
+            float value = float.Parse(column[1]);
+
+            switch (column[0])
+            {
+                case "AdCoolTime":
+                    valueDataBase.AdCoolTime = value;
+                    break;
+                case "ReadyTime":
+                    valueDataBase.ReadyTime = value;
+                    break;
+                case "GamePlayTime":
+                    valueDataBase.GamePlayTime = value;
+                    break;
+                case "ComboTime":
+                    valueDataBase.ComboTime = value;
+                    break;
+                case "MoleNextTime":
+                    valueDataBase.MoleNextTime = value;
+                    break;
+                case "MoleCatchTime":
+                    valueDataBase.MoleCatchTime = value;
+                    break;
+                case "FilpCardRememberTime":
+                    valueDataBase.FilpCardRememberTime = value;
+                    break;
+                case "ClockAddTime":
+                    valueDataBase.ClockAddTime = value;
+                    break;
+            }
+        }
+
         isActive = true;
 
-        Debug.Log("Localization File Download Complete!");
+        Debug.Log("Value File Download Complete!");
     }
 
     [Button]
@@ -72,7 +128,9 @@ public class GoogleSheetDownloader : MonoBehaviour
 
         isActive = false;
 
-        localizationDataBase.OnReset();
+        localizationDataBase.Initialize();
+        valueDataBase.Initialize();
+
         StartCoroutine(DownloadFile());
     }
 }

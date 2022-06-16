@@ -8,10 +8,19 @@ public class ShopContent : MonoBehaviour
     public ShopType shopType = ShopType.RemoveAds;
 
     public Image mainIcon;
-    public Text TitleText;
+    public LocalizationContent TitleText;
     public Text priceText;
 
-    public Sprite[] mainIconArray;
+    Sprite[] mainIconArray;
+
+    ImageDataBase imageDataBase;
+
+    private void Awake()
+    {
+        if (imageDataBase == null) imageDataBase = Resources.Load("ImageDatabase") as ImageDataBase;
+
+        mainIconArray = imageDataBase.GetShopArray();
+    }
 
     void Start()
     {
@@ -20,9 +29,14 @@ public class ShopContent : MonoBehaviour
         switch (shopType)
         {
             case ShopType.RemoveAds:
-                TitleText.text = LocalizationManager.instance.GetString("RemoveAds");
+                TitleText.name = "RemoveAds";
+                break;
+            case ShopType.Coin1000:
+                TitleText.name = "Coin1000";
                 break;
         }
+
+        TitleText.ReLoad();
 
         switch (GameStateManager.instance.Language)
         {
@@ -33,10 +47,7 @@ public class ShopContent : MonoBehaviour
                 priceText.text = "USD $ 1";
                 break;
             case LanguageType.Japenese:
-                priceText.text = "130 円";
-                break;
-            case LanguageType.Chinese:
-                priceText.text = "6 元";
+                priceText.text = "120 円";
                 break;
             default:
 

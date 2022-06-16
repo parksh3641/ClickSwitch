@@ -6,58 +6,52 @@ public class ValueManager : MonoBehaviour
 {
     public static ValueManager instance;
 
-    [SerializeField]
-    private float readyTimer = 4;
-
-    [SerializeField]
-    private float timer = 30;
-
-    [SerializeField]
-    private float comboTimer = 0.5f;
-
-    [SerializeField]
-    private float moleNextTimer = 1.5f;
-
-    [SerializeField]
-    private float moleCatchTimer = 0.75f;
-
-    [SerializeField]
-    private float cardTimer = 5.0f;
-
+    ValueDataBase valueDataBase;
 
     private void Awake()
     {
         instance = this;
+
+        if (valueDataBase == null) valueDataBase = Resources.Load("ValueDataBase") as ValueDataBase;
     }
 
-
-    public float GetReadyTimer()
+    public float GetAdCoolTime()
     {
-        return readyTimer;
+        return valueDataBase.AdCoolTime;
     }
 
-    public float GetTimer()
+    public float GetReadyTime()
     {
-        return timer;
+        return valueDataBase.ReadyTime;
     }
 
-    public float GetComboTimer()
+    public float GetGamePlayTime()
     {
-        return comboTimer;
+        return valueDataBase.GamePlayTime;
     }
 
-    public float GetMoleNextTimer()
+    public float GetComboTime()
     {
-        return moleNextTimer;
+        return valueDataBase.ComboTime;
     }
 
-    public float GetMoleCatchTimer()
+    public float GetMoleNextTime()
     {
-        return moleCatchTimer;
+        return valueDataBase.MoleNextTime;
     }
 
-    public float GetCardTimer()
+    public float GetMoleCatchTime()
     {
-        return cardTimer;
+        return valueDataBase.MoleCatchTime;
+    }
+
+    public float GetFilpCardRememberTime()
+    {
+        return valueDataBase.FilpCardRememberTime;
+    }
+
+    public float GetClockTime()
+    {
+        return valueDataBase.ClockAddTime;
     }
 }

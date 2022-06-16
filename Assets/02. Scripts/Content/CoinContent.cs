@@ -12,6 +12,8 @@ public class CoinContent : MonoBehaviour
 
     public void OnEnable()
     {
+        StopAllCoroutines();
+
         posX = Random.Range(-300, 300);
         posY = Random.Range(-150, 150);
 

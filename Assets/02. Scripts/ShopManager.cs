@@ -6,6 +6,10 @@ public class ShopManager : MonoBehaviour
 {
     public GameObject shopView;
 
+    public ShopContent shopContent;
+
+
+    public List<ShopContent> shopContentList = new List<ShopContent>();
 
     private void Awake()
     {

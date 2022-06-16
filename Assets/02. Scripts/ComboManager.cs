@@ -46,7 +46,7 @@ public class ComboManager : MonoBehaviour
     {
         waitObject.SetActive(false);
 
-        comboTimer = ValueManager.instance.GetComboTimer();
+        comboTimer = ValueManager.instance.GetComboTime();
 
         StartCoroutine(TimerCoroutine());
     }
@@ -150,7 +150,7 @@ public class ComboManager : MonoBehaviour
 
     IEnumerator WaitNotionUICorution()
     {
-        waitTimer = ValueManager.instance.GetCardTimer();
+        waitTimer = ValueManager.instance.GetFilpCardRememberTime();
         waitSaveTimer =  waitTimer;
 
         waitFillAmount.fillAmount = 1;

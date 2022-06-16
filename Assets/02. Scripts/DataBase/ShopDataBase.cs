@@ -16,15 +16,19 @@ public class ShopClass
 [CreateAssetMenu(fileName = "ShopDataBase", menuName = "ScriptableObjects/ShopDataBase")]
 public class ShopDataBase : ScriptableObject
 {
-    [Title("ItemId")]
+    [Title("GooglePlay")]
     [ShowInInspector]
     private ShopClass removeAds;
 
+    [Space]
+    [Title("Item")]
+    [ShowInInspector]
+    private List<ShopClass> itemList = new List<ShopClass>();
 
 
     public void Initialize()
     {
-
+        itemList.Clear();
     }
 
 
@@ -38,5 +42,10 @@ public class ShopDataBase : ScriptableObject
         {
             removeAds = value;
         }
+    }
+
+    public void SetItem(ShopClass shopClass)
+    {
+        itemList.Add(shopClass);
     }
 }

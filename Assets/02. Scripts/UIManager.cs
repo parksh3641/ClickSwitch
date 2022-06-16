@@ -1,4 +1,5 @@
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -38,13 +39,17 @@ public class UIManager : MonoBehaviour, IGameEvent
     public GameObject newRecordObj;
     public GameObject newComboObj;
     public GameObject doubleCoinObj;
-    public GameObject watchAdButton;
     public Text nowScoreText;
     public Text bestScoreText;
     public Text nowComboText;
     public Text bestComboText;
     public Text getGoldText;
     public Text rankText;
+    [Space]
+    [Title("Ad")]
+    public GameObject watchAdButton;
+    public GameObject watchAdLock;
+    public Text watchAdCountText;
 
 
     [Space]
@@ -79,6 +84,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     private float score = 0;
     private int bestScore = 0;
     private int bestCombo = 0;
+    private int adCoolTime = 0;
 
     [Title("Bool")]
     [SerializeField]
@@ -203,11 +209,11 @@ public class UIManager : MonoBehaviour, IGameEvent
         }
     }
 
-    void VirtualCurrency()
+    public void OnRenewalVC()
     {
         Debug.Log("화폐 갱신");
 
-        goldText.text = playerDataBase.Gold.ToString();
+        goldText.text = playerDataBase.Coin.ToString();
         crystalText.text = playerDataBase.Crystal.ToString();
     }
 
@@ -216,10 +222,8 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     }
 
-    void OnVirtualCurrency(bool check)
+    void SetEtcUI(bool check)
     {
-        VirtualCurrency();
-
         virtualCurrencyUI.SetActive(check);
 
         for(int i = 0; i < etcUI.Length; i ++)
@@ -360,7 +364,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         loginUI.SetActive(false);
 
-        VirtualCurrency();
+        OnRenewalVC();
     }
 
     public void OnLogout()
@@ -391,9 +395,9 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         pause = false;
 
-        StartCoroutine("ReadyTimerCorution", ValueManager.instance.GetReadyTimer());
+        StartCoroutine("ReadyTimerCorution", ValueManager.instance.GetReadyTime());
 
-        OnVirtualCurrency(false);
+        SetEtcUI(false);
     }
 
     public void GamePause()
@@ -518,33 +522,30 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         if(money > 0)
         {
-            if (playerDataBase.removeAd)
+            if (playerDataBase.RemoveAd)
             {
                 doubleCoinObj.SetActive(true);
                 watchAdButton.SetActive(false);
 
-                if (PlayfabManager.instance.isActive)
-                {
-                    PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, money * 2);
-                }
-                goldAnimation.OnPlay(playerDataBase.Gold, money * 2);
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, money * 2);
 
-                playerDataBase.Gold += (money * 2);
-
-                getGoldText.text = (money * 2).ToString();
+                getGoldText.text = money + " + " + money.ToString();
             }
             else
             {
                 doubleCoinObj.SetActive(false);
                 watchAdButton.SetActive(true);
 
-                if (PlayfabManager.instance.isActive)
+                if (!GameStateManager.instance.WatchAd)
                 {
-                    PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, money);
+                    LoadWatchAd();
                 }
-                goldAnimation.OnPlay(playerDataBase.Gold, money);
+                else
+                {
+                    SetWatchAd(false);
+                }
 
-                playerDataBase.Gold += money;
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, money);
 
                 getGoldText.text = money.ToString();
             }
@@ -560,20 +561,79 @@ public class UIManager : MonoBehaviour, IGameEvent
         GameReset();
     }
 
-    public void WatchAd()
+    void SetWatchAd(bool check)
+    {
+        if(check)
+        {
+            Debug.Log("광고 잠금");
+
+            watchAdLock.SetActive(true);
+            GameStateManager.instance.WatchAd = false;
+
+            PlayerPrefs.SetString("AdCoolTime",DateTime.Now.AddSeconds(ValueManager.instance.GetAdCoolTime()).ToString("yyyy-MM-dd HH:mm:ss"));
+
+            adCoolTime = (int)ValueManager.instance.GetAdCoolTime();
+
+            StartCoroutine(WatchAdCorution());
+        }
+        else
+        {
+            Debug.Log("광고 잠금 해제");
+
+            watchAdLock.SetActive(false);
+            GameStateManager.instance.WatchAd = true;
+
+            StopAllCoroutines();
+        }
+    }
+
+    void LoadWatchAd()
+    {
+        DateTime time = DateTime.Parse(PlayerPrefs.GetString("AdCoolTime"));
+        DateTime now = DateTime.Now;
+
+        TimeSpan span = time - now;
+
+        if(span.TotalSeconds > 0)
+        {
+            adCoolTime = (int)span.TotalSeconds;
+
+            StopAllCoroutines();
+            StartCoroutine(WatchAdCorution());
+        }
+        else
+        {
+            SetWatchAd(false);
+        }
+    }
+
+    IEnumerator WatchAdCorution()
+    {
+        if(adCoolTime > 0)
+        {
+            adCoolTime -= 1;
+        }
+        else
+        {
+            SetWatchAd(false);
+            yield break;
+        }
+
+        watchAdCountText.text = (adCoolTime / 60).ToString("D2") + ":" + (adCoolTime % 60).ToString("D2");
+
+        yield return new WaitForSeconds(1f);
+        StartCoroutine(WatchAdCorution());
+    }
+
+    public void SuccessWatchAd()
     {
         Debug.Log("광고 보상 : 코인 2배 지급!");
 
-        if (PlayfabManager.instance.isActive)
-        {
-            PlayfabManager.instance.UpdateAddCurrency(MoneyType.Gold, money);
-        }
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, money);
 
-        playerDataBase.Gold += money;
+        getGoldText.text = money + " + " + money.ToString();
 
-        goldAnimation.OnPlay(playerDataBase.Gold, money);
-
-        getGoldText.text = (money * 2).ToString();
+        SetWatchAd(true);
 
     }
 
@@ -598,7 +658,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
             if(!gameOptionUI.activeInHierarchy)
             {
-                            Time.timeScale = 1;
+                Time.timeScale = 1;
             }
         }
         else
@@ -636,7 +696,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         score = 0;
 
-        OnVirtualCurrency(true);
+        SetEtcUI(true);
 
         eGameEnd.Invoke();
     }
@@ -739,7 +799,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         eGameStart.Invoke();
 
-        StartCoroutine("TimerCorution", ValueManager.instance.GetTimer());
+        StartCoroutine("TimerCorution", ValueManager.instance.GetGamePlayTime());
     }
 
     private IEnumerator TimerCorution(float time)

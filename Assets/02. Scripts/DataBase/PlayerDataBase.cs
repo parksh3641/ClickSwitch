@@ -6,12 +6,15 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PlayerDataBase", menuName = "ScriptableObjects/PlayerDataBase")]
 public class PlayerDataBase : ScriptableObject
 {
+    [Title("Money")]
     [SerializeField]
-    private int gold = 0;
+    private int coin = 0;
 
     [SerializeField]
     private int crystal = 0;
 
+    [Space]
+    [Title("Score")]
     [SerializeField]
     private int totalScore = 0;
 
@@ -39,8 +42,18 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private int bestButtonActionCombo = 0;
 
+    [Space]
+    [Title("Item")]
+
+    [SerializeField]
+    private int clock = 0;
+
+    [SerializeField]
+    private int shield = 0;
+
+    [Space]
     [Title("Purchase")]
-    public bool removeAd = false;
+    private bool removeAd = false;
 
     [Title("Achievement")]
     [ShowInInspector]
@@ -48,7 +61,7 @@ public class PlayerDataBase : ScriptableObject
 
     public void Initialize()
     {
-        gold = 0;
+        coin = 0;
         crystal = 0;
         totalScore = 0;
         bestSpeedTouchScore = 0;
@@ -59,6 +72,9 @@ public class PlayerDataBase : ScriptableObject
         bestFilpCardCombo = 0;
         bestButtonActionScore = 0;
         bestButtonActionCombo = 0;
+
+        clock = 0;
+        shield = 0;
 
         removeAd = false;
 
@@ -77,15 +93,15 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
-    public int Gold
+    public int Coin
     {
         get
         {
-            return gold;
+            return coin;
         }
         set
         {
-            gold = value;
+            coin = value;
         }
     }
 
@@ -195,6 +211,40 @@ public class PlayerDataBase : ScriptableObject
             bestButtonActionCombo = value;
         }
     }
+
+    public int Clock
+    {
+        set
+        {
+            clock = value;
+        }
+    }
+
+    public int Shield
+    {
+        set
+        {
+            shield = value;
+        }
+    }
+
+    public int GetItemCount(ItemType type)
+    {
+        int count = 0;
+
+        switch (type)
+        {
+            case ItemType.Clock:
+                count = clock;
+                break;
+            case ItemType.Shield:
+                count = shield;
+                break;
+        }
+
+        return count;
+    }
+
 
     public bool RemoveAd
     {
