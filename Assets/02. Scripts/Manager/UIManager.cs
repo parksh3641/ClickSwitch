@@ -19,7 +19,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     public Text infoBestScoreText;
     public Text infoBestComboText;
 
-
+    [Space]
     [Title("CurrneyUI")]
     public GameObject virtualCurrencyUI;
     public Text goldText;
@@ -29,9 +29,13 @@ public class UIManager : MonoBehaviour, IGameEvent
     public GameObject gamePlayView;
     public GameObject[] gamePlayUI;
 
+    [Space]
     [Title("ReadyUI")]
     public GameObject gameReadyUI;
     public Text gameReadyText;
+
+    [Title("ItemUI")]
+    public ItemUseContent[] itemUseContentArray;
 
     [Space]
     [Title("EndUI")]
@@ -45,6 +49,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     public Text bestComboText;
     public Text getGoldText;
     public Text rankText;
+
     [Space]
     [Title("Ad")]
     public GameObject watchAdButton;
@@ -99,6 +104,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     public SoundManager soundManager;
     public GoogleAdsManager googldAdsManager;
     public ShopManager shopManager;
+    public AchievementManager achievementManager;
 
     [Title("Animation")]
     public CoinAnimation goldAnimation;
@@ -106,6 +112,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     [Title("DataBase")]
     public PlayerDataBase playerDataBase;
+    ImageDataBase imageDataBase;
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(1);
 
@@ -113,6 +120,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     private void Awake()
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+        if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
 
         updateUI.SetActive(false);
 
@@ -209,7 +217,7 @@ public class UIManager : MonoBehaviour, IGameEvent
         }
     }
 
-    public void OnRenewalVC()
+    public void RenewalVC()
     {
         Debug.Log("È­Æó °»½Å");
 
@@ -217,9 +225,22 @@ public class UIManager : MonoBehaviour, IGameEvent
         crystalText.text = playerDataBase.Crystal.ToString();
     }
 
-    void AddVirtualCurrency(MoneyType type)
+    public void SetItem()
     {
+        Sprite[] itemArray = imageDataBase.GetItemArray();
 
+        for(int i = 0; i < itemUseContentArray.Length; i ++)
+        {
+            itemUseContentArray[i].Initialize(itemArray[i]);
+        }
+
+        if (GameStateManager.instance.Clock) itemUseContentArray[0].UseItem();
+        if (GameStateManager.instance.Shield) itemUseContentArray[1].UseItem();
+    }
+
+    public void UsedItem(ItemType type)
+    {
+        itemUseContentArray[(int)type].UsedItem();
     }
 
     void SetEtcUI(bool check)
@@ -251,6 +272,8 @@ public class UIManager : MonoBehaviour, IGameEvent
         gamePlayView.SetActive(true);
 
         gamePlayUI[(int)type].SetActive(true);
+
+        SetItem();
 
         infoBestScoreText.text = "";
         infoBestComboText.text = "";
@@ -334,7 +357,7 @@ public class UIManager : MonoBehaviour, IGameEvent
                 languageContentArray[i].OnFrame(false);
             }
 
-            languageContentArray[(int)GameStateManager.instance.Language].OnFrame(true);
+            languageContentArray[(int)GameStateManager.instance.Language -1].OnFrame(true);
         }
     }
 
@@ -358,13 +381,18 @@ public class UIManager : MonoBehaviour, IGameEvent
         shopManager.OpenShop();
     }
 
+    public void OpenAchievement()
+    {
+        achievementManager.OpenAchievement();
+    }
+
     public void OnLoginSuccess()
     {
         loadingUI.FadeIn();
 
         loginUI.SetActive(false);
 
-        OnRenewalVC();
+        RenewalVC();
     }
 
     public void OnLogout()
@@ -376,6 +404,8 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void OnNeedUpdate()
     {
+        loginUI.SetActive(false);
+
         updateUI.SetActive(true);
     }
 
@@ -799,7 +829,11 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         eGameStart.Invoke();
 
-        StartCoroutine("TimerCorution", ValueManager.instance.GetGamePlayTime());
+        float timer = ValueManager.instance.GetGamePlayTime();
+
+        if (GameStateManager.instance.Clock) timer += ValueManager.instance.GetClockTime();
+
+        StartCoroutine("TimerCorution", timer);
     }
 
     private IEnumerator TimerCorution(float time)

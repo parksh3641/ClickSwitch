@@ -203,6 +203,7 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.clock = value;
+            SaveFile();
         }
     }
 
@@ -215,6 +216,7 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.shield = value;
+            SaveFile();
         }
     }
 
@@ -236,6 +238,9 @@ public class GameStateManager : MonoBehaviour
             if (!string.IsNullOrEmpty(stjs))
             {
                 gameSettings = JsonUtility.FromJson<GameSettings>(stjs);
+
+                gameSettings.clock = false;
+                gameSettings.shield = false;
             }
             else
             {

@@ -8,7 +8,7 @@ public class ShopContent : MonoBehaviour
     public ShopType shopType = ShopType.RemoveAds;
 
     public Image mainIcon;
-    public LocalizationContent TitleText;
+    public LocalizationContent titleText;
     public Text priceText;
 
     Sprite[] mainIconArray;
@@ -29,14 +29,14 @@ public class ShopContent : MonoBehaviour
         switch (shopType)
         {
             case ShopType.RemoveAds:
-                TitleText.name = "RemoveAds";
+                titleText.name = "RemoveAds";
                 break;
             case ShopType.Coin1000:
-                TitleText.name = "Coin1000";
+                titleText.name = "Coin1000";
                 break;
         }
 
-        TitleText.ReLoad();
+        titleText.ReLoad();
 
         switch (GameStateManager.instance.Language)
         {

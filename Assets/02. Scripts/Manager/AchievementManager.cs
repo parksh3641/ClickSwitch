@@ -52,6 +52,11 @@ public class AchievementManager : MonoBehaviour
         OnCreateContent();
     }
 
+    public void OpenAchievement()
+    {
+        Social.ShowAchievementsUI();
+    }
+
     public void AddAchieveContentData(int number) //매개변수는 뭘로 주어야되고
     {
         //데이터베이스에서 로드
@@ -95,8 +100,5 @@ public class AchievementManager : MonoBehaviour
             achievementContentList[i].SetPerfectMode(playerDataBase.GetPerfectMode(gamePlayType + i));
             achievementContentList[i].gameObject.SetActive(true);
         }
-
     }
-
-
 }

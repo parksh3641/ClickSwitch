@@ -17,8 +17,6 @@ public class PlayfabManager : MonoBehaviour
 {
     public static PlayfabManager instance;
 
-    public StateManager stateManager;
-
     public UIManager uiManager;
 
     [ShowInInspector]
@@ -54,7 +52,6 @@ public class PlayfabManager : MonoBehaviour
 
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
         if (shopDataBase == null) shopDataBase = Resources.Load("ShopDataBase") as ShopDataBase;
-        if (stateManager == null) stateManager = GameObject.Find("StateManager").GetComponent<StateManager>() as StateManager;
     }
 
     private void Start()
@@ -418,9 +415,11 @@ public class PlayfabManager : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
-        yield return GetUserInventory();
-
         yield return GetCatalog();
+
+        yield return new WaitForSeconds(0.5f);
+
+        yield return GetUserInventory();
 
         yield return GetStatistics();
 
@@ -434,7 +433,7 @@ public class PlayfabManager : MonoBehaviour
 
         uiManager.OnLoginSuccess();
 
-        stateManager.Initialize();
+        StateManager.instance.Initialize();
     }
 
     public bool GetUserInventory()
@@ -471,6 +470,8 @@ public class PlayfabManager : MonoBehaviour
                     {
                         playerDataBase.Shield = (int)list.RemainingUses;
                     }
+
+                    shopDataBase.SetItemInstanceId(list.ItemId, list.ItemInstanceId);
                 }
             }
             else
@@ -643,19 +644,25 @@ public class PlayfabManager : MonoBehaviour
 
     public void UpdatePlayerStatisticsInsert(string name, int value)
     {
-        PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+        try
         {
-            FunctionName = "UpdatePlayerStatistics",
-            FunctionParameter = new
+            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
             {
-                Statistics = new List<StatisticUpdate>
+                FunctionName = "UpdatePlayerStatistics",
+                FunctionParameter = new
+                {
+                    Statistics = new List<StatisticUpdate>
                 {
                     new StatisticUpdate {StatisticName = name, Value = value}
                 }
-            },
-            GeneratePlayStreamEvent = true,
-        }, OnCloudUpdateStats
-, DisplayPlayfabError);
+                },
+                GeneratePlayStreamEvent = true,
+            }, OnCloudUpdateStats, DisplayPlayfabError);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e.Message);
+        }
     }
 
     public void UpdateAddCurrency(MoneyType type ,int number)
@@ -904,7 +911,7 @@ public class PlayfabManager : MonoBehaviour
     {
         Debug.Log("광고 제거 구매 완료");
 
-        PurchaseItem(shopDataBase.RemoveAds);
+        PurchaseItemToRM(shopDataBase.RemoveAds);
 
         playerDataBase.RemoveAd = true;
     }
@@ -916,8 +923,26 @@ public class PlayfabManager : MonoBehaviour
         UpdateAddCurrency(MoneyType.Coin, number);
     }
 
-    public void PurchaseItem(ShopClass shopClass)
+    public void PurchaseItemToRM(ShopClass shopClass)
     {
+        //try
+        //{
+        //    PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+        //    {
+        //        FunctionName = "PurchaseItem",
+        //        FunctionParameter = new {
+        //            ItemId = shopClass.itemId,
+        //            Price = (int)shopClass.price,
+        //            VirtualCurrency = shopClass.virtualCurrency
+        //        },
+        //        GeneratePlayStreamEvent = true,
+        //    }, OnCloudUpdateStats, DisplayPlayfabError);
+        //}
+        //catch (Exception e)
+        //{
+        //    Debug.LogError(e.Message);
+        //}
+
         var request = new PurchaseItemRequest()
         {
             CatalogVersion = shopClass.catalogVersion,
@@ -932,6 +957,94 @@ public class PlayfabManager : MonoBehaviour
         {
             Debug.Log(shopClass.itemId + " 구매 실패!");
         });
+    }
+
+    public void PurchaseItem(ShopClass shopClass, Action<bool> action)
+    {
+        var request = new PurchaseItemRequest()
+        {
+            CatalogVersion = shopClass.catalogVersion,
+            ItemId = shopClass.itemId,
+            VirtualCurrency = shopClass.virtualCurrency,
+            Price = (int)shopClass.price
+        };
+        PlayFabClientAPI.PurchaseItem(request, (result) =>
+        {
+            Debug.Log(shopClass.itemId + " 구매 성공!");
+
+            switch(shopClass.itemId)
+            {
+                case "Clock":
+                    playerDataBase.Clock += 1;
+                    break;
+                case "Shield":
+                    playerDataBase.Shield += 1;
+                    break;
+            }
+
+            switch (shopClass.virtualCurrency)
+            {
+                case "GO":
+                    playerDataBase.Coin -= (int)shopClass.price;
+                    break;
+                case "ST":
+                    playerDataBase.Crystal -= (int)shopClass.price;
+                    break;
+            }
+            uiManager.RenewalVC();
+            StateManager.instance.ChangeNumber();
+
+            action.Invoke(true);
+        }, error =>
+        {
+            Debug.Log(shopClass.itemId + " 구매 실패!");
+            action.Invoke(false);
+        });
+    }
+
+    public void CheckConsumeItem()
+    {
+        StartCoroutine(ConsumeItemCorution());
+    }
+
+    IEnumerator ConsumeItemCorution()
+    {
+        if (GameStateManager.instance.Clock)
+        {
+            playerDataBase.Clock -= 1;
+
+            ConsumeItem(shopDataBase.GetItemInstanceId("Clock"));
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        if (GameStateManager.instance.Shield)
+        {
+            playerDataBase.Shield -= 1;
+
+            ConsumeItem(shopDataBase.GetItemInstanceId("Shield"));
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        StateManager.instance.ChangeNumber();
+    }
+
+    public void ConsumeItem(string itemInstanceID)
+    {
+        try
+        {
+            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+            {
+                FunctionName = "ConsumeItem",
+                FunctionParameter = new { ConsumeCount = 1, ItemInstanceId = itemInstanceID },
+                GeneratePlayStreamEvent = true,
+            }, OnCloudUpdateStats, DisplayPlayfabError);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e.Message);
+        }
     }
 
     #endregion

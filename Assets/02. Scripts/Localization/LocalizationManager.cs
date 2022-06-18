@@ -49,6 +49,27 @@ public class LocalizationManager : MonoBehaviour
                     case LanguageType.Chinese:
                         str = item.chinese;
                         break;
+                    case LanguageType.Indonesian:
+                        str = item.indonesian;
+                        break;
+                    case LanguageType.Portuguese:
+                        str = item.portuguese;
+                        break;
+                    case LanguageType.Russian:
+                        str = item.russian;
+                        break;
+                    case LanguageType.German:
+                        str = item.german;
+                        break;
+                    case LanguageType.Spanish:
+                        str = item.spanish;
+                        break;
+                    case LanguageType.Arabic:
+                        str = item.arabic;
+                        break;
+                    case LanguageType.Bengali:
+                        str = item.bengali;
+                        break;
                 }
             }
         }
@@ -85,6 +106,52 @@ public class LocalizationManager : MonoBehaviour
     public void ChangeChinese()
     {
         ChangeLanguage(LanguageType.Chinese);
+
+        eChangeLanguage.Invoke();
+    }
+
+    public void ChangeIndonesian()
+    {
+        ChangeLanguage(LanguageType.Indonesian);
+
+        eChangeLanguage.Invoke();
+    }
+
+    public void ChangePortuguese()
+    {
+        ChangeLanguage(LanguageType.Portuguese);
+
+        eChangeLanguage.Invoke();
+    }
+
+    public void ChangeRussian()
+    {
+        ChangeLanguage(LanguageType.Russian);
+
+        eChangeLanguage.Invoke();
+    }
+
+    public void ChangeGerman()
+    {
+        ChangeLanguage(LanguageType.German);
+
+        eChangeLanguage.Invoke();
+    }
+    public void ChangeSpanish()
+    {
+        ChangeLanguage(LanguageType.Spanish);
+
+        eChangeLanguage.Invoke();
+    }
+    public void ChangeArabic()
+    {
+        ChangeLanguage(LanguageType.Arabic);
+
+        eChangeLanguage.Invoke();
+    }
+    public void ChangeBengali()
+    {
+        ChangeLanguage(LanguageType.Bengali);
 
         eChangeLanguage.Invoke();
     }

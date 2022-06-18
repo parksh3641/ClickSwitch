@@ -135,7 +135,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        gameModeText.name = LocalizationManager.instance.GetString(gamePlayType.ToString());
+        gameModeText.name = GameStateManager.instance.GamePlayType.ToString();
+        gameModeText.ReLoad();
 
         ChoiceGameType((int)GameStateManager.instance.GamePlayType);
     }
@@ -308,7 +309,7 @@ public class GameManager : MonoBehaviour
 
         GameStateManager.instance.GamePlayType = gamePlayType;
 
-        gameModeText.name = LocalizationManager.instance.GetString(gamePlayType.ToString());
+        gameModeText.name = gamePlayType.ToString();
         gameModeText.ReLoad();
 
         uiManager.CloseMenu();
@@ -327,6 +328,8 @@ public class GameManager : MonoBehaviour
         }
 
         uiManager.OpenGamePlayUI(gamePlayType);
+
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.CheckConsumeItem();
 
         switch (gamePlayType)
         {
@@ -411,16 +414,27 @@ public class GameManager : MonoBehaviour
             if(nowIndex >= countIndex - 1)
             {
                 Debug.Log("Reset");
-                soundManager.PlaySFX(GameSfxType.Success);
                 CreateUnDuplicateRandom();
             }
         }
         else
         {
-            Debug.Log("Failure");
-            action(false);
+            if(GameStateManager.instance.Shield)
+            {
+                Debug.Log("Defense Shield");
 
-            MinusScore(5);
+                GameStateManager.instance.Shield = false;
+                soundManager.PlaySFX(GameSfxType.Shield);
+                uiManager.UsedItem(ItemType.Shield);
+            }
+            else
+            {
+                Debug.Log("Failure");
+
+                action(false);
+
+                MinusScore(5);
+            }
         }
     }
 
@@ -435,12 +449,23 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Failure");
-            action(false);
+            if (GameStateManager.instance.Shield)
+            {
+                Debug.Log("Defense Shield");
 
-            MinusScore(5);
+                GameStateManager.instance.Shield = false;
+                soundManager.PlaySFX(GameSfxType.Shield);
+                uiManager.UsedItem(ItemType.Shield);
+            }
+            else
+            {
+                Debug.Log("Failure");
 
-            countIndex = 0;
+                action(false);
+                countIndex = 0;
+
+                MinusScore(5);
+            }
         }
     }
 
@@ -485,13 +510,25 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("Failure");
-                action?.Invoke(2);
-                saveAction?.Invoke(2);
+                if (GameStateManager.instance.Shield)
+                {
+                    Debug.Log("Defense Shield");
 
-                filpCardIndex = -1;
+                    GameStateManager.instance.Shield = false;
+                    soundManager.PlaySFX(GameSfxType.Shield);
+                    uiManager.UsedItem(ItemType.Shield);
+                }
+                else
+                {
+                    Debug.Log("Failure");
 
-                MinusScore(5);
+                    action?.Invoke(2);
+                    saveAction?.Invoke(2);
+
+                    filpCardIndex = -1;
+
+                    MinusScore(5);
+                }
             }
         }
     }
@@ -525,13 +562,39 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Failure");
-            action?.Invoke(false);
+            if (GameStateManager.instance.Shield)
+            {
+                Debug.Log("Defense Shield");
 
+                GameStateManager.instance.Shield = false;
+                soundManager.PlaySFX(GameSfxType.Shield);
+                uiManager.UsedItem(ItemType.Shield);
+            }
+            else
+            {
+                Debug.Log("Failure");
+
+                action?.Invoke(false);
+
+                MinusScore(5);
+            }
+        }
+    }
+
+    public void Failure()
+    {
+        if (GameStateManager.instance.Shield)
+        {
+            GameStateManager.instance.Shield = false;
+            soundManager.PlaySFX(GameSfxType.Shield);
+            uiManager.UsedItem(ItemType.Shield);
+        }
+        else
+        {
             MinusScore(5);
         }
-
     }
+
 
     #endregion
 
@@ -569,6 +632,9 @@ public class GameManager : MonoBehaviour
 
     public void OnGameEnd()
     {
+        GameStateManager.instance.Clock = false;
+        GameStateManager.instance.Shield = false;
+
         StopAllCoroutines();
     }
 

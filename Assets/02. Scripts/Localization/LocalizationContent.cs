@@ -14,6 +14,11 @@ public class LocalizationContent : MonoBehaviour
         text = GetComponent<Text>();
     }
 
+    public void TextColor(Color color)
+    {
+        text.color = color;
+    }
+
     private void Start()
     {
         text.text = LocalizationManager.instance.GetString(name);

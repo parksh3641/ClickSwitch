@@ -1,6 +1,7 @@
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
@@ -9,6 +10,7 @@ public class ShopClass
     public string catalogVersion = "";
     public string itemClass = "";
     public string itemId = "";
+    public string itemInstanceId = "";
     public string virtualCurrency = "";
     public uint price = 0;
 }
@@ -25,10 +27,17 @@ public class ShopDataBase : ScriptableObject
     [ShowInInspector]
     private List<ShopClass> itemList = new List<ShopClass>();
 
-
     public void Initialize()
     {
         itemList.Clear();
+    }
+
+    public List<ShopClass> ItemList
+    {
+        get
+        {
+            return itemList;
+        }
     }
 
 
@@ -47,5 +56,33 @@ public class ShopDataBase : ScriptableObject
     public void SetItem(ShopClass shopClass)
     {
         itemList.Add(shopClass);
+
+        itemList = Enumerable.Reverse(itemList).ToList();
+    }
+
+    public void SetItemInstanceId(string itemid, string instanceid)
+    {
+        for(int i = 0; i < itemList.Count; i ++)
+        {
+            if(itemList[i].itemId.Equals(itemid))
+            {
+                itemList[i].itemInstanceId = instanceid;
+            }
+        }
+    }
+
+    public string GetItemInstanceId(string itemid)
+    {
+        string itemInstanceId = "";
+
+        for (int i = 0; i < itemList.Count; i++)
+        {
+            if (itemList[i].itemId.Equals(itemid))
+            {
+                itemInstanceId = itemList[i].itemInstanceId;
+            }
+        }
+
+        return itemInstanceId;
     }
 }

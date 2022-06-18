@@ -53,6 +53,7 @@ public class PlayerDataBase : ScriptableObject
 
     [Space]
     [Title("Purchase")]
+    [SerializeField]
     private bool removeAd = false;
 
     [Title("Achievement")]
@@ -214,6 +215,10 @@ public class PlayerDataBase : ScriptableObject
 
     public int Clock
     {
+        get
+        {
+            return clock;
+        }
         set
         {
             clock = value;
@@ -222,6 +227,10 @@ public class PlayerDataBase : ScriptableObject
 
     public int Shield
     {
+        get
+        {
+            return shield;
+        }
         set
         {
             shield = value;

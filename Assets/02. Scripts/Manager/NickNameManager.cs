@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,6 +12,9 @@ public class NickNameManager : MonoBehaviour
     public Text nickNameText;
     public InputField inputField;
 
+    public string[] lines;
+    string LINE_SPLIT_RE = @"\r\n|\n\r|\n|\r";
+
     public PlayerDataBase playerDataBase;
 
     private void Awake()
@@ -18,6 +22,22 @@ public class NickNameManager : MonoBehaviour
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
 
         nickNameView.SetActive(false);
+    }
+
+    private void Start()
+    {
+        string file = SystemPath.GetPath() + "BadWord.txt";
+
+        string source;
+
+        if (File.Exists(file))
+        {
+            StreamReader word = new StreamReader(file);
+            source = word.ReadToEnd();
+            word.Close();
+
+            lines = Regex.Split(source, LINE_SPLIT_RE);
+        }
     }
 
     public void OpenNickName()
@@ -40,6 +60,16 @@ public class NickNameManager : MonoBehaviour
         {
             string Check = Regex.Replace(inputField.text, @"[^a-zA-Z0-9°¡-ÆR]", "", RegexOptions.Singleline);
             Check = Regex.Replace(inputField.text, @"[^\w\.@-]", "", RegexOptions.Singleline);
+
+            for(int i = 0; i < lines.Length; i ++)
+            {
+                if (inputField.text.Contains(lines[i]))
+                {
+                    NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
+                    Debug.Log("Æ¯¼ö¹®ÀÚ´Â »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.");
+                    return;
+                }
+            }
 
             if (inputField.text.Equals(Check) == true)
             {

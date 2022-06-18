@@ -7,16 +7,22 @@ using UnityEngine.UI;
 [CreateAssetMenu(fileName = "ImageDataBase", menuName = "ScriptableObjects/ImageDataBase")]
 public class ImageDataBase : ScriptableObject
 {
-    [Title("Image")]
     public Sprite[] iconArray;
 
     public Sprite[] countryArray;
 
+    [Title("Shop")]
     public Sprite[] shopArray;
+    public Sprite[] vcArray;
 
     public Sprite[] itemBackgroundArray;
     public Sprite[] itemArray;
 
+
+    public Sprite[] GetVCArray()
+    {
+        return vcArray;
+    }
 
     public Sprite[] GetIconArray()
     {

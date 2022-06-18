@@ -63,6 +63,7 @@ public class SoundManager : MonoBehaviour
             for(int i = 0; i < sfxAudio.Length; i ++)
             {
                 sfxAudio[i].volume = 1;
+                sfxAudio[1].volume = 0.5f;
             }
         }
         else

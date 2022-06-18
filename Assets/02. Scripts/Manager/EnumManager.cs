@@ -36,10 +36,18 @@ public enum OptionType
 
 public enum LanguageType
 {
-    Korean = 0,
+    Default = 0,
+    Korean,
     English,
     Japenese,
-    Chinese
+    Chinese,
+    Indonesian,
+    Portuguese,
+    Russian,
+    German,
+    Spanish,
+    Arabic,
+    Bengali
 }
 
 public enum LoginType
@@ -65,7 +73,8 @@ public enum GameBGMType
 
 public enum GameSfxType
 {
-    Success
+    Success,
+    Shield
 }
 
 public enum ShopType

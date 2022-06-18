@@ -14,10 +14,18 @@ public class ItemManager : MonoBehaviour
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
     }
 
+    void OnEnable()
+    {
+        StateManager.eChangeNumber += Initialize;
+    }
+
+    void OnDisable()
+    {
+        StateManager.eChangeNumber -= Initialize;
+    }
+
     public void Initialize()
     {
-        Debug.Log("ItemManager Initialize");
-
         for(int i = 0; i < itemContents.Length; i ++)
         {
             ItemType itemtype = ItemType.Clock;

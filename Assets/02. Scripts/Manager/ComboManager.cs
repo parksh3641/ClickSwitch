@@ -91,13 +91,17 @@ public class ComboManager : MonoBehaviour
 
     public void OnStopCombo()
     {
+        pause = false;
+
         comboObject.SetActive(false);
 
         timer = 0;
         fillamount.fillAmount = 0;
 
-        StopAllCoroutines();
         waitObject.SetActive(false);
+
+        StopAllCoroutines();
+        StartCoroutine(TimerCoroutine());
     }
 
     public int GetCombo()
@@ -137,10 +141,6 @@ public class ComboManager : MonoBehaviour
                 timer -= 0.01f;
 
                 fillamount.fillAmount = timer / comboTimer;
-            }
-            else
-            {
-                OnStopCombo();
             }
         }
 

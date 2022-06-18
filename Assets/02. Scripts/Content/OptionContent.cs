@@ -17,7 +17,7 @@ public class OptionContent : MonoBehaviour
 
     public GameObject button;
     public Image buttonImg;
-    public Text buttonText;
+    public LocalizationContent buttonText;
 
     [Title("SpriteList")]
     public Sprite[] iconList;
@@ -50,13 +50,14 @@ public class OptionContent : MonoBehaviour
                 OnSFX();
                 break;
             case OptionType.Language:
-                iconImg.sprite = languageList[(int)GameStateManager.instance.Language];
+                iconImg.sprite = languageList[(int)GameStateManager.instance.Language - 1];
                 iconText.text = GameStateManager.instance.Language.ToString();
 
                 buttonImg.sprite = buttonList[0];
 
-                buttonText.text = LocalizationManager.instance.GetString("Change");
-                buttonText.color = new Color(39 / 255f, 220 / 255f, 149 / 255f);
+                buttonText.name = "Change";
+                buttonText.ReLoad();
+                buttonText.TextColor(new Color(39 / 255f, 220 / 255f, 149 / 255f));
 
                 break;
             case OptionType.Logout:
@@ -65,8 +66,9 @@ public class OptionContent : MonoBehaviour
 
                 buttonImg.sprite = buttonList[1];
 
-                buttonText.text = LocalizationManager.instance.GetString("Logout");
-                buttonText.color = new Color(225 / 255f, 34 / 255f, 12 / 255f);
+                buttonText.name = "Logout";
+                buttonText.ReLoad();
+                buttonText.TextColor(new Color(225 / 255f, 34 / 255f, 12 / 255f));
 
                 if (GameStateManager.instance.Login == LoginType.Google)
                 {
@@ -125,16 +127,18 @@ public class OptionContent : MonoBehaviour
         {
             iconImg.sprite = iconList[0];
             buttonImg.sprite = buttonList[0];
-            buttonText.text = "ON";
-            buttonText.color = new Color(39 / 255f, 220 / 255f, 149 / 255f);
+            buttonText.name = "ON";
+            buttonText.ReLoad();
+            buttonText.TextColor(new Color(39 / 255f, 220 / 255f, 149 / 255f));
 
         }
         else
         {
             iconImg.sprite = iconList[1];
             buttonImg.sprite = buttonList[1];
-            buttonText.text = "OFF";
-            buttonText.color = new Color(225 / 255f, 34 / 255f, 12 / 255f);
+            buttonText.name = "OFF";
+            buttonText.ReLoad();
+            buttonText.TextColor(new Color(225 / 255f, 34 / 255f, 12 / 255f));
         }
     }
 
@@ -144,15 +148,17 @@ public class OptionContent : MonoBehaviour
         {
             iconImg.sprite = iconList[2];
             buttonImg.sprite = buttonList[0];
-            buttonText.text = "ON";
-            buttonText.color = new Color(39 / 255f, 220 / 255f, 149 / 255f);
+            buttonText.name = "ON";
+            buttonText.ReLoad();
+            buttonText.TextColor(new Color(39 / 255f, 220 / 255f, 149 / 255f));
         }
         else
         {
             iconImg.sprite = iconList[3];
             buttonImg.sprite = buttonList[1];
-            buttonText.text = "OFF";
-            buttonText.color = new Color(225 / 255f, 34 / 255f, 12 / 255f);
+            buttonText.name = "OFF";
+            buttonText.ReLoad();
+            buttonText.TextColor(new Color(225 / 255f, 34 / 255f, 12 / 255f));
         }
     }
 }
