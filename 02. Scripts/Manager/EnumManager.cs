@@ -41,7 +41,7 @@ public enum LanguageType
     English,
     Japenese,
     Chinese,
-    Indonesian,
+    Indian,
     Portuguese,
     Russian,
     German,

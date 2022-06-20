@@ -141,11 +141,20 @@ public class RankingManager : MonoBehaviour
                 nickName = player.DisplayName;
             }
 
-            if (player.PlayFabId.Equals(GameStateManager.instance.PlayfabId) || player.DisplayName.Equals(GameStateManager.instance.NickName))
+            if (player.PlayFabId.Equals(GameStateManager.instance.PlayfabId))
             {
                 checkMy = true;
 
                 myRankContent.InitState(index, location, nickName, player.StatValue, false);
+            }
+            else if(player.DisplayName != null)
+            {
+                if (player.DisplayName.Equals(GameStateManager.instance.NickName))
+                {
+                    checkMy = true;
+
+                    myRankContent.InitState(index, location, nickName, player.StatValue, false);
+                }
             }
 
             rankContentList[num].InitState(index, location, nickName, player.StatValue, checkMy);

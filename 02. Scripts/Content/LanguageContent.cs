@@ -20,7 +20,7 @@ public class LanguageContent : MonoBehaviour
 
         countryArray = imageDataBase.GetCountryArray();
 
-        country.sprite = countryArray[(int)languageType];
+        country.sprite = countryArray[(int)languageType - 1];
     }
 
 

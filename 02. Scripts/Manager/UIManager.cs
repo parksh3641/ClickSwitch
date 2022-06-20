@@ -1,3 +1,4 @@
+using Firebase.Analytics;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
@@ -447,6 +448,9 @@ public class UIManager : MonoBehaviour, IGameEvent
     public void GameEnd()
     {
         Debug.Log("Game End");
+
+        FirebaseAnalytics.LogEvent(GameStateManager.instance.GamePlayType.ToString(),"GetScore", score);
+        FirebaseAnalytics.LogEvent(GameStateManager.instance.GamePlayType.ToString(), "GetCombo", comboManager.GetCombo());
 
         soundManager.PlayBGM(GameBGMType.End);
 

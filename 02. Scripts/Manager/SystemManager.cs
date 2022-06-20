@@ -24,10 +24,6 @@ public class SystemManager : MonoBehaviour
             {
                 GameStateManager.instance.Language = LanguageType.Chinese;
             }
-            else if (Application.systemLanguage == SystemLanguage.Indonesian)
-            {
-                GameStateManager.instance.Language = LanguageType.Indonesian;
-            }
             else if (Application.systemLanguage == SystemLanguage.Portuguese)
             {
                 GameStateManager.instance.Language = LanguageType.Portuguese;

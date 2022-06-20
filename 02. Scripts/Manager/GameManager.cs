@@ -1,3 +1,4 @@
+using Firebase.Analytics;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -328,6 +329,8 @@ public class GameManager : MonoBehaviour
         }
 
         uiManager.OpenGamePlayUI(gamePlayType);
+
+        FirebaseAnalytics.LogEvent(gamePlayType.ToString());
 
         if (PlayfabManager.instance.isActive) PlayfabManager.instance.CheckConsumeItem();
 

@@ -33,7 +33,7 @@ public class GameStateManager : MonoBehaviour
 
         [Space]
         [Title("Language")]
-        public LanguageType language = LanguageType.Korean;
+        public LanguageType language = LanguageType.Default;
 
         [Space]
         [Title("Setting")]

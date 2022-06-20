@@ -49,7 +49,7 @@ public class LocalizationManager : MonoBehaviour
                     case LanguageType.Chinese:
                         str = item.chinese;
                         break;
-                    case LanguageType.Indonesian:
+                    case LanguageType.Indian:
                         str = item.indonesian;
                         break;
                     case LanguageType.Portuguese:
@@ -110,9 +110,9 @@ public class LocalizationManager : MonoBehaviour
         eChangeLanguage.Invoke();
     }
 
-    public void ChangeIndonesian()
+    public void ChangeIndian()
     {
-        ChangeLanguage(LanguageType.Indonesian);
+        ChangeLanguage(LanguageType.Indian);
 
         eChangeLanguage.Invoke();
     }

@@ -43,22 +43,9 @@ public class ShopContent : MonoBehaviour
             case LanguageType.Korean:
                 priceText.text = "₩ 1200";
                 break;
-            case LanguageType.English:
+            default:
                 priceText.text = "USD $ 1";
                 break;
-            case LanguageType.Japenese:
-                priceText.text = "120 円";
-                break;
-            default:
-
-
-                break;
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
