@@ -9,9 +9,9 @@ public class EnumManager : MonoBehaviour
 
 public enum GameModeType
 {
+    Easy,
     Normal,
     Hard,
-    Expert,
     Perfect
 }
 public enum GamePlayType

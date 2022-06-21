@@ -3,10 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class LocalizationManager : MonoBehaviour
 {
     public static LocalizationManager instance;
+
+    public Font normalFont;
+    public Font bengaliFont;
 
     public UnityEvent eChangeLanguage;
 
@@ -163,6 +167,15 @@ public class LocalizationManager : MonoBehaviour
 
         for(int i = 0; i < localizationContentList.Count; i ++)
         {
+            if (type == LanguageType.Bengali)
+            {
+                localizationContentList[i].GetComponent<Text>().font = bengaliFont;
+            }
+            else
+            {
+                localizationContentList[i].GetComponent<Text>().font = normalFont;
+            }
+
             localizationContentList[i].ReLoad();
         }
     }

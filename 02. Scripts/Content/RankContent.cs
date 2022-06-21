@@ -35,7 +35,7 @@ public class RankContent : MonoBehaviour
 
         indexText.text = index.ToString();
         nickNameText.text = nickName;
-        countryImg.sprite = Resources.Load<Sprite>(country);
+        countryImg.sprite = Resources.Load<Sprite>("Country/" + country);
         scoreText.text = score.ToString();
 
 

@@ -17,8 +17,8 @@ public class UIManager : MonoBehaviour, IGameEvent
     public Text timerText;
     public Text scoreText;
 
-    public Text infoBestScoreText;
-    public Text infoBestComboText;
+    public LocalizationContent infoBestScoreText;
+    public LocalizationContent infoBestComboText;
 
     [Space]
     [Title("CurrneyUI")]
@@ -135,8 +135,8 @@ public class UIManager : MonoBehaviour, IGameEvent
         timerText.color = new Color(1, 1, 0);
         scoreText.text = "";
 
-        infoBestScoreText.text = "";
-        infoBestComboText.text = "";
+        infoBestScoreText.gameObject.SetActive(false);
+        infoBestComboText.gameObject.SetActive(false);
 
         goldText.text = "0";
         crystalText.text = "0";
@@ -276,11 +276,8 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         SetItem();
 
-        infoBestScoreText.text = "";
-        infoBestComboText.text = "";
-
-        infoBestScoreText.text = LocalizationManager.instance.GetString("BestScore") + " : \n";
-        infoBestComboText.text = LocalizationManager.instance.GetString("BestCombo") + " : \n";
+        infoBestScoreText.gameObject.SetActive(true);
+        infoBestComboText.gameObject.SetActive(true);
 
         switch (type)
         {
@@ -312,16 +309,16 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         comboManager.SetBestCombo(bestCombo);
 
-        infoBestScoreText.text += bestScore.ToString();
-        infoBestComboText.text += bestCombo.ToString();
+        infoBestScoreText.SetNumber(bestScore);
+        infoBestComboText.SetNumber(bestCombo);
     }
 
     public void CloseGamePlayUI()
     {
         gamePlayView.SetActive(false);
 
-        infoBestScoreText.text = "";
-        infoBestComboText.text = "";
+        infoBestScoreText.gameObject.SetActive(false);
+        infoBestComboText.gameObject.SetActive(false);
 
         for (int i = 0; i < gamePlayUI.Length; i ++)
         {
@@ -550,6 +547,7 @@ public class UIManager : MonoBehaviour, IGameEvent
         }
 
         UpdateTotalScore();
+        UpdateTotalCombo();
 
 
         money = (int)(score / 10);
@@ -681,6 +679,19 @@ public class UIManager : MonoBehaviour, IGameEvent
             if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("TotalScore", nowTotalScore);
 
             playerDataBase.TotalScore = nowTotalScore;
+        }
+    }
+
+    void UpdateTotalCombo()
+    {
+        int nowTotalCombo = playerDataBase.BestSpeedTouchCombo + playerDataBase.BestMoleCatchCombo + playerDataBase.BestFilpCardCombo + playerDataBase.BestButtonActionCombo;
+
+        if (Comparison(nowTotalCombo, playerDataBase.TotalCombo))
+        {
+            Debug.Log("Best Total Combo");
+            if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("TotalCombo", nowTotalCombo);
+
+            playerDataBase.TotalCombo = nowTotalCombo;
         }
     }
 

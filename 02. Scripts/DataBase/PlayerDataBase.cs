@@ -14,9 +14,11 @@ public class PlayerDataBase : ScriptableObject
     private int crystal = 0;
 
     [Space]
-    [Title("Score")]
     [SerializeField]
     private int totalScore = 0;
+
+    [SerializeField]
+    private int totalCombo = 0;
 
     [SerializeField]
     private int bestSpeedTouchScore = 0;
@@ -65,6 +67,7 @@ public class PlayerDataBase : ScriptableObject
         coin = 0;
         crystal = 0;
         totalScore = 0;
+        totalCombo = 0;
         bestSpeedTouchScore = 0;
         bestSpeedTouchCombo = 0;
         bestMoleCatchScore = 0;
@@ -91,6 +94,18 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             totalScore = value;
+        }
+    }
+
+    public int TotalCombo
+    {
+        get
+        {
+            return totalCombo;
+        }
+        set
+        {
+            totalCombo = value;
         }
     }
 

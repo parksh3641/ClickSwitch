@@ -15,12 +15,18 @@ public class RankingManager : MonoBehaviour
     public GameObject[] scrollViewList;
     public RectTransform[] rankContentParent;
     [Space]
-    [Title("Content")]
+    [Title("TopMenu")]
+    public Image[] topMenuImgArray;
+    public Sprite[] topMenuSpriteArray;
+
+    [Space]
+    [Title("SubMenu")]
     public Image[] contentImgArray;
     public Sprite[] contentSpriteArray;
 
-    public int openNumber = 0;
-    public bool isActive = false;
+    private int topNumber = 0;
+    private int openNumber = 0;
+    private bool isActive = false;
 
     [Space]
     public List<RankContent> rankContentList = new List<RankContent>();
@@ -51,6 +57,9 @@ public class RankingManager : MonoBehaviour
         {
             rankingView.SetActive(true);
 
+            topNumber = -1;
+            ChangeTopMenu(0);
+
             openNumber = -1;
             OpenRankingView(0);
         }
@@ -73,6 +82,22 @@ public class RankingManager : MonoBehaviour
         }
     }
 
+    public void ChangeTopMenu(int number)
+    {
+        if (topNumber != number)
+        {
+            topNumber = number;
+
+            for (int i = 0; i < topMenuImgArray.Length; i++)
+            {
+                topMenuImgArray[i].sprite = topMenuSpriteArray[0];
+            }
+            topMenuImgArray[number].sprite = topMenuSpriteArray[1];
+
+            ChangeRankingView(openNumber);
+        }
+    }
+
     public void OpenRankingView(int number)
     {
         if (openNumber != number)
@@ -80,35 +105,75 @@ public class RankingManager : MonoBehaviour
             OpenView(-1);
             openNumber = number;
 
-            switch (number)
-            {
-                case 0:
-                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("TotalScore", SetRanking);
-
-                    break;
-                case 1:
-                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("SpeedTouchScore", SetRanking);
-
-                    break;
-                case 2:
-                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("MoleCatchScore", SetRanking);
-
-                    break;
-                case 3:
-                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("FilpCardScore", SetRanking);
-
-                    break;
-                case 4:
-                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("ButtonActionScore", SetRanking);
-
-                    break;
-            }
-
-            for(int i = 0; i < contentImgArray.Length; i ++)
+            for (int i = 0; i < contentImgArray.Length; i ++)
             {
                 contentImgArray[i].sprite = contentSpriteArray[0];
             }
             contentImgArray[number].sprite = contentSpriteArray[1];
+
+            ChangeRankingView(number);
+        }
+    }
+
+    void ChangeRankingView(int number)
+    {
+        switch (number)
+        {
+            case 0:
+                if (topNumber == 0)
+                {
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("TotalScore", SetRanking);
+                }
+                else
+                {
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("TotalCombo", SetRanking);
+                }
+
+                break;
+            case 1:
+                if (topNumber == 0)
+                {
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("SpeedTouchScore", SetRanking);
+                }
+                else
+                {
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("SpeedTouchCombo", SetRanking);
+                }
+
+                break;
+            case 2:
+                if (topNumber == 0)
+                {
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("MoleCatchScore", SetRanking);
+                }
+                else
+                {
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("MoleCatchScore", SetRanking);
+                }
+
+                break;
+            case 3:
+                if (topNumber == 0)
+                {
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("FilpCardScore", SetRanking);
+                }
+                else
+                {
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("FilpCardCombo", SetRanking);
+                }
+
+                break;
+            case 4:
+                if (topNumber == 0)
+                {
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("ButtonActionScore", SetRanking);
+                }
+                else
+                {
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("ButtonActionCombo", SetRanking);
+                }
+
+                break;
         }
     }
 

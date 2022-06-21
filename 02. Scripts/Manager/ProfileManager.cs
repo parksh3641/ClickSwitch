@@ -12,6 +12,7 @@ public class ProfileManager : MonoBehaviour
     public Text nickNameText;
     public Image iconImg;
     public Text totalScoreText;
+    public Text totalComboText;
 
 
     [Title("Infomation")]
@@ -77,6 +78,6 @@ public class ProfileManager : MonoBehaviour
         profileContentList[3].InitState(LocalizationManager.instance.GetString("GameChoice4"), playerDataBase.BestButtonActionScore, playerDataBase.BestButtonActionCombo);
 
         totalScoreText.text = " : " + playerDataBase.TotalScore.ToString();
-
+        totalComboText.text = " : " + playerDataBase.TotalCombo.ToString();
     }
 }

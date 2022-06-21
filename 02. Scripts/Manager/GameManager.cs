@@ -30,11 +30,6 @@ public class GameManager : MonoBehaviour
     public LocalizationContent gameModeText;
 
 
-    [Title("Corution")]
-    public IEnumerator timerCoroutine;
-
-
-
     WaitForSeconds waitForSeconds = new WaitForSeconds(1);
     WaitForSeconds waitForHalfSeconds = new WaitForSeconds(0.5f);
     WaitForSeconds waitForMoleCatchSeconds;
@@ -69,6 +64,7 @@ public class GameManager : MonoBehaviour
     [Title("Manager")]
     public UIManager uiManager;
     public SoundManager soundManager;
+    public WarningController warningController;
 
 
     public delegate void GameEvent();
@@ -259,7 +255,7 @@ public class GameManager : MonoBehaviour
     {
         uiManager.OpenMenu();
 
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetServerTime(SetModeContent);
+        //if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetServerTime(SetModeContent);
     }
 
     private void SetModeContent(System.DateTime time)
@@ -434,6 +430,8 @@ public class GameManager : MonoBehaviour
             {
                 Debug.Log("Failure");
 
+                warningController.Hit();
+
                 action(false);
 
                 MinusScore(5);
@@ -463,6 +461,8 @@ public class GameManager : MonoBehaviour
             else
             {
                 Debug.Log("Failure");
+
+                warningController.Hit();
 
                 action(false);
                 countIndex = 0;
@@ -525,6 +525,8 @@ public class GameManager : MonoBehaviour
                 {
                     Debug.Log("Failure");
 
+                    warningController.Hit();
+
                     action?.Invoke(2);
                     saveAction?.Invoke(2);
 
@@ -576,6 +578,8 @@ public class GameManager : MonoBehaviour
             else
             {
                 Debug.Log("Failure");
+
+                warningController.Hit();
 
                 action?.Invoke(false);
 

@@ -542,6 +542,9 @@ public class PlayfabManager : MonoBehaviour
                        case "TotalScore":
                            playerDataBase.TotalScore = statistics.Value;
                            break;
+                       case "TotalCombo":
+                           playerDataBase.TotalCombo = statistics.Value;
+                           break;
                        case "SpeedTouchScore":
                            playerDataBase.BestSpeedTouchScore = statistics.Value;
                            break;
