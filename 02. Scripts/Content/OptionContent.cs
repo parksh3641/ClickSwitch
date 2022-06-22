@@ -79,6 +79,12 @@ public class OptionContent : MonoBehaviour
                     button.SetActive(false);
                 }
                 break;
+            case OptionType.Vibration:
+                buttonText.name = "Vibration";
+                buttonText.ReLoad();
+
+                OnVibration();
+                break;
         }
     }
 
@@ -118,6 +124,18 @@ public class OptionContent : MonoBehaviour
                 eLogout.Invoke();
 
                 break;
+            case OptionType.Vibration:
+                if (GameStateManager.instance.Vibration)
+                {
+                    GameStateManager.instance.Vibration = false;
+                }
+                else
+                {
+                    GameStateManager.instance.Vibration = true;
+                }
+
+                OnVibration();
+                break;
         }
     }
 
@@ -155,6 +173,26 @@ public class OptionContent : MonoBehaviour
         else
         {
             iconImg.sprite = iconList[3];
+            buttonImg.sprite = buttonList[1];
+            buttonText.name = "OFF";
+            buttonText.ReLoad();
+            buttonText.TextColor(new Color(225 / 255f, 34 / 255f, 12 / 255f));
+        }
+    }
+
+    public void OnVibration()
+    {
+        if (GameStateManager.instance.Vibration)
+        {
+            iconImg.sprite = iconList[4];
+            buttonImg.sprite = buttonList[0];
+            buttonText.name = "ON";
+            buttonText.ReLoad();
+            buttonText.TextColor(new Color(39 / 255f, 220 / 255f, 149 / 255f));
+        }
+        else
+        {
+            iconImg.sprite = iconList[4];
             buttonImg.sprite = buttonList[1];
             buttonText.name = "OFF";
             buttonText.ReLoad();

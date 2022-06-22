@@ -8,9 +8,10 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public GamePlayType gamePlayType;
+    public GameModeType gameModeType;
 
     [Title("Mode")]
-    public ModeContent[] modeContentArray;
+    public ModeContent modeContent;
 
 
     [Title("Prefab")]
@@ -29,9 +30,16 @@ public class GameManager : MonoBehaviour
     [Title("UI")]
     public LocalizationContent gameModeText;
 
+    [Title("TimingAction")]
+    public NormalContent timingActionContent;
+    public Image timingActionFillmount;
+    public GameObject timingActionCheckRange;
+
+    [Title("FingerSnap")]
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(1);
     WaitForSeconds waitForHalfSeconds = new WaitForSeconds(0.5f);
+    WaitForSeconds waitForSecSeconds = new WaitForSeconds(0.01f);
     WaitForSeconds waitForMoleCatchSeconds;
     WaitForSeconds waitForMoleNextSeconds;
 
@@ -49,6 +57,17 @@ public class GameManager : MonoBehaviour
     private int buttonActionNumber = 0;
     private int buttonActionLevelIndex = 0;
     private int buttonActionIndex = 0;
+
+    private float timingActionValue = 0;
+    private float timingActionPlus = 0;
+    private float timingActionSpeed = 0;
+    private float timingActionSaveSpeed = 0;
+
+    private float timingActionCheckRange_1 = 0;
+    private float timingActionCheckRange_2 = 0;
+
+    private float timingActionRangePosX = 0;
+    private bool timingActionMove = false;
 
     [Title("bool")]
     private bool isActive = false;
@@ -255,15 +274,13 @@ public class GameManager : MonoBehaviour
     {
         uiManager.OpenMenu();
 
-        //if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetServerTime(SetModeContent);
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetServerTime(SetModeContent);
     }
 
     private void SetModeContent(System.DateTime time)
     {
-        for (int i = 0; i < modeContentArray.Length; i++)
-        {
-            modeContentArray[i].SetNextEventTime(time);
-        }
+        modeContent.SetNextEventTime(time);
+        modeContent.Initialize(GameModeType.Perfect, GamePlayType.GameChoice1);
     }
 
     public void ChoiceGameType(int number) //모드 선택 창에서 옵션 선택
@@ -388,8 +405,15 @@ public class GameManager : MonoBehaviour
 
                 break;
             case GamePlayType.GameChoice5:
+                timingActionContent.Initialize(gamePlayType);
+
+                timingActionPlus = 5;
+                timingActionSpeed = 0.1f;
+                timingActionSaveSpeed = timingActionSpeed;
+
                 break;
             case GamePlayType.GameChoice6:
+
                 break;
             case GamePlayType.GameChoice7:
                 break;
@@ -588,6 +612,69 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+    public void CheckTimingAction()
+    {
+        if(timingActionValue < 100)
+        {
+            timingActionValue += timingActionPlus;
+        }
+        else
+        {
+            timingActionValue = 100f;
+        }
+    }
+
+    void CheckTimingActionRange()
+    {
+        if(timingActionFillmount.fillAmount >= timingActionCheckRange_1 && timingActionFillmount.fillAmount <= timingActionCheckRange_2)
+        {
+            if (timingActionFillmount.fillAmount >= timingActionCheckRange_1 + 0.05f && timingActionFillmount.fillAmount <= timingActionCheckRange_2 - 0.05f)
+            {
+                Debug.Log("Perfect Success");
+
+                PlusScore(10);
+            }
+            else
+            {
+                Debug.Log("Success");
+
+                PlusScore(5);
+            }
+
+            if (timingActionSpeed < timingActionSaveSpeed * 4)
+            {
+                timingActionSpeed += timingActionSaveSpeed * 0.05f;
+            }
+        }
+        else
+        {
+            if (GameStateManager.instance.Shield)
+            {
+                Debug.Log("Defense Shield");
+
+                GameStateManager.instance.Shield = false;
+                soundManager.PlaySFX(GameSfxType.Shield);
+                uiManager.UsedItem(ItemType.Shield);
+            }
+            else
+            {
+                Debug.Log("Failure");
+
+                warningController.Hit();
+
+                MinusScore(5);
+
+                timingActionSpeed = timingActionSaveSpeed;
+            }
+        }
+    }
+
+    public void CheckFingerSnap()
+    {
+
+    }
+
     public void Failure()
     {
         if (GameStateManager.instance.Shield)
@@ -614,14 +701,19 @@ public class GameManager : MonoBehaviour
 
                 break;
             case GamePlayType.GameChoice2:
-                StartCoroutine("MoleCatchCorution");
+                StartCoroutine("MoleCatchCoroution");
                 break;
             case GamePlayType.GameChoice3:
-                StartCoroutine("FilpCardCorution");
+                StartCoroutine("FilpCardCoroution");
                 break;
             case GamePlayType.GameChoice4:
                 break;
             case GamePlayType.GameChoice5:
+                timingActionValue = 50;
+                timingActionFillmount.fillAmount = 0.5f;
+
+                StartCoroutine("TimingActionCoroution");
+                StartCoroutine("MoveTimingActionRange");
                 break;
             case GamePlayType.GameChoice6:
                 break;
@@ -648,7 +740,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Corution
-    IEnumerator MoleCatchCorution()
+    IEnumerator MoleCatchCoroution()
     {
         ShuffleList(moleCatchContentList);
 
@@ -673,10 +765,10 @@ public class GameManager : MonoBehaviour
 
         countIndex += 1;
 
-        StartCoroutine(MoleCatchCorution());
+        StartCoroutine(MoleCatchCoroution());
     }
 
-    IEnumerator FilpCardCorution()
+    IEnumerator FilpCardCoroution()
     {
         isActive = false;
         eGamePause();
@@ -697,6 +789,75 @@ public class GameManager : MonoBehaviour
 
         isActive = true;
         eGamePause();
+    }
+
+    IEnumerator TimingActionCoroution()
+    {
+        float wait = 0;
+        while(true)
+        {
+            wait += 0.01f;
+
+            if(!timingActionMove)
+            {
+                timingActionRangePosX += timingActionSpeed * 3;
+            }
+            else
+            {
+                timingActionRangePosX -= timingActionSpeed * 3;
+            }
+
+            if (timingActionValue > 0)
+            {
+                timingActionValue -= timingActionSpeed;
+            }
+
+            timingActionFillmount.fillAmount = timingActionValue / 100f;
+
+            timingActionCheckRange.transform.localPosition = new Vector3(timingActionRangePosX, 0, 0);
+
+            timingActionCheckRange_1 = (timingActionCheckRange.transform.localPosition.x + 400) / 1000 ;
+            timingActionCheckRange_2 = timingActionCheckRange_1 + 0.2f;
+
+            if (wait > 0.3f)
+            {
+                wait = 0;
+                CheckTimingActionRange();
+            }
+
+            yield return waitForSecSeconds;
+        }
+    }
+
+    IEnumerator MoveTimingActionRange()
+    {
+        while (true)
+        {
+            if(Random.Range(0 , 2) == 0)
+            {
+                if(timingActionRangePosX < 360)
+                {
+                    timingActionMove = false;
+                }
+                else
+                {
+                    timingActionMove = true;
+                }
+            }
+            else
+            {
+                if (timingActionRangePosX > -360)
+                {
+                    timingActionMove = true;
+                }
+                else
+                {
+                    timingActionMove = false;
+                }
+            }
+
+            yield return new WaitForSeconds(2);
+        }
     }
 
     #endregion

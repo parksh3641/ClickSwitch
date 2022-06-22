@@ -174,6 +174,28 @@ public class RankingManager : MonoBehaviour
                 }
 
                 break;
+            case 5:
+                if (topNumber == 0)
+                {
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("TimingActionScore", SetRanking);
+                }
+                else
+                {
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("TimingActionCombo", SetRanking);
+                }
+
+                break;
+            case 6:
+                if (topNumber == 0)
+                {
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("FingerSnapScore", SetRanking);
+                }
+                else
+                {
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("FingerSnapCombo", SetRanking);
+                }
+
+                break;
         }
     }
 

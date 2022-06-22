@@ -30,7 +30,7 @@ public class ProfileManager : MonoBehaviour
     {
         profileContentList.Clear();
 
-        for (int i = 0; i < 4; i ++)
+        for (int i = 0; i < 6; i ++)
         {
             ProfileContent monster = Instantiate(profileContent);
             monster.transform.parent = profileTransform;
@@ -76,6 +76,8 @@ public class ProfileManager : MonoBehaviour
         profileContentList[1].InitState(LocalizationManager.instance.GetString("GameChoice2"), playerDataBase.BestMoleCatchScore, playerDataBase.BestMoleCatchCombo);
         profileContentList[2].InitState(LocalizationManager.instance.GetString("GameChoice3"), playerDataBase.BestFilpCardScore, playerDataBase.BestFilpCardCombo);
         profileContentList[3].InitState(LocalizationManager.instance.GetString("GameChoice4"), playerDataBase.BestButtonActionScore, playerDataBase.BestButtonActionCombo);
+        profileContentList[4].InitState(LocalizationManager.instance.GetString("GameChoice5"), playerDataBase.BestTimingActionScore, playerDataBase.BestTimingActionCombo);
+        profileContentList[5].InitState(LocalizationManager.instance.GetString("GameChoice6"), playerDataBase.BestFingerSnapScore, playerDataBase.BestFingerSnapCombo);
 
         totalScoreText.text = " : " + playerDataBase.TotalScore.ToString();
         totalComboText.text = " : " + playerDataBase.TotalCombo.ToString();

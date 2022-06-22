@@ -24,16 +24,16 @@ public class LocalizationContent : MonoBehaviour
 
     private void Start()
     {
-        text.text = LocalizationManager.instance.GetString(name);
+        if (name.Length > 0) text.text = LocalizationManager.instance.GetString(name);
 
         LocalizationManager.instance.AddContent(this);
     }
 
     public void ReLoad()
     {
-        text.text = LocalizationManager.instance.GetString(name);
+        if (name.Length > 0) text.text = LocalizationManager.instance.GetString(name);
 
-        if(setValue)
+        if (setValue)
         {
             text.text += " : \n" + value;
         }
@@ -41,11 +41,18 @@ public class LocalizationContent : MonoBehaviour
 
     public void SetNumber(int number)
     {
-        setValue = true;
+        if(!setValue)
+        {
+            setValue = true;
 
-        value = number;
+            value = number;
 
-        Invoke("Delay", 0.5f);
+            Invoke("Delay", 0.5f);
+        }
+        else
+        {
+            ReLoad();
+        }
     }
 
     void Delay()

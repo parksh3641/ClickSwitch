@@ -31,7 +31,8 @@ public enum OptionType
     Music = 0,
     SFX,
     Language,
-    Logout
+    Logout,
+    Vibration
 }
 
 public enum LanguageType

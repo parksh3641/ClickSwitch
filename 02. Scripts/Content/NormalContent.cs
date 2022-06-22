@@ -13,6 +13,7 @@ public class NormalContent : MonoBehaviour, IContentEvent
     private bool isActive = false;
     public int index = 0;
     public Text numberText;
+    public LocalizationContent clickText;
 
     [Space]
     public UnityEvent clickEvent;
@@ -44,6 +45,8 @@ public class NormalContent : MonoBehaviour, IContentEvent
 
         moleImg.enabled = false;
         filpCardImg.enabled = false;
+
+        clickText.gameObject.SetActive(false);
     }
 
     public void Initialize(GamePlayType type)
@@ -67,8 +70,13 @@ public class NormalContent : MonoBehaviour, IContentEvent
                 clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().CheckButtonAction(index, ChoiceButtonAction); });
                 break;
             case GamePlayType.GameChoice5:
+                clickText.gameObject.SetActive(true);
+                clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().CheckTimingAction(); });
+
+                isActive = true;
                 break;
             case GamePlayType.GameChoice6:
+                clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().CheckFingerSnap(); });
                 break;
             case GamePlayType.GameChoice7:
                 break;

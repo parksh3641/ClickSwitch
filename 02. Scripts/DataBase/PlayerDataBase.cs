@@ -44,9 +44,22 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private int bestButtonActionCombo = 0;
 
+    [SerializeField]
+    private int bestTimingActionScore = 0;
+
+    [SerializeField]
+    private int bestTimingActionCombo = 0;
+
+    [SerializeField]
+    private int bestFingerSnapScore = 0;
+
+    [SerializeField]
+    private int bestFingerSnapCombo = 0;
+
+
+
     [Space]
     [Title("Item")]
-
     [SerializeField]
     private int clock = 0;
 
@@ -66,16 +79,27 @@ public class PlayerDataBase : ScriptableObject
     {
         coin = 0;
         crystal = 0;
+
         totalScore = 0;
         totalCombo = 0;
+
         bestSpeedTouchScore = 0;
         bestSpeedTouchCombo = 0;
+
         bestMoleCatchScore = 0;
         bestMoleCatchCombo = 0;
+
         bestFilpCardScore = 0;
         bestFilpCardCombo = 0;
+
         bestButtonActionScore = 0;
         bestButtonActionCombo = 0;
+
+        bestTimingActionScore = 0;
+        bestTimingActionCombo = 0;
+
+        bestFingerSnapScore = 0;
+        bestFingerSnapCombo = 0;
 
         clock = 0;
         shield = 0;
@@ -225,6 +249,54 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             bestButtonActionCombo = value;
+        }
+    }
+
+    public int BestTimingActionScore
+    {
+        get
+        {
+            return bestTimingActionScore;
+        }
+        set
+        {
+            bestTimingActionScore = value;
+        }
+    }
+
+    public int BestTimingActionCombo
+    {
+        get
+        {
+            return bestTimingActionCombo;
+        }
+        set
+        {
+            bestTimingActionCombo = value;
+        }
+    }
+
+    public int BestFingerSnapScore
+    {
+        get
+        {
+            return bestFingerSnapScore;
+        }
+        set
+        {
+            bestFingerSnapScore = value;
+        }
+    }
+
+    public int BestFingerSnapCombo
+    {
+        get
+        {
+            return bestFingerSnapCombo;
+        }
+        set
+        {
+            bestFingerSnapCombo = value;
         }
     }
 

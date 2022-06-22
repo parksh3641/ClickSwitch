@@ -40,6 +40,7 @@ public class GameStateManager : MonoBehaviour
         public GamePlayType gamePlayType = GamePlayType.GameChoice1;
         public bool music = true;
         public bool sfx = true;
+        public bool vibration = true;
         public bool watchAd = true;
 
         [Space]
@@ -177,6 +178,19 @@ public class GameStateManager : MonoBehaviour
         {
             gameSettings.sfx = value;
             eSfx(value);
+            SaveFile();
+        }
+    }
+
+    public bool Vibration
+    {
+        get
+        {
+            return gameSettings.vibration;
+        }
+        set
+        {
+            gameSettings.vibration = value;
             SaveFile();
         }
     }

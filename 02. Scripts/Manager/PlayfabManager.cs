@@ -569,6 +569,18 @@ public class PlayfabManager : MonoBehaviour
                        case "ButtonActionCombo":
                            playerDataBase.BestButtonActionCombo = statistics.Value;
                            break;
+                       case "TimingActionScore":
+                           playerDataBase.BestTimingActionScore = statistics.Value;
+                           break;
+                       case "TimingActionCombo":
+                           playerDataBase.BestTimingActionCombo = statistics.Value;
+                           break;
+                       case "FingerSnapScore":
+                           playerDataBase.BestFingerSnapScore = statistics.Value;
+                           break;
+                       case "FingerSnapCombo":
+                           playerDataBase.BestFingerSnapCombo = statistics.Value;
+                           break;
                    }
                }
            })

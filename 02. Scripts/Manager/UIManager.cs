@@ -298,8 +298,12 @@ public class UIManager : MonoBehaviour, IGameEvent
                 bestCombo = playerDataBase.BestButtonActionCombo;
                 break;
             case GamePlayType.GameChoice5:
+                bestScore = playerDataBase.BestTimingActionScore;
+                bestCombo = playerDataBase.BestTimingActionCombo;
                 break;
             case GamePlayType.GameChoice6:
+                bestScore = playerDataBase.BestFingerSnapScore;
+                bestCombo = playerDataBase.BestFingerSnapCombo;
                 break;
             case GamePlayType.GameChoice7:
                 break;
@@ -482,6 +486,14 @@ public class UIManager : MonoBehaviour, IGameEvent
                 bestScore = playerDataBase.BestButtonActionScore;
                 bestCombo = playerDataBase.BestButtonActionCombo;
                 break;
+            case GamePlayType.GameChoice5:
+                bestScore = playerDataBase.BestTimingActionScore;
+                bestCombo = playerDataBase.BestTimingActionCombo;
+                break;
+            case GamePlayType.GameChoice6:
+                bestScore = playerDataBase.BestFingerSnapScore;
+                bestCombo = playerDataBase.BestFingerSnapCombo;
+                break;
         }
 
         if(Comparison(score,bestScore))
@@ -506,6 +518,14 @@ public class UIManager : MonoBehaviour, IGameEvent
                 case GamePlayType.GameChoice4:
                     playerDataBase.BestButtonActionScore = (int)score;
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("ButtonActionScore", (int)score);
+                    break;
+                case GamePlayType.GameChoice5:
+                    playerDataBase.BestTimingActionScore = (int)score;
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("TimingActionScore", (int)score);
+                    break;
+                case GamePlayType.GameChoice6:
+                    playerDataBase.BestFingerSnapScore = (int)score;
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("FingerSnapScore", (int)score);
                     break;
             }
 
@@ -540,6 +560,14 @@ public class UIManager : MonoBehaviour, IGameEvent
                 case GamePlayType.GameChoice4:
                     playerDataBase.BestButtonActionCombo = combo;
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("ButtonActionCombo", combo);
+                    break;
+                case GamePlayType.GameChoice5:
+                    playerDataBase.BestTimingActionCombo = combo;
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("TimingActionCombo", combo);
+                    break;
+                case GamePlayType.GameChoice6:
+                    playerDataBase.BestFingerSnapCombo = combo;
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("FingerSnapCombo", combo);
                     break;
             }
 
@@ -671,7 +699,8 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     void UpdateTotalScore()
     {
-        int nowTotalScore = playerDataBase.BestSpeedTouchScore + playerDataBase.BestMoleCatchScore + playerDataBase.BestFilpCardScore + playerDataBase.BestButtonActionScore;
+        int nowTotalScore = playerDataBase.BestSpeedTouchScore + playerDataBase.BestMoleCatchScore + playerDataBase.BestFilpCardScore + 
+            playerDataBase.BestButtonActionScore + playerDataBase.BestTimingActionScore + playerDataBase.BestFingerSnapScore;
 
         if (Comparison(nowTotalScore, playerDataBase.TotalScore))
         {
@@ -684,7 +713,8 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     void UpdateTotalCombo()
     {
-        int nowTotalCombo = playerDataBase.BestSpeedTouchCombo + playerDataBase.BestMoleCatchCombo + playerDataBase.BestFilpCardCombo + playerDataBase.BestButtonActionCombo;
+        int nowTotalCombo = playerDataBase.BestSpeedTouchCombo + playerDataBase.BestMoleCatchCombo + playerDataBase.BestFilpCardCombo + 
+            playerDataBase.BestButtonActionCombo + playerDataBase.BestTimingActionCombo + playerDataBase.BestFingerSnapCombo;
 
         if (Comparison(nowTotalCombo, playerDataBase.TotalCombo))
         {
@@ -795,6 +825,11 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void MinusScore(int index)
     {
+        if(GameStateManager.instance.Vibration)
+        {
+            Handheld.Vibrate();
+        }
+
         score = (score - index >= 0) ? score -= index : score = 0;
         scoreText.text = LocalizationManager.instance.GetString("Score") + " : " + score.ToString();
 

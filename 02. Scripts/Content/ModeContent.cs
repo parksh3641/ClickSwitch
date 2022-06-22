@@ -13,6 +13,7 @@ public class ModeContent : MonoBehaviour
 
     public UnityEvent clickEvent;
 
+    public LocalizationContent levelText;
     public LocalizationContent titleText;
     public Text nextEventText;
 
@@ -30,6 +31,7 @@ public class ModeContent : MonoBehaviour
     private void Awake()
     {
         titleText.name = gamePlayType.ToString();
+        levelText.name = gameModeType.ToString();
         nextEventText.text = "";
 
         clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().ChoiceGameType((int)gamePlayType); });
@@ -55,6 +57,12 @@ public class ModeContent : MonoBehaviour
         clickEvent.Invoke();
     }
 
+    public void Initialize(GameModeType mode, GamePlayType play)
+    {
+        backgroundImg.sprite = backgroundImgArray[(int)mode];
+        iconImg.sprite = iconImgArray[(int)play];
+    }
+
     public void SetNextEventTime(DateTime time)
     {
         serverTime = time;
@@ -72,5 +80,4 @@ public class ModeContent : MonoBehaviour
 
         StartCoroutine(RemainTimerCourtion());
     }
-
 }
