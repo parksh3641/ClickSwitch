@@ -539,6 +539,15 @@ public class PlayfabManager : MonoBehaviour
                        //case "":
                        //    string text = statistics.Value.ToString();
                        //    break;
+                       case "Level":
+                           playerDataBase.Level = statistics.Value;
+                           break;
+                       case "Exp":
+                           playerDataBase.Exp = statistics.Value;
+                           break;
+                       case "Icon":
+                           playerDataBase.Icon = statistics.Value;
+                           break;
                        case "TotalScore":
                            playerDataBase.TotalScore = statistics.Value;
                            break;
@@ -575,11 +584,11 @@ public class PlayfabManager : MonoBehaviour
                        case "TimingActionCombo":
                            playerDataBase.BestTimingActionCombo = statistics.Value;
                            break;
-                       case "FingerSnapScore":
-                           playerDataBase.BestFingerSnapScore = statistics.Value;
+                       case "DragActionScore":
+                           playerDataBase.BestDragActionScore = statistics.Value;
                            break;
-                       case "FingerSnapCombo":
-                           playerDataBase.BestFingerSnapCombo = statistics.Value;
+                       case "DragActionCombo":
+                           playerDataBase.BestDragActionCombo = statistics.Value;
                            break;
                    }
                }
@@ -919,6 +928,21 @@ public class PlayfabManager : MonoBehaviour
     }
 
     //"2022-04-24T22:17:04.548Z"
+
+    public void ReadTitleNews(Action<List<TitleNewsItem>> action)
+    {
+        List<TitleNewsItem> item = new List<TitleNewsItem>();
+
+        PlayFabClientAPI.GetTitleNews(new GetTitleNewsRequest(), result =>
+        {
+            foreach (var list in result.News)
+            {
+                item.Add(list);
+            }
+            action.Invoke(item);
+
+        }, error => Debug.LogError(error.GenerateErrorReport()));
+    }
 
 
     #region PurchaseItem

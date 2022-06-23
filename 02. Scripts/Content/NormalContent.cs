@@ -12,6 +12,9 @@ public class NormalContent : MonoBehaviour, IContentEvent
     [SerializeField]
     private bool isActive = false;
     public int index = 0;
+    private int moveSpeed = 30;
+    private int moveDirection = 0;
+
     public Text numberText;
     public LocalizationContent clickText;
 
@@ -36,6 +39,11 @@ public class NormalContent : MonoBehaviour, IContentEvent
     [Space]
     [Title("ButtonAction")]
     public string[] buttonActionStrArray;
+
+    [Space]
+    [Title("FingerSnap")]
+    public string[] fingerSnapStrArray;
+
 
     void Awake()
     {
@@ -72,11 +80,9 @@ public class NormalContent : MonoBehaviour, IContentEvent
             case GamePlayType.GameChoice5:
                 clickText.gameObject.SetActive(true);
                 clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().CheckTimingAction(); });
-
                 isActive = true;
                 break;
             case GamePlayType.GameChoice6:
-                clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().CheckFingerSnap(); });
                 break;
             case GamePlayType.GameChoice7:
                 break;
@@ -98,12 +104,22 @@ public class NormalContent : MonoBehaviour, IContentEvent
         isActive = true;
     }
 
+    public void NormalFirst()
+    {
+        backgroundImg.sprite = backgroundImgList[1];
+    }
+
     public void MoleReset()
     {
         moleImg.sprite = moleImgList[0];
         moleImg.enabled = false;
 
         isActive = true;
+    }
+
+    public void SetMole()
+    {
+        moleImg.enabled = true;
     }
 
     public void FilpCardReset(int number)
@@ -123,16 +139,21 @@ public class NormalContent : MonoBehaviour, IContentEvent
         isActive = true;
     }
 
-    public void NormalFirst()
+    public void FingerSnapReset(int number)
     {
-        backgroundImg.sprite = backgroundImgList[1];
+        numberText.text = fingerSnapStrArray[number];
+
+        isActive = true;
     }
 
-    public void SetMole()
+    public void MoveFingerSnap(int number)
     {
-        moleImg.enabled = true;
+        moveDirection = number;
+        StartCoroutine(MoveCoroution());
     }
 
+
+    #region Choice
 
     public void Choice()
     {
@@ -171,7 +192,6 @@ public class NormalContent : MonoBehaviour, IContentEvent
         }
     }
 
-
     public void ChoiceCardAction(int check)
     {
         switch(check)
@@ -209,8 +229,68 @@ public class NormalContent : MonoBehaviour, IContentEvent
         }
     }
 
+    #endregion
+
     public int GetIndex()
     {
         return index;
+    }
+
+    IEnumerator MoveCoroution()
+    {
+        switch(moveDirection)
+        {
+            case 0:
+                if (transform.localPosition.x >= -400)
+                {
+                    transform.Translate(new Vector3(-1, 0, 0) * moveSpeed);
+                }
+                else
+                {
+                    gameObject.SetActive(false);
+                    yield break;
+                }
+
+                break;
+            case 1:
+                if (transform.localPosition.x <= 400)
+                {
+                    transform.Translate(new Vector3(1, 0, 0) * moveSpeed);
+                }
+                else
+                {
+                    gameObject.SetActive(false);
+                    yield break;
+                }
+
+                break;
+            case 2:
+                if (transform.localPosition.y >= -400)
+                {
+                    transform.Translate(new Vector3(0, -1, 0) * moveSpeed);
+                }
+                else
+                {
+                    gameObject.SetActive(false);
+                    yield break;
+                }
+
+                break;
+            case 3:
+                if (transform.localPosition.y <= 400)
+                {
+                    transform.Translate(new Vector3(0, 1, 0) * moveSpeed);
+                }
+                else
+                {
+                    gameObject.SetActive(false);
+                    yield break;
+                }
+
+                break;
+        }
+
+        yield return new WaitForSeconds(0.01f);
+        StartCoroutine(MoveCoroution());
     }
 }

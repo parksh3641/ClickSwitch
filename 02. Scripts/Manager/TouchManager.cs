@@ -11,6 +11,7 @@ public class TouchManager : MonoBehaviour
 
     private bool firstSwipe = false;
 
+    public string direction = "";
 
     void Update()
     {
@@ -42,11 +43,15 @@ public class TouchManager : MonoBehaviour
                 {
                     Debug.Log("오른쪽");
 
+                    direction = "Right";
+
                     firstSwipe = false;
                 }
                 else if (swipeValue < 0)
                 {
                     Debug.Log("왼쪽");
+
+                    direction = "Left";
 
                     firstSwipe = false;
                 }
@@ -61,22 +66,26 @@ public class TouchManager : MonoBehaviour
                 {
                     Debug.Log("위쪽");
 
+                    direction = "Up";
+
                     firstSwipe = false;
                 }
                 else if (swipeValue < 0)
                 {
                     Debug.Log("아래쪽");
 
+                    direction = "Down";
+
                     firstSwipe = false;
                 }
             }
         }
 
-        Invoke("Reset", 0.25f);
+        Invoke("OnReset", 0.25f);
     }
 
-    private void Reset()
+    private void OnReset()
     {
-        firstSwipe = false;
+        direction = "";
     }
 }

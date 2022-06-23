@@ -73,6 +73,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     [Space]
     [Title("LoginUI")]
     public FadeInOut loadingUI;
+    public Text messageText;
     public GameObject loginUI;
     public GameObject[] loginButtonList;
     public Text platformText;
@@ -106,6 +107,8 @@ public class UIManager : MonoBehaviour, IGameEvent
     public GoogleAdsManager googldAdsManager;
     public ShopManager shopManager;
     public AchievementManager achievementManager;
+    public IconManager iconManager;
+    public NewsManager newsManager;
 
     [Title("Animation")]
     public CoinAnimation goldAnimation;
@@ -162,9 +165,74 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         loadingUI.gameObject.SetActive(true);
 
+        StartCoroutine(LoadingCoroution());
+
         loginUI.SetActive(!GameStateManager.instance.AutoLogin);
 
         SetLoginUI();
+    }
+
+    IEnumerator LoadingCoroution()
+    {
+        if(loadingUI.gameObject.activeInHierarchy)
+        {
+            messageText.text = "Login";
+            yield return new WaitForSeconds(0.5f);
+            messageText.text = "Login.";
+            yield return new WaitForSeconds(0.5f);
+            messageText.text = "Login..";
+            yield return new WaitForSeconds(0.5f);
+            messageText.text = "Login...";
+            yield return new WaitForSeconds(0.5f);
+        }
+        else
+        {
+            yield break;
+        }
+
+        StartCoroutine(LoadingCoroution());
+    }
+
+    void Update()
+    {
+        if(Application.platform == RuntimePlatform.Android)
+        {
+            if(Input.GetKey(KeyCode.Escape))
+            {
+                if(rankingManager.rankingView.activeInHierarchy)
+                {
+                    rankingManager.OpenRanking();
+                }
+                else if(profileManager.profileView.activeInHierarchy)
+                {
+                    profileManager.OpenProfile();
+                }
+                else if(nickNameManager.nickNameView.activeInHierarchy)
+                {
+                    nickNameManager.OpenNickName();
+                }
+                else if(shopManager.shopView.activeInHierarchy)
+                {
+                    shopManager.OpenShop();
+                }
+                else if(gameOptionUI.activeInHierarchy)
+                {
+                    OpenOption();
+                }
+                else if (iconManager.iconView.activeInHierarchy)
+                {
+                    iconManager.OpenIcon();
+                }
+                else if (newsManager.newsView.activeInHierarchy)
+                {
+                    newsManager.OpenNews();
+                }
+                else
+                {
+                    Debug.Log("게임 종료");
+                }
+            }
+        }
     }
 
     public void SetLoginUI()
@@ -302,8 +370,8 @@ public class UIManager : MonoBehaviour, IGameEvent
                 bestCombo = playerDataBase.BestTimingActionCombo;
                 break;
             case GamePlayType.GameChoice6:
-                bestScore = playerDataBase.BestFingerSnapScore;
-                bestCombo = playerDataBase.BestFingerSnapCombo;
+                bestScore = playerDataBase.BestDragActionScore;
+                bestCombo = playerDataBase.BestDragActionCombo;
                 break;
             case GamePlayType.GameChoice7:
                 break;
@@ -381,6 +449,16 @@ public class UIManager : MonoBehaviour, IGameEvent
     public void OpenShop()
     {
         shopManager.OpenShop();
+    }
+
+    public void OpenIcon()
+    {
+        iconManager.OpenIcon();
+    }
+
+    public void OpenNews()
+    {
+        newsManager.OpenNews();
     }
 
     public void OpenAchievement()
@@ -491,8 +569,8 @@ public class UIManager : MonoBehaviour, IGameEvent
                 bestCombo = playerDataBase.BestTimingActionCombo;
                 break;
             case GamePlayType.GameChoice6:
-                bestScore = playerDataBase.BestFingerSnapScore;
-                bestCombo = playerDataBase.BestFingerSnapCombo;
+                bestScore = playerDataBase.BestDragActionScore;
+                bestCombo = playerDataBase.BestDragActionCombo;
                 break;
         }
 
@@ -524,8 +602,8 @@ public class UIManager : MonoBehaviour, IGameEvent
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("TimingActionScore", (int)score);
                     break;
                 case GamePlayType.GameChoice6:
-                    playerDataBase.BestFingerSnapScore = (int)score;
-                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("FingerSnapScore", (int)score);
+                    playerDataBase.BestDragActionScore = (int)score;
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("DragActionScore", (int)score);
                     break;
             }
 
@@ -566,8 +644,8 @@ public class UIManager : MonoBehaviour, IGameEvent
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("TimingActionCombo", combo);
                     break;
                 case GamePlayType.GameChoice6:
-                    playerDataBase.BestFingerSnapCombo = combo;
-                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("FingerSnapCombo", combo);
+                    playerDataBase.BestDragActionCombo = combo;
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("DragActionCombo", combo);
                     break;
             }
 
@@ -700,7 +778,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     void UpdateTotalScore()
     {
         int nowTotalScore = playerDataBase.BestSpeedTouchScore + playerDataBase.BestMoleCatchScore + playerDataBase.BestFilpCardScore + 
-            playerDataBase.BestButtonActionScore + playerDataBase.BestTimingActionScore + playerDataBase.BestFingerSnapScore;
+            playerDataBase.BestButtonActionScore + playerDataBase.BestTimingActionScore + playerDataBase.BestDragActionScore;
 
         if (Comparison(nowTotalScore, playerDataBase.TotalScore))
         {
@@ -714,7 +792,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     void UpdateTotalCombo()
     {
         int nowTotalCombo = playerDataBase.BestSpeedTouchCombo + playerDataBase.BestMoleCatchCombo + playerDataBase.BestFilpCardCombo + 
-            playerDataBase.BestButtonActionCombo + playerDataBase.BestTimingActionCombo + playerDataBase.BestFingerSnapCombo;
+            playerDataBase.BestButtonActionCombo + playerDataBase.BestTimingActionCombo + playerDataBase.BestDragActionCombo;
 
         if (Comparison(nowTotalCombo, playerDataBase.TotalCombo))
         {

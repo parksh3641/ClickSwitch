@@ -188,11 +188,11 @@ public class RankingManager : MonoBehaviour
             case 6:
                 if (topNumber == 0)
                 {
-                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("FingerSnapScore", SetRanking);
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("DragActionScore", SetRanking);
                 }
                 else
                 {
-                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("FingerSnapCombo", SetRanking);
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("DragActionCombo", SetRanking);
                 }
 
                 break;

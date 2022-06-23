@@ -51,11 +51,21 @@ public class PlayerDataBase : ScriptableObject
     private int bestTimingActionCombo = 0;
 
     [SerializeField]
-    private int bestFingerSnapScore = 0;
+    private int bestDragActionScore = 0;
 
     [SerializeField]
-    private int bestFingerSnapCombo = 0;
+    private int bestDragActionCombo = 0;
 
+    [Space]
+    [Title("Level")]
+    [SerializeField]
+    private int level = 0;
+
+    [SerializeField]
+    private int exp = 0;
+
+    [SerializeField]
+    private int icon = 0;
 
 
     [Space]
@@ -65,6 +75,11 @@ public class PlayerDataBase : ScriptableObject
 
     [SerializeField]
     private int shield = 0;
+
+    [Space]
+    [Title("Reset")]
+    [SerializeField]
+    private string attendanceDay = "";
 
     [Space]
     [Title("Purchase")]
@@ -98,11 +113,17 @@ public class PlayerDataBase : ScriptableObject
         bestTimingActionScore = 0;
         bestTimingActionCombo = 0;
 
-        bestFingerSnapScore = 0;
-        bestFingerSnapCombo = 0;
+        bestDragActionScore = 0;
+        bestDragActionCombo = 0;
+
+        level = 0;
+        exp = 0;
+        icon = 0;
 
         clock = 0;
         shield = 0;
+
+        attendanceDay = "";
 
         removeAd = false;
 
@@ -276,27 +297,63 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
-    public int BestFingerSnapScore
+    public int BestDragActionScore
     {
         get
         {
-            return bestFingerSnapScore;
+            return bestDragActionScore;
         }
         set
         {
-            bestFingerSnapScore = value;
+            bestDragActionScore = value;
         }
     }
 
-    public int BestFingerSnapCombo
+    public int BestDragActionCombo
     {
         get
         {
-            return bestFingerSnapCombo;
+            return bestDragActionCombo;
         }
         set
         {
-            bestFingerSnapCombo = value;
+            bestDragActionCombo = value;
+        }
+    }
+
+    public int Level
+    {
+        get
+        {
+            return level;
+        }
+        set
+        {
+            level = value;
+        }
+    }
+
+    public int Exp
+    {
+        get
+        {
+            return exp;
+        }
+        set
+        {
+            exp = value;
+        }
+    }
+
+    public int Icon
+    {
+        get
+        {
+            return icon;
+        }
+        set
+        {
+            icon = value;
         }
     }
 
@@ -321,6 +378,18 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             shield = value;
+        }
+    }
+
+    public string AttendanceDay
+    {
+        get
+        {
+            return attendanceDay;
+        }
+        set
+        {
+            attendanceDay = value;
         }
     }
 

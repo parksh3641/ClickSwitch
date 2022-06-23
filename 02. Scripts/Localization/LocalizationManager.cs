@@ -165,6 +165,52 @@ public class LocalizationManager : MonoBehaviour
         Debug.Log("Change Language : " + type);
         GameStateManager.instance.Language = type;
 
+        string iso = "";
+
+        switch (type)
+        {
+            case LanguageType.Default:
+                break;
+            case LanguageType.Korean:
+                iso = "ko";
+                break;
+            case LanguageType.English:
+                iso = "en";
+                break;
+            case LanguageType.Japenese:
+                iso = "ja";
+                break;
+            case LanguageType.Chinese:
+                iso = "en";
+                break;
+            case LanguageType.Indian:
+                iso = "hi";
+                break;
+            case LanguageType.Portuguese:
+                iso = "pt";
+                break;
+            case LanguageType.Russian:
+                iso = "ru";
+                break;
+            case LanguageType.German:
+                iso = "de";
+                break;
+            case LanguageType.Spanish:
+                iso = "es";
+                break;
+            case LanguageType.Arabic:
+                iso = "ar";
+                break;
+            case LanguageType.Bengali:
+                iso = "bn";
+                break;
+            default:
+                iso = "en";
+                break;
+        }
+
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.SetProfileLanguage(iso);
+
         for(int i = 0; i < localizationContentList.Count; i ++)
         {
             if (type == LanguageType.Bengali)

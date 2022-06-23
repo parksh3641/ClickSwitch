@@ -89,3 +89,10 @@ public enum ItemType
     Clock = 0,
     Shield
 }
+
+public enum IconType
+{
+    Default_0,
+    Default_1,
+    Default_2
+}

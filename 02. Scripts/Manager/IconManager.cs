@@ -1,18 +1,84 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class IconManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public GameObject iconView;
+
+    public IconContent iconContent;
+    public Transform iconContentTransform;
+
+
+    public Image profileIcon;
+
+
+    public List<IconContent> iconContentList = new List<IconContent>();
+
+    public ImageDataBase imageDataBase;
+    public PlayerDataBase playerDataBase;
+
+    private void Awake()
     {
-        
+        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+        if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+
+        for (int i = 0; i < System.Enum.GetValues(typeof(IconType)).Length; i ++)
+        {
+            IconContent monster = Instantiate(iconContent);
+            monster.transform.parent = iconContentTransform;
+            monster.transform.position = Vector3.zero;
+            monster.transform.rotation = Quaternion.identity;
+            monster.transform.localScale = Vector3.one;
+
+            monster.gameObject.SetActive(true);
+
+            iconContentList.Add(monster);
+        }
+
+        iconView.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OpenIcon()
     {
-        
+        if (!iconView.activeSelf)
+        {
+            iconView.SetActive(true);
+        }
+        else
+        {
+            iconView.SetActive(false);
+        }
+    }
+
+    public void Initialize() //StateManager에서 제어해야됨
+    {
+        IconType iconType = IconType.Default_0;
+
+        for(int i = 0; i < iconContentList.Count; i ++)
+        {
+            if (imageDataBase.GetProfileIconArray(iconType))
+            {
+                iconContentList[i].UnLock(this, iconType);
+            }
+
+            iconType++;
+        }
+
+        iconType = IconType.Default_0;
+
+        profileIcon.sprite = imageDataBase.GetProfileIconArray(iconType + playerDataBase.Icon);
+    }
+
+    public void UseIcon(IconType type)
+    {
+        profileIcon.sprite = imageDataBase.GetProfileIconArray(type);
+
+        playerDataBase.Icon = (int)type;
+
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Icon", (int)type);
+
+        OpenIcon();
     }
 }

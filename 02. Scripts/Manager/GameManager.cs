@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     public Transform filpCardTransform;
     public Transform buttonActionUpTransform;
     public Transform buttonActionDownTransform;
+    public Transform fingerSnapTransform;
 
 
     [Title("UI")]
@@ -69,6 +70,8 @@ public class GameManager : MonoBehaviour
     private float timingActionRangePosX = 0;
     private bool timingActionMove = false;
 
+    private int fingerSnapIndex = 0;
+
     [Title("bool")]
     private bool isActive = false;
 
@@ -79,11 +82,13 @@ public class GameManager : MonoBehaviour
     private List<NormalContent> filpCardList = new List<NormalContent>();
     private List<ButtonActionContent> buttonActionUpList = new List<ButtonActionContent>();
     private List<NormalContent> buttonActionDownList = new List<NormalContent>();
+    private List<NormalContent> fingerSnapList = new List<NormalContent>();
 
     [Title("Manager")]
     public UIManager uiManager;
     public SoundManager soundManager;
     public WarningController warningController;
+    public TouchManager touchManager;
 
 
     public delegate void GameEvent();
@@ -101,9 +106,9 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 9; i ++)
         {
             NormalContent content = Instantiate(normalContent);
+            content.transform.parent = normalTransform;
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
-            content.transform.parent = normalTransform;
             content.gameObject.SetActive(false);
             normalContentList.Add(content);
         }
@@ -111,9 +116,9 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 9; i++)
         {
             NormalContent content = Instantiate(normalContent);
+            content.transform.parent = moleCatchTransform;
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
-            content.transform.parent = moleCatchTransform;
             content.gameObject.SetActive(false);
             moleCatchContentList.Add(content);
         }
@@ -121,9 +126,9 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 16; i++)
         {
             NormalContent content = Instantiate(normalContent);
+            content.transform.parent = filpCardTransform;
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
-            content.transform.parent = filpCardTransform;
             content.gameObject.SetActive(false);
             filpCardList.Add(content);
         }
@@ -131,9 +136,9 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 6; i++)
         {
             ButtonActionContent content = Instantiate(buttonActionContent);
+            content.transform.parent = buttonActionUpTransform;
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
-            content.transform.parent = buttonActionUpTransform;
             content.gameObject.SetActive(false);
             buttonActionUpList.Add(content);
         }
@@ -141,11 +146,23 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 6; i++)
         {
             NormalContent content = Instantiate(normalContent);
+            content.transform.parent = buttonActionDownTransform;
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
-            content.transform.parent = buttonActionDownTransform;
             content.gameObject.SetActive(false);
             buttonActionDownList.Add(content);
+        }
+
+        for (int i = 0; i < 10; i++)
+        {
+            NormalContent content = Instantiate(normalContent);
+            content.transform.parent = fingerSnapTransform;
+            content.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 250);
+            content.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 250);
+            content.transform.localPosition = Vector3.zero;
+            content.transform.localScale = Vector3.one;
+            content.gameObject.SetActive(false);
+            fingerSnapList.Add(content);
         }
     }
 
@@ -254,6 +271,17 @@ public class GameManager : MonoBehaviour
         buttonActionNumber = 0;
 
         buttonActionIndex = numberList.Dequeue();
+    }
+
+    private void RandomFingerSnap()
+    {
+        fingerSnapIndex = Random.Range(0, 4);
+
+        Debug.Log("¹æÇâ : " + fingerSnapIndex);
+
+        fingerSnapList[nowIndex].transform.localPosition = Vector3.zero;
+        fingerSnapList[nowIndex].FingerSnapReset(fingerSnapIndex);
+        fingerSnapList[nowIndex].gameObject.SetActive(true);
     }
 
     #endregion
@@ -413,6 +441,10 @@ public class GameManager : MonoBehaviour
 
                 break;
             case GamePlayType.GameChoice6:
+
+                nowIndex = 0;
+
+                RandomFingerSnap();
 
                 break;
             case GamePlayType.GameChoice7:
@@ -629,7 +661,7 @@ public class GameManager : MonoBehaviour
     {
         if(timingActionFillmount.fillAmount >= timingActionCheckRange_1 && timingActionFillmount.fillAmount <= timingActionCheckRange_2)
         {
-            if (timingActionFillmount.fillAmount >= timingActionCheckRange_1 + 0.05f && timingActionFillmount.fillAmount <= timingActionCheckRange_2 - 0.05f)
+            if (timingActionFillmount.fillAmount >= timingActionCheckRange_1 + 0.1f && timingActionFillmount.fillAmount <= timingActionCheckRange_2 - 0.05f)
             {
                 Debug.Log("Perfect Success");
 
@@ -670,9 +702,44 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void CheckFingerSnap()
+    void CheckFingerSnap(bool check)
     {
+        if(check)
+        {
+            Debug.Log("Success");
 
+            PlusScore(10);
+
+            fingerSnapList[nowIndex].MoveFingerSnap(fingerSnapIndex);
+
+            nowIndex++;
+
+            if (nowIndex > fingerSnapList.Count - 1)
+            {
+                nowIndex = 0;
+            }
+
+            RandomFingerSnap();
+        }
+        else
+        {
+            if (GameStateManager.instance.Shield)
+            {
+                Debug.Log("Defense Shield");
+
+                GameStateManager.instance.Shield = false;
+                soundManager.PlaySFX(GameSfxType.Shield);
+                uiManager.UsedItem(ItemType.Shield);
+            }
+            else
+            {
+                Debug.Log("Failure");
+
+                warningController.Hit();
+
+                MinusScore(10);
+            }
+        }
     }
 
     public void Failure()
@@ -716,6 +783,7 @@ public class GameManager : MonoBehaviour
                 StartCoroutine("MoveTimingActionRange");
                 break;
             case GamePlayType.GameChoice6:
+                StartCoroutine("CheckFingerSnapDirection");
                 break;
             case GamePlayType.GameChoice7:
                 break;
@@ -857,6 +925,68 @@ public class GameManager : MonoBehaviour
             }
 
             yield return new WaitForSeconds(2);
+        }
+    }
+
+    IEnumerator CheckFingerSnapDirection()
+    {
+        while(true)
+        {
+            if (touchManager.direction != "")
+            {
+                switch (fingerSnapIndex)
+                {
+                    case 0:
+                        if (touchManager.direction == "Left")
+                        {
+                            touchManager.direction = "";
+                            CheckFingerSnap(true);
+                        }
+                        else
+                        {
+                            touchManager.direction = "";
+                            CheckFingerSnap(false);
+                        }
+                        break;
+                    case 1:
+                        if (touchManager.direction == "Right")
+                        {
+                            touchManager.direction = "";
+                            CheckFingerSnap(true);
+                        }
+                        else
+                        {
+                            touchManager.direction = "";
+                            CheckFingerSnap(false);
+                        }
+                        break;
+                    case 2:
+                        if (touchManager.direction == "Down")
+                        {
+                            touchManager.direction = "";
+                            CheckFingerSnap(true);
+                        }
+                        else
+                        {
+                            touchManager.direction = "";
+                            CheckFingerSnap(false);
+                        }
+                        break;
+                    case 3:
+                        if (touchManager.direction == "Up")
+                        {
+                            touchManager.direction = "";
+                            CheckFingerSnap(true);
+                        }
+                        else
+                        {
+                            touchManager.direction = "";
+                            CheckFingerSnap(false);
+                        }
+                        break;
+                }
+            }
+            yield return new WaitForSeconds(0.01f);
         }
     }
 

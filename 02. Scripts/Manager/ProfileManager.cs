@@ -42,7 +42,7 @@ public class ProfileManager : MonoBehaviour
 
         profileView.SetActive(false);
 
-        profileTransform.anchoredPosition = new Vector2(0, -500);
+        profileTransform.anchoredPosition = new Vector2(0, -999);
 
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
     }
@@ -77,7 +77,7 @@ public class ProfileManager : MonoBehaviour
         profileContentList[2].InitState(LocalizationManager.instance.GetString("GameChoice3"), playerDataBase.BestFilpCardScore, playerDataBase.BestFilpCardCombo);
         profileContentList[3].InitState(LocalizationManager.instance.GetString("GameChoice4"), playerDataBase.BestButtonActionScore, playerDataBase.BestButtonActionCombo);
         profileContentList[4].InitState(LocalizationManager.instance.GetString("GameChoice5"), playerDataBase.BestTimingActionScore, playerDataBase.BestTimingActionCombo);
-        profileContentList[5].InitState(LocalizationManager.instance.GetString("GameChoice6"), playerDataBase.BestFingerSnapScore, playerDataBase.BestFingerSnapCombo);
+        profileContentList[5].InitState(LocalizationManager.instance.GetString("GameChoice6"), playerDataBase.BestDragActionScore, playerDataBase.BestDragActionCombo);
 
         totalScoreText.text = " : " + playerDataBase.TotalScore.ToString();
         totalComboText.text = " : " + playerDataBase.TotalCombo.ToString();

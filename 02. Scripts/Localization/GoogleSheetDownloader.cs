@@ -34,9 +34,22 @@ public class GoogleSheetDownloader : MonoBehaviour
             Directory.CreateDirectory(SystemPath.GetPath());
         }
 
-        messageText.text = "Loading...";
+        StartCoroutine(LoadingCoroution());
 
         SyncFile();
+    }
+
+    IEnumerator LoadingCoroution()
+    {
+        messageText.text = "Loading";
+        yield return new WaitForSeconds(0.5f);
+        messageText.text = "Loading.";
+        yield return new WaitForSeconds(0.5f);
+        messageText.text = "Loading..";
+        yield return new WaitForSeconds(0.5f);
+        messageText.text = "Loading...";
+        yield return new WaitForSeconds(0.5f);
+        StartCoroutine(LoadingCoroution());
     }
 
     IEnumerator DownloadFile()
@@ -150,6 +163,7 @@ public class GoogleSheetDownloader : MonoBehaviour
         }
         else
         {
+            StopAllCoroutines();
             messageText.text = "Please check the internet connection...";
             StartCoroutine(DelayCorution());
         }

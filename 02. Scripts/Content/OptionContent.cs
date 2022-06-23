@@ -80,8 +80,6 @@ public class OptionContent : MonoBehaviour
                 }
                 break;
             case OptionType.Vibration:
-                buttonText.name = "Vibration";
-                buttonText.ReLoad();
 
                 OnVibration();
                 break;
