@@ -49,7 +49,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     public Text nowComboText;
     public Text bestComboText;
     public Text getGoldText;
-    public Text rankText;
+    public Text getExpText;
 
     [Space]
     [Title("Ad")]
@@ -109,10 +109,12 @@ public class UIManager : MonoBehaviour, IGameEvent
     public AchievementManager achievementManager;
     public IconManager iconManager;
     public NewsManager newsManager;
+    public LevelManager levelManager;
 
     [Title("Animation")]
     public CoinAnimation goldAnimation;
     public CoinAnimation crystalAnimation;
+    public CoinAnimation expAnimation;
 
     [Title("DataBase")]
     public PlayerDataBase playerDataBase;
@@ -434,36 +436,50 @@ public class UIManager : MonoBehaviour, IGameEvent
     public void OpenRanking()
     {
         rankingManager.OpenRanking();
+
+        FirebaseAnalytics.LogEvent("OpenRanking");
     }
 
     public void OpenProfile()
     {
         profileManager.OpenProfile();
+
+        FirebaseAnalytics.LogEvent("OpenProfile");
     }
 
     public void OpenNickName()
     {
         nickNameManager.OpenNickName();
+
+        FirebaseAnalytics.LogEvent("OpenNickName");
     }
 
     public void OpenShop()
     {
         shopManager.OpenShop();
+
+        FirebaseAnalytics.LogEvent("OpenShop");
     }
 
     public void OpenIcon()
     {
         iconManager.OpenIcon();
+
+        FirebaseAnalytics.LogEvent("OpenIcon");
     }
 
     public void OpenNews()
     {
         newsManager.OpenNews();
+
+        FirebaseAnalytics.LogEvent("OpenNews");
     }
 
     public void OpenAchievement()
     {
         achievementManager.OpenAchievement();
+
+        FirebaseAnalytics.LogEvent("OpenAchievement");
     }
 
     public void OnLoginSuccess()
@@ -523,6 +539,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     }
 
     int money = 0;
+    int exp = 0;
 
     public void GameEnd()
     {
@@ -692,6 +709,16 @@ public class UIManager : MonoBehaviour, IGameEvent
         {
             getGoldText.text = "0";
         }
+
+        exp = (int)score / 5;
+
+        if(exp > 0)
+        {
+            levelManager.CheckLevelUp(exp);
+        }
+
+
+
 
         nowScoreText.text = score.ToString();
         nowComboText.text = combo.ToString();
@@ -959,7 +986,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         float timer = ValueManager.instance.GetGamePlayTime();
 
-        if (GameStateManager.instance.Clock) timer += ValueManager.instance.GetClockTime();
+        if (GameStateManager.instance.Clock) timer += ValueManager.instance.GetClockAddTime();
 
         StartCoroutine("TimerCorution", timer);
     }

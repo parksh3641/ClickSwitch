@@ -11,6 +11,8 @@ public class IconContent : MonoBehaviour
 
     public GameObject lockObject;
 
+    public GameObject checkMark;
+
     IconManager iconManager;
 
     public ImageDataBase imageDataBase;
@@ -20,6 +22,7 @@ public class IconContent : MonoBehaviour
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
 
         lockObject.SetActive(true);
+        checkMark.SetActive(false);
     }
 
     public void UnLock(IconManager manager,IconType type)
@@ -30,6 +33,11 @@ public class IconContent : MonoBehaviour
         icon.sprite = imageDataBase.GetProfileIconArray(type);
 
         lockObject.SetActive(false);
+    }
+
+    public void CheckMark(bool check)
+    {
+        checkMark.SetActive(check);
     }
 
     public void OnClick()

@@ -29,6 +29,15 @@ public class ValueDataBase : ScriptableObject
     [SerializeField]
     private float clockAddTime = 0;
 
+    [SerializeField]
+    private float comboAddTime = 0;
+
+    [SerializeField]
+    private float defaultExp = 0;
+
+    [SerializeField]
+    private float addExp = 0;
+
     public void Initialize()
     {
         adCoolTime = 0;
@@ -41,6 +50,10 @@ public class ValueDataBase : ScriptableObject
         filpCardRememberTime = 0;
 
         clockAddTime = 0;
+        comboAddTime = 0;
+
+        defaultExp = 0;
+        addExp = 0;
     }
 
     public float AdCoolTime
@@ -137,6 +150,42 @@ public class ValueDataBase : ScriptableObject
         set
         {
             clockAddTime = value;
+        }
+    }
+
+    public float ComboAddTime
+    {
+        get
+        {
+            return comboAddTime;
+        }
+        set
+        {
+            comboAddTime = value;
+        }
+    }
+
+    public float DefaultExp
+    {
+        get
+        {
+            return defaultExp;
+        }
+        set
+        {
+            defaultExp = value;
+        }
+    }
+
+    public float AddExp
+    {
+        get
+        {
+            return addExp;
+        }
+        set
+        {
+            addExp = value;
         }
     }
 }

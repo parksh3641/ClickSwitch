@@ -75,7 +75,8 @@ public enum GameBGMType
 public enum GameSfxType
 {
     Success,
-    Shield
+    Shield,
+    LevelUp
 }
 
 public enum ShopType

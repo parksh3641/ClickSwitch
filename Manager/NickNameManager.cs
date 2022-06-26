@@ -85,7 +85,7 @@ public class NickNameManager : MonoBehaviour
                     oldNickName = "";
                 }
 
-                if (newNickName.Length > 2)
+                if (newNickName.Length > 1)
                 {
                     if (!(newNickName.Equals(oldNickName)))
                     {

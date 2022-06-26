@@ -50,8 +50,23 @@ public class ValueManager : MonoBehaviour
         return valueDataBase.FilpCardRememberTime;
     }
 
-    public float GetClockTime()
+    public float GetClockAddTime()
     {
         return valueDataBase.ClockAddTime;
+    }
+
+    public float GetComboAddTime()
+    {
+        return valueDataBase.ComboAddTime;
+    }
+
+    public float GetDefaultExp()
+    {
+        return valueDataBase.DefaultExp;
+    }
+
+    public float GetAddExp()
+    {
+        return valueDataBase.AddExp;
     }
 }

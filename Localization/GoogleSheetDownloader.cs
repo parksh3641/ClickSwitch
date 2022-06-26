@@ -54,18 +54,34 @@ public class GoogleSheetDownloader : MonoBehaviour
 
     IEnumerator DownloadFile()
     {
+        Debug.Log("Localization File Downloading...");
+
         UnityWebRequest www = UnityWebRequest.Get(LocalizationURL);
         yield return www.SendWebRequest();
         SetLocalization(www.downloadHandler.text);
+
+        Debug.Log("Value File Downloading...");
 
         UnityWebRequest www2 = UnityWebRequest.Get(ValueURL);
         yield return www2.SendWebRequest();
         SetValue(www2.downloadHandler.text);
 
-        UnityWebRequest www3 = UnityWebRequest.Get(BadWordURL);
-        yield return www3.SendWebRequest();
-        File.WriteAllText(SystemPath.GetPath() + "BadWord.txt", www3.downloadHandler.text);
-        Debug.Log("BadWord File Download Complete!");
+        if (!File.Exists(SystemPath.GetPath() + "BadWord.txt"))
+        {
+            Debug.Log("BadWord File Downloading...");
+
+            UnityWebRequest www3 = UnityWebRequest.Get(BadWordURL);
+            yield return www3.SendWebRequest();
+            File.WriteAllText(SystemPath.GetPath() + "BadWord.txt", www3.downloadHandler.text);
+
+            Debug.Log("BadWord File Download Complete!");
+        }
+        else
+        {
+            Debug.Log("BadWord File is exists");
+        }
+
+        isActive = true;
     }
 
     void SetLocalization(string tsv)
@@ -139,10 +155,17 @@ public class GoogleSheetDownloader : MonoBehaviour
                 case "ClockAddTime":
                     valueDataBase.ClockAddTime = value;
                     break;
+                case "ComboAddTime":
+                    valueDataBase.ComboAddTime = value;
+                    break;
+                case "DefaultExp":
+                    valueDataBase.DefaultExp = value;
+                    break;
+                case "AddExp":
+                    valueDataBase.AddExp = value;
+                    break;
             }
         }
-
-        isActive = true;
 
         Debug.Log("Value File Download Complete!");
     }
@@ -152,8 +175,6 @@ public class GoogleSheetDownloader : MonoBehaviour
     {
         if(NetworkConnect.instance.CheckConnectInternet())
         {
-            Debug.Log("Localization File Downloading...");
-
             isActive = false;
 
             localizationDataBase.Initialize();

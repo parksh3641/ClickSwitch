@@ -45,6 +45,8 @@ public class IconManager : MonoBehaviour
         if (!iconView.activeSelf)
         {
             iconView.SetActive(true);
+
+            CheckMyIcon();
         }
         else
         {
@@ -52,7 +54,17 @@ public class IconManager : MonoBehaviour
         }
     }
 
-    public void Initialize() //StateManager에서 제어해야됨
+    public void CheckMyIcon()
+    {
+        for (int i = 0; i < iconContentList.Count; i++)
+        {
+            iconContentList[i].CheckMark(false);
+        }
+
+        iconContentList[playerDataBase.Icon].CheckMark(true);
+    }
+
+    public void Initialize()
     {
         IconType iconType = IconType.Default_0;
 

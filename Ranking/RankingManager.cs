@@ -207,7 +207,6 @@ public class RankingManager : MonoBehaviour
 
 
         var curBoard = result.Leaderboard;
-        var location = curBoard[index - 1].Profile.Locations[0].CountryCode.Value.ToString().ToLower();
         int num = 0;
 
         for(int i = 0; i < rankContentList.Count; i ++)
@@ -217,6 +216,8 @@ public class RankingManager : MonoBehaviour
 
         foreach(PlayerLeaderboardEntry player in curBoard)
         {
+            var location = curBoard[num].Profile.Locations[0].CountryCode.Value.ToString().ToLower();
+
             checkMy = false;
 
             if (player.DisplayName == null)

@@ -29,6 +29,15 @@ public class LocalizationManager : MonoBehaviour
     public void AddContent(LocalizationContent content)
     {
         localizationContentList.Add(content);
+
+        if (GameStateManager.instance.Language == LanguageType.Bengali)
+        {
+            content.GetComponent<Text>().font = bengaliFont;
+        }
+        else
+        {
+            content.GetComponent<Text>().font = normalFont;
+        }
     }
 
     public string GetString(string name)
