@@ -19,6 +19,9 @@ public class ComboManager : MonoBehaviour
     public Text waitNotionText;
     public Image waitFillAmount;
 
+    [Title("Animation")]
+    public BarAnimation barAnimation;
+
     private int combo = 0;
     private int bestCombo = 0;
 
@@ -69,6 +72,11 @@ public class ComboManager : MonoBehaviour
         timer = comboTimer;
         fillamount.fillAmount = 1;
         comboText.text = LocalizationManager.instance.GetString("Combo") + " : " + combo.ToString();
+
+        if(combo % 50 == 0)
+        {
+            barAnimation.PlayAnimation();
+        }
 
         if (bestCombo != 0)
         {

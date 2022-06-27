@@ -80,6 +80,8 @@ public class PlayerDataBase : ScriptableObject
     [Title("Reset")]
     [SerializeField]
     private string attendanceDay = "";
+    [SerializeField]
+    private string gameMode = "";
 
     [Space]
     [Title("Purchase")]
@@ -124,6 +126,7 @@ public class PlayerDataBase : ScriptableObject
         shield = 0;
 
         attendanceDay = "";
+        gameMode = "";
 
         removeAd = false;
 
@@ -390,6 +393,18 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             attendanceDay = value;
+        }
+    }
+
+    public string GameMode
+    {
+        get
+        {
+            return gameMode;
+        }
+        set
+        {
+            gameMode = value;
         }
     }
 

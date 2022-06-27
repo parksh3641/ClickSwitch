@@ -6,16 +6,28 @@ using UnityEngine.UI;
 
 public class CoinAnimation : MonoBehaviour
 {
-    public Transform target;
+    public int coinPosX = 0;
+    public int coinPosY = 0;
+
+    public int expPosX = 0;
+    public int expPosY = 0;
+
+    public Transform goldTransform;
+    public Transform expTransform;
+
+    public Transform goldTarget;
+    public Transform expTarget;
+
     public MoneyType moneyType = MoneyType.Coin;
 
     public Text goldText;
 
     public CoinContent goldPrefab;
+    public CoinContent expPrefab;
 
-    public Transform goldTransform;
 
     public List<CoinContent> goldPrefabList = new List<CoinContent>();
+    public List<CoinContent> expPrefabList = new List<CoinContent>();
 
     private void Awake()
     {
@@ -28,20 +40,36 @@ public class CoinAnimation : MonoBehaviour
             monster.gameObject.SetActive(false);
             goldPrefabList.Add(monster);
         }
+
+        for (int i = 0; i < 10; i++)
+        {
+            CoinContent monster = Instantiate(expPrefab);
+            monster.transform.parent = expTransform;
+            monster.transform.localPosition = Vector3.zero;
+            monster.transform.localScale = new Vector3(1, 1, 1);
+            monster.gameObject.SetActive(false);
+            expPrefabList.Add(monster);
+        }
     }
 
-    public void OnPlay(int money, int plus)
+    public void OnPlayCoinAnimation(int money, int plus)
     {
-        StartCoroutine(OnPlayCorution(money, plus));
+        StartCoroutine(OnPlayCoinCoroution(money, plus));
+    }
+
+    [Button]
+    public void OnPlayExpAnimation()
+    {
+        StartCoroutine(OnPlayExpCoroution());
     }
 
     [Button]
     public void OnPlay()
     {
-        StartCoroutine(OnPlayCorution(0, 100));
+        StartCoroutine(OnPlayCoinCoroution(0, 100));
     }
 
-    IEnumerator OnPlayCorution(int money, int plus)
+    IEnumerator OnPlayCoinCoroution(int money, int plus)
     {
         if(plus >= goldPrefabList.Count)
         {
@@ -64,14 +92,14 @@ public class CoinAnimation : MonoBehaviour
         {
             for (int i = 0; i < goldPrefabList.Count; i++)
             {
-                goldPrefabList[i].GoToTarget(target.localPosition - new Vector3(350, 35, 0));
+                goldPrefabList[i].GoToTarget(goldTarget.localPosition - new Vector3(coinPosX, coinPosY, 0));
             }
         }
         else
         {
             for (int i = 0; i < plus; i++)
             {
-                goldPrefabList[i].GoToTarget(target.localPosition - new Vector3(350, 35, 0));
+                goldPrefabList[i].GoToTarget(goldTarget.localPosition - new Vector3(coinPosX, coinPosY, 0));
             }
         }
 
@@ -94,6 +122,20 @@ public class CoinAnimation : MonoBehaviour
 
             yield return new WaitForSeconds(0.01f);
         }
+    }
 
+    IEnumerator OnPlayExpCoroution()
+    {
+        for (int i = 0; i < expPrefabList.Count; i++)
+        {
+            expPrefabList[i].gameObject.SetActive(true);
+        }
+
+        yield return new WaitForSeconds(1.0f);
+
+        for (int i = 0; i < expPrefabList.Count; i++)
+        {
+            expPrefabList[i].GoToTarget(expTarget.localPosition - new Vector3(expPosX, expPosY, 0));
+        }
     }
 }

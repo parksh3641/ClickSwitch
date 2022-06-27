@@ -10,9 +10,6 @@ public class GameManager : MonoBehaviour
     public GamePlayType gamePlayType;
     public GameModeType gameModeType;
 
-    [Title("Mode")]
-    public ModeContent modeContent;
-
 
     [Title("Prefab")]
     public NormalContent normalContent;
@@ -301,14 +298,6 @@ public class GameManager : MonoBehaviour
     public void OpenGameMenuButton() //게임 시작전 모드 선택 창 열기
     {
         uiManager.OpenMenu();
-
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetServerTime(SetModeContent);
-    }
-
-    private void SetModeContent(System.DateTime time)
-    {
-        modeContent.SetNextEventTime(time);
-        modeContent.Initialize(GameModeType.Perfect, GamePlayType.GameChoice1);
     }
 
     public void ChoiceGameType(int number) //모드 선택 창에서 옵션 선택

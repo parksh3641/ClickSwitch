@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,8 +8,6 @@ public class LevelManager : MonoBehaviour
 {
     public Text profileLevelText;
     public Image profileFillamount;
-
-
 
     public GameObject levelupView;
 
@@ -28,6 +27,8 @@ public class LevelManager : MonoBehaviour
     private void Awake()
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+
+        levelupView.SetActive(false);
     }
 
     public void Initialize()
@@ -37,17 +38,18 @@ public class LevelManager : MonoBehaviour
         profileFillamount.fillAmount = playerDataBase.Exp / CheckNeedExp();
     }
 
-    public void CheckLevelUp(int getExp)
+    public void CheckLevelUp(float getExp)
     {
         level = playerDataBase.Level;
-        exp = playerDataBase.Exp + getExp;
+        exp = playerDataBase.Exp;
+        int plusExp = (int)getExp;
         if (defaultExp == 0 || addExp == 0)
         {
             Debug.Log("레벨업 오류");
             return;
         }
 
-        if(exp >= (defaultExp * CheckNeedExp()))
+        if(exp + plusExp >= CheckNeedExp())
         {
             Debug.Log("레벨 업");
 
@@ -56,14 +58,14 @@ public class LevelManager : MonoBehaviour
             playerDataBase.Level += 1;
             if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Level", playerDataBase.Level);
 
-            playerDataBase.Exp -= (int)CheckNeedExp();
+            playerDataBase.Exp -= ((int)CheckNeedExp() - plusExp);
             if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Exp", playerDataBase.Exp);
         }
         else
         {
             Debug.Log("경험치 증가");
 
-            playerDataBase.Exp += (int)CheckNeedExp();
+            playerDataBase.Exp += plusExp;
             if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Exp", playerDataBase.Exp);
         }
 
@@ -75,17 +77,18 @@ public class LevelManager : MonoBehaviour
         defaultExp = ValueManager.instance.GetDefaultExp();
         addExp = ValueManager.instance.GetAddExp();
 
-        float needExp = defaultExp + ((level + 1) * addExp);
+        float needExp = defaultExp + (level * addExp);
 
         return needExp;
     }
 
+    [Button]
     public void OpenLevelView()
     {
         levelupView.SetActive(true);
 
-        levelUpText.text = level.ToString();
-        coinUpText.text = "+" + level + "%";
+        levelUpText.text = (level + 1).ToString();
+        coinUpText.text = LocalizationManager.instance.GetString("Bouns") + " + " + (level + 1) + "%";
 
         soundManager.PlaySFX(GameSfxType.LevelUp);
 

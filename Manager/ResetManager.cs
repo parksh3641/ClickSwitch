@@ -1,44 +1,117 @@
 ﻿using PlayFab;
 using PlayFab.ClientModels;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ResetManager : MonoBehaviour
 {
-    public PlayerDataBase playerDataBase;
+    GamePlayType type = GamePlayType.GameChoice1;
+
+    public GameObject gameMenuView;
+
+
+    [Title("Perfect Mode")]
+    public ModeContent modeContent;
+
+
+    PlayerDataBase playerDataBase;
 
     private void Awake()
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+
+        gameMenuView.SetActive(false);
     }
 
-    public bool OnCheckAttendanceDay()
+    public void OpenMenu()
     {
-        bool check = false;
-
-        if (playerDataBase.AttendanceDay == "")
+        if (!gameMenuView.activeSelf)
         {
-            playerDataBase.AttendanceDay = System.DateTime.Now.ToString("yyyyMMdd");
-            if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceDay", int.Parse(System.DateTime.Now.ToString("yyyyMMdd")));
+            gameMenuView.SetActive(true);
+
+            OnCheckAttendanceDay();
+        }
+        else
+        {
+            gameMenuView.SetActive(false);
+        }
+    }
+
+    public void OnCheckAttendanceDay()
+    {
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetServerTime(SetModeContent);
+    }
+
+    private void SetModeContent(System.DateTime time)
+    {
+        modeContent.SetNextEventTime(time);
+
+        if (playerDataBase.AttendanceDay.Length < 2)
+        {
+            Debug.Log("처음 로그인");
+
+            playerDataBase.AttendanceDay = System.DateTime.Now.AddDays(1).ToString("yyyyMMdd");
+
+            if (PlayfabManager.instance.isActive)
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceDay", int.Parse(playerDataBase.AttendanceDay));
         }
 
-        if (ComparisonDate(playerDataBase.AttendanceDay))
+        if (ComparisonDate(playerDataBase.AttendanceDay, time))
         {
             Debug.Log("날짜 초기화");
 
-            check = true;
+            type = GamePlayType.GameChoice1;
+
+            switch (System.DateTime.Now.DayOfWeek)
+            {
+                case System.DayOfWeek.Friday:
+                    type = GamePlayType.GameChoice5;
+                    break;
+                case System.DayOfWeek.Monday:
+                    type = GamePlayType.GameChoice1;
+                    break;
+                case System.DayOfWeek.Saturday:
+                    type = GamePlayType.GameChoice6;
+                    break;
+                case System.DayOfWeek.Sunday:
+                    type = GamePlayType.GameChoice1;
+                    break;
+                case System.DayOfWeek.Thursday:
+                    type = GamePlayType.GameChoice4;
+                    break;
+                case System.DayOfWeek.Tuesday:
+                    type = GamePlayType.GameChoice2;
+                    break;
+                case System.DayOfWeek.Wednesday:
+                    type = GamePlayType.GameChoice3;
+                    break;
+            }
+
+            modeContent.Initialize(GameModeType.Perfect, type);
+
+            playerDataBase.GameMode = ((int)type).ToString();
+
+            if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("GameMode", (int)type);
+
+
+            playerDataBase.AttendanceDay = System.DateTime.Now.AddDays(1).ToString("yyyyMMdd");
+
+            if (PlayfabManager.instance.isActive)
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceDay", int.Parse(playerDataBase.AttendanceDay));
         }
         else
         {
             Debug.Log("아직 하루가 안 지났습니다.");
-        }
 
-        return check;
+            modeContent.Initialize(GameModeType.Perfect, GamePlayType.GameChoice1 + int.Parse(playerDataBase.GameMode.ToString()));
+        }
     }
-    public bool ComparisonDate(string target)
+
+    public bool ComparisonDate(string target, System.DateTime time)
     {
-        System.DateTime server = GetServerTime();
+        System.DateTime server = time;
         System.DateTime system = System.DateTime.ParseExact(target, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
 
         bool c = false;
@@ -81,19 +154,5 @@ public class ResetManager : MonoBehaviour
         }
 
         return c;
-    }
-
-    public System.DateTime GetServerTime()
-    {
-        System.DateTime _time = System.DateTime.Now;
-        PlayFabClientAPI.GetTime(new GetTimeRequest(),
-            result =>
-            {
-                _time = result.Time;
-            }, error =>
-            {
-
-            });
-        return _time;
     }
 }

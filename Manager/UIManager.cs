@@ -26,7 +26,6 @@ public class UIManager : MonoBehaviour, IGameEvent
     public Text goldText;
     public Text crystalText;
 
-    public GameObject gameMenuUI;
     public GameObject gamePlayView;
     public GameObject[] gamePlayUI;
 
@@ -44,6 +43,9 @@ public class UIManager : MonoBehaviour, IGameEvent
     public GameObject newRecordObj;
     public GameObject newComboObj;
     public GameObject doubleCoinObj;
+    public GameObject doubleExpObj;
+    public Text plusGoldText;
+    public Text plusExpText;
     public Text nowScoreText;
     public Text bestScoreText;
     public Text nowComboText;
@@ -81,10 +83,13 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public GameObject updateUI;
 
-
     [Space]
     [Title("NotionUI")]
     public Notion scoreNotion;
+
+    [Space]
+    [Title("Network")]
+    public GameObject networkView;
 
     [Space]
     [Title("Value")]
@@ -104,17 +109,16 @@ public class UIManager : MonoBehaviour, IGameEvent
     public ProfileManager profileManager;
     public NickNameManager nickNameManager;
     public SoundManager soundManager;
-    public GoogleAdsManager googldAdsManager;
     public ShopManager shopManager;
     public AchievementManager achievementManager;
     public IconManager iconManager;
     public NewsManager newsManager;
     public LevelManager levelManager;
+    public ResetManager resetManager;
 
     [Title("Animation")]
     public CoinAnimation goldAnimation;
-    public CoinAnimation crystalAnimation;
-    public CoinAnimation expAnimation;
+
 
     [Title("DataBase")]
     public PlayerDataBase playerDataBase;
@@ -146,7 +150,6 @@ public class UIManager : MonoBehaviour, IGameEvent
         goldText.text = "0";
         crystalText.text = "0";
 
-        gameMenuUI.SetActive(false);
         gameOptionUI.SetActive(false);
         languageUI.SetActive(false);
 
@@ -161,6 +164,7 @@ public class UIManager : MonoBehaviour, IGameEvent
         gameEndUI.SetActive(false);
         cancleWindowUI.SetActive(false);
         cancleUI.SetActive(false);
+        networkView.SetActive(false);
     }
 
     private void Start()
@@ -201,7 +205,11 @@ public class UIManager : MonoBehaviour, IGameEvent
         {
             if(Input.GetKey(KeyCode.Escape))
             {
-                if(rankingManager.rankingView.activeInHierarchy)
+                if(resetManager.gameMenuView.activeInHierarchy)
+                {
+                    resetManager.OpenMenu();
+                }
+                else if(rankingManager.rankingView.activeInHierarchy)
                 {
                     rankingManager.OpenRanking();
                 }
@@ -330,12 +338,12 @@ public class UIManager : MonoBehaviour, IGameEvent
 #region Button
     public void OpenMenu()
     {
-        gameMenuUI.SetActive(true);
+        resetManager.OpenMenu();
     }
 
     public void CloseMenu()
     {
-        gameMenuUI.SetActive(false);
+        resetManager.gameMenuView.SetActive(false);
     }
 
     public void OpenGamePlayUI(GamePlayType type)
@@ -538,12 +546,24 @@ public class UIManager : MonoBehaviour, IGameEvent
         }
     }
 
-    int money = 0;
-    int exp = 0;
+    float money = 0;
+    float exp = 0;
+    float plus = 0;
 
     public void GameEnd()
     {
         Debug.Log("Game End");
+
+        if(!NetworkConnect.instance.CheckConnectInternet())
+        {
+            networkView.SetActive(true);
+            return;
+        }
+        else
+        {
+            networkView.SetActive(false);
+        }
+
 
         FirebaseAnalytics.LogEvent(GameStateManager.instance.GamePlayType.ToString(),"GetScore", score);
         FirebaseAnalytics.LogEvent(GameStateManager.instance.GamePlayType.ToString(), "GetCombo", comboManager.GetCombo());
@@ -682,7 +702,11 @@ public class UIManager : MonoBehaviour, IGameEvent
                 doubleCoinObj.SetActive(true);
                 watchAdButton.SetActive(false);
 
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, money * 2);
+                plus = 1.0f + (playerDataBase.Level / 100.0f);
+
+                plusGoldText.text = "+ " + (100 + playerDataBase.Level) + "%";
+
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, (int)(money + (money * plus)));
 
                 getGoldText.text = money + " + " + money.ToString();
             }
@@ -690,6 +714,15 @@ public class UIManager : MonoBehaviour, IGameEvent
             {
                 doubleCoinObj.SetActive(false);
                 watchAdButton.SetActive(true);
+
+                if(playerDataBase.Level > 0)
+                {
+                    doubleCoinObj.SetActive(true);
+
+                    plus = playerDataBase.Level / 100.0f;
+
+                    plusGoldText.text = "+ " + playerDataBase.Level + "%";
+                }
 
                 if (!GameStateManager.instance.WatchAd)
                 {
@@ -700,7 +733,7 @@ public class UIManager : MonoBehaviour, IGameEvent
                     SetWatchAd(false);
                 }
 
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, money);
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, (int)(money + (money * plus)));
 
                 getGoldText.text = money.ToString();
             }
@@ -710,18 +743,22 @@ public class UIManager : MonoBehaviour, IGameEvent
             getGoldText.text = "0";
         }
 
-        exp = (int)score / 5;
+        doubleExpObj.SetActive(false);
+
+        exp = (int)score / 2;
 
         if(exp > 0)
         {
             levelManager.CheckLevelUp(exp);
-        }
 
+            goldAnimation.OnPlayExpAnimation();
+        }
 
 
 
         nowScoreText.text = score.ToString();
         nowComboText.text = combo.ToString();
+        getExpText.text = exp.ToString();
 
         GameReset();
     }
@@ -794,7 +831,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         Debug.Log("광고 보상 : 코인 2배 지급!");
 
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, money);
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, (int)money);
 
         getGoldText.text = money + " + " + money.ToString();
 

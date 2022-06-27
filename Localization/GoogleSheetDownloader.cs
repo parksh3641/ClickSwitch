@@ -185,7 +185,7 @@ public class GoogleSheetDownloader : MonoBehaviour
         else
         {
             StopAllCoroutines();
-            messageText.text = "Please check the internet connection...";
+            messageText.text = "Reconnect internet...";
             StartCoroutine(DelayCorution());
         }
     }

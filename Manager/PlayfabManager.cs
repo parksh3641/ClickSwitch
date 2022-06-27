@@ -590,6 +590,12 @@ public class PlayfabManager : MonoBehaviour
                        case "DragActionCombo":
                            playerDataBase.BestDragActionCombo = statistics.Value;
                            break;
+                       case "AttendanceDay":
+                           playerDataBase.AttendanceDay = statistics.Value.ToString();
+                           break;
+                       case "GameMode":
+                           playerDataBase.GameMode = statistics.Value.ToString();
+                           break;
                    }
                }
            })
@@ -714,7 +720,7 @@ public class PlayfabManager : MonoBehaviour
                     GeneratePlayStreamEvent = true,
                 }, OnCloudUpdateStats, DisplayPlayfabError);
 
-                uiManager.goldAnimation.OnPlay(playerDataBase.Coin, number);
+                uiManager.goldAnimation.OnPlayCoinAnimation(playerDataBase.Coin, number);
 
                 playerDataBase.Coin += number;
             }
