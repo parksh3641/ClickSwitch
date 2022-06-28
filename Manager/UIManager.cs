@@ -313,8 +313,18 @@ public class UIManager : MonoBehaviour, IGameEvent
             itemUseContentArray[i].Initialize(itemArray[i]);
         }
 
-        if (GameStateManager.instance.Clock) itemUseContentArray[0].UseItem();
-        if (GameStateManager.instance.Shield) itemUseContentArray[1].UseItem();
+        if (GameStateManager.instance.Clock)
+        {
+            itemUseContentArray[0].UseItem();
+
+            FirebaseAnalytics.LogEvent("ItemUse : Timer");
+        }
+        if (GameStateManager.instance.Shield)
+        {
+            itemUseContentArray[1].UseItem();
+
+            FirebaseAnalytics.LogEvent("ItemUse : Shield");
+        }
     }
 
     public void UsedItem(ItemType type)
@@ -745,10 +755,16 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         doubleExpObj.SetActive(false);
 
-        exp = (int)score / 2;
+        exp = 0;
 
         if(exp > 0)
         {
+            exp += 100;
+
+            exp = (int)score / 50;
+
+            exp = combo / 10;
+
             levelManager.CheckLevelUp(exp);
 
             goldAnimation.OnPlayExpAnimation();

@@ -1,3 +1,4 @@
+using Firebase.Analytics;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -60,6 +61,8 @@ public class LevelManager : MonoBehaviour
 
             playerDataBase.Exp -= ((int)CheckNeedExp() - plusExp);
             if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Exp", playerDataBase.Exp);
+
+            FirebaseAnalytics.LogEvent("Level Up");
         }
         else
         {

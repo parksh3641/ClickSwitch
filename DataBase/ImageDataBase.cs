@@ -10,6 +10,9 @@ public class ImageDataBase : ScriptableObject
     [Title("GameChoice Icon")]
     public Sprite[] iconArray;
 
+    [Title("GameMode Background")]
+    public Sprite[] modeBackgroundArray;
+
     [Title("Country")]
     public Sprite[] countryArray;
 
@@ -25,14 +28,14 @@ public class ImageDataBase : ScriptableObject
     public Sprite[] itemArray;
 
 
-    public Sprite[] GetVCArray()
-    {
-        return vcArray;
-    }
-
     public Sprite[] GetIconArray()
     {
         return iconArray;
+    }
+
+    public Sprite[] GetModeBackgroundArray()
+    {
+        return modeBackgroundArray;
     }
 
     public Sprite GetProfileIconArray(IconType type)
@@ -48,6 +51,11 @@ public class ImageDataBase : ScriptableObject
     public Sprite[] GetShopArray()
     {
         return shopArray;
+    }
+
+    public Sprite[] GetVCArray()
+    {
+        return vcArray;
     }
 
     public Sprite[] GetItemBackgroundArray()

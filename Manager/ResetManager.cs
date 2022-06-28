@@ -1,9 +1,11 @@
 ﻿using PlayFab;
 using PlayFab.ClientModels;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ResetManager : MonoBehaviour
 {
@@ -11,9 +13,13 @@ public class ResetManager : MonoBehaviour
 
     public GameObject gameMenuView;
 
+    public Text nextEventText;
+
+    DateTime serverTime;
 
     [Title("Perfect Mode")]
-    public ModeContent modeContent;
+    public EventModeContent eventModeContent;
+    public GameObject waitForNextEventObj;
 
 
     PlayerDataBase playerDataBase;
@@ -22,7 +28,11 @@ public class ResetManager : MonoBehaviour
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
 
+        nextEventText.text = "";
+
         gameMenuView.SetActive(false);
+
+        waitForNextEventObj.SetActive(false);
     }
 
     public void OpenMenu()
@@ -46,7 +56,7 @@ public class ResetManager : MonoBehaviour
 
     private void SetModeContent(System.DateTime time)
     {
-        modeContent.SetNextEventTime(time);
+        SetNextEventTime(time);
 
         if (playerDataBase.AttendanceDay.Length < 2)
         {
@@ -89,7 +99,8 @@ public class ResetManager : MonoBehaviour
                     break;
             }
 
-            modeContent.Initialize(GameModeType.Perfect, type);
+            eventModeContent.Initialize(type, GameModeType.Perfect);
+            eventModeContent.SetClearInformation(type, GameModeType.Perfect);
 
             playerDataBase.GameMode = ((int)type).ToString();
 
@@ -105,7 +116,8 @@ public class ResetManager : MonoBehaviour
         {
             Debug.Log("아직 하루가 안 지났습니다.");
 
-            modeContent.Initialize(GameModeType.Perfect, GamePlayType.GameChoice1 + int.Parse(playerDataBase.GameMode.ToString()));
+            eventModeContent.Initialize(GamePlayType.GameChoice1 + int.Parse(playerDataBase.GameMode.ToString()), GameModeType.Perfect);
+            eventModeContent.SetClearInformation(GamePlayType.GameChoice1 + int.Parse(playerDataBase.GameMode.ToString()), GameModeType.Perfect);
         }
     }
 
@@ -154,5 +166,24 @@ public class ResetManager : MonoBehaviour
         }
 
         return c;
+    }
+
+    public void SetNextEventTime(DateTime time)
+    {
+        serverTime = time;
+
+        StopAllCoroutines();
+        StartCoroutine(RemainTimerCourtion());
+    }
+
+    IEnumerator RemainTimerCourtion()
+    {
+        serverTime = serverTime.AddSeconds(-1);
+
+        nextEventText.text = " :" + serverTime.ToString("hh:mm:ss");
+
+        yield return new WaitForSeconds(1f);
+
+        StartCoroutine(RemainTimerCourtion());
     }
 }

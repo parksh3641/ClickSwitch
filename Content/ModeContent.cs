@@ -8,42 +8,40 @@ using UnityEngine.UI;
 
 public class ModeContent : MonoBehaviour
 {
-    public GameModeType gameModeType;
     public GamePlayType gamePlayType;
+    public GameModeType gameModeType;
 
     public UnityEvent clickEvent;
 
-    public LocalizationContent levelText;
-    public LocalizationContent titleText;
-    public Text nextEventText;
+    public LocalizationContent playTypeText;
+    public LocalizationContent modeTypeText;
 
     [Title("UI")]
     public Image backgroundImg;
     public Image iconImg;
 
-    public Sprite[] backgroundImgArray;
     Sprite[] iconImgArray;
+    Sprite[] modeBackgroundImgArray;
 
-    DateTime serverTime;
 
     public ImageDataBase imageDataBase;
 
     private void Awake()
     {
-        titleText.name = gamePlayType.ToString();
-        levelText.name = gameModeType.ToString();
-        nextEventText.text = "";
+        playTypeText.name = gamePlayType.ToString();
+        modeTypeText.name = gameModeType.ToString();
 
-        clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().ChoiceGameType((int)gamePlayType); });
+        clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().ChoiceGameType(gamePlayType, gameModeType); });
 
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
 
         iconImgArray = imageDataBase.GetIconArray();
+        modeBackgroundImgArray = imageDataBase.GetModeBackgroundArray();
     }
 
     private void Start()
     {
-        backgroundImg.sprite = backgroundImgArray[(int)gameModeType];
+        backgroundImg.sprite = modeBackgroundImgArray[(int)gameModeType];
         iconImg.sprite = iconImgArray[(int)gamePlayType];
     }
 
@@ -57,27 +55,18 @@ public class ModeContent : MonoBehaviour
         clickEvent.Invoke();
     }
 
-    public void Initialize(GameModeType mode, GamePlayType play)
+    public void Initialize(GamePlayType play, GameModeType mode)
     {
-        backgroundImg.sprite = backgroundImgArray[(int)mode];
+        backgroundImg.sprite = modeBackgroundImgArray[(int)mode];
         iconImg.sprite = iconImgArray[(int)play];
-    }
 
-    public void SetNextEventTime(DateTime time)
-    {
-        serverTime = time;
+        gamePlayType = play;
+        gameModeType = mode;
 
-        StartCoroutine(RemainTimerCourtion());
-    }
+        playTypeText.name = gamePlayType.ToString();
+        modeTypeText.name = gameModeType.ToString();
 
-    IEnumerator RemainTimerCourtion()
-    {
-        serverTime = serverTime.AddSeconds(-1);
-
-        nextEventText.text = serverTime.ToString("hh:mm:ss");
-
-        yield return new WaitForSeconds(1f);
-
-        StartCoroutine(RemainTimerCourtion());
+        playTypeText.ReLoad();
+        modeTypeText.ReLoad();
     }
 }

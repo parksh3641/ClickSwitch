@@ -38,6 +38,7 @@ public class GameStateManager : MonoBehaviour
         [Space]
         [Title("Setting")]
         public GamePlayType gamePlayType = GamePlayType.GameChoice1;
+        public GameModeType gameModeType = GameModeType.Easy;
         public bool music = true;
         public bool sfx = true;
         public bool vibration = true;
@@ -150,6 +151,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.gamePlayType = value;
+            SaveFile();
+        }
+    }
+
+    public GameModeType GameModeType
+    {
+        get
+        {
+            return gameSettings.gameModeType;
+        }
+        set
+        {
+            gameSettings.gameModeType = value;
             SaveFile();
         }
     }

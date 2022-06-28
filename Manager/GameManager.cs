@@ -25,8 +25,10 @@ public class GameManager : MonoBehaviour
     public Transform fingerSnapTransform;
 
 
-    [Title("UI")]
+    [Title("GameStartButton")]
     public LocalizationContent gameModeText;
+    public Image gameModeBackground;
+    Sprite[] modeBackgroundImgArray;
 
     [Title("TimingAction")]
     public NormalContent timingActionContent;
@@ -87,6 +89,8 @@ public class GameManager : MonoBehaviour
     public WarningController warningController;
     public TouchManager touchManager;
 
+    ImageDataBase imageDataBase;
+
 
     public delegate void GameEvent();
     public static event GameEvent eGameStart, eGamePause, eGameEnd;
@@ -96,6 +100,9 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+        modeBackgroundImgArray = imageDataBase.GetModeBackgroundArray();
+
         numberList.Clear();
 
         Time.timeScale = 1;
@@ -168,7 +175,7 @@ public class GameManager : MonoBehaviour
         gameModeText.name = GameStateManager.instance.GamePlayType.ToString();
         gameModeText.ReLoad();
 
-        ChoiceGameType((int)GameStateManager.instance.GamePlayType);
+        ChoiceGameType(GameStateManager.instance.GamePlayType, GameStateManager.instance.GameModeType);
     }
 
     #region Setting
@@ -300,45 +307,14 @@ public class GameManager : MonoBehaviour
         uiManager.OpenMenu();
     }
 
-    public void ChoiceGameType(int number) //모드 선택 창에서 옵션 선택
+    public void ChoiceGameType(GamePlayType type, GameModeType mode) //모드 선택 창에서 옵션 선택
     {
-        switch(number)
-        {
-            case 0:
-                gamePlayType = GamePlayType.GameChoice1;
+        gamePlayType = type;
 
-                break;
-            case 1:
-                gamePlayType = GamePlayType.GameChoice2;
-
-                break;
-            case 2:
-                gamePlayType = GamePlayType.GameChoice3;
-
-                break;
-            case 3:
-                gamePlayType = GamePlayType.GameChoice4;
-
-                break;
-            case 4:
-                gamePlayType = GamePlayType.GameChoice5;
-
-                break;
-            case 5:
-                gamePlayType = GamePlayType.GameChoice6;
-
-                break;
-            case 6:
-                gamePlayType = GamePlayType.GameChoice7;
-
-                break;
-            case 7:
-                gamePlayType = GamePlayType.GameChoice8;
-
-                break;
-        }
+        gameModeBackground.sprite = modeBackgroundImgArray[(int)mode];
 
         GameStateManager.instance.GamePlayType = gamePlayType;
+        GameStateManager.instance.GameModeType = mode;
 
         gameModeText.name = gamePlayType.ToString();
         gameModeText.ReLoad();
