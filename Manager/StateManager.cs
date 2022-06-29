@@ -10,6 +10,7 @@ public class StateManager : MonoBehaviour
     public ItemManager itemManager;
     public IconManager iconManager;
     public LevelManager levelManager;
+    public TrophyManager trophyManager;
 
     public delegate void PurchasEvent();
     public static event PurchasEvent eChangeNumber;
@@ -25,6 +26,7 @@ public class StateManager : MonoBehaviour
         itemManager.Initialize();
         iconManager.Initialize();
         levelManager.Initialize();
+        trophyManager.Initialize();
     }
 
     public void ChangeNumber()

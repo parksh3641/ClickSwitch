@@ -88,6 +88,11 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private bool removeAd = false;
 
+    [Space]
+    [Title("Trophy")]
+    [SerializeField]
+    private List<TrophyData> trophyDataList = new List<TrophyData>();
+
     [Title("Achievement")]
     [ShowInInspector]
     public List<AchievementData> achievementDataList = new List<AchievementData>();
@@ -131,6 +136,8 @@ public class PlayerDataBase : ScriptableObject
         removeAd = false;
 
         achievementDataList.Clear();
+
+        trophyDataList.Clear();
     }
 
     public int TotalScore
@@ -462,5 +469,35 @@ public class PlayerDataBase : ScriptableObject
 
         return check;
 
+    }
+
+    public bool GetTrophyIsAcive(GamePlayType type)
+    {
+        bool check = false;
+
+        for (int i = 0; i < trophyDataList.Count; i++)
+        {
+            if (trophyDataList[i].gamePlayType.Equals(type))
+            {
+                check = trophyDataList[i].isActive;
+            }
+        }
+
+        return check;
+    }
+
+    public TrophyData GetTrophyData(GamePlayType type)
+    {
+        TrophyData trophyData = new TrophyData();
+
+        for(int i = 0; i < trophyDataList.Count; i ++)
+        {
+            if(trophyDataList[i].gamePlayType.Equals(type))
+            {
+                trophyData = trophyDataList[i];
+            }
+        }
+
+        return trophyData;
     }
 }

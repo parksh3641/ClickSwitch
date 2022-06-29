@@ -48,6 +48,12 @@ public class GameStateManager : MonoBehaviour
         [Title("Item")]
         public bool clock = false;
         public bool shield = false;
+
+        [Space]
+        [Title("Event")]
+        public int tryCount = 1;
+        public bool fail = false;
+        public bool eventWatchAd = false;
     }
 
     #region Data
@@ -244,6 +250,45 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.shield = value;
+            SaveFile();
+        }
+    }
+
+    public int TryCount
+    {
+        get
+        {
+            return gameSettings.tryCount;
+        }
+        set
+        {
+            gameSettings.tryCount = value;
+            SaveFile();
+        }
+    }
+
+    public bool EventWatchAd
+    {
+        get
+        {
+            return gameSettings.eventWatchAd;
+        }
+        set
+        {
+            gameSettings.eventWatchAd = value;
+            SaveFile();
+        }
+    }
+
+    public bool Fail
+    {
+        get
+        {
+            return gameSettings.fail;
+        }
+        set
+        {
+            gameSettings.fail = value;
             SaveFile();
         }
     }

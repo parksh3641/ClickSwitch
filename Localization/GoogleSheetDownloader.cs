@@ -164,6 +164,25 @@ public class GoogleSheetDownloader : MonoBehaviour
                 case "AddExp":
                     valueDataBase.AddExp = value;
                     break;
+                case "GameChoice1Perfect":
+                    valueDataBase.GameChoice1Perfect = value;
+                    break;
+                case "GameChoice2Perfect":
+                    valueDataBase.GameChoice2Perfect = value;
+                    break;
+                case "GameChoice3Perfect":
+                    valueDataBase.GameChoice3Perfect = value;
+                    break;
+                case "GameChoice4Perfect":
+                    valueDataBase.GameChoice4Perfect = value;
+                    break;
+                case "GameChoice5Perfect":
+                    valueDataBase.GameChoice5Perfect = value;
+                    break;
+                case "GameChoice6Perfect":
+                    valueDataBase.GameChoice6Perfect = value;
+                    break;
+
             }
         }
 

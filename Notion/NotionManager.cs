@@ -141,5 +141,6 @@ public enum NotionType
     NetworkConnectNotion,
     GameModeRockNotion,
     SuccessBuyItem,
-    FailBuyItem
+    FailBuyItem,
+    FailEventTry
 }

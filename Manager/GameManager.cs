@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public GamePlayType gamePlayType;
     public GameModeType gameModeType;
 
+    public GameObject eventWatchAdView;
 
     [Title("Prefab")]
     public NormalContent normalContent;
@@ -102,6 +103,8 @@ public class GameManager : MonoBehaviour
     {
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
         modeBackgroundImgArray = imageDataBase.GetModeBackgroundArray();
+
+        eventWatchAdView.SetActive(false);
 
         numberList.Clear();
 
@@ -334,6 +337,25 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        if(GameStateManager.instance.GameModeType == GameModeType.Perfect)
+        {
+            if(GameStateManager.instance.TryCount <= 0)
+            {
+                if (!GameStateManager.instance.EventWatchAd)
+                {
+                    eventWatchAdView.SetActive(true);
+                    return;
+                }
+                else
+                {
+                    NotionManager.instance.UseNotion(NotionType.FailEventTry);
+                    return;
+                }
+            }
+        }
+
+        GameStateManager.instance.Fail = false;
+
         uiManager.OpenGamePlayUI(gamePlayType);
 
         FirebaseAnalytics.LogEvent(gamePlayType.ToString());
@@ -456,6 +478,8 @@ public class GameManager : MonoBehaviour
                 action(false);
 
                 MinusScore(5);
+
+                if (!GameStateManager.instance.Fail) GameStateManager.instance.Fail = true;
             }
         }
     }
@@ -489,6 +513,8 @@ public class GameManager : MonoBehaviour
                 countIndex = 0;
 
                 MinusScore(5);
+
+                if (!GameStateManager.instance.Fail) GameStateManager.instance.Fail = true;
             }
         }
     }
@@ -554,6 +580,8 @@ public class GameManager : MonoBehaviour
                     filpCardIndex = -1;
 
                     MinusScore(5);
+
+                    if(!GameStateManager.instance.Fail) GameStateManager.instance.Fail = true;
                 }
             }
         }
@@ -605,6 +633,8 @@ public class GameManager : MonoBehaviour
                 action?.Invoke(false);
 
                 MinusScore(5);
+
+                if (!GameStateManager.instance.Fail) GameStateManager.instance.Fail = true;
             }
         }
     }

@@ -66,6 +66,9 @@ public class ResetManager : MonoBehaviour
 
             if (PlayfabManager.instance.isActive)
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceDay", int.Parse(playerDataBase.AttendanceDay));
+
+            GameStateManager.instance.TryCount = 1;
+            GameStateManager.instance.EventWatchAd = false;
         }
 
         if (ComparisonDate(playerDataBase.AttendanceDay, time))
@@ -111,6 +114,9 @@ public class ResetManager : MonoBehaviour
 
             if (PlayfabManager.instance.isActive)
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceDay", int.Parse(playerDataBase.AttendanceDay));
+
+            GameStateManager.instance.TryCount = 1;
+            GameStateManager.instance.EventWatchAd = false;
         }
         else
         {

@@ -54,6 +54,10 @@ public class UIManager : MonoBehaviour, IGameEvent
     public Text getExpText;
 
     [Space]
+    [Title("Trophy")]
+    public GameObject trophyView;
+
+    [Space]
     [Title("Ad")]
     public GameObject watchAdButton;
     public GameObject watchAdLock;
@@ -115,6 +119,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     public NewsManager newsManager;
     public LevelManager levelManager;
     public ResetManager resetManager;
+    public TrophyManager trophyManager;
 
     [Title("Animation")]
     public CoinAnimation goldAnimation;
@@ -165,6 +170,7 @@ public class UIManager : MonoBehaviour, IGameEvent
         cancleWindowUI.SetActive(false);
         cancleUI.SetActive(false);
         networkView.SetActive(false);
+        trophyView.SetActive(false);
     }
 
     private void Start()
@@ -236,6 +242,10 @@ public class UIManager : MonoBehaviour, IGameEvent
                 else if (newsManager.newsView.activeInHierarchy)
                 {
                     newsManager.OpenNews();
+                }
+                else if (trophyManager.trophyView.activeInHierarchy)
+                {
+                    trophyManager.OpenTrophy();
                 }
                 else
                 {
@@ -500,6 +510,11 @@ public class UIManager : MonoBehaviour, IGameEvent
         FirebaseAnalytics.LogEvent("OpenAchievement");
     }
 
+    public void OpenTrophy()
+    {
+        trophyManager.OpenTrophy();
+    }
+
     public void OnLoginSuccess()
     {
         loadingUI.FadeIn();
@@ -564,7 +579,31 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         Debug.Log("Game End");
 
-        if(!NetworkConnect.instance.CheckConnectInternet())
+        if(GameStateManager.instance.GameModeType == GameModeType.Perfect)
+        {
+            if(GameStateManager.instance.TryCount > 0)
+            {
+                GameStateManager.instance.TryCount -= 1;
+            }
+
+            float clearScore = 0;
+            bool fail = false;
+
+            clearScore = ValueManager.instance.GetPerfectClearScore(GameStateManager.instance.GamePlayType);
+            fail = GameStateManager.instance.Fail;
+
+            if(score > clearScore && !fail)
+            {
+                Debug.Log("퍼펙트 모드 성공!");
+
+                if(!playerDataBase.GetTrophyIsAcive(GameStateManager.instance.GamePlayType))
+                {
+                    trophyView.SetActive(true);
+                }
+            }
+        }
+
+        if (!NetworkConnect.instance.CheckConnectInternet())
         {
             networkView.SetActive(true);
             return;

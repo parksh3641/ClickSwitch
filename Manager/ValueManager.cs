@@ -69,4 +69,38 @@ public class ValueManager : MonoBehaviour
     {
         return valueDataBase.AddExp;
     }
+
+    public float GetPerfectClearScore(GamePlayType type)
+    {
+        float clearScore = 0;
+
+        switch (type)
+        {
+            case GamePlayType.GameChoice1:
+                clearScore = valueDataBase.GameChoice1Perfect;
+                break;
+            case GamePlayType.GameChoice2:
+                clearScore = valueDataBase.GameChoice2Perfect;
+                break;
+            case GamePlayType.GameChoice3:
+                clearScore = valueDataBase.GameChoice3Perfect;
+                break;
+            case GamePlayType.GameChoice4:
+                clearScore = valueDataBase.GameChoice4Perfect;
+                break;
+            case GamePlayType.GameChoice5:
+                clearScore = valueDataBase.GameChoice5Perfect;
+                break;
+            case GamePlayType.GameChoice6:
+                clearScore = valueDataBase.GameChoice6Perfect;
+                break;
+            case GamePlayType.GameChoice7:
+                break;
+            case GamePlayType.GameChoice8:
+                break;
+        }
+
+        return clearScore;
+    }
+
 }
