@@ -59,7 +59,7 @@ public class NewsContent : MonoBehaviour
                 break;
         }
 
-        titleText.text = title + "(" + dateText + ")";
+        titleText.text = title + " (" + dateText + ")";
     }
 
     public void OpenReadMore()

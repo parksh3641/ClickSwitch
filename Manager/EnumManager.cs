@@ -76,7 +76,9 @@ public enum GameSfxType
 {
     Success,
     Shield,
-    LevelUp
+    LevelUp,
+    Fail,
+    Click
 }
 
 public enum ShopType
@@ -96,4 +98,10 @@ public enum IconType
     Default_0,
     Default_1,
     Default_2
+}
+
+public enum AdType
+{
+    CoinX2,
+    TryCount
 }

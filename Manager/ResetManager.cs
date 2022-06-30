@@ -62,12 +62,12 @@ public class ResetManager : MonoBehaviour
         {
             Debug.Log("처음 로그인");
 
-            playerDataBase.AttendanceDay = System.DateTime.Now.AddDays(1).ToString("yyyyMMdd");
+            playerDataBase.AttendanceDay = System.DateTime.Now.ToString("yyyyMMdd");
 
             if (PlayfabManager.instance.isActive)
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceDay", int.Parse(playerDataBase.AttendanceDay));
 
-            GameStateManager.instance.TryCount = 1;
+            GameStateManager.instance.TryCount = 2;
             GameStateManager.instance.EventWatchAd = false;
         }
 
@@ -115,12 +115,19 @@ public class ResetManager : MonoBehaviour
             if (PlayfabManager.instance.isActive)
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceDay", int.Parse(playerDataBase.AttendanceDay));
 
-            GameStateManager.instance.TryCount = 1;
+            GameStateManager.instance.TryCount = 2;
             GameStateManager.instance.EventWatchAd = false;
         }
         else
         {
             Debug.Log("아직 하루가 안 지났습니다.");
+
+            if(playerDataBase.GameMode == "")
+            {
+                Debug.Log("강제 초기화");
+                playerDataBase.AttendanceDay = "";
+                OnCheckAttendanceDay();
+            }
 
             eventModeContent.Initialize(GamePlayType.GameChoice1 + int.Parse(playerDataBase.GameMode.ToString()), GameModeType.Perfect);
             eventModeContent.SetClearInformation(GamePlayType.GameChoice1 + int.Parse(playerDataBase.GameMode.ToString()), GameModeType.Perfect);
@@ -186,7 +193,7 @@ public class ResetManager : MonoBehaviour
     {
         serverTime = serverTime.AddSeconds(-1);
 
-        nextEventText.text = " :" + serverTime.ToString("hh:mm:ss");
+        nextEventText.text = " " + serverTime.ToString("hh:mm:ss");
 
         yield return new WaitForSeconds(1f);
 

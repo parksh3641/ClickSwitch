@@ -629,14 +629,14 @@ public class PlayfabManager : MonoBehaviour
         var request = new GetUserDataRequest() { PlayFabId = GameStateManager.instance.PlayfabId };
         PlayFabClientAPI.GetUserData(request, (result) =>
         {
-            AchievementData content = new AchievementData();
+            TrophyData trophyData = new TrophyData();
 
             foreach (var eachData in result.Data)
             {
                 string key = eachData.Key;
 
-                content = JsonUtility.FromJson<AchievementData>(eachData.Value.Value);
-                playerDataBase.OnSetAchievementContent(content);
+                trophyData = JsonUtility.FromJson<TrophyData>(eachData.Value.Value);
+                playerDataBase.SetTrophyData(trophyData);
             }
 
         }, DisplayPlayfabError);

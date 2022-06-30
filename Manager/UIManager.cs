@@ -27,6 +27,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     public Text crystalText;
 
     public GameObject gamePlayView;
+    public Image gamePlayBackground;
     public GameObject[] gamePlayUI;
 
     [Space]
@@ -56,6 +57,8 @@ public class UIManager : MonoBehaviour, IGameEvent
     [Space]
     [Title("Trophy")]
     public GameObject trophyView;
+    public Image trophyIcon;
+    Sprite[] iconArray;
 
     [Space]
     [Title("Ad")]
@@ -114,7 +117,6 @@ public class UIManager : MonoBehaviour, IGameEvent
     public NickNameManager nickNameManager;
     public SoundManager soundManager;
     public ShopManager shopManager;
-    public AchievementManager achievementManager;
     public IconManager iconManager;
     public NewsManager newsManager;
     public LevelManager levelManager;
@@ -129,6 +131,8 @@ public class UIManager : MonoBehaviour, IGameEvent
     public PlayerDataBase playerDataBase;
     ImageDataBase imageDataBase;
 
+    private Dictionary<string, string> playerData = new Dictionary<string, string>();
+
     WaitForSeconds waitForSeconds = new WaitForSeconds(1);
 
 
@@ -136,6 +140,8 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+
+        iconArray = imageDataBase.GetIconArray();
 
         updateUI.SetActive(false);
 
@@ -377,6 +383,16 @@ public class UIManager : MonoBehaviour, IGameEvent
         infoBestScoreText.gameObject.SetActive(true);
         infoBestComboText.gameObject.SetActive(true);
 
+        gamePlayBackground.color = new Color(1, 1, 1);
+
+        if(GameStateManager.instance.GameModeType == GameModeType.Perfect)
+        {
+            gamePlayBackground.color = new Color(1, 1, 200 / 255f);
+        }
+
+        bestScore = 0;
+        bestCombo = 0;
+
         switch (type)
         {
             case GamePlayType.GameChoice1:
@@ -407,9 +423,16 @@ public class UIManager : MonoBehaviour, IGameEvent
                 break;
             case GamePlayType.GameChoice8:
                 break;
+            default:
+                bestScore = 0;
+                bestCombo = 0;
+                break;
         }
 
         comboManager.SetBestCombo(bestCombo);
+
+        infoBestScoreText.OnReset();
+        infoBestComboText.OnReset();
 
         infoBestScoreText.SetNumber(bestScore);
         infoBestComboText.SetNumber(bestCombo);
@@ -505,8 +528,6 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void OpenAchievement()
     {
-        achievementManager.OpenAchievement();
-
         FirebaseAnalytics.LogEvent("OpenAchievement");
     }
 
@@ -599,6 +620,37 @@ public class UIManager : MonoBehaviour, IGameEvent
                 if(!playerDataBase.GetTrophyIsAcive(GameStateManager.instance.GamePlayType))
                 {
                     trophyView.SetActive(true);
+
+                    trophyIcon.sprite = iconArray[(int)GameStateManager.instance.GamePlayType];
+
+                    TrophyData trophyContent = new TrophyData();
+
+                    trophyContent.gamePlayType = GameStateManager.instance.GamePlayType;
+                    trophyContent.isActive = true;
+                    trophyContent.number = 1;
+                    trophyContent.date = DateTime.Today.ToString("yyyy-MM-dd");
+
+                    playerData.Clear();
+                    playerData.Add(GameStateManager.instance.GamePlayType.ToString(), JsonUtility.ToJson(trophyContent));
+
+                    playerDataBase.SetTrophyData(trophyContent);
+
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.SetPlayerData(playerData);
+                }
+                else
+                {
+                    TrophyData trophyContent = new TrophyData();
+
+                    trophyContent = playerDataBase.GetTrophyData(GameStateManager.instance.GamePlayType);
+
+                    trophyContent.number += 1;
+
+                    playerData.Clear();
+                    playerData.Add(GameStateManager.instance.GamePlayType.ToString(), JsonUtility.ToJson(trophyContent));
+
+                    playerDataBase.SetTrophyData(trophyContent);
+
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.SetPlayerData(playerData);
                 }
             }
         }
@@ -744,16 +796,20 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         money = (int)(score / 10);
 
-        if(money > 0)
+        int level = playerDataBase.Level;
+
+        if (level > 30) level = 30;
+
+        if (money > 0)
         {
             if (playerDataBase.RemoveAd)
             {
                 doubleCoinObj.SetActive(true);
                 watchAdButton.SetActive(false);
 
-                plus = 1.0f + (playerDataBase.Level / 100.0f);
+                plus = 1.0f + (level / 100.0f);
 
-                plusGoldText.text = "+ " + (100 + playerDataBase.Level) + "%";
+                plusGoldText.text = "+ " + (100 + level) + "%";
 
                 if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, (int)(money + (money * plus)));
 
@@ -766,11 +822,16 @@ public class UIManager : MonoBehaviour, IGameEvent
 
                 if(playerDataBase.Level > 0)
                 {
+                    if(playerDataBase.Level > 30)
+                    {
+                        playerDataBase.Level = 30;
+                    }
+
                     doubleCoinObj.SetActive(true);
 
-                    plus = playerDataBase.Level / 100.0f;
+                    plus = level / 100.0f;
 
-                    plusGoldText.text = "+ " + playerDataBase.Level + "%";
+                    plusGoldText.text = "+ " + level + "%";
                 }
 
                 if (!GameStateManager.instance.WatchAd)
@@ -796,18 +857,15 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         exp = 0;
 
-        if(exp > 0)
-        {
-            exp += 100;
+        exp += 100;
 
-            exp = (int)score / 50;
+        exp += ((int)score / 100);
 
-            exp = combo / 10;
+        exp += (combo / 20);
 
-            levelManager.CheckLevelUp(exp);
+        levelManager.CheckLevelUp(exp);
 
-            goldAnimation.OnPlayExpAnimation();
-        }
+        goldAnimation.OnPlayExpAnimation();
 
 
 
@@ -816,6 +874,11 @@ public class UIManager : MonoBehaviour, IGameEvent
         getExpText.text = exp.ToString();
 
         GameReset();
+    }
+
+    public void CloseTrophyView()
+    {
+        trophyView.SetActive(false);
     }
 
     void SetWatchAd(bool check)
@@ -1041,7 +1104,16 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         scoreNotion.gameObject.SetActive(false);
         scoreNotion.txt.color = new Color(1, 0, 0);
-        scoreNotion.txt.text = "-" + index.ToString();
+
+        if(index == 0)
+        {
+            scoreNotion.txt.text = "";
+        }
+        else
+        {
+            scoreNotion.txt.text = "-" + index.ToString();
+        }
+
         scoreNotion.gameObject.SetActive(true);
 
         comboManager.OnStopCombo();

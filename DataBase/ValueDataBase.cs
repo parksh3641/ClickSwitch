@@ -256,7 +256,7 @@ public class ValueDataBase : ScriptableObject
         }
         set
         {
-            gameChoice5Perfect = value;
+            gameChoice4Perfect = value;
         }
     }
 
@@ -268,7 +268,7 @@ public class ValueDataBase : ScriptableObject
         }
         set
         {
-            gameChoice6Perfect = value;
+            gameChoice5Perfect = value;
         }
     }
 
@@ -280,7 +280,7 @@ public class ValueDataBase : ScriptableObject
         }
         set
         {
-            gameChoice1Perfect = value;
+            gameChoice6Perfect = value;
         }
     }
 }

@@ -59,4 +59,11 @@ public class LocalizationContent : MonoBehaviour
     {
         text.text += " : \n" + value;
     }
+
+    public void OnReset()
+    {
+        setValue = false;
+
+        if (name.Length > 0) text.text = LocalizationManager.instance.GetString(name);
+    }
 }

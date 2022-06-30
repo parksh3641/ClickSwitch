@@ -93,9 +93,6 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private List<TrophyData> trophyDataList = new List<TrophyData>();
 
-    [Title("Achievement")]
-    [ShowInInspector]
-    public List<AchievementData> achievementDataList = new List<AchievementData>();
 
     public void Initialize()
     {
@@ -134,8 +131,6 @@ public class PlayerDataBase : ScriptableObject
         gameMode = "";
 
         removeAd = false;
-
-        achievementDataList.Clear();
 
         trophyDataList.Clear();
     }
@@ -445,30 +440,9 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
-
-    public void OnSetAchievementContent(AchievementData content)
+    public void SetTrophyData(TrophyData data)
     {
-        achievementDataList.Add(content);
-    }
-
-    public bool GetPerfectMode(GamePlayType type)
-    {
-        int index = 0;
-        bool check = false;
-
-        for(int i = 0; i < achievementDataList.Count; i ++)
-        {
-            if(achievementDataList[i].achievementType.Equals(type))
-            {
-                index = achievementDataList[i].achievementList[0];        
-            }
-        }
-
-        if (index == 0) check = false;
-        else check = true;
-
-        return check;
-
+        trophyDataList.Add(data);
     }
 
     public bool GetTrophyIsAcive(GamePlayType type)

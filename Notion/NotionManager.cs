@@ -142,5 +142,6 @@ public enum NotionType
     GameModeRockNotion,
     SuccessBuyItem,
     FailBuyItem,
-    FailEventTry
+    FailEventTry,
+    AddTryCount
 }

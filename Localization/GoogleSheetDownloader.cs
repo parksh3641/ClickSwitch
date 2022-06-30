@@ -102,7 +102,7 @@ public class GoogleSheetDownloader : MonoBehaviour
             content.english = column[2].Replace('$', '\n');
             content.japanese = column[3].Replace('$', '\n');
             content.chinese = column[4].Replace('$', '\n');
-            content.indonesian = column[5].Replace('$', '\n');
+            content.indian = column[5].Replace('$', '\n');
             content.portuguese = column[6].Replace('$', '\n');
             content.russian = column[7].Replace('$', '\n');
             content.german = column[8].Replace('$', '\n');

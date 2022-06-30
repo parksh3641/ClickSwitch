@@ -28,7 +28,7 @@ public class LocalizationData
     public string english = "";
     public string japanese = "";
     public string chinese = "";
-    public string indonesian = "";
+    public string indian = "";
     public string portuguese = "";
     public string russian = "";
     public string german = "";

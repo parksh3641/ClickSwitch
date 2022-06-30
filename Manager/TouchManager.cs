@@ -41,16 +41,12 @@ public class TouchManager : MonoBehaviour
                 float swipeValue = Input.mousePosition.x - startPos.x;
                 if (swipeValue > 0)
                 {
-                    Debug.Log("오른쪽");
-
                     direction = "Right";
 
                     firstSwipe = false;
                 }
                 else if (swipeValue < 0)
                 {
-                    Debug.Log("왼쪽");
-
                     direction = "Left";
 
                     firstSwipe = false;
@@ -64,16 +60,12 @@ public class TouchManager : MonoBehaviour
                 float swipeValue = Input.mousePosition.y - startPos.y;
                 if (swipeValue > 0)
                 {
-                    Debug.Log("위쪽");
-
                     direction = "Up";
 
                     firstSwipe = false;
                 }
                 else if (swipeValue < 0)
                 {
-                    Debug.Log("아래쪽");
-
                     direction = "Down";
 
                     firstSwipe = false;

@@ -149,6 +149,9 @@ public class NormalContent : MonoBehaviour, IContentEvent
     public void MoveFingerSnap(int number)
     {
         moveDirection = number;
+
+        clickEvent.Invoke();
+
         StartCoroutine(MoveCoroution());
     }
 

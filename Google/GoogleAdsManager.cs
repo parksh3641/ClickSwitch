@@ -9,7 +9,10 @@ using System.Collections;
 
 public class GoogleAdsManager : MonoBehaviour
 {
+    public AdType adType = AdType.CoinX2;
+
     public UIManager uIManager;
+    public GameManager gameManager;
 
     string adUnitId;
 
@@ -46,9 +49,12 @@ public class GoogleAdsManager : MonoBehaviour
         this.rewardedAd.LoadAd(request);
     }
 
-    public void Show()
+    public void Show(int number)
     {
         if (!GameStateManager.instance.WatchAd) return;
+
+        adType = AdType.CoinX2;
+        adType += number;
 
         StartCoroutine(ShowRewardAd());
     }
@@ -123,6 +129,14 @@ public class GoogleAdsManager : MonoBehaviour
 
     public void HandleUserEarnedReward(object sender, Reward args)
     {
-        uIManager.SuccessWatchAd();
+        switch (adType)
+        {
+            case AdType.CoinX2:
+                uIManager.SuccessWatchAd();
+                break;
+            case AdType.TryCount:
+                gameManager.SuccessWatchAd();
+                break;
+        }
     }
 }

@@ -63,7 +63,7 @@ public class LocalizationManager : MonoBehaviour
                         str = item.chinese;
                         break;
                     case LanguageType.Indian:
-                        str = item.indonesian;
+                        str = item.indian;
                         break;
                     case LanguageType.Portuguese:
                         str = item.portuguese;

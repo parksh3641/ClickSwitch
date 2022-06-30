@@ -29,14 +29,16 @@ public class GameManager : MonoBehaviour
     [Title("GameStartButton")]
     public LocalizationContent gameModeText;
     public Image gameModeBackground;
+    public GameObject tryCountView;
+    public Text tryCountText;
     Sprite[] modeBackgroundImgArray;
+
 
     [Title("TimingAction")]
     public NormalContent timingActionContent;
     public Image timingActionFillmount;
     public GameObject timingActionCheckRange;
 
-    [Title("FingerSnap")]
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(1);
     WaitForSeconds waitForHalfSeconds = new WaitForSeconds(0.5f);
@@ -284,8 +286,6 @@ public class GameManager : MonoBehaviour
     {
         fingerSnapIndex = Random.Range(0, 4);
 
-        Debug.Log("방향 : " + fingerSnapIndex);
-
         fingerSnapList[nowIndex].transform.localPosition = Vector3.zero;
         fingerSnapList[nowIndex].FingerSnapReset(fingerSnapIndex);
         fingerSnapList[nowIndex].gameObject.SetActive(true);
@@ -323,6 +323,14 @@ public class GameManager : MonoBehaviour
         gameModeText.ReLoad();
 
         uiManager.CloseMenu();
+
+        tryCountView.SetActive(false);
+
+        if (mode == GameModeType.Perfect)
+        {
+            tryCountView.SetActive(true);
+            tryCountText.text = GameStateManager.instance.TryCount.ToString();
+        }
     }
 
     #endregion
@@ -447,7 +455,8 @@ public class GameManager : MonoBehaviour
     {
         if(nowIndex + 1 == index)
         {
-            Debug.Log("Success");
+            soundManager.PlaySFX(GameSfxType.Click);
+
             action(true);
 
             PlusScore(10);
@@ -455,7 +464,6 @@ public class GameManager : MonoBehaviour
 
             if(nowIndex >= countIndex - 1)
             {
-                Debug.Log("Reset");
                 CreateUnDuplicateRandom();
             }
         }
@@ -463,15 +471,13 @@ public class GameManager : MonoBehaviour
         {
             if(GameStateManager.instance.Shield)
             {
-                Debug.Log("Defense Shield");
-
                 GameStateManager.instance.Shield = false;
                 soundManager.PlaySFX(GameSfxType.Shield);
                 uiManager.UsedItem(ItemType.Shield);
             }
             else
             {
-                Debug.Log("Failure");
+                soundManager.PlaySFX(GameSfxType.Fail);
 
                 warningController.Hit();
 
@@ -484,28 +490,31 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    bool mole = false;
+
     public void CheckMole(int index, System.Action<bool> action)
     {
         if(index == moleIndex)
         {
-            Debug.Log("Success");
+            soundManager.PlaySFX(GameSfxType.Click);
+
             action(true);
 
             PlusScore(20);
+
+            mole = true;
         }
         else
         {
             if (GameStateManager.instance.Shield)
             {
-                Debug.Log("Defense Shield");
-
                 GameStateManager.instance.Shield = false;
                 soundManager.PlaySFX(GameSfxType.Shield);
                 uiManager.UsedItem(ItemType.Shield);
             }
             else
             {
-                Debug.Log("Failure");
+                soundManager.PlaySFX(GameSfxType.Fail);
 
                 warningController.Hit();
 
@@ -537,7 +546,8 @@ public class GameManager : MonoBehaviour
         {
             if(filpCardIndex == index)
             {
-                Debug.Log("Success");
+                soundManager.PlaySFX(GameSfxType.Click);
+
                 action?.Invoke(1);
                 saveAction?.Invoke(1);
 
@@ -555,22 +565,20 @@ public class GameManager : MonoBehaviour
                     soundManager.PlaySFX(GameSfxType.Success);
                     CreateFilpCardRandom();
 
-                    StartCoroutine("FilpCardCorution");
+                    StartCoroutine("FilpCardCoroution");
                 }
             }
             else
             {
                 if (GameStateManager.instance.Shield)
                 {
-                    Debug.Log("Defense Shield");
-
                     GameStateManager.instance.Shield = false;
                     soundManager.PlaySFX(GameSfxType.Shield);
                     uiManager.UsedItem(ItemType.Shield);
                 }
                 else
                 {
-                    Debug.Log("Failure");
+                    soundManager.PlaySFX(GameSfxType.Fail);
 
                     warningController.Hit();
 
@@ -591,7 +599,8 @@ public class GameManager : MonoBehaviour
     {
         if (buttonActionIndex.Equals(index))
         {
-            Debug.Log("Success");
+            soundManager.PlaySFX(GameSfxType.Click);
+
             action?.Invoke(true);
 
             PlusScore(10);
@@ -618,15 +627,13 @@ public class GameManager : MonoBehaviour
         {
             if (GameStateManager.instance.Shield)
             {
-                Debug.Log("Defense Shield");
-
                 GameStateManager.instance.Shield = false;
                 soundManager.PlaySFX(GameSfxType.Shield);
                 uiManager.UsedItem(ItemType.Shield);
             }
             else
             {
-                Debug.Log("Failure");
+                soundManager.PlaySFX(GameSfxType.Fail);
 
                 warningController.Hit();
 
@@ -656,6 +663,8 @@ public class GameManager : MonoBehaviour
     {
         if(timingActionFillmount.fillAmount >= timingActionCheckRange_1 && timingActionFillmount.fillAmount <= timingActionCheckRange_2)
         {
+            soundManager.PlaySFX(GameSfxType.Click);
+
             if (timingActionFillmount.fillAmount >= timingActionCheckRange_1 + 0.1f && timingActionFillmount.fillAmount <= timingActionCheckRange_2 - 0.05f)
             {
                 Debug.Log("Perfect Success");
@@ -688,6 +697,8 @@ public class GameManager : MonoBehaviour
             {
                 Debug.Log("Failure");
 
+                soundManager.PlaySFX(GameSfxType.Fail);
+
                 warningController.Hit();
 
                 MinusScore(5);
@@ -701,7 +712,7 @@ public class GameManager : MonoBehaviour
     {
         if(check)
         {
-            Debug.Log("Success");
+            soundManager.PlaySFX(GameSfxType.Click);
 
             PlusScore(10);
 
@@ -720,15 +731,13 @@ public class GameManager : MonoBehaviour
         {
             if (GameStateManager.instance.Shield)
             {
-                Debug.Log("Defense Shield");
-
                 GameStateManager.instance.Shield = false;
                 soundManager.PlaySFX(GameSfxType.Shield);
                 uiManager.UsedItem(ItemType.Shield);
             }
             else
             {
-                Debug.Log("Failure");
+                soundManager.PlaySFX(GameSfxType.Fail);
 
                 warningController.Hit();
 
@@ -797,7 +806,25 @@ public class GameManager : MonoBehaviour
         GameStateManager.instance.Clock = false;
         GameStateManager.instance.Shield = false;
 
+        tryCountText.text = GameStateManager.instance.TryCount.ToString();
+
         StopAllCoroutines();
+    }
+
+    public void SuccessWatchAd()
+    {
+        NotionManager.instance.UseNotion(NotionType.AddTryCount);
+
+        GameStateManager.instance.EventWatchAd = true;
+        GameStateManager.instance.TryCount += 1;
+        tryCountText.text = GameStateManager.instance.TryCount.ToString();
+
+        eventWatchAdView.SetActive(false);
+    }
+
+    public void CloseEventWatchAd()
+    {
+        eventWatchAdView.SetActive(false);
     }
 
     #endregion
@@ -807,18 +834,26 @@ public class GameManager : MonoBehaviour
     {
         ShuffleList(moleCatchContentList);
 
-        if(countIndex <= 10)
+        if(countIndex <= 5)
         {
             Debug.Log("두더지 잡기 속도 증가 : " + countIndex);
-            waitForMoleCatchSeconds = new WaitForSeconds(ValueManager.instance.GetMoleCatchTime() - (0.025f * countIndex));
-            waitForMoleNextSeconds = new WaitForSeconds(ValueManager.instance.GetMoleNextTime() - (0.05f * countIndex));
+            waitForMoleCatchSeconds = new WaitForSeconds(ValueManager.instance.GetMoleCatchTime() - (0.05f * countIndex));
+            waitForMoleNextSeconds = new WaitForSeconds(ValueManager.instance.GetMoleNextTime() - (0.1f * countIndex));
         }
+
+        mole = false;
 
         moleIndex = 0;
 
         moleCatchContentList[0].SetMole();
 
         yield return waitForMoleCatchSeconds;
+
+        if(!mole)
+        {
+            countIndex = 0;
+            MinusScore(0);
+        }
 
         moleIndex = -1;
 

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class TrophyData
 {
     public GamePlayType gamePlayType = GamePlayType.GameChoice1;
@@ -37,8 +38,6 @@ public class TrophyManager : MonoBehaviour
             monster.transform.rotation = Quaternion.identity;
             monster.transform.localScale = Vector3.one;
 
-            monster.Initialize(GamePlayType.GameChoice1 + i);
-
             trophyContentList.Add(monster);
         }
     }
@@ -48,10 +47,20 @@ public class TrophyManager : MonoBehaviour
         if (!trophyView.activeSelf)
         {
             trophyView.SetActive(true);
+
+            CheckTrophy();
         }
         else
         {
             trophyView.SetActive(false);
+        }
+    }
+
+    void CheckTrophy()
+    {
+        for(int i = 0; i < trophyContentList.Count; i ++)
+        {
+            trophyContentList[i].Initialize(GamePlayType.GameChoice1 + i);
         }
     }
 }
