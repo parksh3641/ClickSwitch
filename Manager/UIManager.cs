@@ -27,7 +27,6 @@ public class UIManager : MonoBehaviour, IGameEvent
     public Text crystalText;
 
     public GameObject gamePlayView;
-    public Image gamePlayBackground;
     public GameObject[] gamePlayUI;
 
     [Space]
@@ -227,11 +226,18 @@ public class UIManager : MonoBehaviour, IGameEvent
                 }
                 else if(profileManager.profileView.activeInHierarchy)
                 {
-                    profileManager.OpenProfile();
-                }
-                else if(nickNameManager.nickNameView.activeInHierarchy)
-                {
-                    nickNameManager.OpenNickName();
+                    if (iconManager.iconView.activeInHierarchy)
+                    {
+                        iconManager.OpenIcon();
+                    }
+                    else if (nickNameManager.nickNameView.activeInHierarchy)
+                    {
+                        nickNameManager.OpenNickName();
+                    }
+                    else
+                    {
+                        profileManager.OpenProfile();
+                    }
                 }
                 else if(shopManager.shopView.activeInHierarchy)
                 {
@@ -240,10 +246,6 @@ public class UIManager : MonoBehaviour, IGameEvent
                 else if(gameOptionUI.activeInHierarchy)
                 {
                     OpenOption();
-                }
-                else if (iconManager.iconView.activeInHierarchy)
-                {
-                    iconManager.OpenIcon();
                 }
                 else if (newsManager.newsView.activeInHierarchy)
                 {
@@ -383,13 +385,6 @@ public class UIManager : MonoBehaviour, IGameEvent
         infoBestScoreText.gameObject.SetActive(true);
         infoBestComboText.gameObject.SetActive(true);
 
-        gamePlayBackground.color = new Color(1, 1, 1);
-
-        if(GameStateManager.instance.GameModeType == GameModeType.Perfect)
-        {
-            gamePlayBackground.color = new Color(1, 1, 200 / 255f);
-        }
-
         bestScore = 0;
         bestCombo = 0;
 
@@ -526,14 +521,12 @@ public class UIManager : MonoBehaviour, IGameEvent
         FirebaseAnalytics.LogEvent("OpenNews");
     }
 
-    public void OpenAchievement()
-    {
-        FirebaseAnalytics.LogEvent("OpenAchievement");
-    }
 
     public void OpenTrophy()
     {
         trophyManager.OpenTrophy();
+
+        FirebaseAnalytics.LogEvent("OpenTrophy");
     }
 
     public void OnLoginSuccess()
@@ -547,6 +540,8 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void OnLogout()
     {
+        OpenOption();
+
         loginUI.SetActive(true);
 
         SetLoginUI();
@@ -796,7 +791,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         money = (int)(score / 10);
 
-        int level = playerDataBase.Level;
+        int level = playerDataBase.Level + 1;
 
         if (level > 30) level = 30;
 

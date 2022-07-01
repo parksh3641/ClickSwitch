@@ -258,9 +258,9 @@ public class PlayfabManager : MonoBehaviour
     public void OnClickGoogleLogout()
     {
 #if UNITY_ANDROID
-        LogOut();
         ((PlayGamesPlatform)Social.Active).SignOut();
 #endif
+        LogOut();
     }
 
     public void OnClickGoogleLink()
