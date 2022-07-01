@@ -61,8 +61,6 @@ public class ComboManager : MonoBehaviour
 
     public void OnStartCombo()
     {
-        Debug.Log("Combo Start!");
-
         comboObject.SetActive(true);
 
         if (timer == 0) combo = 0;

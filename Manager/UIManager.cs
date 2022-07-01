@@ -859,9 +859,9 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         exp += 100;
 
-        exp += ((int)score / 100);
+        exp += ((int)score / 20);
 
-        exp += (combo / 20);
+        exp += (combo / 10);
 
         levelManager.CheckLevelUp(exp);
 

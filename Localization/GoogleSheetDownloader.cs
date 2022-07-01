@@ -39,6 +39,12 @@ public class GoogleSheetDownloader : MonoBehaviour
         SyncFile();
     }
 
+    [Button]
+    void OnResetVersion()
+    {
+        PlayerPrefs.SetInt("Version", 0);
+    }
+
     IEnumerator LoadingCoroution()
     {
         messageText.text = "Loading";
@@ -54,11 +60,34 @@ public class GoogleSheetDownloader : MonoBehaviour
 
     IEnumerator DownloadFile()
     {
-        Debug.Log("Localization File Downloading...");
+        int saveVersion = PlayerPrefs.GetInt("Version");
+        int version = int.Parse(Application.version.Replace(".", "").ToString());
 
-        UnityWebRequest www = UnityWebRequest.Get(LocalizationURL);
-        yield return www.SendWebRequest();
-        SetLocalization(www.downloadHandler.text);
+        if (saveVersion < version)
+        {
+            Debug.Log("Localization File Downloading...");
+
+            UnityWebRequest www = UnityWebRequest.Get(LocalizationURL);
+            yield return www.SendWebRequest();
+            SetLocalization(www.downloadHandler.text);
+
+            PlayerPrefs.SetInt("Version", version);
+        }
+
+        if (!File.Exists(SystemPath.GetPath() + "Localization.txt"))
+        {
+            Debug.Log("Localization File Downloading...");
+
+            UnityWebRequest www = UnityWebRequest.Get(LocalizationURL);
+            yield return www.SendWebRequest();
+            SetLocalization(www.downloadHandler.text);
+
+            PlayerPrefs.SetInt("Version", version);
+        }
+        else
+        {
+            Debug.Log("Localization File is exists");
+        }
 
         Debug.Log("Value File Downloading...");
 

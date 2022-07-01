@@ -252,7 +252,92 @@ public class RankingManager : MonoBehaviour
             num++;
         }
 
+        if(!checkMy) //랭킹 100위 밖일 경우
+        {
+            PlayfabManager.instance.GetPlayerProfile(GameStateManager.instance.PlayfabId, CheckCountry);
+        }
+
         rankContentParent[openNumber].anchoredPosition = new Vector2(0, -9999);
         OpenView(openNumber);
+    }
+
+    void CheckCountry(string code)
+    {
+        int number = 0;
+        switch (openNumber)
+        {
+            case 0:
+                if (topNumber == 0)
+                {
+                    number = playerDataBase.TotalScore;
+                }
+                else
+                {
+                    number = playerDataBase.TotalCombo;
+                }
+                break;
+            case 1:
+                if (topNumber == 0)
+                {
+                    number = playerDataBase.BestSpeedTouchScore;
+                }
+                else
+                {
+                    number = playerDataBase.BestSpeedTouchCombo;
+                }
+                break;
+            case 2:
+                if (topNumber == 0)
+                {
+                    number = playerDataBase.BestMoleCatchScore;
+                }
+                else
+                {
+                    number = playerDataBase.BestMoleCatchCombo;
+                }
+                break;
+            case 3:
+                if (topNumber == 0)
+                {
+                    number = playerDataBase.BestFilpCardScore;
+                }
+                else
+                {
+                    number = playerDataBase.BestFilpCardCombo;
+                }
+                break;
+            case 4:
+                if (topNumber == 0)
+                {
+                    number = playerDataBase.BestButtonActionScore;
+                }
+                else
+                {
+                    number = playerDataBase.BestButtonActionCombo;
+                }
+                break;
+            case 5:
+                if (topNumber == 0)
+                {
+                    number = playerDataBase.BestTimingActionScore;
+                }
+                else
+                {
+                    number = playerDataBase.BestTimingActionCombo;
+                }
+                break;
+            case 6:
+                if (topNumber == 0)
+                {
+                    number = playerDataBase.BestDragActionScore;
+                }
+                else
+                {
+                    number = playerDataBase.BestDragActionCombo;
+                }
+                break;
+        }
+
+        myRankContent.InitState(999, code, GameStateManager.instance.NickName, number, false);
     }
 }

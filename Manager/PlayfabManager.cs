@@ -644,6 +644,28 @@ public class PlayfabManager : MonoBehaviour
         return true;
     }
 
+    public void GetPlayerProfile(string playFabId, Action<string> action)
+    {
+        string countryCode = "";
+
+        PlayFabClientAPI.GetPlayerProfile(new GetPlayerProfileRequest()
+        {
+            PlayFabId = playFabId,
+            ProfileConstraints = new PlayerProfileViewConstraints()
+            {
+                ShowLocations = true
+            }
+        }, result =>
+        {
+            countryCode = result.PlayerProfile.Locations[0].CountryCode.Value.ToString();
+            action?.Invoke(countryCode);
+
+        }, error =>
+        {
+            action?.Invoke("");
+        });
+    }
+
     public void UpdatePlayerStatistics(List<StatisticUpdate> data)
     {
         if (NetworkConnect.instance.CheckConnectInternet())
@@ -771,6 +793,8 @@ public class PlayfabManager : MonoBehaviour
             Debug.LogError("Error : Internet Disconnected\nCheck Internet State");
         }
 
+
+        uiManager.RenewalVC();
     }
 
     public void UpdateDisplayName(string nickname, Action successAction, Action failAction)
