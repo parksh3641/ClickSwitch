@@ -86,6 +86,12 @@ public class GoogleSheetDownloader : MonoBehaviour
         }
         else
         {
+            StreamReader reader = new StreamReader(SystemPath.GetPath() + "Localization.txt");
+            string value = reader.ReadToEnd();
+            reader.Close();
+
+            SetLocalization(value);
+
             Debug.Log("Localization File is exists");
         }
 
