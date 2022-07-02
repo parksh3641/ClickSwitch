@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     public Transform filpCardTransform;
     public Transform buttonActionUpTransform;
     public Transform buttonActionDownTransform;
-    public Transform fingerSnapTransform;
+    public Transform dragActionTransform;
 
 
     [Title("GameStartButton")]
@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
     private float timingActionRangePosX = 0;
     private bool timingActionMove = false;
 
-    private int fingerSnapIndex = 0;
+    private int dragActionIndex = 0;
 
     [Title("bool")]
     private bool isActive = false;
@@ -84,7 +84,7 @@ public class GameManager : MonoBehaviour
     private List<NormalContent> filpCardList = new List<NormalContent>();
     private List<ButtonActionContent> buttonActionUpList = new List<ButtonActionContent>();
     private List<NormalContent> buttonActionDownList = new List<NormalContent>();
-    private List<NormalContent> fingerSnapList = new List<NormalContent>();
+    private List<NormalContent> drageActionList = new List<NormalContent>();
 
     [Title("Manager")]
     public UIManager uiManager;
@@ -165,13 +165,13 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 10; i++)
         {
             NormalContent content = Instantiate(normalContent);
-            content.transform.parent = fingerSnapTransform;
+            content.transform.parent = dragActionTransform;
             content.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 250);
             content.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 250);
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.gameObject.SetActive(false);
-            fingerSnapList.Add(content);
+            drageActionList.Add(content);
         }
     }
 
@@ -284,11 +284,11 @@ public class GameManager : MonoBehaviour
 
     private void RandomFingerSnap()
     {
-        fingerSnapIndex = Random.Range(0, 4);
+        dragActionIndex = Random.Range(0, 4);
 
-        fingerSnapList[nowIndex].transform.localPosition = Vector3.zero;
-        fingerSnapList[nowIndex].FingerSnapReset(fingerSnapIndex);
-        fingerSnapList[nowIndex].gameObject.SetActive(true);
+        drageActionList[nowIndex].transform.localPosition = Vector3.zero;
+        drageActionList[nowIndex].FingerSnapReset(dragActionIndex);
+        drageActionList[nowIndex].gameObject.SetActive(true);
     }
 
     #endregion
@@ -437,6 +437,11 @@ public class GameManager : MonoBehaviour
                 break;
             case GamePlayType.GameChoice6:
 
+                for (int i = 0; i < drageActionList.Count; i++)
+                {
+                    drageActionList[i].gameObject.SetActive(false);
+                }
+
                 nowIndex = 0;
 
                 RandomFingerSnap();
@@ -483,7 +488,7 @@ public class GameManager : MonoBehaviour
 
                 action(false);
 
-                MinusScore(5);
+                MinusScore(20);
 
                 if (!GameStateManager.instance.Fail) GameStateManager.instance.Fail = true;
             }
@@ -521,7 +526,7 @@ public class GameManager : MonoBehaviour
                 action(false);
                 countIndex = 0;
 
-                MinusScore(5);
+                MinusScore(40);
 
                 if (!GameStateManager.instance.Fail) GameStateManager.instance.Fail = true;
             }
@@ -587,7 +592,7 @@ public class GameManager : MonoBehaviour
 
                     filpCardIndex = -1;
 
-                    MinusScore(5);
+                    MinusScore(10);
 
                     if(!GameStateManager.instance.Fail) GameStateManager.instance.Fail = true;
                 }
@@ -639,7 +644,7 @@ public class GameManager : MonoBehaviour
 
                 action?.Invoke(false);
 
-                MinusScore(5);
+                MinusScore(20);
 
                 if (!GameStateManager.instance.Fail) GameStateManager.instance.Fail = true;
             }
@@ -701,7 +706,7 @@ public class GameManager : MonoBehaviour
 
                 warningController.Hit();
 
-                MinusScore(5);
+                MinusScore(20);
 
                 timingActionSpeed = timingActionSaveSpeed;
             }
@@ -716,11 +721,11 @@ public class GameManager : MonoBehaviour
 
             PlusScore(10);
 
-            fingerSnapList[nowIndex].MoveFingerSnap(fingerSnapIndex);
+            drageActionList[nowIndex].MoveFingerSnap(dragActionIndex);
 
             nowIndex++;
 
-            if (nowIndex > fingerSnapList.Count - 1)
+            if (nowIndex > drageActionList.Count - 1)
             {
                 nowIndex = 0;
             }
@@ -741,25 +746,10 @@ public class GameManager : MonoBehaviour
 
                 warningController.Hit();
 
-                MinusScore(10);
+                MinusScore(20);
             }
         }
     }
-
-    public void Failure()
-    {
-        if (GameStateManager.instance.Shield)
-        {
-            GameStateManager.instance.Shield = false;
-            soundManager.PlaySFX(GameSfxType.Shield);
-            uiManager.UsedItem(ItemType.Shield);
-        }
-        else
-        {
-            MinusScore(5);
-        }
-    }
-
 
     #endregion
 
@@ -964,7 +954,7 @@ public class GameManager : MonoBehaviour
         {
             if (touchManager.direction != "")
             {
-                switch (fingerSnapIndex)
+                switch (dragActionIndex)
                 {
                     case 0:
                         if (touchManager.direction == "Left")

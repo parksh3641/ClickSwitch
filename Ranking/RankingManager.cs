@@ -11,9 +11,7 @@ public class RankingManager : MonoBehaviour
     public GameObject rankingView;
     public RankContent rankContentPrefab;
     public RankContent myRankContent;
-    [Space]
-    public GameObject[] scrollViewList;
-    public RectTransform[] rankContentParent;
+    public RectTransform rankContentParent;
     [Space]
     [Title("TopMenu")]
     public Image[] topMenuImgArray;
@@ -26,7 +24,7 @@ public class RankingManager : MonoBehaviour
 
     private int topNumber = 0;
     private int openNumber = 0;
-    private bool isActive = false;
+    private bool isDelay = false;
 
     [Space]
     public List<RankContent> rankContentList = new List<RankContent>();
@@ -40,7 +38,7 @@ public class RankingManager : MonoBehaviour
             RankContent monster = Instantiate(rankContentPrefab) as RankContent;
             monster.name = "RankContent_" + i;
             monster.transform.position = Vector3.zero;
-            monster.transform.parent = rankContentParent[0];
+            monster.transform.parent = rankContentParent;
             monster.gameObject.SetActive(false);
 
             rankContentList.Add(monster);
@@ -49,6 +47,9 @@ public class RankingManager : MonoBehaviour
         rankingView.SetActive(false);
 
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+
+        topNumber = -1;
+        openNumber = -1;
     }
 
     public void OpenRanking()
@@ -57,11 +58,16 @@ public class RankingManager : MonoBehaviour
         {
             rankingView.SetActive(true);
 
-            topNumber = -1;
-            ChangeTopMenu(0);
+            if(topNumber == -1)
+            {
+                topNumber = 0;
+                topMenuImgArray[0].sprite = topMenuSpriteArray[1];
 
-            openNumber = -1;
-            OpenRankingView(0);
+                openNumber = 0;
+                contentImgArray[0].sprite = contentSpriteArray[1];
+
+                ChangeRankingView(0);
+            }
         }
         else
         {
@@ -69,21 +75,10 @@ public class RankingManager : MonoBehaviour
         }
     }
 
-    void OpenView(int number)
-    {
-        for(int i = 0; i < scrollViewList.Length; i ++)
-        {
-            scrollViewList[i].SetActive(false);
-        }
-
-        if(number != -1)
-        {
-            scrollViewList[number].SetActive(true);
-        }
-    }
-
     public void ChangeTopMenu(int number)
     {
+        if (isDelay) return;
+
         if (topNumber != number)
         {
             topNumber = number;
@@ -100,9 +95,10 @@ public class RankingManager : MonoBehaviour
 
     public void OpenRankingView(int number)
     {
+        if (isDelay) return;
+
         if (openNumber != number)
         {
-            OpenView(-1);
             openNumber = number;
 
             for (int i = 0; i < contentImgArray.Length; i ++)
@@ -197,12 +193,15 @@ public class RankingManager : MonoBehaviour
 
                 break;
         }
+
+        isDelay = true;
     }
 
     public void SetRanking(GetLeaderboardResult result)
     {
         int index = 1;
-        bool checkMy = false;
+        bool isMine = false;
+        bool isCheck = false;
         string nickName = "";
 
 
@@ -218,7 +217,7 @@ public class RankingManager : MonoBehaviour
         {
             var location = curBoard[num].Profile.Locations[0].CountryCode.Value.ToString().ToLower();
 
-            checkMy = false;
+            isMine = false;
 
             if (player.DisplayName == null)
             {
@@ -231,7 +230,8 @@ public class RankingManager : MonoBehaviour
 
             if (player.PlayFabId.Equals(GameStateManager.instance.PlayfabId))
             {
-                checkMy = true;
+                isMine = true;
+                isCheck = true;
 
                 myRankContent.InitState(index, location, nickName, player.StatValue, false);
             }
@@ -239,26 +239,33 @@ public class RankingManager : MonoBehaviour
             {
                 if (player.DisplayName.Equals(GameStateManager.instance.NickName))
                 {
-                    checkMy = true;
+                    isMine = true;
+                    isCheck = true;
 
                     myRankContent.InitState(index, location, nickName, player.StatValue, false);
                 }
             }
 
-            rankContentList[num].InitState(index, location, nickName, player.StatValue, checkMy);
+            rankContentList[num].InitState(index, location, nickName, player.StatValue, isMine);
             rankContentList[num].gameObject.SetActive(true);
 
             index++;
             num++;
         }
 
-        if(!checkMy) //랭킹 100위 밖일 경우
+        if(!isCheck) //랭킹 100위 밖일 경우
         {
             PlayfabManager.instance.GetPlayerProfile(GameStateManager.instance.PlayfabId, CheckCountry);
         }
 
-        rankContentParent[openNumber].anchoredPosition = new Vector2(0, -9999);
-        OpenView(openNumber);
+        rankContentParent.anchoredPosition = new Vector2(0, -9999);
+
+        Invoke("Delay", 0.5f);
+    }
+
+    void Delay()
+    {
+        isDelay = false;
     }
 
     void CheckCountry(string code)
