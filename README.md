@@ -5,5 +5,7 @@
 ### 출시된 기기 : Android, iOS(출시 예정), Web(출시 예정)
 -------------
 **[구글 플레이 스토어 다운 받기](https://play.google.com/store/apps/details?id=com.unity3d.toucharcade)**
+
 **[앱 플레이 스토어 다운 받기]()**
+
 -------------
