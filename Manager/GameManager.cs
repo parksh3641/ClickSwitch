@@ -447,10 +447,6 @@ public class GameManager : MonoBehaviour
                 RandomFingerSnap();
 
                 break;
-            case GamePlayType.GameChoice7:
-                break;
-            case GamePlayType.GameChoice8:
-                break;
         }
 
         eGameStart();
@@ -779,11 +775,9 @@ public class GameManager : MonoBehaviour
             case GamePlayType.GameChoice6:
                 StartCoroutine("CheckFingerSnapDirection");
                 break;
-            case GamePlayType.GameChoice7:
-                break;
-            case GamePlayType.GameChoice8:
-                break;
         }
+
+        if (GameStateManager.instance.Slow) Time.timeScale = 0.9f;
     }
 
     public void OnGamePause()
@@ -793,8 +787,13 @@ public class GameManager : MonoBehaviour
 
     public void OnGameEnd()
     {
+        Time.timeScale = 1;
+
         GameStateManager.instance.Clock = false;
         GameStateManager.instance.Shield = false;
+        GameStateManager.instance.Combo = false;
+        GameStateManager.instance.Exp = false;
+        GameStateManager.instance.Slow = false;
 
         tryCountText.text = GameStateManager.instance.TryCount.ToString();
 

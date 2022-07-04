@@ -36,13 +36,13 @@ public class LevelManager : MonoBehaviour
     {
         profileLevelText.text = "Lv." + (playerDataBase.Level + 1);
 
-        profileFillamount.fillAmount = playerDataBase.Exp / CheckNeedExp();
+        profileFillamount.fillAmount = playerDataBase.Experience / CheckNeedExp();
     }
 
     public void CheckLevelUp(float getExp)
     {
         level = playerDataBase.Level;
-        exp = playerDataBase.Exp;
+        exp = playerDataBase.Experience;
         int plusExp = (int)getExp;
         if (defaultExp == 0 || addExp == 0)
         {
@@ -59,8 +59,8 @@ public class LevelManager : MonoBehaviour
             playerDataBase.Level += 1;
             if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Level", playerDataBase.Level);
 
-            playerDataBase.Exp -= ((int)CheckNeedExp() - plusExp);
-            if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Exp", playerDataBase.Exp);
+            playerDataBase.Experience -= ((int)CheckNeedExp() - plusExp);
+            if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Exp", playerDataBase.Experience);
 
             FirebaseAnalytics.LogEvent("Level Up");
         }
@@ -68,8 +68,8 @@ public class LevelManager : MonoBehaviour
         {
             Debug.Log("경험치 증가");
 
-            playerDataBase.Exp += plusExp;
-            if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Exp", playerDataBase.Exp);
+            playerDataBase.Experience += plusExp;
+            if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Exp", playerDataBase.Experience);
         }
 
         Initialize();

@@ -39,7 +39,7 @@ public class ItemManager : MonoBehaviour
         switch (type)
         {
             case ItemType.Clock:
-                if(GameStateManager.instance.Clock)
+                if (GameStateManager.instance.Clock)
                 {
                     GameStateManager.instance.Clock = false;
                 }
@@ -57,6 +57,39 @@ public class ItemManager : MonoBehaviour
                 {
                     GameStateManager.instance.Shield = true;
                 }
+                break;
+            case ItemType.Combo:
+                if (GameStateManager.instance.Combo)
+                {
+                    GameStateManager.instance.Combo = false;
+                }
+                else
+                {
+                    GameStateManager.instance.Combo = true;
+                }
+
+                break;
+            case ItemType.Exp:
+                if (GameStateManager.instance.Exp)
+                {
+                    GameStateManager.instance.Exp = false;
+                }
+                else
+                {
+                    GameStateManager.instance.Exp = true;
+                }
+
+                break;
+            case ItemType.Slow:
+                if (GameStateManager.instance.Slow)
+                {
+                    GameStateManager.instance.Slow = false;
+                }
+                else
+                {
+                    GameStateManager.instance.Slow = true;
+                }
+
                 break;
         }
     }

@@ -94,10 +94,6 @@ public class ValueManager : MonoBehaviour
             case GamePlayType.GameChoice6:
                 clearScore = valueDataBase.GameChoice6Perfect;
                 break;
-            case GamePlayType.GameChoice7:
-                break;
-            case GamePlayType.GameChoice8:
-                break;
         }
 
         return clearScore;

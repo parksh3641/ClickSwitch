@@ -57,6 +57,8 @@ public class ComboManager : MonoBehaviour
     public void SetBestCombo(int number)
     {
         bestCombo = number;
+
+        if (GameStateManager.instance.Combo) comboTimer += 0.5f;
     }
 
     public void OnStartCombo()

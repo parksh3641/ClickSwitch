@@ -48,6 +48,9 @@ public class GameStateManager : MonoBehaviour
         [Title("Item")]
         public bool clock = false;
         public bool shield = false;
+        public bool combo = false;
+        public bool exp = false;
+        public bool slow = false;
 
         [Space]
         [Title("Event")]
@@ -250,6 +253,45 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.shield = value;
+            SaveFile();
+        }
+    }
+
+    public bool Combo
+    {
+        get
+        {
+            return gameSettings.combo;
+        }
+        set
+        {
+            gameSettings.combo = value;
+            SaveFile();
+        }
+    }
+
+    public bool Exp
+    {
+        get
+        {
+            return gameSettings.exp;
+        }
+        set
+        {
+            gameSettings.exp = value;
+            SaveFile();
+        }
+    }
+
+    public bool Slow
+    {
+        get
+        {
+            return gameSettings.slow;
+        }
+        set
+        {
+            gameSettings.slow = value;
             SaveFile();
         }
     }

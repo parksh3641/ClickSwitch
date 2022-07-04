@@ -121,6 +121,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     public LevelManager levelManager;
     public ResetManager resetManager;
     public TrophyManager trophyManager;
+    public HelpManager helpManager;
 
     [Title("Animation")]
     public CoinAnimation goldAnimation;
@@ -210,58 +211,62 @@ public class UIManager : MonoBehaviour, IGameEvent
         StartCoroutine(LoadingCoroution());
     }
 
-    void Update()
-    {
-        if(Application.platform == RuntimePlatform.Android)
-        {
-            if(Input.GetKey(KeyCode.Escape))
-            {
-                if(resetManager.gameMenuView.activeInHierarchy)
-                {
-                    resetManager.OpenMenu();
-                }
-                else if(rankingManager.rankingView.activeInHierarchy)
-                {
-                    rankingManager.OpenRanking();
-                }
-                else if(profileManager.profileView.activeInHierarchy)
-                {
-                    if (iconManager.iconView.activeInHierarchy)
-                    {
-                        iconManager.OpenIcon();
-                    }
-                    else if (nickNameManager.nickNameView.activeInHierarchy)
-                    {
-                        nickNameManager.OpenNickName();
-                    }
-                    else
-                    {
-                        profileManager.OpenProfile();
-                    }
-                }
-                else if(shopManager.shopView.activeInHierarchy)
-                {
-                    shopManager.OpenShop();
-                }
-                else if(gameOptionUI.activeInHierarchy)
-                {
-                    OpenOption();
-                }
-                else if (newsManager.newsView.activeInHierarchy)
-                {
-                    newsManager.OpenNews();
-                }
-                else if (trophyManager.trophyView.activeInHierarchy)
-                {
-                    trophyManager.OpenTrophy();
-                }
-                else
-                {
-                    Debug.Log("게임 종료");
-                }
-            }
-        }
-    }
+    //void Update()
+    //{
+    //    if(Application.platform == RuntimePlatform.Android)
+    //    {
+    //        if(Input.GetKey(KeyCode.Escape))
+    //        {
+    //            if(resetManager.gameMenuView.activeInHierarchy)
+    //            {
+    //                resetManager.OpenMenu();
+    //            }
+    //            else if(rankingManager.rankingView.activeInHierarchy)
+    //            {
+    //                rankingManager.OpenRanking();
+    //            }
+    //            else if(profileManager.profileView.activeInHierarchy)
+    //            {
+    //                if (iconManager.iconView.activeInHierarchy)
+    //                {
+    //                    iconManager.OpenIcon();
+    //                }
+    //                else if (nickNameManager.nickNameView.activeInHierarchy)
+    //                {
+    //                    nickNameManager.OpenNickName();
+    //                }
+    //                else
+    //                {
+    //                    profileManager.OpenProfile();
+    //                }
+    //            }
+    //            else if(shopManager.shopView.activeInHierarchy)
+    //            {
+    //                shopManager.OpenShop();
+    //            }
+    //            else if(gameOptionUI.activeInHierarchy)
+    //            {
+    //                OpenOption();
+    //            }
+    //            else if (newsManager.newsView.activeInHierarchy)
+    //            {
+    //                newsManager.OpenNews();
+    //            }
+    //            else if (trophyManager.trophyView.activeInHierarchy)
+    //            {
+    //                trophyManager.OpenTrophy();
+    //            }
+    //            else if (helpManager.helpView.activeInHierarchy)
+    //            {
+    //                helpManager.OpenHelp();
+    //            }
+    //            else
+    //            {
+    //                Debug.Log("게임 종료");
+    //            }
+    //        }
+    //    }
+    //}
 
     public void SetLoginUI()
     {
@@ -343,6 +348,24 @@ public class UIManager : MonoBehaviour, IGameEvent
 
             FirebaseAnalytics.LogEvent("ItemUse : Shield");
         }
+        if (GameStateManager.instance.Combo)
+        {
+            itemUseContentArray[2].UseItem();
+
+            FirebaseAnalytics.LogEvent("ItemUse : Combo");
+        }
+        if (GameStateManager.instance.Exp)
+        {
+            itemUseContentArray[3].UseItem();
+
+            FirebaseAnalytics.LogEvent("ItemUse : Exp");
+        }
+        if (GameStateManager.instance.Slow)
+        {
+            itemUseContentArray[4].UseItem();
+
+            FirebaseAnalytics.LogEvent("ItemUse : Slow");
+        }
     }
 
     public void UsedItem(ItemType type)
@@ -413,10 +436,6 @@ public class UIManager : MonoBehaviour, IGameEvent
             case GamePlayType.GameChoice6:
                 bestScore = playerDataBase.BestDragActionScore;
                 bestCombo = playerDataBase.BestDragActionCombo;
-                break;
-            case GamePlayType.GameChoice7:
-                break;
-            case GamePlayType.GameChoice8:
                 break;
             default:
                 bestScore = 0;
@@ -527,6 +546,27 @@ public class UIManager : MonoBehaviour, IGameEvent
         trophyManager.OpenTrophy();
 
         FirebaseAnalytics.LogEvent("OpenTrophy");
+    }
+
+    public void OpenHelp()
+    {
+        helpManager.OpenHelp();
+
+        FirebaseAnalytics.LogEvent("OpenHelp");
+    }
+
+    public void OpenUpgrade()
+    {
+
+
+        FirebaseAnalytics.LogEvent("OpenUpgrade");
+    }
+
+    public void OpenQuest()
+    {
+
+
+        FirebaseAnalytics.LogEvent("OpenQuest");
     }
 
     public void OnLoginSuccess()
@@ -857,6 +897,14 @@ public class UIManager : MonoBehaviour, IGameEvent
         exp += ((int)score / 20);
 
         exp += (combo / 10);
+
+        if (GameStateManager.instance.Exp)
+        {
+            doubleExpObj.SetActive(true);
+            plusExpText.text = "+ 50%";
+
+            exp = exp + (exp * 0.5f);
+        }
 
         levelManager.CheckLevelUp(exp);
 

@@ -62,7 +62,7 @@ public class PlayerDataBase : ScriptableObject
     private int level = 0;
 
     [SerializeField]
-    private int exp = 0;
+    private int experience = 0;
 
     [SerializeField]
     private int icon = 0;
@@ -72,9 +72,14 @@ public class PlayerDataBase : ScriptableObject
     [Title("Item")]
     [SerializeField]
     private int clock = 0;
-
     [SerializeField]
     private int shield = 0;
+    [SerializeField]
+    private int combo = 0;
+    [SerializeField]
+    private int exp = 0;
+    [SerializeField]
+    private int slow = 0;
 
     [Space]
     [Title("Reset")]
@@ -121,11 +126,14 @@ public class PlayerDataBase : ScriptableObject
         bestDragActionCombo = 0;
 
         level = 0;
-        exp = 0;
+        experience = 0;
         icon = 0;
 
         clock = 0;
         shield = 0;
+        combo = 0;
+        exp = 0;
+        slow = 0;
 
         attendanceDay = "";
         gameMode = "";
@@ -338,15 +346,15 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
-    public int Exp
+    public int Experience
     {
         get
         {
-            return exp;
+            return experience;
         }
         set
         {
-            exp = value;
+            experience = value;
         }
     }
 
@@ -386,6 +394,42 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public int Combo
+    {
+        get
+        {
+            return combo;
+        }
+        set
+        {
+            combo = value;
+        }
+    }
+
+    public int Exp
+    {
+        get
+        {
+            return exp;
+        }
+        set
+        {
+            exp = value;
+        }
+    }
+
+    public int Slow
+    {
+        get
+        {
+            return slow;
+        }
+        set
+        {
+            slow = value;
+        }
+    }
+
     public string AttendanceDay
     {
         get
@@ -421,6 +465,15 @@ public class PlayerDataBase : ScriptableObject
                 break;
             case ItemType.Shield:
                 count = shield;
+                break;
+            case ItemType.Combo:
+                count = combo;
+                break;
+            case ItemType.Exp:
+                count = exp;
+                break;
+            case ItemType.Slow:
+                count = slow;
                 break;
         }
 

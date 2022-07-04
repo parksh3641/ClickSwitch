@@ -224,8 +224,7 @@ public class GoogleSheetDownloader : MonoBehaviour
         Debug.Log("Value File Download Complete!");
     }
 
-    [Button]
-    public void SyncFile()
+    void SyncFile()
     {
         if(NetworkConnect.instance.CheckConnectInternet())
         {

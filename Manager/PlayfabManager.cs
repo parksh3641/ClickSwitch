@@ -471,6 +471,21 @@ public class PlayfabManager : MonoBehaviour
                         playerDataBase.Shield = (int)list.RemainingUses;
                     }
 
+                    if (list.ItemId.Equals("Combo"))
+                    {
+                        playerDataBase.Combo = (int)list.RemainingUses;
+                    }
+
+                    if (list.ItemId.Equals("Exp"))
+                    {
+                        playerDataBase.Exp = (int)list.RemainingUses;
+                    }
+
+                    if (list.ItemId.Equals("Slow"))
+                    {
+                        playerDataBase.Slow = (int)list.RemainingUses;
+                    }
+
                     shopDataBase.SetItemInstanceId(list.ItemId, list.ItemInstanceId);
                 }
             }
@@ -543,7 +558,7 @@ public class PlayfabManager : MonoBehaviour
                            playerDataBase.Level = statistics.Value;
                            break;
                        case "Exp":
-                           playerDataBase.Exp = statistics.Value;
+                           playerDataBase.Experience = statistics.Value;
                            break;
                        case "Icon":
                            playerDataBase.Icon = statistics.Value;
@@ -1039,8 +1054,6 @@ public class PlayfabManager : MonoBehaviour
         };
         PlayFabClientAPI.PurchaseItem(request, (result) =>
         {
-            Debug.Log(shopClass.itemId + " 备概 己傍!");
-
             switch(shopClass.itemId)
             {
                 case "Clock":
@@ -1048,6 +1061,15 @@ public class PlayfabManager : MonoBehaviour
                     break;
                 case "Shield":
                     playerDataBase.Shield += 1;
+                    break;
+                case "Combo":
+                    playerDataBase.Combo += 1;
+                    break;
+                case "Exp":
+                    playerDataBase.Exp += 1;
+                    break;
+                case "Slow":
+                    playerDataBase.Slow += 1;
                     break;
             }
 
@@ -1063,6 +1085,7 @@ public class PlayfabManager : MonoBehaviour
             uiManager.RenewalVC();
             StateManager.instance.ChangeNumber();
 
+            Debug.Log(shopClass.itemId + " 备概 己傍!");
             action.Invoke(true);
         }, error =>
         {
@@ -1092,6 +1115,33 @@ public class PlayfabManager : MonoBehaviour
             playerDataBase.Shield -= 1;
 
             ConsumeItem(shopDataBase.GetItemInstanceId("Shield"));
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        if (GameStateManager.instance.Combo)
+        {
+            playerDataBase.Combo -= 1;
+
+            ConsumeItem(shopDataBase.GetItemInstanceId("Combo"));
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        if (GameStateManager.instance.Exp)
+        {
+            playerDataBase.Exp -= 1;
+
+            ConsumeItem(shopDataBase.GetItemInstanceId("Exp"));
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        if (GameStateManager.instance.Slow)
+        {
+            playerDataBase.Slow -= 1;
+
+            ConsumeItem(shopDataBase.GetItemInstanceId("Slow"));
         }
 
         yield return new WaitForSeconds(0.5f);

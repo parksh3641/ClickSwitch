@@ -9,7 +9,7 @@ public class ShopManager : MonoBehaviour
     public NotionManager notionManager;
 
     public ShopItemContent shopItemContent;
-    public Transform shopItemTransform;
+    public RectTransform shopItemTransform;
 
     public List<ShopItemContent> shopContentList = new List<ShopItemContent>();
 
@@ -44,6 +44,8 @@ public class ShopManager : MonoBehaviour
 
             shopContentList.Add(monster);
         }
+
+        shopItemTransform.anchoredPosition = new Vector2(0, -9999);
     }
 
     public void OpenShop()

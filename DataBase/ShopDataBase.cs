@@ -30,6 +30,12 @@ public class ShopDataBase : ScriptableObject
     public void Initialize()
     {
         itemList.Clear();
+
+        for(int i = 0; i < System.Enum.GetValues(typeof(ItemType)).Length; i ++)
+        {
+            ShopClass shopClass = new ShopClass();
+            itemList.Add(shopClass);
+        }
     }
 
     public List<ShopClass> ItemList
@@ -55,9 +61,27 @@ public class ShopDataBase : ScriptableObject
 
     public void SetItem(ShopClass shopClass)
     {
-        itemList.Add(shopClass);
+        switch(shopClass.itemId)
+        {
+            case "Clock":
+                itemList[0] = shopClass;
+                break;
+            case "Shield":
+                itemList[1] = shopClass;
+                break;
+            case "Combo":
+                itemList[2] = shopClass;
+                break;
+            case "Exp":
+                itemList[3] = shopClass;
+                break;
+            case "Slow":
+                itemList[4] = shopClass;
+                break;
+        }
+        //itemList.Add(shopClass);
 
-        itemList = Enumerable.Reverse(itemList).ToList();
+        //itemList = Enumerable.Reverse(itemList).ToList();
     }
 
     public void SetItemInstanceId(string itemid, string instanceid)

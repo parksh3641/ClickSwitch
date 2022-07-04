@@ -21,9 +21,7 @@ public enum GamePlayType
     GameChoice3,
     GameChoice4,
     GameChoice5,
-    GameChoice6,
-    GameChoice7,
-    GameChoice8
+    GameChoice6
 }
 
 public enum OptionType
@@ -90,7 +88,10 @@ public enum ShopType
 public enum ItemType
 {
     Clock = 0,
-    Shield
+    Shield,
+    Combo,
+    Exp,
+    Slow
 }
 
 public enum IconType

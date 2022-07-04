@@ -84,10 +84,6 @@ public class NormalContent : MonoBehaviour, IContentEvent
                 break;
             case GamePlayType.GameChoice6:
                 break;
-            case GamePlayType.GameChoice7:
-                break;
-            case GamePlayType.GameChoice8:
-                break;
         }
     }
 
