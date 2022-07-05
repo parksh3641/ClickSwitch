@@ -313,7 +313,12 @@ public class PlayfabManager : MonoBehaviour
 
         GameStateManager.instance.PlayfabId = result.PlayFabId;
 
+#if UNITY_EDITOR
+        StartCoroutine(LoadDataCoroutine());
+#else
         GetTitleInternalData("CheckVersion", CheckVersion);
+#endif
+
     }
 
     public void CheckVersion(bool check)
@@ -990,7 +995,7 @@ public class PlayfabManager : MonoBehaviour
     }
 
 
-    #region PurchaseItem
+#region PurchaseItem
     public void PurchaseRemoveAd()
     {
         Debug.Log("광고 제거 구매 완료");
@@ -1166,5 +1171,5 @@ public class PlayfabManager : MonoBehaviour
         }
     }
 
-    #endregion
+#endregion
 }

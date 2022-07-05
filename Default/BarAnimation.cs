@@ -19,6 +19,12 @@ public class BarAnimation : MonoBehaviour
         saveMain = main.transform.localPosition;
     }
 
+    public void OnReset()
+    {
+        StopAllCoroutines();
+        main.transform.localPosition = main.localPosition;
+    }
+
     [Button]
     public void PlayAnimation()
     {

@@ -110,6 +110,8 @@ public class ComboManager : MonoBehaviour
 
         StopAllCoroutines();
         StartCoroutine(TimerCoroutine());
+
+        barAnimation.OnReset();
     }
 
     public int GetCombo()

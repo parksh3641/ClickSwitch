@@ -134,6 +134,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     private Dictionary<string, string> playerData = new Dictionary<string, string>();
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(1);
+    WaitForSeconds waitForSeconds2 = new WaitForSeconds(0.1f);
 
 
     private void Awake()
@@ -671,6 +672,8 @@ public class UIManager : MonoBehaviour, IGameEvent
                     playerDataBase.SetTrophyData(trophyContent);
 
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.SetPlayerData(playerData);
+
+                    FirebaseAnalytics.LogEvent(GameStateManager.instance.GamePlayType.ToString(), "Trophy", 1);
                 }
                 else
                 {
@@ -686,6 +689,8 @@ public class UIManager : MonoBehaviour, IGameEvent
                     playerDataBase.SetTrophyData(trophyContent);
 
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.SetPlayerData(playerData);
+
+                    FirebaseAnalytics.LogEvent(GameStateManager.instance.GamePlayType.ToString(), "Trophy", trophyContent.number);
                 }
             }
         }
@@ -984,7 +989,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         watchAdCountText.text = (adCoolTime / 60).ToString("D2") + ":" + (adCoolTime % 60).ToString("D2");
 
-        yield return new WaitForSeconds(1f);
+        yield return waitForSeconds;
         StartCoroutine(WatchAdCorution());
     }
 
@@ -1206,8 +1211,8 @@ public class UIManager : MonoBehaviour, IGameEvent
         {
             if (!pause)
             {
-                number -= 1;
-                timerText.text = number.ToString();
+                number -= 0.1f;
+                timerText.text = number.ToString("N1");
 
                 if (number < 11)
                 {
@@ -1221,7 +1226,7 @@ public class UIManager : MonoBehaviour, IGameEvent
                 }
             }
 
-            yield return waitForSeconds;
+            yield return waitForSeconds2;
         }
 
         timerText.text = "";

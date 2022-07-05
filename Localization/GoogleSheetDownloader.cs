@@ -47,13 +47,13 @@ public class GoogleSheetDownloader : MonoBehaviour
 
     IEnumerator LoadingCoroution()
     {
-        messageText.text = "Loading";
+        messageText.text = "Downloading";
         yield return new WaitForSeconds(0.5f);
-        messageText.text = "Loading.";
+        messageText.text = "Downloading.";
         yield return new WaitForSeconds(0.5f);
-        messageText.text = "Loading..";
+        messageText.text = "Downloading..";
         yield return new WaitForSeconds(0.5f);
-        messageText.text = "Loading...";
+        messageText.text = "Downloading...";
         yield return new WaitForSeconds(0.5f);
         StartCoroutine(LoadingCoroution());
     }
