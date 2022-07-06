@@ -122,6 +122,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     public ResetManager resetManager;
     public TrophyManager trophyManager;
     public HelpManager helpManager;
+    public MailBoxManager mailBoxManager;
 
     [Title("Animation")]
     public CoinAnimation goldAnimation;
@@ -554,6 +555,13 @@ public class UIManager : MonoBehaviour, IGameEvent
         helpManager.OpenHelp();
 
         FirebaseAnalytics.LogEvent("OpenHelp");
+    }
+
+    public void OpenMailBox()
+    {
+        mailBoxManager.OpenMail();
+
+        FirebaseAnalytics.LogEvent("OpenMail");
     }
 
     public void OpenUpgrade()

@@ -143,5 +143,7 @@ public enum NotionType
     SuccessBuyItem,
     FailBuyItem,
     FailEventTry,
-    AddTryCount
+    AddTryCount,
+    CopyIdNotion,
+    MailReceiveNotion
 }

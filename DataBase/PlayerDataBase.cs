@@ -461,19 +461,19 @@ public class PlayerDataBase : ScriptableObject
         switch (type)
         {
             case ItemType.Clock:
-                count = clock;
+                count = Clock;
                 break;
             case ItemType.Shield:
-                count = shield;
+                count = Shield;
                 break;
             case ItemType.Combo:
-                count = combo;
+                count = Combo;
                 break;
             case ItemType.Exp:
-                count = exp;
+                count = Exp;
                 break;
             case ItemType.Slow:
-                count = slow;
+                count = Slow;
                 break;
         }
 
@@ -526,5 +526,29 @@ public class PlayerDataBase : ScriptableObject
         }
 
         return trophyData;
+    }
+
+    public void SetItemCount(ItemType type, int number)
+    {
+        switch (type)
+        {
+            case ItemType.Clock:
+                Clock += number;
+                break;
+            case ItemType.Shield:
+                Shield += number;
+                break;
+            case ItemType.Combo:
+                Combo += number;
+                break;
+            case ItemType.Exp:
+                Exp += number;
+                break;
+            case ItemType.Slow:
+                Slow += number;
+                break;
+        }
+
+        StateManager.instance.ChangeNumber();
     }
 }

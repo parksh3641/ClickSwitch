@@ -104,4 +104,17 @@ public class HelpManager : MonoBehaviour
             scrollView[number].SetActive(true);
         }
     }
+
+    public void BugReport()
+    {
+        switch(GameStateManager.instance.Language)
+        {
+            case LanguageType.Korean:
+                Application.OpenURL("https://docs.google.com/forms/d/e/1FAIpQLSek7nC_FNrk3oIPWbAb8CBWSC4c7to_cKeQt9QQwCTdGcavtQ/viewform?usp=sf_link");
+                break;
+            default:
+                Application.OpenURL("https://docs.google.com/forms/d/e/1FAIpQLScF2Gz--Kuu5kExfRtMFoW_24sv8_0mys4zcoRHLr1l0YgA2A/viewform?usp=sf_link");
+                break;
+        }
+    }
 }

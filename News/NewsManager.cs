@@ -12,6 +12,9 @@ public class NewsManager : MonoBehaviour
     public NewsContent newsContent;
     public RectTransform newsContentTransform;
 
+    public Font normalFont;
+    public Font bengaliFont;
+
     [Title("Read More")]
     public GameObject infoView;
     public Text infoTitleText;
@@ -74,7 +77,14 @@ public class NewsManager : MonoBehaviour
 
         for (int i = 0; i < item.Count; i++)
         {
-            newsContentList[i].InitState(i, item[i].Title, item[i].Timestamp);
+            if (GameStateManager.instance.Language == LanguageType.Bengali)
+            {
+                newsContentList[i].InitState(i, item[i].Title, item[i].Timestamp,bengaliFont);
+            }
+            else
+            {
+                newsContentList[i].InitState(i, item[i].Title, item[i].Timestamp, normalFont);
+            }
             newsContentList[i].newsManager = this;
             newsInfoList.Add(item[i]);
             newsContentList[i].gameObject.SetActive(true);
@@ -86,6 +96,17 @@ public class NewsManager : MonoBehaviour
     public void OpenReadMore(int number, string title)
     {
         infoView.SetActive(true);
+
+        if (GameStateManager.instance.Language == LanguageType.Bengali)
+        {
+            infoTitleText.font = bengaliFont;
+            infoBodyText.font = bengaliFont;
+        }
+        else
+        {
+            infoTitleText.font = normalFont;
+            infoBodyText.font = normalFont;
+        }
 
         infoTitleText.text = title;
         infoBodyText.text = newsInfoList[number].Body;

@@ -136,4 +136,11 @@ public class NickNameManager : MonoBehaviour
         NotionManager.instance.UseNotion(NotionType.NickNameNotion5);
         Debug.Log("이미 존재하는 닉네임 입니다.");
     }
+
+    public void CopyId()
+    {
+        GUIUtility.systemCopyBuffer = nickNameText.text;
+
+        NotionManager.instance.UseNotion(NotionType.CopyIdNotion);
+    }
 }

@@ -13,8 +13,10 @@ public class NewsContent : MonoBehaviour
     [Title("Title")]
     public Text titleText;
     string dateText;
-    public void InitState(int number, string title, System.DateTime date)
+    public void InitState(int number, string title, System.DateTime date, Font font)
     {
+        titleText.font = font;
+
         index = number;
 
         switch (GameStateManager.instance.Language)
