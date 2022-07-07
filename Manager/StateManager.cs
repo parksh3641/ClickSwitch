@@ -8,9 +8,11 @@ public class StateManager : MonoBehaviour
 
     public bool isInit = false;
 
+    public NickNameManager nickNameManager;
     public ShopManager shopManager;
     public ItemManager itemManager;
     public IconManager iconManager;
+    public NewsManager newsManager;
     public LevelManager levelManager;
     public TrophyManager trophyManager;
     public HelpManager helpManager;
@@ -30,9 +32,11 @@ public class StateManager : MonoBehaviour
         {
             isInit = true;
 
+            nickNameManager.Initialize();
             shopManager.Initialize();
             itemManager.Initialize();
             iconManager.Initialize();
+            newsManager.Initialize();
             levelManager.Initialize();
             trophyManager.Initialize();
             helpManager.Initialize();

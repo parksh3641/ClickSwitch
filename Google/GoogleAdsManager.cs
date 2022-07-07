@@ -13,10 +13,18 @@ public class GoogleAdsManager : MonoBehaviour
 
     public UIManager uIManager;
     public GameManager gameManager;
+    public ShopManager shopManager;
 
     string adUnitId;
 
     private RewardedAd rewardedAd;
+
+    PlayerDataBase playerDataBase;
+
+    private void Awake()
+    {
+        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+    }
 
     public void Start()
     {
@@ -51,10 +59,16 @@ public class GoogleAdsManager : MonoBehaviour
 
     public void Show(int number)
     {
-        if (!GameStateManager.instance.WatchAd) return;
-
         adType = AdType.CoinX2;
         adType += number;
+
+        if(playerDataBase.RemoveAd && number == 2)
+        {
+            shopManager.SuccessWatchAd();
+            return;
+        }
+
+        if (!GameStateManager.instance.WatchAd) return;
 
         StartCoroutine(ShowRewardAd());
     }
@@ -136,6 +150,9 @@ public class GoogleAdsManager : MonoBehaviour
                 break;
             case AdType.TryCount:
                 gameManager.SuccessWatchAd();
+                break;
+            case AdType.ShopWatchAd:
+                shopManager.SuccessWatchAd();
                 break;
         }
     }

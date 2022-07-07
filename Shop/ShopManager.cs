@@ -1,6 +1,9 @@
+using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShopManager : MonoBehaviour
 {
@@ -11,7 +14,16 @@ public class ShopManager : MonoBehaviour
     public ShopItemContent shopItemContent;
     public RectTransform shopItemTransform;
 
-    public List<ShopItemContent> shopContentList = new List<ShopItemContent>();
+    [Space]
+    [Title("Ad")]
+    public GameObject watchAdLock;
+    public Text watchAdCountText;
+
+    private int adCoolTime = 0;
+
+    WaitForSeconds waitForSeconds = new WaitForSeconds(1);
+
+    List<ShopItemContent> shopContentList = new List<ShopItemContent>();
 
     Sprite[] itemArray;
 
@@ -53,6 +65,15 @@ public class ShopManager : MonoBehaviour
         if (!shopView.activeSelf)
         {
             shopView.SetActive(true);
+
+            if (!GameStateManager.instance.WatchAd)
+            {
+                LoadWatchAd();
+            }
+            else
+            {
+                SetWatchAd(false);
+            }
         }
         else
         {
@@ -76,4 +97,83 @@ public class ShopManager : MonoBehaviour
             notionManager.UseNotion(NotionType.FailBuyItem);
         }
     }
+
+    #region WatchAd
+
+    void SetWatchAd(bool check)
+    {
+        if (check)
+        {
+            Debug.Log("±¤°í Àá±Ý");
+
+            watchAdLock.SetActive(true);
+            GameStateManager.instance.WatchAd = false;
+
+            PlayerPrefs.SetString("AdCoolTime", DateTime.Now.AddSeconds(ValueManager.instance.GetAdCoolTime()).ToString("yyyy-MM-dd HH:mm:ss"));
+
+            adCoolTime = (int)ValueManager.instance.GetAdCoolTime();
+
+            StartCoroutine(WatchAdCorution());
+        }
+        else
+        {
+            Debug.Log("±¤°í Àá±Ý ÇØÁ¦");
+
+            watchAdLock.SetActive(false);
+            GameStateManager.instance.WatchAd = true;
+
+            StopAllCoroutines();
+        }
+    }
+
+    void LoadWatchAd()
+    {
+        DateTime time = DateTime.Parse(PlayerPrefs.GetString("AdCoolTime"));
+        DateTime now = DateTime.Now;
+
+        TimeSpan span = time - now;
+
+        if (span.TotalSeconds > 0)
+        {
+            adCoolTime = (int)span.TotalSeconds;
+
+            watchAdLock.SetActive(true);
+
+            StopAllCoroutines();
+            StartCoroutine(WatchAdCorution());
+        }
+        else
+        {
+            SetWatchAd(false);
+        }
+    }
+
+    IEnumerator WatchAdCorution()
+    {
+        if (adCoolTime > 0)
+        {
+            adCoolTime -= 1;
+        }
+        else
+        {
+            SetWatchAd(false);
+            yield break;
+        }
+
+        watchAdCountText.text = (adCoolTime / 60).ToString("D2") + ":" + (adCoolTime % 60).ToString("D2");
+
+        yield return waitForSeconds;
+        StartCoroutine(WatchAdCorution());
+    }
+
+    public void SuccessWatchAd()
+    {
+        NotionManager.instance.UseNotion(NotionType.SuccessWatchAd);
+
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 200);
+
+        SetWatchAd(true);
+    }
+
+    #endregion
 }

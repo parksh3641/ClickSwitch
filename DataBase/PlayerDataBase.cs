@@ -98,6 +98,11 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private List<TrophyData> trophyDataList = new List<TrophyData>();
 
+    [Space]
+    [Title("Alarm")]
+    [SerializeField]
+    private int newsAlarm;
+
 
     public void Initialize()
     {
@@ -141,6 +146,8 @@ public class PlayerDataBase : ScriptableObject
         removeAd = false;
 
         trophyDataList.Clear();
+
+        newsAlarm = 0;
     }
 
     public int TotalScore
@@ -490,6 +497,18 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             removeAd = value;
+        }
+    }
+
+    public int NewsAlarm
+    {
+        get
+        {
+            return newsAlarm;
+        }
+        set
+        {
+            newsAlarm = value;
         }
     }
 

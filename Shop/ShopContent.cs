@@ -11,6 +11,9 @@ public class ShopContent : MonoBehaviour
     public LocalizationContent titleText;
     public Text priceText;
 
+    public GameObject price;
+    public GameObject reward;
+
     Sprite[] mainIconArray;
 
     ImageDataBase imageDataBase;
@@ -20,6 +23,9 @@ public class ShopContent : MonoBehaviour
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDatabase") as ImageDataBase;
 
         mainIconArray = imageDataBase.GetShopArray();
+
+        price.SetActive(false);
+        reward.SetActive(false);
     }
 
     void Start()
@@ -40,6 +46,9 @@ public class ShopContent : MonoBehaviour
                         priceText.text = "USD $ 2";
                         break;
                 }
+
+                price.SetActive(true);
+
                 break;
             case ShopType.Coin1000:
                 titleText.name = "Coin1000";
@@ -53,6 +62,15 @@ public class ShopContent : MonoBehaviour
                         priceText.text = "USD $ 1";
                         break;
                 }
+
+                price.SetActive(true);
+
+                break;
+            case ShopType.WatchAd:
+                titleText.name = "WatchAd";
+
+                reward.SetActive(true);
+
                 break;
         }
 

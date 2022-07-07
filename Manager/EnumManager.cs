@@ -82,7 +82,8 @@ public enum GameSfxType
 public enum ShopType
 {
     RemoveAds = 0,
-    Coin1000
+    Coin1000,
+    WatchAd
 }
 
 public enum ItemType
@@ -104,5 +105,19 @@ public enum IconType
 public enum AdType
 {
     CoinX2,
-    TryCount
+    TryCount,
+    ShopWatchAd
+}
+
+public enum MissionType
+{
+    Score,
+    Combo
+}
+
+public enum RewardType
+{
+    Coin = 0,
+    Crystal,
+    Exp,
 }

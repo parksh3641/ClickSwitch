@@ -563,19 +563,18 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         FirebaseAnalytics.LogEvent("OpenMail");
     }
+    public void OpenDailyMission()
+    {
+
+
+        FirebaseAnalytics.LogEvent("OpenDailyMission");
+    }
 
     public void OpenUpgrade()
     {
 
 
         FirebaseAnalytics.LogEvent("OpenUpgrade");
-    }
-
-    public void OpenQuest()
-    {
-
-
-        FirebaseAnalytics.LogEvent("OpenQuest");
     }
 
     public void OnLoginSuccess()
@@ -842,7 +841,7 @@ public class UIManager : MonoBehaviour, IGameEvent
         UpdateTotalCombo();
 
 
-        money = (int)(score / 10);
+        money = (int)(score / 5);
 
         int level = playerDataBase.Level + 1;
 
@@ -937,6 +936,8 @@ public class UIManager : MonoBehaviour, IGameEvent
         trophyView.SetActive(false);
     }
 
+    #region WatchAd
+
     void SetWatchAd(bool check)
     {
         if(check)
@@ -974,6 +975,8 @@ public class UIManager : MonoBehaviour, IGameEvent
         {
             adCoolTime = (int)span.TotalSeconds;
 
+            watchAdLock.SetActive(true);
+
             StopAllCoroutines();
             StartCoroutine(WatchAdCorution());
         }
@@ -1003,15 +1006,16 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void SuccessWatchAd()
     {
-        Debug.Log("광고 보상 : 코인 2배 지급!");
+        NotionManager.instance.UseNotion(NotionType.SuccessWatchAd);
 
         if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, (int)money);
 
         getGoldText.text = money + " + " + money.ToString();
 
         SetWatchAd(true);
-
     }
+
+    #endregion
 
     void UpdateTotalScore()
     {
@@ -1215,7 +1219,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         float number = time;
 
-        while(number > 0)
+        while(number > 0.1f)
         {
             if (!pause)
             {

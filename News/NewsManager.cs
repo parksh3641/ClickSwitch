@@ -9,6 +9,8 @@ public class NewsManager : MonoBehaviour
 {
     public GameObject newsView;
 
+    public GameObject alarm;
+
     public NewsContent newsContent;
     public RectTransform newsContentTransform;
 
@@ -24,10 +26,17 @@ public class NewsManager : MonoBehaviour
 
     public List<NewsContent> newsContentList = new List<NewsContent>();
     private List<TitleNewsItem> newsInfoList = new List<TitleNewsItem>();
+
+    PlayerDataBase playerDataBase;
+
     private void Awake()
     {
+        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+
         newsView.SetActive(false);
         infoView.SetActive(false);
+
+        alarm.SetActive(false);
 
         newsContentList.Clear();
 
@@ -42,6 +51,14 @@ public class NewsManager : MonoBehaviour
             monster.gameObject.SetActive(false);
 
             newsContentList.Add(monster);
+        }
+    }
+
+    public void Initialize()
+    {
+        if(playerDataBase.NewsAlarm > 0)
+        {
+            alarm.SetActive(true);
         }
     }
 
@@ -91,6 +108,11 @@ public class NewsManager : MonoBehaviour
         }
 
         newsContentTransform.anchoredPosition = new Vector3(0, -999, 0);
+
+        playerDataBase.NewsAlarm = 0;
+        PlayfabManager.instance.UpdatePlayerStatisticsInsert("NewsAlarm", 0);
+
+        alarm.SetActive(false);
     }
 
     public void OpenReadMore(int number, string title)

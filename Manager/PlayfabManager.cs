@@ -616,6 +616,9 @@ public class PlayfabManager : MonoBehaviour
                        case "GameMode":
                            playerDataBase.GameMode = statistics.Value.ToString();
                            break;
+                       case "NewsAlarm":
+                           playerDataBase.NewsAlarm = statistics.Value;
+                           break;
                    }
                }
            })

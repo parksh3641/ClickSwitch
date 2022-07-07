@@ -145,5 +145,6 @@ public enum NotionType
     FailEventTry,
     AddTryCount,
     CopyIdNotion,
-    MailReceiveNotion
+    MailReceiveNotion,
+    SuccessWatchAd
 }

@@ -9,8 +9,11 @@ public class NickNameManager : MonoBehaviour
 {
     public GameObject nickNameView;
 
+    public GameObject nickNameFirstView;
+
     public Text nickNameText;
     public InputField inputField;
+    public InputField inputFieldFree;
 
     public string[] lines;
     string LINE_SPLIT_RE = @"\r\n|\n\r|\n|\r";
@@ -22,10 +25,16 @@ public class NickNameManager : MonoBehaviour
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
 
         nickNameView.SetActive(false);
+        nickNameFirstView.SetActive(false);
     }
 
-    private void Start()
+    public void Initialize()
     {
+        if(GameStateManager.instance.NickName.Length > 10)
+        {
+            nickNameFirstView.SetActive(true);
+        }
+
         string file = SystemPath.GetPath() + "BadWord.txt";
 
         string source;
@@ -116,6 +125,60 @@ public class NickNameManager : MonoBehaviour
         }
     }
 
+    public void CheckFreeNickName()
+    {
+            string Check = Regex.Replace(inputFieldFree.text, @"[^a-zA-Z0-9°¡-ÆR]", "", RegexOptions.Singleline);
+            Check = Regex.Replace(inputFieldFree.text, @"[^\w\.@-]", "", RegexOptions.Singleline);
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                if (inputFieldFree.text.Contains(lines[i]))
+                {
+                    NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
+                    Debug.Log("Æ¯¼ö¹®ÀÚ´Â »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.");
+                    return;
+                }
+            }
+
+        if (inputFieldFree.text.Equals(Check) == true)
+        {
+            string newNickName = ((inputFieldFree.text.Trim()).Replace(" ", ""));
+            string oldNickName = "";
+
+            if (GameStateManager.instance.NickName != null)
+            {
+                oldNickName = GameStateManager.instance.NickName.Trim().Replace(" ", "");
+            }
+            else
+            {
+                oldNickName = "";
+            }
+
+            if (newNickName.Length > 1)
+            {
+                if (!(newNickName.Equals(oldNickName)))
+                {
+                    PlayfabManager.instance.UpdateDisplayName(newNickName, FreeSuccess, Failure);
+                }
+                else
+                {
+                    NotionManager.instance.UseNotion(NotionType.NickNameNotion1);
+                    Debug.Log("Áßº¹µÈ ´Ð³×ÀÓ ÀÔ´Ï´Ù.");
+                }
+            }
+            else
+            {
+                NotionManager.instance.UseNotion(NotionType.NickNameNotion2);
+                Debug.Log("2±ÛÀÚ ÀÌ»óÀÌ¾î¾ß ÇÕ´Ï´Ù.");
+            }
+        }
+        else
+        {
+            NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
+            Debug.Log("Æ¯¼ö¹®ÀÚ´Â »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.");
+        }
+    }
+
     public void Success()
     {
         Debug.Log("´Ð³×ÀÓ º¯°æ ¼º°ø!");
@@ -129,6 +192,17 @@ public class NickNameManager : MonoBehaviour
         if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Coin, 100);
 
         nickNameView.SetActive(false);
+    }
+
+    public void FreeSuccess()
+    {
+        Debug.Log("´Ð³×ÀÓ º¯°æ ¼º°ø!");
+
+        NotionManager.instance.UseNotion(NotionType.NickNameNotion6);
+
+        nickNameText.text = GameStateManager.instance.NickName;
+
+        nickNameFirstView.SetActive(false);
     }
 
     public void Failure()
