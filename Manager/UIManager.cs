@@ -123,6 +123,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     public TrophyManager trophyManager;
     public HelpManager helpManager;
     public MailBoxManager mailBoxManager;
+    public DailyManager dailyManager;
 
     [Title("Animation")]
     public CoinAnimation goldAnimation;
@@ -565,7 +566,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     }
     public void OpenDailyMission()
     {
-
+        dailyManager.OpenDaily();
 
         FirebaseAnalytics.LogEvent("OpenDailyMission");
     }
@@ -643,9 +644,22 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         Debug.Log("Game End");
 
-        if(GameStateManager.instance.GameModeType == GameModeType.Perfect)
+        if (!NetworkConnect.instance.CheckConnectInternet())
         {
-            if(GameStateManager.instance.TryCount > 0)
+            networkView.SetActive(true);
+            return;
+        }
+        else
+        {
+            networkView.SetActive(false);
+        }
+
+        FirebaseAnalytics.LogEvent(GameStateManager.instance.GamePlayType.ToString(), "GetScore", score);
+        FirebaseAnalytics.LogEvent(GameStateManager.instance.GamePlayType.ToString(), "GetCombo", comboManager.GetCombo());
+
+        if (GameStateManager.instance.GameModeType == GameModeType.Perfect)
+        {
+            if (GameStateManager.instance.TryCount > 0)
             {
                 GameStateManager.instance.TryCount -= 1;
             }
@@ -656,11 +670,11 @@ public class UIManager : MonoBehaviour, IGameEvent
             clearScore = ValueManager.instance.GetPerfectClearScore(GameStateManager.instance.GamePlayType);
             fail = GameStateManager.instance.Fail;
 
-            if(score > clearScore && !fail)
+            if (score > clearScore && !fail)
             {
                 Debug.Log("퍼펙트 모드 성공!");
 
-                if(!playerDataBase.GetTrophyIsAcive(GameStateManager.instance.GamePlayType))
+                if (!playerDataBase.GetTrophyIsAcive(GameStateManager.instance.GamePlayType))
                 {
                     trophyView.SetActive(true);
 
@@ -702,19 +716,16 @@ public class UIManager : MonoBehaviour, IGameEvent
             }
         }
 
-        if (!NetworkConnect.instance.CheckConnectInternet())
-        {
-            networkView.SetActive(true);
-            return;
-        }
-        else
-        {
-            networkView.SetActive(false);
-        }
+        DailyMissionReport report = new DailyMissionReport();
 
+        report = playerDataBase.GetDailyMissionReport(GameStateManager.instance.GamePlayType);
 
-        FirebaseAnalytics.LogEvent(GameStateManager.instance.GamePlayType.ToString(),"GetScore", score);
-        FirebaseAnalytics.LogEvent(GameStateManager.instance.GamePlayType.ToString(), "GetCombo", comboManager.GetCombo());
+        report.doPlay += 1;
+        report.getScore = (int)score;
+        report.getCombo = comboManager.GetCombo();
+
+        playerDataBase.SetDailyMissionReport(report);
+
 
         soundManager.PlayBGM(GameBGMType.End);
 

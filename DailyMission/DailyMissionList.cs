@@ -13,30 +13,16 @@ public class DailyMissionList : ScriptableObject
 public class DailyMission
 {
     public GamePlayType gamePlayType = GamePlayType.GameChoice1;
-    public MissionType missionType = MissionType.Score;
+    public MissionType missionType = MissionType.QuestDoPlay;
     public int goal = 0;
-    public int rewardCount = 1;
-    public MissionReward[] missionRewards = new MissionReward[3];
-}
-
-public class DailyMissionJson
-{
-    public GamePlayType gamePlayType = GamePlayType.GameChoice1;
-    public MissionType missionType = MissionType.Score;
-    public int goal = 0;
-    public bool isClear = false;
+    public bool clear = false;
 }
 
 [System.Serializable]
-public class MissionReward
+public class DailyMissionReport
 {
-    public RewardType rewardType = RewardType.Coin;
-    public int rewardNumber = 0;
-}
-
-public class MissionRewardContent
-{
-    public GameObject obj;
-    public Image icon;
-    public Text rewardNumberText;
+    public GamePlayType gamePlayType = GamePlayType.GameChoice1;
+    public int doPlay = 0;
+    public int getScore = 0;
+    public int getCombo = 0;
 }

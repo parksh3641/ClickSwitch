@@ -170,7 +170,7 @@ public class MailBoxManager : MonoBehaviour
 
         SetInventoryCustomData(instanceid, inputCustom);
 
-        NotionManager.instance.UseNotion(NotionType.MailReceiveNotion);
+        NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
 
         count -= 1;
 

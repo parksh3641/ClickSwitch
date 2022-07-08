@@ -103,6 +103,14 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private int newsAlarm;
 
+    [Space]
+    [Title("DailyMission")]
+    [SerializeField]
+    private List<DailyMission> dailyMissionList = new List<DailyMission>();
+
+    [SerializeField]
+    private List<DailyMissionReport> dailyMissionReportList = new List<DailyMissionReport>();
+
 
     public void Initialize()
     {
@@ -148,6 +156,19 @@ public class PlayerDataBase : ScriptableObject
         trophyDataList.Clear();
 
         newsAlarm = 0;
+
+        dailyMissionList.Clear();
+
+        for(int i = 0; i < 3; i ++)
+        {
+            DailyMission dailyMission = new DailyMission();
+            dailyMissionList.Add(dailyMission);
+        }
+
+        if(dailyMissionReportList.Count < System.Enum.GetValues(typeof(GamePlayType)).Length)
+        {
+            OnResetDailyMissionReport();
+        }
     }
 
     public int TotalScore
@@ -570,4 +591,83 @@ public class PlayerDataBase : ScriptableObject
 
         StateManager.instance.ChangeNumber();
     }
+
+
+    #region DailyMission
+    public void OnResetDailyMissionReport()
+    {
+        dailyMissionReportList.Clear();
+
+        for (int i = 0; i < System.Enum.GetValues(typeof(GamePlayType)).Length; i++)
+        {
+            DailyMissionReport report = new DailyMissionReport();
+            report.gamePlayType = GamePlayType.GameChoice1 + i;
+            dailyMissionReportList.Add(report);
+        }
+    }
+    public void SetDailyMission(DailyMission dailyMission, int number)
+    {
+        dailyMissionList[number] = dailyMission;
+    }
+
+    public void SetDailyMissionClear(DailyMission dailyMission)
+    {
+        for(int i = 0; i < dailyMissionList.Count; i ++)
+        {
+            if(dailyMissionList[i].gamePlayType.Equals(dailyMission.gamePlayType))
+            {
+                dailyMissionList[i].clear = true;
+            }
+        }
+    }    
+
+    public DailyMission GetDailyMission(int number)
+    {
+        return dailyMissionList[number];
+    }
+
+    public void SetDailyMissionReport(DailyMissionReport report)
+    {
+        for(int i = 0; i <dailyMissionReportList.Count; i ++)
+        {
+            if(dailyMissionReportList[i].gamePlayType.Equals(report.gamePlayType))
+            {
+                dailyMissionReportList[i] = report;
+            }
+        }
+    }
+
+    public DailyMissionReport GetDailyMissionReport(GamePlayType type)
+    {
+        return dailyMissionReportList[(int)type];
+    }
+
+    public int GetDailyMissionReportValue(int number)
+    {
+        int value = 0;
+
+        for(int i = 0; i < dailyMissionReportList.Count; i ++)
+        {
+            if(dailyMissionList[number].gamePlayType.Equals(dailyMissionReportList[i].gamePlayType))
+            {
+                switch (dailyMissionList[number].missionType)
+                {
+                    case MissionType.QuestDoPlay:
+                        value = dailyMissionReportList[i].doPlay;
+                        break;
+                    case MissionType.QuestScore:
+                        value = dailyMissionReportList[i].getScore;
+                        break;
+                    case MissionType.QuestCombo:
+                        value = dailyMissionReportList[i].getCombo;
+                        break;
+                }
+                break;
+            }
+        }
+
+        return value;
+    }
+
+    #endregion
 }

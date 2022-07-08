@@ -7,20 +7,19 @@ using UnityEngine.UI;
 public class DailyContent : MonoBehaviour
 {
     DailyMission dailyMission;
-
-    public Image icon;
-    public Text goalText;
-
-    public GameObject nowReceiveObj;
-    public GameObject receiveButton;
-
-    public MissionRewardContent[] missionRewardContents;
-
     DailyManager dailyManager;
 
+    public Image icon;
+    public LocalizationContent titleText;
+    public Text goalText;
+
+    private int index = 0;
+    private int goal = 0;
+
+    public GameObject lockReceiveObj;
+    public GameObject clearObj;
 
     ImageDataBase imageDataBase;
-    Sprite[] vcArray;
     Sprite[] iconArray;
 
 
@@ -28,46 +27,49 @@ public class DailyContent : MonoBehaviour
     {
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
 
-        vcArray = imageDataBase.GetVCArray();
+        iconArray = imageDataBase.GetIconArray();
 
-        nowReceiveObj.SetActive(false);
-        receiveButton.SetActive(false);
+        lockReceiveObj.SetActive(true);
+        clearObj.SetActive(false);
     }
 
-    public void Initialize(DailyMission mission, DailyManager manager)
+    public void Initialize(DailyMission mission, int number, DailyManager manager)
     {
         dailyMission = mission;
+        index = number;
         dailyManager = manager;
 
         icon.sprite = iconArray[(int)mission.gamePlayType];
-        goalText.text = mission.goal.ToString();
+        titleText.name = mission.missionType.ToString();
 
-        for (int i = 0; i < missionRewardContents.Length; i ++)
-        {
-            missionRewardContents[i].obj.SetActive(false);
-        }
+        goal = mission.goal;
 
-        for(int i =0; i < mission.rewardCount; i ++)
+        if (mission.clear)
         {
-            missionRewardContents[i].icon.sprite = vcArray[(int)mission.missionRewards[i].rewardType];
-            missionRewardContents[i].rewardNumberText.text = mission.missionRewards[i].rewardNumber.ToString();
-            missionRewardContents[i].obj.SetActive(true);
+            lockReceiveObj.SetActive(true);
+            clearObj.SetActive(true);
         }
     }
 
-    public void SuccessDaily()
+    public void UpdateState(int number)
     {
-        receiveButton.SetActive(true);
+        goalText.text = number + " / " + goal.ToString();
+
+        if(number >= goal)
+        {
+            lockReceiveObj.SetActive(false);
+        }
     }
 
-    public void NowReceived()
-    {
-        nowReceiveObj.SetActive(true);
-        receiveButton.SetActive(false);
-    }
 
-    public void OnClick()
+    public void OnReceive()
     {
-        dailyManager.Receive(dailyMission);
+        if(!lockReceiveObj.activeInHierarchy)
+        {
+            dailyManager.Received(dailyMission, index);
+
+            lockReceiveObj.SetActive(true);
+            clearObj.SetActive(true);
+        }
     }
 }

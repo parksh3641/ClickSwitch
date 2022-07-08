@@ -501,7 +501,7 @@ public class GameManager : MonoBehaviour
 
             action(true);
 
-            PlusScore(20);
+            PlusScore(30);
 
             mole = true;
         }
@@ -522,7 +522,7 @@ public class GameManager : MonoBehaviour
                 action(false);
                 countIndex = 0;
 
-                MinusScore(40);
+                MinusScore(20);
 
                 if (!GameStateManager.instance.Fail) GameStateManager.instance.Fail = true;
             }
@@ -787,6 +787,8 @@ public class GameManager : MonoBehaviour
 
     public void OnGameEnd()
     {
+        eGameEnd();
+
         Time.timeScale = 1;
 
         GameStateManager.instance.Clock = false;

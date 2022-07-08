@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,6 @@ public class DailyManager : MonoBehaviour
     public GameObject dailyView;
 
     public DailyContent[] dailyContents;
-
 
 
     List<int> missionIndexs = new List<int>();
@@ -24,6 +24,15 @@ public class DailyManager : MonoBehaviour
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
 
         dailyView.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
+        GameManager.eGameEnd += UpdateDailyMission;
+    }
+    private void OnDisable()
+    {
+        GameManager.eGameEnd -= UpdateDailyMission;
     }
 
     public void OpenDaily()
@@ -44,7 +53,7 @@ public class DailyManager : MonoBehaviour
     {
         int number = PlayerPrefs.GetInt(System.DateTime.Today.ToString());
 
-        if(number == 0)
+        if (number == 0)
         {
             Debug.Log("New DailyMission Appeard!");
 
@@ -60,6 +69,8 @@ public class DailyManager : MonoBehaviour
 
     void RandomDailyMission()
     {
+        playerDataBase.OnResetDailyMissionReport();
+
         PlayerPrefs.SetInt(System.DateTime.Today.ToString(), 1);
 
         UnDuplicateRandom(0, dailyMissionList.dailyMissions.Length);
@@ -85,25 +96,24 @@ public class DailyManager : MonoBehaviour
 
         for (int i = 0; i < missionIndexs.Count; i++)
         {
-            dailyContents[i].Initialize(dailyMissionList.dailyMissions[missionIndexs[i]],this);
+            dailyContents[i].Initialize(dailyMissionList.dailyMissions[missionIndexs[i]], i, this);
+            playerDataBase.SetDailyMission(dailyMissionList.dailyMissions[missionIndexs[i]],i);
 
-            //playerDataBase.SetDailyMission(dailyMissionList.dailyMissions[missionIndexs[i]]);
 
+            DailyMission dailyMission = new DailyMission();
 
-            //서버 저장
-
-            DailyMissionJson dailyMissionJson = new DailyMissionJson();
-
-            dailyMissionJson.gamePlayType = dailyMissionList.dailyMissions[missionIndexs[i]].gamePlayType;
-            dailyMissionJson.missionType = dailyMissionList.dailyMissions[missionIndexs[i]].missionType;
-            dailyMissionJson.goal = dailyMissionList.dailyMissions[missionIndexs[i]].goal;
-            dailyMissionJson.isClear = false;
+            dailyMission.gamePlayType = dailyMissionList.dailyMissions[missionIndexs[i]].gamePlayType;
+            dailyMission.missionType = dailyMissionList.dailyMissions[missionIndexs[i]].missionType;
+            dailyMission.goal = dailyMissionList.dailyMissions[missionIndexs[i]].goal;
+            dailyMission.clear = false;
  
             dailyMissionData.Clear();
-            dailyMissionData.Add("DailyMission_" + i, JsonUtility.ToJson(dailyMissionJson));
+            dailyMissionData.Add("DailyMission_" + i, JsonUtility.ToJson(dailyMission));
 
             if(PlayfabManager.instance.isActive) PlayfabManager.instance.SetPlayerData(dailyMissionData);
         }
+
+        UpdateDailyMission();
     }
 
 
@@ -111,57 +121,36 @@ public class DailyManager : MonoBehaviour
     {
         for(int i = 0; i < dailyContents.Length; i ++)
         {
-            //dailyContents[i].Initialize(playerDataBase.GetDailyMission(i),this);
+            dailyContents[i].Initialize(playerDataBase.GetDailyMission(i), i, this);
         }
 
         UpdateDailyMission();
     }
 
+    [Button]
     public void UpdateDailyMission() //게임 끝날때 마다 체크
     {
-        //for(int i = 0; i < dailyContents.Length; i ++)
-        //{
-        //    if(int.Parse(dailyContents[i].goalText.text) >= playerDataBase.GetDailyMissionGoal(i))
-        //    {
-        //        if(!playerDataBase.GetCheckReardDailyMission(i))
-        //        {
-        //            //목표 성공!
+        Debug.Log("일일 미션 상황 체크");
 
-        //            dailyContents[i].SuccessDaily();
-        //        }
-        //        else
-        //        {
-        //            //이미 받음
-
-        //            dailyContents[i].NowReceived();
-        //        }
-        //    }
-        //}
+        for(int i = 0; i < dailyContents.Length; i ++)
+        {
+            dailyContents[i].UpdateState(playerDataBase.GetDailyMissionReportValue(i));
+        }
     }
 
-    public void Receive(DailyMission dailyMission)
+    public void Received(DailyMission dailyMission, int number)
     {
-        for (int i = 0; i < dailyMission.rewardCount; i++)
-        {
-            switch (dailyMission.missionRewards[i].rewardType)
-            {
-                case RewardType.Coin:
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 100);
 
+        NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
 
-                    break;
-                case RewardType.Crystal:
+        playerDataBase.SetDailyMissionClear(dailyMission);
 
+        dailyMission.clear = true;
 
-                    break;
-                case RewardType.Exp:
+        dailyMissionData.Clear();
+        dailyMissionData.Add("DailyMission_" + number, JsonUtility.ToJson(dailyMission));
 
-
-                    break;
-            }
-        }    
-
-        //데이터베이스에 받았다고 전송해줘야함
-
-        //서버에도 받았다고 전송해줘야함
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.SetPlayerData(dailyMissionData);
     }
 }

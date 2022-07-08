@@ -111,8 +111,9 @@ public enum AdType
 
 public enum MissionType
 {
-    Score,
-    Combo
+    QuestDoPlay,
+    QuestScore,
+    QuestCombo
 }
 
 public enum RewardType

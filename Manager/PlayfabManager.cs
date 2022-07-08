@@ -653,13 +653,24 @@ public class PlayfabManager : MonoBehaviour
         PlayFabClientAPI.GetUserData(request, (result) =>
         {
             TrophyData trophyData = new TrophyData();
+            DailyMission dailyMission = new DailyMission();
 
             foreach (var eachData in result.Data)
             {
                 string key = eachData.Key;
 
-                trophyData = JsonUtility.FromJson<TrophyData>(eachData.Value.Value);
-                playerDataBase.SetTrophyData(trophyData);
+                if(key.Contains("GameChoice"))
+                {
+                    trophyData = JsonUtility.FromJson<TrophyData>(eachData.Value.Value);
+                    playerDataBase.SetTrophyData(trophyData);
+                }
+                else if(key.Contains("DailyMission"))
+                {
+                    string[] number = key.Split('_');
+                    dailyMission = JsonUtility.FromJson<DailyMission>(eachData.Value.Value);
+                    playerDataBase.SetDailyMission(dailyMission, int.Parse(number[1]));
+                }
+
             }
 
         }, DisplayPlayfabError);
@@ -918,6 +929,18 @@ public class PlayfabManager : MonoBehaviour
 
         PlayFabClientAPI.GetLeaderboard(requestLeaderboard, successCalback, DisplayPlayfabError);
     }
+
+    public void GetLeaderboardMyRank(string name, Action<GetLeaderboardAroundPlayerResult> successCalback)
+    {
+        var request = new GetLeaderboardAroundPlayerRequest()
+        {
+            StatisticName = name,
+            MaxResultsCount = 1,
+        };
+
+        PlayFabClientAPI.GetLeaderboardAroundPlayer(request, successCalback, DisplayPlayfabError);
+    }
+
 
     public void SetProfileLanguage(string language)
     {
