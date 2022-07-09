@@ -114,7 +114,9 @@ public class MailBoxManager : MonoBehaviour
             return;
         }
 
-        for(int i = 0; i < bundleItemIdList.Count; i ++)
+        noMailObj.SetActive(false);
+
+        for (int i = 0; i < bundleItemIdList.Count; i ++)
         {
             int temp = i;
             mailContentList[i].gameObject.SetActive(true);

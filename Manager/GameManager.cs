@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
     public Image gameModeBackground;
     public GameObject tryCountView;
     public Text tryCountText;
+    public GameObject tryCountZeroView;
     Sprite[] modeBackgroundImgArray;
 
 
@@ -325,11 +326,19 @@ public class GameManager : MonoBehaviour
         uiManager.CloseMenu();
 
         tryCountView.SetActive(false);
+        tryCountZeroView.SetActive(false);
 
         if (mode == GameModeType.Perfect)
         {
-            tryCountView.SetActive(true);
-            tryCountText.text = GameStateManager.instance.TryCount.ToString();
+            if(GameStateManager.instance.TryCount > 0)
+            {
+                tryCountView.SetActive(true);
+                tryCountText.text = GameStateManager.instance.TryCount.ToString();
+            }
+            else
+            {
+                if(!GameStateManager.instance.EventWatchAd) tryCountZeroView.SetActive(true);
+            }
         }
     }
 
@@ -702,10 +711,22 @@ public class GameManager : MonoBehaviour
 
                 warningController.Hit();
 
-                MinusScore(20);
+                MinusScore(5);
 
                 timingActionSpeed = timingActionSaveSpeed;
             }
+        }
+    }
+
+    public void CheckFingerSnapDirection(int direction)
+    {
+        if (dragActionIndex == direction)
+        {
+            CheckFingerSnap(true);
+        }
+        else
+        {
+            CheckFingerSnap(false);
         }
     }
 
@@ -773,7 +794,6 @@ public class GameManager : MonoBehaviour
                 StartCoroutine("MoveTimingActionRange");
                 break;
             case GamePlayType.GameChoice6:
-                StartCoroutine("CheckFingerSnapDirection");
                 break;
         }
 
@@ -800,6 +820,13 @@ public class GameManager : MonoBehaviour
         tryCountText.text = GameStateManager.instance.TryCount.ToString();
 
         StopAllCoroutines();
+
+        if(GameStateManager.instance.GameModeType == GameModeType.Perfect && GameStateManager.instance.TryCount <= 0)
+        {
+            tryCountView.SetActive(false);
+
+            if (!GameStateManager.instance.EventWatchAd) tryCountZeroView.SetActive(true);
+        }
     }
 
     public void SuccessWatchAd()
@@ -811,6 +838,9 @@ public class GameManager : MonoBehaviour
         tryCountText.text = GameStateManager.instance.TryCount.ToString();
 
         eventWatchAdView.SetActive(false);
+
+        tryCountView.SetActive(true);
+        tryCountZeroView.SetActive(false);
     }
 
     public void CloseEventWatchAd()
@@ -948,68 +978,5 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(2);
         }
     }
-
-    IEnumerator CheckFingerSnapDirection()
-    {
-        while(true)
-        {
-            if (touchManager.direction != "")
-            {
-                switch (dragActionIndex)
-                {
-                    case 0:
-                        if (touchManager.direction == "Left")
-                        {
-                            touchManager.direction = "";
-                            CheckFingerSnap(true);
-                        }
-                        else
-                        {
-                            touchManager.direction = "";
-                            CheckFingerSnap(false);
-                        }
-                        break;
-                    case 1:
-                        if (touchManager.direction == "Right")
-                        {
-                            touchManager.direction = "";
-                            CheckFingerSnap(true);
-                        }
-                        else
-                        {
-                            touchManager.direction = "";
-                            CheckFingerSnap(false);
-                        }
-                        break;
-                    case 2:
-                        if (touchManager.direction == "Down")
-                        {
-                            touchManager.direction = "";
-                            CheckFingerSnap(true);
-                        }
-                        else
-                        {
-                            touchManager.direction = "";
-                            CheckFingerSnap(false);
-                        }
-                        break;
-                    case 3:
-                        if (touchManager.direction == "Up")
-                        {
-                            touchManager.direction = "";
-                            CheckFingerSnap(true);
-                        }
-                        else
-                        {
-                            touchManager.direction = "";
-                            CheckFingerSnap(false);
-                        }
-                        break;
-                }
-            }
-            yield return new WaitForSeconds(0.01f);
-        }
-    }
-
     #endregion
 }

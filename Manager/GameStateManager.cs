@@ -54,8 +54,8 @@ public class GameStateManager : MonoBehaviour
 
         [Space]
         [Title("Event")]
-        public int tryCount = 1;
         public bool fail = false;
+        public int tryCount = 2;
         public bool eventWatchAd = false;
     }
 
@@ -353,9 +353,6 @@ public class GameStateManager : MonoBehaviour
             if (!string.IsNullOrEmpty(stjs))
             {
                 gameSettings = JsonUtility.FromJson<GameSettings>(stjs);
-
-                gameSettings.clock = false;
-                gameSettings.shield = false;
             }
             else
             {

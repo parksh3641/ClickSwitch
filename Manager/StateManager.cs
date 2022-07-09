@@ -17,6 +17,7 @@ public class StateManager : MonoBehaviour
     public TrophyManager trophyManager;
     public HelpManager helpManager;
     public MailBoxManager mailBoxManager;
+    public DailyManager dailyManager;
 
     public delegate void PurchasEvent();
     public static event PurchasEvent eChangeNumber;
@@ -41,6 +42,7 @@ public class StateManager : MonoBehaviour
             trophyManager.Initialize();
             helpManager.Initialize();
             mailBoxManager.Initialize();
+            dailyManager.Initialize();
         }
     }
 

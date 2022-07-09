@@ -2,13 +2,23 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DailyManager : MonoBehaviour
 {
     public GameObject dailyView;
 
+    public GameObject alarm;
+
+    public Text timerText;
+
     public DailyContent[] dailyContents;
 
+    public Text clearText;
+    public GameObject lockReceiveObj;
+
+    private int alarmIndex = 0;
+    private bool open = false;
 
     List<int> missionIndexs = new List<int>();
     Dictionary<string, string> dailyMissionData = new Dictionary<string, string>();
@@ -24,29 +34,57 @@ public class DailyManager : MonoBehaviour
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
 
         dailyView.SetActive(false);
+        alarm.SetActive(false);
+        lockReceiveObj.SetActive(true);
+    }
+
+    public void Initialize()
+    {
+        dailyView.SetActive(true);
+        dailyView.GetComponent<RectTransform>().anchoredPosition = new Vector2(2000, 0);
+
+        CheckDailyMission();
+    }
+
+    private void Start()
+    {
+        StartCoroutine(DailyMissionTimer());
     }
 
     private void OnEnable()
     {
+        GameManager.eGameStart += GameStart;
         GameManager.eGameEnd += UpdateDailyMission;
     }
     private void OnDisable()
     {
+        GameManager.eGameStart -= GameStart;
         GameManager.eGameEnd -= UpdateDailyMission;
+    }
+
+    void GameStart()
+    {
+        dailyView.SetActive(false);
     }
 
     public void OpenDaily()
     {
-        if (!dailyView.activeSelf)
+        if (!open)
         {
-            dailyView.SetActive(true);
-
-            CheckDailyMission();
+            open = true;
+            dailyView.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
         }
         else
         {
-            dailyView.SetActive(false);
+            open = false;
+            dailyView.GetComponent<RectTransform>().anchoredPosition = new Vector2(2000, 0);
         }
+    }
+
+    [Button]
+    public void OnReset()
+    {
+        PlayerPrefs.SetInt(System.DateTime.Today.ToString(), 0);
     }
 
     public void CheckDailyMission()
@@ -72,6 +110,12 @@ public class DailyManager : MonoBehaviour
         playerDataBase.OnResetDailyMissionReport();
 
         PlayerPrefs.SetInt(System.DateTime.Today.ToString(), 1);
+
+        if (PlayfabManager.instance.isActive)
+        {
+            PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyMissionCount", 0);
+            PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyMissionClear", 0);
+        }
 
         UnDuplicateRandom(0, dailyMissionList.dailyMissions.Length);
     }
@@ -124,13 +168,23 @@ public class DailyManager : MonoBehaviour
             dailyContents[i].Initialize(playerDataBase.GetDailyMission(i), i, this);
         }
 
+        clearText.text = playerDataBase.DailyMissionCount + " / 3";
+
+        if (playerDataBase.DailyMissionCount >= 3 && !playerDataBase.DailyMissionClear)
+        {
+            lockReceiveObj.SetActive(false);
+            OnSetAlarm();
+        }
+
         UpdateDailyMission();
     }
 
     [Button]
-    public void UpdateDailyMission() //게임 끝날때 마다 체크
+    public void UpdateDailyMission()
     {
-        Debug.Log("일일 미션 상황 체크");
+        dailyView.SetActive(true);
+
+        Debug.Log("퀘스트 클리어 여부 업데이트");
 
         for(int i = 0; i < dailyContents.Length; i ++)
         {
@@ -138,11 +192,18 @@ public class DailyManager : MonoBehaviour
         }
     }
 
+    public void OnSetAlarm()
+    {
+        alarm.SetActive(true);
+
+        alarmIndex++;
+    }
+
     public void Received(DailyMission dailyMission, int number)
     {
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 100);
-
         NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
+
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 100);
 
         playerDataBase.SetDailyMissionClear(dailyMission);
 
@@ -151,6 +212,98 @@ public class DailyManager : MonoBehaviour
         dailyMissionData.Clear();
         dailyMissionData.Add("DailyMission_" + number, JsonUtility.ToJson(dailyMission));
 
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.SetPlayerData(dailyMissionData);
+        playerDataBase.DailyMissionCount += 1;
+
+        if (PlayfabManager.instance.isActive)
+        {
+            PlayfabManager.instance.SetPlayerData(dailyMissionData);
+            PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyMissionCount", playerDataBase.DailyMissionCount);
+        }
+
+        clearText.text = playerDataBase.DailyMissionCount + " / 3";
+
+        if (playerDataBase.DailyMissionCount >= 3)
+        {
+            lockReceiveObj.SetActive(false);
+
+            OnSetAlarm();
+        }
+
+        alarmIndex--;
+
+        if(alarmIndex == 0)
+        {
+            alarm.SetActive(false);
+        }
+    }
+
+    public void ReceiveCrystal()
+    {
+        if (!lockReceiveObj.activeInHierarchy && !playerDataBase.DailyMissionClear)
+        {
+            NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
+
+            if (PlayfabManager.instance.isActive)
+            {
+                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 10);
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyMissionClear", 1);
+            }
+
+            playerDataBase.DailyMissionClear = true;
+
+            lockReceiveObj.SetActive(true);
+
+            alarmIndex--;
+
+            if (alarmIndex == 0)
+            {
+                alarm.SetActive(false);
+            }
+        }
+    }
+
+    IEnumerator DailyMissionTimer()
+    {
+        System.DateTime f = System.DateTime.Now;
+        System.DateTime g = System.DateTime.Today.AddDays(1);
+        System.TimeSpan h = g - f;
+
+        int i = h.Hours;
+        int j = h.Minutes;
+        int k = h.Seconds;
+        int total = i + j + k;
+        string l, m, n;
+
+        if (i > 9)
+        {
+            l = i.ToString();
+        }
+        else
+        {
+            l = "0" + i.ToString();
+        }
+
+        if (j > 9)
+        {
+            m = j.ToString();
+        }
+        else
+        {
+            m = "0" + j.ToString();
+        }
+
+        if (k > 9)
+        {
+            n = k.ToString();
+        }
+        else
+        {
+            n = "0" + k.ToString();
+        }
+
+        timerText.text = " : " + l + ":" + m + ":" + n;
+
+        yield return new WaitForSeconds(1);
+        StartCoroutine(DailyMissionTimer());
     }
 }

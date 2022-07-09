@@ -62,9 +62,24 @@ public class GoogleAdsManager : MonoBehaviour
         adType = AdType.CoinX2;
         adType += number;
 
-        if(playerDataBase.RemoveAd && number == 2)
+
+        if(playerDataBase.RemoveAd)
         {
-            shopManager.SuccessWatchAd();
+            switch(number)
+            {
+                case 0:
+                    uIManager.SuccessWatchAd();
+
+                    break;
+                case 1:
+                    gameManager.SuccessWatchAd();
+
+                    break;
+                case 2:
+                    shopManager.SuccessWatchAd();
+
+                    break;
+            }
             return;
         }
 

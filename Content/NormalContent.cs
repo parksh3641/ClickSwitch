@@ -12,7 +12,7 @@ public class NormalContent : MonoBehaviour, IContentEvent
     [SerializeField]
     private bool isActive = false;
     public int index = 0;
-    private int moveSpeed = 30;
+    private int moveSpeed = 50;
     private int moveDirection = 0;
 
     public Text numberText;

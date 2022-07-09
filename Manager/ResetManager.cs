@@ -69,12 +69,6 @@ public class ResetManager : MonoBehaviour
 
             GameStateManager.instance.TryCount = 2;
             GameStateManager.instance.EventWatchAd = false;
-
-            if (playerDataBase.RemoveAd)
-            {
-                GameStateManager.instance.TryCount = 3;
-                GameStateManager.instance.EventWatchAd = true;
-            }
         }
 
         if (ComparisonDate(playerDataBase.AttendanceDay, time))
@@ -123,12 +117,6 @@ public class ResetManager : MonoBehaviour
 
             GameStateManager.instance.TryCount = 2;
             GameStateManager.instance.EventWatchAd = false;
-
-            if(playerDataBase.RemoveAd)
-            {
-                GameStateManager.instance.TryCount = 3;
-                GameStateManager.instance.EventWatchAd = true;
-            }
         }
         else
         {

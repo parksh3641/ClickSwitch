@@ -61,7 +61,6 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     [Space]
     [Title("Ad")]
-    public GameObject watchAdButton;
     public GameObject watchAdLock;
     public Text watchAdCountText;
 
@@ -716,13 +715,30 @@ public class UIManager : MonoBehaviour, IGameEvent
             }
         }
 
+        if (!GameStateManager.instance.WatchAd)
+        {
+            LoadWatchAd();
+        }
+        else
+        {
+            SetWatchAd(false);
+        }
+
         DailyMissionReport report = new DailyMissionReport();
 
         report = playerDataBase.GetDailyMissionReport(GameStateManager.instance.GamePlayType);
 
         report.doPlay += 1;
-        report.getScore = (int)score;
-        report.getCombo = comboManager.GetCombo();
+
+        if(report.getScore < (int)score)
+        {
+            report.getScore = (int)score;
+        }
+
+        if(report.getCombo < comboManager.GetCombo())
+        {
+            report.getCombo = comboManager.GetCombo();
+        }
 
         playerDataBase.SetDailyMissionReport(report);
 
@@ -860,51 +876,23 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         if (money > 0)
         {
-            if (playerDataBase.RemoveAd)
+            if (playerDataBase.Level > 0)
             {
+                if (playerDataBase.Level > 30)
+                {
+                    playerDataBase.Level = 30;
+                }
+
                 doubleCoinObj.SetActive(true);
-                watchAdButton.SetActive(false);
 
-                plus = 1.0f + (level / 100.0f);
+                plus = level / 100.0f;
 
-                plusGoldText.text = "+ " + (100 + level) + "%";
-
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, (int)(money + (money * plus)));
-
-                getGoldText.text = money + " + " + money.ToString();
+                plusGoldText.text = "+ " + level + "%";
             }
-            else
-            {
-                doubleCoinObj.SetActive(false);
-                watchAdButton.SetActive(true);
 
-                if(playerDataBase.Level > 0)
-                {
-                    if(playerDataBase.Level > 30)
-                    {
-                        playerDataBase.Level = 30;
-                    }
+            if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, (int)(money + (money * plus)));
 
-                    doubleCoinObj.SetActive(true);
-
-                    plus = level / 100.0f;
-
-                    plusGoldText.text = "+ " + level + "%";
-                }
-
-                if (!GameStateManager.instance.WatchAd)
-                {
-                    LoadWatchAd();
-                }
-                else
-                {
-                    SetWatchAd(false);
-                }
-
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, (int)(money + (money * plus)));
-
-                getGoldText.text = money.ToString();
-            }
+            getGoldText.text = money.ToString();
         }
         else
         {

@@ -15,6 +15,8 @@ public class DailyContent : MonoBehaviour
 
     private int index = 0;
     private int goal = 0;
+    private bool alarm = false;
+    private bool clear = false;
 
     public GameObject lockReceiveObj;
     public GameObject clearObj;
@@ -44,7 +46,9 @@ public class DailyContent : MonoBehaviour
 
         goal = mission.goal;
 
-        if (mission.clear)
+        clear = mission.clear;
+
+        if (clear)
         {
             lockReceiveObj.SetActive(true);
             clearObj.SetActive(true);
@@ -58,6 +62,16 @@ public class DailyContent : MonoBehaviour
         if(number >= goal)
         {
             lockReceiveObj.SetActive(false);
+
+            if(!alarm)
+            {
+                alarm = true;
+
+                if(!clear)
+                {
+                                    dailyManager.OnSetAlarm();
+                }
+            }
         }
     }
 

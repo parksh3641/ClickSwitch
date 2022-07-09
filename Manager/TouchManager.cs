@@ -11,12 +11,7 @@ public class TouchManager : MonoBehaviour
 
     private bool firstSwipe = false;
 
-    public string direction = "";
-
-    void Update()
-    {
-        if (Time.timeScale == 0) { InputButtonUp(); return; }
-    }
+    public GameManager gameManager;
 
     public void InputButtonUp()
     {
@@ -41,13 +36,13 @@ public class TouchManager : MonoBehaviour
                 float swipeValue = Input.mousePosition.x - startPos.x;
                 if (swipeValue > 0)
                 {
-                    direction = "Right";
+                    gameManager.CheckFingerSnapDirection(1);
 
                     firstSwipe = false;
                 }
                 else if (swipeValue < 0)
                 {
-                    direction = "Left";
+                    gameManager.CheckFingerSnapDirection(0);
 
                     firstSwipe = false;
                 }
@@ -60,24 +55,15 @@ public class TouchManager : MonoBehaviour
                 float swipeValue = Input.mousePosition.y - startPos.y;
                 if (swipeValue > 0)
                 {
-                    direction = "Up";
-
+                    gameManager.CheckFingerSnapDirection(3);
                     firstSwipe = false;
                 }
                 else if (swipeValue < 0)
                 {
-                    direction = "Down";
-
+                    gameManager.CheckFingerSnapDirection(2);
                     firstSwipe = false;
                 }
             }
         }
-
-        Invoke("OnReset", 0.25f);
-    }
-
-    private void OnReset()
-    {
-        direction = "";
     }
 }

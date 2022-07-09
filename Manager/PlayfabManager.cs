@@ -619,6 +619,19 @@ public class PlayfabManager : MonoBehaviour
                        case "NewsAlarm":
                            playerDataBase.NewsAlarm = statistics.Value;
                            break;
+                       case "DailyMissionCount":
+                           playerDataBase.DailyMissionCount = statistics.Value;
+                           break;
+                       case "DailyMissionClear":
+                           if(statistics.Value == 0)
+                           {
+                               playerDataBase.DailyMissionClear = false;
+                           }
+                           else
+                           {
+                               playerDataBase.DailyMissionClear = true;
+                           }
+                           break;
                    }
                }
            })
@@ -776,7 +789,16 @@ public class PlayfabManager : MonoBehaviour
                     GeneratePlayStreamEvent = true,
                 }, OnCloudUpdateStats, DisplayPlayfabError);
 
-                uiManager.goldAnimation.OnPlayCoinAnimation(playerDataBase.Coin, number);
+
+                switch (type)
+                {
+                    case MoneyType.Coin:
+                        uiManager.goldAnimation.OnPlayCoinAnimation(MoneyType.Coin, playerDataBase.Coin, number);
+                        break;
+                    case MoneyType.Crystal:
+                        uiManager.goldAnimation.OnPlayCoinAnimation(MoneyType.Crystal, playerDataBase.Crystal, number);
+                        break;
+                }
 
                 playerDataBase.Coin += number;
             }

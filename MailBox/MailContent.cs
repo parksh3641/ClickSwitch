@@ -43,7 +43,7 @@ public class MailContent : MonoBehaviour
             {
                 if(name.Contains((itemType + i).ToString()))
                 {
-                    icon.sprite = itemArray[(int)itemType];
+                    icon.sprite = itemArray[(int)itemType + i];
                 }
             }
         }

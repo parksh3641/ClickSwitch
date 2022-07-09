@@ -106,6 +106,10 @@ public class PlayerDataBase : ScriptableObject
     [Space]
     [Title("DailyMission")]
     [SerializeField]
+    private int dailyMissionCount = 0;
+    [SerializeField]
+    private bool dailyMissionClear = false;
+    [SerializeField]
     private List<DailyMission> dailyMissionList = new List<DailyMission>();
 
     [SerializeField]
@@ -156,6 +160,9 @@ public class PlayerDataBase : ScriptableObject
         trophyDataList.Clear();
 
         newsAlarm = 0;
+
+        dailyMissionCount = 0;
+        dailyMissionClear = false;
 
         dailyMissionList.Clear();
 
@@ -594,8 +601,35 @@ public class PlayerDataBase : ScriptableObject
 
 
     #region DailyMission
+
+    public int DailyMissionCount
+    {
+        get
+        {
+            return dailyMissionCount;
+        }
+        set
+        {
+            dailyMissionCount = value;
+        }
+    }
+
+    public bool DailyMissionClear
+    {
+        get
+        {
+            return dailyMissionClear;
+        }
+        set
+        {
+            dailyMissionClear = value;
+        }
+    }
     public void OnResetDailyMissionReport()
     {
+        DailyMissionCount = 0;
+        DailyMissionClear = false;
+
         dailyMissionReportList.Clear();
 
         for (int i = 0; i < System.Enum.GetValues(typeof(GamePlayType)).Length; i++)

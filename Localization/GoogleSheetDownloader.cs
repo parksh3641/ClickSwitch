@@ -71,6 +71,16 @@ public class GoogleSheetDownloader : MonoBehaviour
             yield return www.SendWebRequest();
             SetLocalization(www.downloadHandler.text);
 
+            Debug.Log("Localization File Download Complete!");
+
+            Debug.Log("Value File Downloading...");
+
+            UnityWebRequest www2 = UnityWebRequest.Get(ValueURL);
+            yield return www2.SendWebRequest();
+            SetValue(www2.downloadHandler.text);
+
+            Debug.Log("Value File Download Complete!");
+
             PlayerPrefs.SetInt("Version", version);
         }
 
@@ -81,6 +91,8 @@ public class GoogleSheetDownloader : MonoBehaviour
             UnityWebRequest www = UnityWebRequest.Get(LocalizationURL);
             yield return www.SendWebRequest();
             SetLocalization(www.downloadHandler.text);
+
+            Debug.Log("Localization File Download Complete!");
 
             PlayerPrefs.SetInt("Version", version);
         }
@@ -95,11 +107,25 @@ public class GoogleSheetDownloader : MonoBehaviour
             Debug.Log("Localization File is exists");
         }
 
-        Debug.Log("Value File Downloading...");
+        if (!File.Exists(SystemPath.GetPath() + "Value.txt"))
+        {
+            Debug.Log("Value File Downloading...");
 
-        UnityWebRequest www2 = UnityWebRequest.Get(ValueURL);
-        yield return www2.SendWebRequest();
-        SetValue(www2.downloadHandler.text);
+            UnityWebRequest www2 = UnityWebRequest.Get(ValueURL);
+            yield return www2.SendWebRequest();
+            SetValue(www2.downloadHandler.text);
+        }
+        else
+        {
+            StreamReader reader = new StreamReader(SystemPath.GetPath() + "Value.txt");
+            string value = reader.ReadToEnd();
+            reader.Close();
+
+            SetValue(value);
+
+
+            Debug.Log("Value File is exists");
+        }
 
         if (!File.Exists(SystemPath.GetPath() + "BadWord.txt"))
         {
@@ -147,8 +173,6 @@ public class GoogleSheetDownloader : MonoBehaviour
 
             localizationDataBase.SetLocalization(content);
         }
-
-        Debug.Log("Localization File Download Complete!");
     }
 
     void SetValue(string tsv)
@@ -220,8 +244,6 @@ public class GoogleSheetDownloader : MonoBehaviour
 
             }
         }
-
-        Debug.Log("Value File Download Complete!");
     }
 
     void SyncFile()
