@@ -42,6 +42,7 @@ public class GameStateManager : MonoBehaviour
         public bool music = true;
         public bool sfx = true;
         public bool vibration = true;
+        public bool sleepMode = false;
         public bool watchAd = true;
 
         [Space]
@@ -214,6 +215,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.vibration = value;
+            SaveFile();
+        }
+    }
+
+    public bool SleepMode
+    {
+        get
+        {
+            return gameSettings.sleepMode;
+        }
+        set
+        {
+            gameSettings.sleepMode = value;
             SaveFile();
         }
     }

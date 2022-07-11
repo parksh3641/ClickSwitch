@@ -1,3 +1,4 @@
+using Firebase.Analytics;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -260,6 +261,8 @@ public class DailyManager : MonoBehaviour
                 alarm.SetActive(false);
             }
         }
+
+        FirebaseAnalytics.LogEvent("DailyMission");
     }
 
     IEnumerator DailyMissionTimer()

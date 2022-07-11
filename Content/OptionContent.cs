@@ -83,6 +83,9 @@ public class OptionContent : MonoBehaviour
 
                 OnVibration();
                 break;
+            case OptionType.SleepMode:
+                OnSleepMode();
+                break;
         }
     }
 
@@ -133,6 +136,22 @@ public class OptionContent : MonoBehaviour
                 }
 
                 OnVibration();
+                break;
+            case OptionType.SleepMode:
+                if (GameStateManager.instance.SleepMode)
+                {
+                    GameStateManager.instance.SleepMode = false;
+
+                    Application.targetFrameRate = 60;
+                }
+                else
+                {
+                    GameStateManager.instance.SleepMode = true;
+
+                    Application.targetFrameRate = 30;
+                }
+
+                OnSleepMode();
                 break;
         }
     }
@@ -191,6 +210,26 @@ public class OptionContent : MonoBehaviour
         else
         {
             iconImg.sprite = iconList[4];
+            buttonImg.sprite = buttonList[1];
+            buttonText.name = "OFF";
+            buttonText.ReLoad();
+            buttonText.TextColor(new Color(225 / 255f, 34 / 255f, 12 / 255f));
+        }
+    }
+
+    public void OnSleepMode()
+    {
+        if (GameStateManager.instance.SleepMode)
+        {
+            iconImg.sprite = iconList[5];
+            buttonImg.sprite = buttonList[0];
+            buttonText.name = "ON";
+            buttonText.ReLoad();
+            buttonText.TextColor(new Color(39 / 255f, 220 / 255f, 149 / 255f));
+        }
+        else
+        {
+            iconImg.sprite = iconList[5];
             buttonImg.sprite = buttonList[1];
             buttonText.name = "OFF";
             buttonText.ReLoad();

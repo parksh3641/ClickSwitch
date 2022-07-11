@@ -111,6 +111,7 @@ public class GameManager : MonoBehaviour
 
         numberList.Clear();
 
+        Screen.sleepTimeout = SleepTimeout.SystemSetting;
         Time.timeScale = 1;
 
         for (int i = 0; i < 9; i ++)
@@ -182,6 +183,15 @@ public class GameManager : MonoBehaviour
         gameModeText.ReLoad();
 
         ChoiceGameType(GameStateManager.instance.GamePlayType, GameStateManager.instance.GameModeType);
+
+        if (GameStateManager.instance.SleepMode)
+        {
+            Application.targetFrameRate = 30;
+        }
+        else
+        {
+            Application.targetFrameRate = 60;
+        }
     }
 
     #region Setting

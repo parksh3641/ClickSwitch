@@ -18,6 +18,7 @@ public class PlayfabManager : MonoBehaviour
     public static PlayfabManager instance;
 
     public UIManager uiManager;
+    public SoundManager soundManager;
 
     [ShowInInspector]
     string customId = "";
@@ -794,13 +795,15 @@ public class PlayfabManager : MonoBehaviour
                 {
                     case MoneyType.Coin:
                         uiManager.goldAnimation.OnPlayCoinAnimation(MoneyType.Coin, playerDataBase.Coin, number);
+                        playerDataBase.Coin += number;
                         break;
                     case MoneyType.Crystal:
                         uiManager.goldAnimation.OnPlayCoinAnimation(MoneyType.Crystal, playerDataBase.Crystal, number);
+                        playerDataBase.Crystal += number;
                         break;
                 }
 
-                playerDataBase.Coin += number;
+                soundManager.PlaySFX(GameSfxType.GetMoney);
             }
             catch (Exception e)
             {
@@ -1140,6 +1143,8 @@ public class PlayfabManager : MonoBehaviour
 
             Debug.Log(shopClass.itemId + " 구매 성공!");
             action.Invoke(true);
+
+            soundManager.PlaySFX(GameSfxType.BuyItem);
         }, error =>
         {
             Debug.Log(shopClass.itemId + " 구매 실패!");

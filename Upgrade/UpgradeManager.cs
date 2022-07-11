@@ -4,15 +4,40 @@ using UnityEngine;
 
 public class UpgradeManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public GameObject upgradeView;
+
+
+    PlayerDataBase playerDataBase;
+    UpgradeDataBase upgradeDataBase;
+
+    private void Awake()
     {
-        
+        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+        if (upgradeDataBase == null) upgradeDataBase = Resources.Load("UpgradeDataBase") as UpgradeDataBase;
+
+        upgradeView.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Initialize()
     {
-        
+
+    }
+
+    public void OpenUpgrade()
+    {
+        if (!upgradeView.activeSelf)
+        {
+            upgradeView.SetActive(true);
+
+        }
+        else
+        {
+            upgradeView.SetActive(false);
+        }
+    }
+
+    void CheckUpgrade()
+    {
+
     }
 }

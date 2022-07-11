@@ -11,8 +11,9 @@ public class MailBoxManager : MonoBehaviour
 {
     public GameObject mailView;
 
-    public GameObject alarm;
 
+
+    public GameObject alarm;
     public GameObject noMailObj;
 
     public MailContent mailContent;
@@ -23,6 +24,7 @@ public class MailBoxManager : MonoBehaviour
 
     public int count = 0;
 
+    public SoundManager soundManager;
 
     List<MailContent> mailContentList = new List<MailContent>();
 
@@ -181,6 +183,8 @@ public class MailBoxManager : MonoBehaviour
             noMailObj.SetActive(true);
             alarm.SetActive(false);
         }
+
+        soundManager.PlaySFX(GameSfxType.Success);
     }
 
     #region Message

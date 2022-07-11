@@ -123,6 +123,8 @@ public class UIManager : MonoBehaviour, IGameEvent
     public HelpManager helpManager;
     public MailBoxManager mailBoxManager;
     public DailyManager dailyManager;
+    public ModeManager modeManager;
+    public UpgradeManager upgradeManager;
 
     [Title("Animation")]
     public CoinAnimation goldAnimation;
@@ -572,7 +574,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void OpenUpgrade()
     {
-
+        upgradeManager.OpenUpgrade();
 
         FirebaseAnalytics.LogEvent("OpenUpgrade");
     }
@@ -621,6 +623,8 @@ public class UIManager : MonoBehaviour, IGameEvent
         StartCoroutine("ReadyTimerCorution", ValueManager.instance.GetReadyTime());
 
         SetEtcUI(false);
+
+        modeManager.OnMode();
     }
 
     public void GamePause()
@@ -642,6 +646,8 @@ public class UIManager : MonoBehaviour, IGameEvent
     public void GameEnd()
     {
         Debug.Log("Game End");
+
+        soundManager.PlayBGM(GameBGMType.End);
 
         if (!NetworkConnect.instance.CheckConnectInternet())
         {
@@ -741,9 +747,6 @@ public class UIManager : MonoBehaviour, IGameEvent
         }
 
         playerDataBase.SetDailyMissionReport(report);
-
-
-        soundManager.PlayBGM(GameBGMType.End);
 
         scoreText.text = "";
         comboManager.OnStopCombo();
@@ -1091,6 +1094,7 @@ public class UIManager : MonoBehaviour, IGameEvent
         score = 0;
 
         SetEtcUI(true);
+        modeManager.OffMode();
 
         eGameEnd.Invoke();
     }

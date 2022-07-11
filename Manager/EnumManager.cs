@@ -30,7 +30,8 @@ public enum OptionType
     SFX,
     Language,
     Logout,
-    Vibration
+    Vibration,
+    SleepMode
 }
 
 public enum LanguageType
@@ -76,7 +77,9 @@ public enum GameSfxType
     Shield,
     LevelUp,
     Fail,
-    Click
+    Click,
+    GetMoney,
+    BuyItem
 }
 
 public enum ShopType

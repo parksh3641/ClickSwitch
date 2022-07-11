@@ -11,23 +11,28 @@ public class GoogleSheetDownloader : MonoBehaviour
     const string LocalizationURL = "https://docs.google.com/spreadsheets/d/1nTQjgAQ631ayvzsWQeXt0PwTpneVV5sPs173vgpg05w/export?format=tsv&gid=0";
     const string ValueURL = "https://docs.google.com/spreadsheets/d/1nTQjgAQ631ayvzsWQeXt0PwTpneVV5sPs173vgpg05w/export?format=tsv&gid=1957583039";
     const string BadWordURL = "https://docs.google.com/spreadsheets/d/1nTQjgAQ631ayvzsWQeXt0PwTpneVV5sPs173vgpg05w/export?format=tsv&gid=582114712";
+    const string UpgradeURL = "https://docs.google.com/spreadsheets/d/1nTQjgAQ631ayvzsWQeXt0PwTpneVV5sPs173vgpg05w/export?format=tsv&gid=374819877";
 
     public bool isActive = false;
 
     public Text messageText;
+    public Image barFillAmount;
+    public Text barPercentText;
 
     LocalizationDataBase localizationDataBase;
     ValueDataBase valueDataBase;
+    UpgradeDataBase upgradeDataBase;
 
     private void Awake()
     {
-        Application.targetFrameRate = 60;
-        Screen.sleepTimeout = SleepTimeout.SystemSetting;
         Time.timeScale = 1;
 
-        if(localizationDataBase == null) localizationDataBase = Resources.Load("LocalizationDataBase") as LocalizationDataBase;
-        if (valueDataBase == null) valueDataBase = Resources.Load("ValueDataBase") as ValueDataBase;
+        barFillAmount.fillAmount = 0f;
+        barPercentText.text = "0%";
 
+        if (localizationDataBase == null) localizationDataBase = Resources.Load("LocalizationDataBase") as LocalizationDataBase;
+        if (valueDataBase == null) valueDataBase = Resources.Load("ValueDataBase") as ValueDataBase;
+        if (upgradeDataBase == null) upgradeDataBase = Resources.Load("UpgradeDataBase") as UpgradeDataBase;
 
         if (!Directory.Exists(SystemPath.GetPath()))
         {
@@ -66,75 +71,107 @@ public class GoogleSheetDownloader : MonoBehaviour
         if (saveVersion < version)
         {
             Debug.Log("Localization File Downloading...");
-
             UnityWebRequest www = UnityWebRequest.Get(LocalizationURL);
             yield return www.SendWebRequest();
             SetLocalization(www.downloadHandler.text);
-
             Debug.Log("Localization File Download Complete!");
 
-            Debug.Log("Value File Downloading...");
+            CheckPercent(25);
 
+            Debug.Log("Value File Downloading...");
             UnityWebRequest www2 = UnityWebRequest.Get(ValueURL);
             yield return www2.SendWebRequest();
             SetValue(www2.downloadHandler.text);
-
             Debug.Log("Value File Download Complete!");
 
-            PlayerPrefs.SetInt("Version", version);
-        }
+            CheckPercent(50);
 
-        if (!File.Exists(SystemPath.GetPath() + "Localization.txt"))
-        {
-            Debug.Log("Localization File Downloading...");
+            Debug.Log("Upgrade File Downloading...");
+            UnityWebRequest www3 = UnityWebRequest.Get(UpgradeURL);
+            yield return www3.SendWebRequest();
+            SetUpgrade(www3.downloadHandler.text);
+            Debug.Log("Upgrade File Download Complete!");
 
-            UnityWebRequest www = UnityWebRequest.Get(LocalizationURL);
-            yield return www.SendWebRequest();
-            SetLocalization(www.downloadHandler.text);
-
-            Debug.Log("Localization File Download Complete!");
+            CheckPercent(75);
 
             PlayerPrefs.SetInt("Version", version);
         }
         else
         {
-            StreamReader reader = new StreamReader(SystemPath.GetPath() + "Localization.txt");
-            string value = reader.ReadToEnd();
-            reader.Close();
+            if (!File.Exists(SystemPath.GetPath() + "Localization.txt"))
+            {
+                Debug.Log("Localization File Downloading...");
 
-            SetLocalization(value);
+                UnityWebRequest www = UnityWebRequest.Get(LocalizationURL);
+                yield return www.SendWebRequest();
+                SetLocalization(www.downloadHandler.text);
 
-            Debug.Log("Localization File is exists");
-        }
+                Debug.Log("Localization File Download Complete!");
 
-        if (!File.Exists(SystemPath.GetPath() + "Value.txt"))
-        {
-            Debug.Log("Value File Downloading...");
+                CheckPercent(25);
 
-            UnityWebRequest www2 = UnityWebRequest.Get(ValueURL);
-            yield return www2.SendWebRequest();
-            SetValue(www2.downloadHandler.text);
-        }
-        else
-        {
-            StreamReader reader = new StreamReader(SystemPath.GetPath() + "Value.txt");
-            string value = reader.ReadToEnd();
-            reader.Close();
+                PlayerPrefs.SetInt("Version", version);
+            }
+            else
+            {
+                StreamReader reader = new StreamReader(SystemPath.GetPath() + "Localization.txt");
+                string value = reader.ReadToEnd();
+                reader.Close();
+                SetLocalization(value);
+                Debug.Log("Localization File is exists");
 
-            SetValue(value);
+                CheckPercent(25);
+            }
 
+            if (!File.Exists(SystemPath.GetPath() + "Value.txt"))
+            {
+                Debug.Log("Value File Downloading...");
+                UnityWebRequest www2 = UnityWebRequest.Get(ValueURL);
+                yield return www2.SendWebRequest();
+                SetValue(www2.downloadHandler.text);
+                Debug.Log("Value File Download Complete!");
 
-            Debug.Log("Value File is exists");
+                CheckPercent(50);
+            }
+            else
+            {
+                StreamReader reader = new StreamReader(SystemPath.GetPath() + "Value.txt");
+                string value = reader.ReadToEnd();
+                reader.Close();
+                SetValue(value);
+                Debug.Log("Value File is exists");
+
+                CheckPercent(50);
+            }
+
+            if (!File.Exists(SystemPath.GetPath() + "Upgrade.txt"))
+            {
+                Debug.Log("Upgrade File Downloading...");
+                UnityWebRequest www3 = UnityWebRequest.Get(UpgradeURL);
+                yield return www3.SendWebRequest();
+                SetUpgrade(www3.downloadHandler.text);
+                Debug.Log("Upgrade File Download Complete!");
+
+                CheckPercent(75);
+            }
+            else
+            {
+                StreamReader reader = new StreamReader(SystemPath.GetPath() + "Upgrade.txt");
+                string value = reader.ReadToEnd();
+                reader.Close();
+                SetUpgrade(value);
+                Debug.Log("Upgrade File is exists");
+
+                CheckPercent(75);
+            }
         }
 
         if (!File.Exists(SystemPath.GetPath() + "BadWord.txt"))
         {
             Debug.Log("BadWord File Downloading...");
-
             UnityWebRequest www3 = UnityWebRequest.Get(BadWordURL);
             yield return www3.SendWebRequest();
             File.WriteAllText(SystemPath.GetPath() + "BadWord.txt", www3.downloadHandler.text);
-
             Debug.Log("BadWord File Download Complete!");
         }
         else
@@ -142,6 +179,7 @@ public class GoogleSheetDownloader : MonoBehaviour
             Debug.Log("BadWord File is exists");
         }
 
+        CheckPercent(100);
         isActive = true;
     }
 
@@ -246,6 +284,42 @@ public class GoogleSheetDownloader : MonoBehaviour
         }
     }
 
+    void SetUpgrade(string tsv)
+    {
+        File.WriteAllText(SystemPath.GetPath() + "Upgrade.txt", tsv);
+
+        string[] row = tsv.Split('\n');
+        int rowSize = row.Length;
+
+        for (int i = 1; i < rowSize; i++)
+        {
+            string[] column = row[i].Split('\t');
+
+            UpgradeInformation upgradeInformation = new UpgradeInformation();
+
+            upgradeInformation.price = int.Parse(column[1]);
+            upgradeInformation.addPrice = int.Parse(column[2]);
+            upgradeInformation.value = float.Parse(column[3]);
+            upgradeInformation.addValue = float.Parse(column[4]);
+
+            switch (column[0])
+            {
+                case "StartTime":
+                    upgradeDataBase.StartTime = upgradeInformation;
+                    break;
+                case "Critical":
+                    upgradeDataBase.Critical = upgradeInformation;
+                    break;
+                case "Burning":
+                    upgradeDataBase.Burning = upgradeInformation;
+                    break;
+                case "AddExp":
+                    upgradeDataBase.AddExp = upgradeInformation;
+                    break;
+            }
+        }
+    }
+
     void SyncFile()
     {
         if(NetworkConnect.instance.CheckConnectInternet())
@@ -269,5 +343,11 @@ public class GoogleSheetDownloader : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
         SyncFile();
+    }
+
+    void CheckPercent(float number)
+    {
+        barFillAmount.fillAmount = number / 100.0f;
+        barPercentText.text = number.ToString() + "%";
     }
 }
