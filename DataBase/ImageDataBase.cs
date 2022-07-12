@@ -27,6 +27,8 @@ public class ImageDataBase : ScriptableObject
     public Sprite[] itemBackgroundArray;
     public Sprite[] itemArray;
 
+    [Title("Upgrade")]
+    public Sprite[] upgradeIconArray;
 
     public Sprite[] GetIconArray()
     {
@@ -66,5 +68,10 @@ public class ImageDataBase : ScriptableObject
     public Sprite[] GetItemArray()
     {
         return itemArray;
+    }
+
+    public Sprite[] GetUpgradeArray()
+    {
+        return upgradeIconArray;
     }
 }

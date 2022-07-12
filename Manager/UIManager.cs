@@ -132,6 +132,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     [Title("DataBase")]
     public PlayerDataBase playerDataBase;
+    public UpgradeDataBase upgradeDataBase;
     ImageDataBase imageDataBase;
 
     private Dictionary<string, string> playerData = new Dictionary<string, string>();
@@ -143,6 +144,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     private void Awake()
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+        if (upgradeDataBase == null) upgradeDataBase = Resources.Load("UpgradeDataBase") as UpgradeDataBase;
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
 
         iconArray = imageDataBase.GetIconArray();
@@ -1212,6 +1214,8 @@ public class UIManager : MonoBehaviour, IGameEvent
         eGameStart.Invoke();
 
         float timer = ValueManager.instance.GetGamePlayTime();
+
+        timer += upgradeDataBase.GetValue(UpgradeType.StartTime, playerDataBase.StartTimeLevel);
 
         if (GameStateManager.instance.Clock) timer += ValueManager.instance.GetClockAddTime();
 

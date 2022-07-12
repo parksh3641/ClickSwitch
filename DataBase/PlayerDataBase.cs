@@ -57,7 +57,7 @@ public class PlayerDataBase : ScriptableObject
     private int bestDragActionCombo = 0;
 
     [Space]
-    [Title("Level")]
+    [Title("Player")]
     [SerializeField]
     private int level = 0;
 
@@ -111,9 +111,20 @@ public class PlayerDataBase : ScriptableObject
     private bool dailyMissionClear = false;
     [SerializeField]
     private List<DailyMission> dailyMissionList = new List<DailyMission>();
-
     [SerializeField]
     private List<DailyMissionReport> dailyMissionReportList = new List<DailyMissionReport>();
+
+
+    [Space]
+    [Title("Upgrade")]
+    [SerializeField]
+    private int startTimeLevel = 0;
+    [SerializeField]
+    private int criticalLevel = 0;
+    [SerializeField]
+    private int burningLevel = 0;
+    [SerializeField]
+    private int addExpLevel = 0;
 
 
     public void Initialize()
@@ -176,6 +187,11 @@ public class PlayerDataBase : ScriptableObject
         {
             OnResetDailyMissionReport();
         }
+
+        StartTimeLevel = 0;
+        criticalLevel = 0;
+        burningLevel = 0;
+        addExpLevel = 0;
     }
 
     public int TotalScore
@@ -701,6 +717,80 @@ public class PlayerDataBase : ScriptableObject
         }
 
         return value;
+    }
+
+    #endregion
+
+    #region Upgrade
+    public int StartTimeLevel
+    {
+        get
+        {
+            return startTimeLevel;
+        }
+        set
+        {
+            startTimeLevel = value;
+        }
+    }
+
+    public int CriticalLevel
+    {
+        get
+        {
+            return criticalLevel;
+        }
+        set
+        {
+            criticalLevel = value;
+        }
+    }
+
+    public int BurningLevel
+    {
+        get
+        {
+            return burningLevel;
+        }
+        set
+        {
+            burningLevel = value;
+        }
+    }
+
+    public int AddExpLevel
+    {
+        get
+        {
+            return addExpLevel;
+        }
+        set
+        {
+            addExpLevel = value;
+        }
+    }
+
+    public int GetLevel(UpgradeType type)
+    {
+        int level = 0;
+
+        switch (type)
+        {
+            case UpgradeType.StartTime:
+                level = StartTimeLevel;
+                break;
+            case UpgradeType.Critical:
+                level = CriticalLevel;
+                break;
+            case UpgradeType.Burning:
+                level = BurningLevel;
+                break;
+            case UpgradeType.AddExp:
+                level = AddExpLevel;
+                break;
+        }
+
+        return level;
     }
 
     #endregion

@@ -10,6 +10,7 @@ public class FirebaseManager : MonoBehaviour
     FirebaseApp app;
     void Start()
     {
+#if !UNITY_EDITOR
         FirebaseMessaging.TokenReceived += OnTokenReceived;
         FirebaseMessaging.MessageReceived += OnMessageReceived;
 
@@ -27,6 +28,8 @@ public class FirebaseManager : MonoBehaviour
                   "Could not resolve all Firebase dependencies: {0}", dependencyStatus));
             }
         });
+
+#endif
     }
 
     void OnTokenReceived(object sender, TokenReceivedEventArgs e)

@@ -125,3 +125,11 @@ public enum RewardType
     Crystal,
     Exp,
 }
+
+public enum UpgradeType
+{
+    StartTime,
+    Critical,
+    Burning,
+    AddExp
+}

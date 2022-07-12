@@ -633,6 +633,18 @@ public class PlayfabManager : MonoBehaviour
                                playerDataBase.DailyMissionClear = true;
                            }
                            break;
+                       case "StartTimeLevel":
+                           playerDataBase.StartTimeLevel = statistics.Value;
+                           break;
+                       case "CriticalLevel":
+                           playerDataBase.CriticalLevel = statistics.Value;
+                           break;
+                       case "BurningLevel":
+                           playerDataBase.BurningLevel = statistics.Value;
+                           break;
+                       case "AddExpLevel":
+                           playerDataBase.AddExpLevel = statistics.Value;
+                           break;
                    }
                }
            })
@@ -845,6 +857,16 @@ public class PlayfabManager : MonoBehaviour
             catch (Exception e)
             {
                 Debug.LogError(e.Message);
+            }
+
+            switch (type)
+            {
+                case MoneyType.Coin:
+                    playerDataBase.Coin -= number;
+                    break;
+                case MoneyType.Crystal:
+                    playerDataBase.Crystal -= number;
+                    break;
             }
         }
         else
@@ -1148,6 +1170,7 @@ public class PlayfabManager : MonoBehaviour
         }, error =>
         {
             Debug.Log(shopClass.itemId + " 구매 실패!");
+            NotionManager.instance.UseNotion(NotionType.LowCoinNotion);
             action.Invoke(false);
         });
     }

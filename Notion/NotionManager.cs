@@ -146,5 +146,9 @@ public enum NotionType
     AddTryCount,
     CopyIdNotion,
     ReceiveNotion,
-    SuccessWatchAd
+    SuccessWatchAd,
+    LowCoinNotion,
+    LowCrystalNotion,
+    UpgradeSuccess,
+    UpgradeMax
 }

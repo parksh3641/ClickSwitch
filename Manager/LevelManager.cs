@@ -80,7 +80,7 @@ public class LevelManager : MonoBehaviour
         defaultExp = ValueManager.instance.GetDefaultExp();
         addExp = ValueManager.instance.GetAddExp();
 
-        float needExp = defaultExp + (level * addExp);
+        float needExp = defaultExp + (playerDataBase.Level * addExp);
 
         return needExp;
     }

@@ -82,4 +82,26 @@ public class UpgradeDataBase : ScriptableObject
             addExp = value;
         }
     }
+
+    public float GetValue(UpgradeType type, int level)
+    {
+        float value = 0;
+        switch (type)
+        {
+            case UpgradeType.StartTime:
+                value = startTime.value + (startTime.addValue * level);
+                break;
+            case UpgradeType.Critical:
+                value = critical.value + (critical.addValue * level);
+                break;
+            case UpgradeType.Burning:
+                value = burning.value + (burning.addValue * level);
+                break;
+            case UpgradeType.AddExp:
+                value = addExp.value + (addExp.addValue * level);
+                break;
+        }
+
+        return value;
+    }
 }
