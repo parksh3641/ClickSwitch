@@ -8,7 +8,7 @@ public class IconManager : MonoBehaviour
     public GameObject iconView;
 
     public IconContent iconContent;
-    public Transform iconContentTransform;
+    public RectTransform iconContentTransform;
 
 
     public Image profileIcon;
@@ -38,6 +38,8 @@ public class IconManager : MonoBehaviour
         }
 
         iconView.SetActive(false);
+
+        iconContentTransform.anchoredPosition = new Vector2(0, -999);
     }
 
     public void OpenIcon()
@@ -66,19 +68,28 @@ public class IconManager : MonoBehaviour
 
     public void Initialize()
     {
-        IconType iconType = IconType.Default_0;
+        IconType iconType = IconType.Icon_0;
 
         for(int i = 0; i < iconContentList.Count; i ++)
         {
             if (imageDataBase.GetProfileIconArray(iconType))
             {
-                iconContentList[i].UnLock(this, iconType);
+                iconContentList[i].Initialize(this, iconType);
+
+                if (i < 3)
+                {
+                    iconContentList[i].UnLock();
+                }
+                else
+                {
+
+                }
             }
 
             iconType++;
         }
 
-        iconType = IconType.Default_0;
+        iconType = IconType.Icon_0;
 
         profileIcon.sprite = imageDataBase.GetProfileIconArray(iconType + playerDataBase.Icon);
     }
@@ -91,6 +102,6 @@ public class IconManager : MonoBehaviour
 
         if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Icon", (int)type);
 
-        OpenIcon();
+        CheckMyIcon();
     }
 }

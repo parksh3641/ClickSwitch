@@ -30,15 +30,13 @@ public class UpgradeContent : MonoBehaviour
     UpgradeDataBase upgradeDataBase;
     UpgradeInformation upgradeInformation = new UpgradeInformation();
 
-
     private void Awake()
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
-
-        upgradeIcon = imageDataBase.GetUpgradeArray();
-
         if (upgradeDataBase == null) upgradeDataBase = Resources.Load("UpgradeDataBase") as UpgradeDataBase;
+
+        if (upgradeIcon == null) upgradeIcon = imageDataBase.GetUpgradeArray();
     }
 
     public void Initialize(UpgradeType type, SoundManager manager)
@@ -49,7 +47,7 @@ public class UpgradeContent : MonoBehaviour
         icon.sprite = upgradeIcon[(int)type];
 
         level = playerDataBase.GetLevel(type);
-        levelText.text = "Lv. " + level.ToString();
+        levelText.text = "Lv. " + level + "/10";
 
         titleText.name = type.ToString();
         titleText.ReLoad();
@@ -70,6 +68,9 @@ public class UpgradeContent : MonoBehaviour
                 break;
             case UpgradeType.AddExp:
                 upgradeInformation = upgradeDataBase.AddExp;
+                break;
+            default:
+                upgradeInformation = upgradeDataBase.StartTime;
                 break;
         }
 

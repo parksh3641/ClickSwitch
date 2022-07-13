@@ -100,9 +100,21 @@ public enum ItemType
 
 public enum IconType
 {
-    Default_0,
-    Default_1,
-    Default_2
+    Icon_0,
+    Icon_1,
+    Icon_2,
+    Icon_3,
+    Icon_4,
+    Icon_5,
+    Icon_6,
+    Icon_7,
+    Icon_8,
+    Icon_9,
+    Icon_10,
+    Icon_11,
+    Icon_12,
+    Icon_13,
+    Icon_14
 }
 
 public enum AdType

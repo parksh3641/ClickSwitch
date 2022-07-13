@@ -75,6 +75,8 @@ public class GameManager : MonoBehaviour
 
     private int dragActionIndex = 0;
 
+    private float critical = 0;
+
     [Title("bool")]
     private bool isActive = false;
 
@@ -92,6 +94,8 @@ public class GameManager : MonoBehaviour
     public SoundManager soundManager;
     public WarningController warningController;
     public TouchManager touchManager;
+    public PlayerDataBase playerDataBase;
+    public UpgradeDataBase upgradeDataBase;
 
     ImageDataBase imageDataBase;
 
@@ -106,6 +110,10 @@ public class GameManager : MonoBehaviour
     {
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
         modeBackgroundImgArray = imageDataBase.GetModeBackgroundArray();
+
+        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+        if (upgradeDataBase == null) upgradeDataBase = Resources.Load("UpgradeDataBase") as UpgradeDataBase;
+
 
         eventWatchAdView.SetActive(false);
 
@@ -383,6 +391,8 @@ public class GameManager : MonoBehaviour
 
         GameStateManager.instance.Fail = false;
 
+        critical = upgradeDataBase.GetValue(UpgradeType.Critical, playerDataBase.CriticalLevel);
+
         uiManager.OpenGamePlayUI(gamePlayType);
 
         FirebaseAnalytics.LogEvent(gamePlayType.ToString());
@@ -471,6 +481,21 @@ public class GameManager : MonoBehaviour
         eGameStart();
     }
 
+    void CheckPlusScore(int number)
+    {
+        float random = Random.Range(0, 100f);
+
+        if(random <= critical)
+        {
+            PlusScore(number * 2);
+        }
+        else
+        {
+            PlusScore(number);
+        }
+    }
+
+
     public void CheckNumber(int index, System.Action<bool> action)
     {
         if(nowIndex + 1 == index)
@@ -479,7 +504,7 @@ public class GameManager : MonoBehaviour
 
             action(true);
 
-            PlusScore(10);
+            CheckPlusScore(10);
             nowIndex++;
 
             if(nowIndex >= countIndex - 1)
@@ -520,7 +545,7 @@ public class GameManager : MonoBehaviour
 
             action(true);
 
-            PlusScore(30);
+            CheckPlusScore(30);
 
             mole = true;
         }
@@ -571,7 +596,7 @@ public class GameManager : MonoBehaviour
                 action?.Invoke(1);
                 saveAction?.Invoke(1);
 
-                PlusScore(20);
+                CheckPlusScore(20);
 
                 filpCardIndex = -1;
                 nowIndex++;
@@ -623,7 +648,7 @@ public class GameManager : MonoBehaviour
 
             action?.Invoke(true);
 
-            PlusScore(10);
+            CheckPlusScore(10);
 
             if (numberList.Count == 0)
             {
@@ -687,15 +712,11 @@ public class GameManager : MonoBehaviour
 
             if (timingActionFillmount.fillAmount >= timingActionCheckRange_1 + 0.1f && timingActionFillmount.fillAmount <= timingActionCheckRange_2 - 0.05f)
             {
-                Debug.Log("Perfect Success");
-
-                PlusScore(10);
+                CheckPlusScore(10);
             }
             else
             {
-                Debug.Log("Success");
-
-                PlusScore(5);
+                CheckPlusScore(5);
             }
 
             if (timingActionSpeed < timingActionSaveSpeed * 4)
@@ -746,7 +767,7 @@ public class GameManager : MonoBehaviour
         {
             soundManager.PlaySFX(GameSfxType.Click);
 
-            PlusScore(10);
+            CheckPlusScore(10);
 
             drageActionList[nowIndex].MoveFingerSnap(dragActionIndex);
 

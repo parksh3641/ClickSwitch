@@ -41,6 +41,11 @@ public class UpgradeManager : MonoBehaviour
             monster.gameObject.SetActive(true);
             monster.Initialize(UpgradeType.StartTime + i, soundManager);
 
+            if(i == 2)
+            {
+                monster.gameObject.SetActive(false);
+            }
+
             upgradeContentList.Add(monster);
         }
 

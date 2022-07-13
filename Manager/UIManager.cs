@@ -626,6 +626,8 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         SetEtcUI(false);
 
+        comboManager.barAnimation.OnReset();
+
         modeManager.OnMode();
     }
 
@@ -914,13 +916,25 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         exp += (combo / 10);
 
-        if (GameStateManager.instance.Exp)
+
+        float expPlus = 0;
+
+        expPlus += upgradeDataBase.GetValue(UpgradeType.AddExp, playerDataBase.AddExpLevel);
+
+        if (GameStateManager.instance.Exp || playerDataBase.AddExpLevel > 0)
         {
             doubleExpObj.SetActive(true);
-            plusExpText.text = "+ 50%";
-
-            exp = exp + (exp * 0.5f);
         }
+
+        if(GameStateManager.instance.Exp)
+        {
+            expPlus += 50;
+        }
+
+        plusExpText.text = "+ " + expPlus + "%";
+
+        exp = exp + (exp * (expPlus /100));
+
 
         levelManager.CheckLevelUp(exp);
 
@@ -930,7 +944,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         nowScoreText.text = score.ToString();
         nowComboText.text = combo.ToString();
-        getExpText.text = exp.ToString();
+        getExpText.text = ((int)exp).ToString();
 
         GameReset();
     }

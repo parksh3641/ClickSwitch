@@ -79,6 +79,11 @@ public class DailyManager : MonoBehaviour
         {
             open = false;
             dailyView.GetComponent<RectTransform>().anchoredPosition = new Vector2(2000, 0);
+
+            if(playerDataBase.DailyMissionCount == 0)
+            {
+                OnCheckAlarm();
+            }
         }
     }
 
@@ -97,6 +102,8 @@ public class DailyManager : MonoBehaviour
             Debug.Log("New DailyMission Appeard!");
 
             RandomDailyMission();
+
+            OnSetAlarm();
         }
         else
         {
@@ -200,6 +207,16 @@ public class DailyManager : MonoBehaviour
         alarmIndex++;
     }
 
+    public void OnCheckAlarm()
+    {
+        alarmIndex--;
+
+        if (alarmIndex == 0)
+        {
+            alarm.SetActive(false);
+        }
+    }
+
     public void Received(DailyMission dailyMission, int number)
     {
         NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
@@ -230,12 +247,7 @@ public class DailyManager : MonoBehaviour
             OnSetAlarm();
         }
 
-        alarmIndex--;
-
-        if(alarmIndex == 0)
-        {
-            alarm.SetActive(false);
-        }
+        OnCheckAlarm();
     }
 
     public void ReceiveCrystal()

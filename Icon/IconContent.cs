@@ -25,13 +25,16 @@ public class IconContent : MonoBehaviour
         checkMark.SetActive(false);
     }
 
-    public void UnLock(IconManager manager,IconType type)
+    public void Initialize(IconManager manager,IconType type)
     {
         iconManager = manager;
         iconType = type;
 
         icon.sprite = imageDataBase.GetProfileIconArray(type);
+    }
 
+    public void UnLock()
+    {
         lockObject.SetActive(false);
     }
 
