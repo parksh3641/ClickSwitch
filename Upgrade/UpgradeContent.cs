@@ -144,7 +144,7 @@ public class UpgradeContent : MonoBehaviour
 
             if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Coin, upgradeValue);
 
-            soundManager.PlaySFX(GameSfxType.Success);
+            soundManager.PlaySFX(GameSfxType.LevelUp);
 
             NotionManager.instance.UseNotion(NotionType.UpgradeSuccess);
 

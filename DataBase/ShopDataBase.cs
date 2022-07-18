@@ -19,13 +19,11 @@ public class ShopClass
 public class ShopDataBase : ScriptableObject
 {
     [Title("GooglePlay")]
-    [ShowInInspector]
-    private ShopClass removeAds;
+    public ShopClass removeAds;
 
     [Space]
     [Title("Item")]
-    [ShowInInspector]
-    private List<ShopClass> itemList = new List<ShopClass>();
+    public List<ShopClass> itemList = new List<ShopClass>();
 
     public void Initialize()
     {

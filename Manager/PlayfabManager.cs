@@ -1,3 +1,4 @@
+//using Facebook.Unity;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 using PlayFab;
@@ -70,6 +71,7 @@ public class PlayfabManager : MonoBehaviour
                     OnClickGoogleLogin();
                     break;
                 case LoginType.Facebook:
+                    //OnClickFacebookLogin();
                     break;
             }
         }
@@ -284,6 +286,9 @@ public class PlayfabManager : MonoBehaviour
                     PlayFabClientAPI.LinkGoogleAccount(request, result =>
                     {
                         Debug.Log("Link Google Account Success");
+
+                        GameStateManager.instance.AutoLogin = true;
+                        GameStateManager.instance.Login = LoginType.Google;
                     }, error =>
                     {
                         Debug.Log(error.GenerateErrorReport());
@@ -304,7 +309,66 @@ public class PlayfabManager : MonoBehaviour
 #endif
     #endregion
 
-    public void OnLoginSuccess(LoginResult result)
+    #region Facebook Login
+
+    //public void OnClickFacebookLogin()
+    //{
+    //    Debug.Log("페이스북 로그인 시도");
+
+    //    FB.Init(OnFacebookInitialized);
+    //}
+
+    //public void OnClickFacebookLogout()
+    //{
+    //    Debug.Log("페이스북 로그아웃");
+
+    //    FB.LogOut();
+
+    //    LogOut();
+    //}
+
+    //private void OnFacebookInitialized()
+    //{
+    //    if (FB.IsLoggedIn)
+    //        FB.LogOut();
+
+    //    // We invoke basic login procedure and pass in the callback to process the result
+    //    FB.LogInWithReadPermissions(null, OnFacebookLoggedIn);
+    //}
+
+    //private void OnFacebookLoggedIn(ILoginResult result)
+    //{
+    //    if (result == null || string.IsNullOrEmpty(result.Error))
+    //    {
+    //        PlayFabClientAPI.LoginWithFacebook(new LoginWithFacebookRequest
+    //        {
+    //            CreateAccount = true,
+    //            AccessToken = AccessToken.CurrentAccessToken.TokenString
+    //        }, result =>
+    //        {
+    //            Debug.Log("플레이팹 페이스북 로그인 성공!");
+
+    //            GameStateManager.instance.AutoLogin = true;
+    //            GameStateManager.instance.Login = LoginType.Facebook;
+
+    //            OnLoginSuccess(result);
+    //        }
+    //    , error => { Debug.Log(error.GenerateErrorReport()); });
+    //    }
+    //    else
+    //    {
+    //        Debug.Log("플레이팹 페이스북 로그인 실패!");
+    //    }
+    //}
+
+
+    #endregion
+
+    #region Apple Login
+
+    #endregion 
+
+    public void OnLoginSuccess(PlayFab.ClientModels.LoginResult result)
     {
         SetEditorOnlyMessage("Playfab Login Success");
 

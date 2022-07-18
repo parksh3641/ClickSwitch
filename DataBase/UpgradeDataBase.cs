@@ -15,17 +15,13 @@ public class UpgradeInformation
 [CreateAssetMenu(fileName = "UpgradeDataBase", menuName = "ScriptableObjects/UpgradeDataBase")]
 public class UpgradeDataBase : ScriptableObject
 {
-    [ShowInInspector]
-    private UpgradeInformation startTime;
+    public UpgradeInformation startTime;
 
-    [ShowInInspector]
-    private UpgradeInformation critical;
+    public UpgradeInformation critical;
 
-    [ShowInInspector]
-    private UpgradeInformation burning;
+    public UpgradeInformation burning;
 
-    [ShowInInspector]
-    private UpgradeInformation addExp;
+    public UpgradeInformation addExp;
 
     public void Initialize()
     {

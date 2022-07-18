@@ -10,7 +10,9 @@ public class OptionContent : MonoBehaviour
     public OptionType optionType;
 
     public UnityEvent eChangeLanguage;
-    public UnityEvent eLogout;
+    public UnityEvent eGoogleLogout;
+    public UnityEvent eGoogleLink;
+    public UnityEvent eFacebookLogout;
 
     public Image iconImg;
     public Text iconText;
@@ -70,14 +72,27 @@ public class OptionContent : MonoBehaviour
                 buttonText.ReLoad();
                 buttonText.TextColor(new Color(225 / 255f, 34 / 255f, 12 / 255f));
 
-                if (GameStateManager.instance.Login == LoginType.Google)
+                switch (GameStateManager.instance.Login)
                 {
-                    button.SetActive(true);
+                    case LoginType.None:
+                        break;
+                    case LoginType.Guest:
+
+                        buttonImg.sprite = buttonList[0];
+                        buttonText.name = "GoogleLink";
+                        buttonText.ReLoad();
+
+                        buttonText.TextColor(new Color(39 / 255f, 220 / 255f, 149 / 255f));
+
+                        break;
+                    case LoginType.Google:
+                        break;
+                    case LoginType.Facebook:
+                        break;
                 }
-                else
-                {
-                    button.SetActive(false);
-                }
+
+                button.SetActive(true);
+
                 break;
             case OptionType.Vibration:
 
@@ -122,7 +137,21 @@ public class OptionContent : MonoBehaviour
 
                 break;
             case OptionType.Logout:
-                eLogout.Invoke();
+
+                switch (GameStateManager.instance.Login)
+                {
+                    case LoginType.None:
+                        break;
+                    case LoginType.Guest:
+                        eGoogleLink.Invoke();
+                        break;
+                    case LoginType.Google:
+                        eGoogleLogout.Invoke();
+                        break;
+                    case LoginType.Facebook:
+                        eFacebookLogout.Invoke();
+                        break;
+                }
 
                 break;
             case OptionType.Vibration:

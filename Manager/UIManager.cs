@@ -30,7 +30,8 @@ public class UIManager : MonoBehaviour, IGameEvent
     public GameObject[] gamePlayUI;
 
     [Space]
-    [Title("ReadyUI")]
+    [Title("MainUI")]
+    public GameObject gameStartUI;
     public GameObject gameReadyUI;
     public Text gameReadyText;
 
@@ -177,6 +178,7 @@ public class UIManager : MonoBehaviour, IGameEvent
             gamePlayUI[i].SetActive(false);
         }
 
+        gameStartUI.SetActive(true);
         gameReadyUI.SetActive(false);
         gameEndUI.SetActive(false);
         cancleWindowUI.SetActive(false);
@@ -285,18 +287,10 @@ public class UIManager : MonoBehaviour, IGameEvent
             loginButtonList[i].SetActive(false);
         }
 
-#if UNITY_EDITOR
-        platformText.text += " : " + "Editor";
+#if UNITY_ANDROID
         loginButtonList[0].SetActive(true);
-#elif UNITY_WEBGL
-        platformText.text += " : " + "WebGL";
-        loginButtonList[0].SetActive(true);
-#elif UNITY_ANDROID
-        platformText.text += " : " + "Android";
-        loginButtonList[1].SetActive(true);
 #elif UNITY_IOS
-        platformText.text += " : " + "IOS";
-        loginButtonList[2].SetActive(true);
+        loginButtonList[1].SetActive(true);
 #endif
     }
 
@@ -405,6 +399,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void OpenGamePlayUI(GamePlayType type)
     {
+        gameStartUI.SetActive(false);
         gamePlayView.SetActive(true);
 
         gamePlayUI[(int)type].SetActive(true);
@@ -1109,6 +1104,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         score = 0;
 
+        gameStartUI.SetActive(true);
         SetEtcUI(true);
         modeManager.OffMode();
 
