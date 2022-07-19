@@ -390,7 +390,11 @@ public class PlayfabManager : MonoBehaviour
     {
         if(check)
         {
-            GetTitleInternalData("GameVersion", CheckUpdate);
+#if UNITY_EDITOR || UNITY_ANDROID
+            GetTitleInternalData("AOSVersion", CheckUpdate);
+#elif UNITY_IOS
+            GetTitleInternalData("IOSVersion", CheckUpdate);
+#endif
         }
         else
         {
@@ -513,6 +517,16 @@ public class PlayfabManager : MonoBehaviour
             var Inventory = result.Inventory;
             int gold = result.VirtualCurrency["GO"]; //Get Money
             int crystal = result.VirtualCurrency["ST"]; //Get Money
+
+            if(gold > 100000)
+            {
+                gold = 100000;
+            }
+
+            if(crystal > 10000)
+            {
+                crystal = 10000;
+            }
 
             playerDataBase.Coin = gold;
             playerDataBase.Crystal = crystal;
@@ -989,7 +1003,7 @@ public class PlayfabManager : MonoBehaviour
         PlayFabServerAPI.GetTitleInternalData(new PlayFab.ServerModels.GetTitleDataRequest(),
             result =>
             {
-                if (name.Equals("GameVersion"))
+                if (name.Contains("Version"))
                 {
                     if (result.Data[name].Equals(Application.version))
                     {

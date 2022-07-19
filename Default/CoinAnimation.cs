@@ -98,6 +98,13 @@ public class CoinAnimation : MonoBehaviour
                 }
                 else
                 {
+                    StopAllCoroutines();
+
+                    for (int i = 0; i < coinPrefabList.Count; i++)
+                    {
+                        coinPrefabList[i].gameObject.SetActive(false);
+                    }
+
                     StartCoroutine(OnPlayCoinCoroution(money, plus, coinPrefabList2, goldTarget, coinText));
                 }
                 break;
@@ -116,7 +123,7 @@ public class CoinAnimation : MonoBehaviour
     [Button]
     public void OnPlayCrystal()
     {
-        StartCoroutine(OnPlayCoinCoroution(0, 100, coinPrefabList, crystaltarget, crystalText));
+        StartCoroutine(OnPlayCoinCoroution(0, 100, crystalPrefabList, crystaltarget, crystalText));
     }
 
     [Button]
@@ -127,6 +134,11 @@ public class CoinAnimation : MonoBehaviour
 
     IEnumerator OnPlayCoinCoroution(int money, int plus, List<CoinContent> list, Transform target, Text text)
     {
+        for(int i = 0; i < list.Count; i ++)
+        {
+            list[i].gameObject.SetActive(false);
+        }    
+
         if(plus >= list.Count)
         {
             for (int i = 0; i < list.Count; i++)

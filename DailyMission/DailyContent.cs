@@ -69,7 +69,7 @@ public class DailyContent : MonoBehaviour
 
                 if(!clear)
                 {
-                                    dailyManager.OnSetAlarm();
+                    dailyManager.OnSetAlarm();
                 }
             }
         }
