@@ -95,25 +95,13 @@ public class PlayfabManager : MonoBehaviour
 #if UNITY_IOS
     private void IOSActivate()
     {
-        if (AppleAuthManager.IsCurrentPlatformSupported)
-        {
-            // Creates a default JSON deserializer, to transform JSON Native responses to C# instances
-            var deserializer = new PayloadDeserializer();
-            // Creates an Apple Authentication manager with the deserializer
-            _appleAuthManager = new AppleAuthManager(deserializer);
-        }
-        if (_appleAuthManager == null)
-        {
-            // SetupLoginMenuForUnsupportedPlatform();
-            return;
-        }
     }
 #endif
     #endregion
 
     void LogOut()
     {
-        Debug.Log("·Î±×¾Æ¿ô µÇ¾ú½À´Ï´Ù.");
+        Debug.Log("ï¿½Î±×¾Æ¿ï¿½ ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
 
         uiManager.OnLogout();
 
@@ -216,18 +204,18 @@ public class PlayfabManager : MonoBehaviour
     {
 #if UNITY_ANDROID
 
-        Debug.Log("±¸±Û ·Î±×ÀÎ ½ÃµµÁß");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ ï¿½Ãµï¿½ï¿½ï¿½");
 
         //if (Social.localUser.authenticated)
         //{
-        //    Debug.Log("ÀÌ¹Ì ±¸±Û ·Î±×ÀÎ µÇ¾îÀÖ´Â »óÅÂÀÔ´Ï´Ù.");
+        //    Debug.Log("ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ ï¿½Ç¾ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.");
         //    return;
         //}
         Social.localUser.Authenticate((bool success) =>
         {
             if (!success)
             {
-                Debug.Log("±¸±Û »ç¿ëÀÚ ÀÎÁõ ½ÇÆÐ!");
+                Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½!");
                 return;
             }
 
@@ -240,7 +228,7 @@ public class PlayfabManager : MonoBehaviour
             },
             result =>
             {
-                Debug.Log("ÇÃ·¹ÀÌÆÕ ±¸±Û ·Î±×ÀÎ ¼º°ø!");
+                Debug.Log("ï¿½Ã·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½!");
 
                 GameStateManager.instance.AutoLogin = true;
                 GameStateManager.instance.Login = LoginType.Google;
@@ -249,7 +237,7 @@ public class PlayfabManager : MonoBehaviour
             },
             error =>
             {
-                Debug.Log("ÇÃ·¹ÀÌÆÕ ±¸±Û ·Î±×ÀÎ ½ÇÆÐ!");
+                Debug.Log("ï¿½Ã·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½!");
 
                 DisplayPlayfabError(error);
             });
@@ -307,20 +295,21 @@ public class PlayfabManager : MonoBehaviour
     }
 
 #endif
+    }
     #endregion
 
     #region Facebook Login
 
     //public void OnClickFacebookLogin()
     //{
-    //    Debug.Log("ÆäÀÌ½ººÏ ·Î±×ÀÎ ½Ãµµ");
+    //    Debug.Log("ï¿½ï¿½ï¿½Ì½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ ï¿½Ãµï¿½");
 
     //    FB.Init(OnFacebookInitialized);
     //}
 
     //public void OnClickFacebookLogout()
     //{
-    //    Debug.Log("ÆäÀÌ½ººÏ ·Î±×¾Æ¿ô");
+    //    Debug.Log("ï¿½ï¿½ï¿½Ì½ï¿½ï¿½ï¿½ ï¿½Î±×¾Æ¿ï¿½");
 
     //    FB.LogOut();
 
@@ -346,7 +335,7 @@ public class PlayfabManager : MonoBehaviour
     //            AccessToken = AccessToken.CurrentAccessToken.TokenString
     //        }, result =>
     //        {
-    //            Debug.Log("ÇÃ·¹ÀÌÆÕ ÆäÀÌ½ººÏ ·Î±×ÀÎ ¼º°ø!");
+    //            Debug.Log("ï¿½Ã·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½!");
 
     //            GameStateManager.instance.AutoLogin = true;
     //            GameStateManager.instance.Login = LoginType.Facebook;
@@ -357,7 +346,7 @@ public class PlayfabManager : MonoBehaviour
     //    }
     //    else
     //    {
-    //        Debug.Log("ÇÃ·¹ÀÌÆÕ ÆäÀÌ½ººÏ ·Î±×ÀÎ ½ÇÆÐ!");
+    //        Debug.Log("ï¿½Ã·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½!");
     //    }
     //}
 
@@ -390,7 +379,11 @@ public class PlayfabManager : MonoBehaviour
     {
         if(check)
         {
-            GetTitleInternalData("GameVersion", CheckUpdate);
+#if UNITY_EDITOR || UNITY_ANDROID
+            GetTitleInternalData("AOSVersion", CheckUpdate);
+#elif UNITY_IOS
+            GetTitleInternalData("IOSVersion", CheckUpdate);
+#endif
         }
         else
         {
@@ -513,6 +506,16 @@ public class PlayfabManager : MonoBehaviour
             var Inventory = result.Inventory;
             int gold = result.VirtualCurrency["GO"]; //Get Money
             int crystal = result.VirtualCurrency["ST"]; //Get Money
+
+            if(gold > 100000)
+            {
+                gold = 100000;
+            }
+
+            if(crystal > 10000)
+            {
+                crystal = 10000;
+            }
 
             playerDataBase.Coin = gold;
             playerDataBase.Crystal = crystal;
@@ -989,7 +992,7 @@ public class PlayfabManager : MonoBehaviour
         PlayFabServerAPI.GetTitleInternalData(new PlayFab.ServerModels.GetTitleDataRequest(),
             result =>
             {
-                if (name.Equals("GameVersion"))
+                if (name.Contains("Version"))
                 {
                     if (result.Data[name].Equals(Application.version))
                     {
@@ -1135,7 +1138,7 @@ public class PlayfabManager : MonoBehaviour
 #region PurchaseItem
     public void PurchaseRemoveAd()
     {
-        Debug.Log("±¤°í Á¦°Å ±¸¸Å ¿Ï·á");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½");
 
         PurchaseItemToRM(shopDataBase.RemoveAds);
 
@@ -1144,7 +1147,7 @@ public class PlayfabManager : MonoBehaviour
 
     public void PurchaseCoin(int number)
     {
-        Debug.Log("ÄÚÀÎ ±¸¸Å : " + number);
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ : " + number);
 
         UpdateAddCurrency(MoneyType.Coin, number);
     }
@@ -1178,10 +1181,10 @@ public class PlayfabManager : MonoBehaviour
         };
         PlayFabClientAPI.PurchaseItem(request, (result) =>
         {
-            Debug.Log(shopClass.itemId + " ±¸¸Å ¼º°ø!");
+            Debug.Log(shopClass.itemId + " ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½!");
         }, error =>
         {
-            Debug.Log(shopClass.itemId + " ±¸¸Å ½ÇÆÐ!");
+            Debug.Log(shopClass.itemId + " ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½!");
         });
     }
 
@@ -1227,13 +1230,13 @@ public class PlayfabManager : MonoBehaviour
             uiManager.RenewalVC();
             StateManager.instance.ChangeNumber();
 
-            Debug.Log(shopClass.itemId + " ±¸¸Å ¼º°ø!");
+            Debug.Log(shopClass.itemId + " ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½!");
             action.Invoke(true);
 
             soundManager.PlaySFX(GameSfxType.BuyItem);
         }, error =>
         {
-            Debug.Log(shopClass.itemId + " ±¸¸Å ½ÇÆÐ!");
+            Debug.Log(shopClass.itemId + " ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½!");
             NotionManager.instance.UseNotion(NotionType.LowCoinNotion);
             action.Invoke(false);
         });

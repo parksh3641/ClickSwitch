@@ -144,6 +144,13 @@ public class OptionContent : MonoBehaviour
                         break;
                     case LoginType.Guest:
                         eGoogleLink.Invoke();
+
+                        optionType = OptionType.Logout;
+
+                        buttonText.name = "Logout";
+                        buttonText.ReLoad();
+                        buttonText.TextColor(new Color(225 / 255f, 34 / 255f, 12 / 255f));
+
                         break;
                     case LoginType.Google:
                         eGoogleLogout.Invoke();
