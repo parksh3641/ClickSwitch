@@ -40,7 +40,7 @@ public class CoinAnimation : MonoBehaviour
 
     private void Awake()
     {
-        for(int i = 0; i < 10; i ++)
+        for (int i = 0; i < 10; i++)
         {
             CoinContent monster = Instantiate(goldPrefab);
             monster.transform.parent = goldTransform;
@@ -71,7 +71,7 @@ public class CoinAnimation : MonoBehaviour
         }
     }
 
-    public void OnPlayCoinAnimation(MoneyType type ,int money, int plus)
+    public void OnPlayCoinAnimation(MoneyType type, int money, int plus)
     {
         switch (type)
         {
@@ -84,6 +84,7 @@ public class CoinAnimation : MonoBehaviour
                 }
 
                 StartCoroutine(OnPlayCoinCoroution(money, plus, coinPrefabList, goldTarget, coinText));
+
                 break;
             case MoneyType.Crystal:
                 StartCoroutine(OnPlayCoinCoroution(money, plus, crystalPrefabList, crystaltarget, crystalText));
@@ -111,12 +112,12 @@ public class CoinAnimation : MonoBehaviour
 
     IEnumerator OnPlayCoinCoroution(int money, int plus, List<CoinContent> list, Transform target, Text text)
     {
-        for(int i = 0; i < list.Count; i ++)
+        for (int i = 0; i < list.Count; i++)
         {
             list[i].gameObject.SetActive(false);
-        }    
+        }
 
-        if(plus >= list.Count)
+        if (plus >= list.Count)
         {
             for (int i = 0; i < list.Count; i++)
             {
@@ -152,9 +153,9 @@ public class CoinAnimation : MonoBehaviour
 
         int max = money + plus;
 
-        while(money < max)
+        while (money < max)
         {
-            if(money + 100 < max)
+            if (money + 100 < max)
             {
                 money += 100;
             }
