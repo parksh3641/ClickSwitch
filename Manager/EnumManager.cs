@@ -55,7 +55,8 @@ public enum LoginType
     None = 0,
     Guest,
     Google,
-    Facebook
+    Facebook,
+    Apple
 }
 
 public enum MoneyType
