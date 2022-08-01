@@ -12,6 +12,7 @@ public class OptionContent : MonoBehaviour
     public UnityEvent eChangeLanguage;
     public UnityEvent eGoogleLogout;
     public UnityEvent eGoogleLink;
+    public UnityEvent eAppleLink;
     public UnityEvent eFacebookLogout;
 
     public Image iconImg;
@@ -72,6 +73,8 @@ public class OptionContent : MonoBehaviour
                 buttonText.ReLoad();
                 buttonText.TextColor(new Color(225 / 255f, 34 / 255f, 12 / 255f));
 
+                button.SetActive(false);
+
                 switch (GameStateManager.instance.Login)
                 {
                     case LoginType.None:
@@ -79,19 +82,30 @@ public class OptionContent : MonoBehaviour
                     case LoginType.Guest:
 
                         buttonImg.sprite = buttonList[0];
-                        buttonText.name = "GoogleLink";
+
+                        switch (Application.platform)
+                        {
+                            case RuntimePlatform.Android:
+                                buttonText.name = "GoogleLink";
+                                break;
+                            case RuntimePlatform.IPhonePlayer:
+                                buttonText.name = "AppleLink";
+                                break;
+                        }
                         buttonText.ReLoad();
 
                         buttonText.TextColor(new Color(39 / 255f, 220 / 255f, 149 / 255f));
+
+                        button.SetActive(true);
 
                         break;
                     case LoginType.Google:
                         break;
                     case LoginType.Facebook:
                         break;
+                    case LoginType.Apple:
+                        break;
                 }
-
-                button.SetActive(true);
 
                 break;
             case OptionType.Vibration:
@@ -143,14 +157,16 @@ public class OptionContent : MonoBehaviour
                     case LoginType.None:
                         break;
                     case LoginType.Guest:
-                        eGoogleLink.Invoke();
 
-                        optionType = OptionType.Logout;
-
-                        buttonText.name = "Logout";
-                        buttonText.ReLoad();
-                        buttonText.TextColor(new Color(225 / 255f, 34 / 255f, 12 / 255f));
-
+                        switch (Application.platform)
+                        {
+                            case RuntimePlatform.Android:
+                                eGoogleLink.Invoke();
+                                break;
+                            case RuntimePlatform.IPhonePlayer:
+                                eAppleLink.Invoke();
+                                break;
+                        }
                         break;
                     case LoginType.Google:
                         eGoogleLogout.Invoke();
@@ -271,5 +287,13 @@ public class OptionContent : MonoBehaviour
             buttonText.ReLoad();
             buttonText.TextColor(new Color(225 / 255f, 34 / 255f, 12 / 255f));
         }
+    }
+
+    public void SuccessLink(LoginType type)
+    {
+        iconImg.sprite = loginList[(int)GameStateManager.instance.Login - 1];
+        iconText.text = GameStateManager.instance.Login.ToString();
+
+        button.SetActive(false);
     }
 }
