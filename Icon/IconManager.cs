@@ -13,6 +13,8 @@ public class IconManager : MonoBehaviour
 
     public Image profileIcon;
 
+    bool delay = false;
+
 
     public List<IconContent> iconContentList = new List<IconContent>();
 
@@ -46,6 +48,8 @@ public class IconManager : MonoBehaviour
     {
         if (!iconView.activeSelf)
         {
+            delay = false;
+
             iconView.SetActive(true);
 
             CheckMyIcon();
@@ -96,6 +100,10 @@ public class IconManager : MonoBehaviour
 
     public void UseIcon(IconType type)
     {
+        if ((int)type == playerDataBase.Icon) return;
+
+        if (delay) return;
+
         profileIcon.sprite = imageDataBase.GetProfileIconArray(type);
 
         playerDataBase.Icon = (int)type;
@@ -103,5 +111,15 @@ public class IconManager : MonoBehaviour
         if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Icon", (int)type);
 
         CheckMyIcon();
+
+        delay = true;
+        StartCoroutine(WaitDelay());
+    }
+
+    IEnumerator WaitDelay()
+    {
+        yield return new WaitForSeconds(0.5f);
+        delay = false;
+
     }
 }

@@ -646,6 +646,9 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         Debug.Log("Game End");
 
+        checkClose = false;
+        Invoke("WaitCloseGameEnd", 1f);
+
         soundManager.PlayBGM(GameBGMType.End);
 
         if (!NetworkConnect.instance.CheckConnectInternet())
@@ -1123,11 +1126,20 @@ public class UIManager : MonoBehaviour, IGameEvent
         return check;
     }
 
+    bool checkClose = false;
+
     public void CloseGameEnd()
     {
+        if (!checkClose) return;
+
         soundManager.PlayBGM(GameBGMType.Lobby);
 
         gameEndUI.SetActive(false);
+    }
+
+    void WaitCloseGameEnd()
+    {
+        checkClose = true;
     }
 
 
