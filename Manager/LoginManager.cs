@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class LoginManager : MonoBehaviour
 {
+    public GameObject buttonObj;
     public Text numberText;
 
     private int number = 0;
@@ -12,6 +13,8 @@ public class LoginManager : MonoBehaviour
     private void Awake()
     {
         numberText.text = "0";
+
+        buttonObj.SetActive(true);
     }
 
     public void OnClick()
@@ -19,5 +22,10 @@ public class LoginManager : MonoBehaviour
         number += 1;
 
         numberText.text = number.ToString();
+    }
+
+    public void NowLoaded()
+    {
+        buttonObj.SetActive(false);
     }
 }

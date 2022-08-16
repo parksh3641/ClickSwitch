@@ -6,9 +6,9 @@ using UnityEngine;
 public class TrophyData
 {
     public GamePlayType gamePlayType = GamePlayType.GameChoice1;
-    public bool isActive = false; //클리어여부
-    public int number = 0; //달성 횟수
-    public string date = ""; //달성 날짜
+    public bool isActive = false;
+    public int number = 0;
+    public string date = "";
 }
 
 public class TrophyManager : MonoBehaviour
@@ -25,7 +25,7 @@ public class TrophyManager : MonoBehaviour
 
     private void Awake()
     {
-
+        trophyView.SetActive(false);
     }
 
     public void Initialize()

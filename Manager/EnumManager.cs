@@ -55,7 +55,8 @@ public enum LoginType
     None = 0,
     Guest,
     Google,
-    Facebook
+    Facebook,
+    Apple
 }
 
 public enum MoneyType
@@ -85,8 +86,10 @@ public enum GameSfxType
 public enum ShopType
 {
     RemoveAds = 0,
+    WatchAd,
     Coin1000,
-    WatchAd
+    Coin2000,
+    Coin3000
 }
 
 public enum ItemType
@@ -96,6 +99,11 @@ public enum ItemType
     Combo,
     Exp,
     Slow
+}
+
+public enum ETCType
+{
+    IconBox = 0,
 }
 
 public enum IconType

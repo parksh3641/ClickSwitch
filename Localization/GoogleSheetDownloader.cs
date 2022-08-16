@@ -19,6 +19,8 @@ public class GoogleSheetDownloader : MonoBehaviour
     public Image barFillAmount;
     public Text barPercentText;
 
+    public LoginManager loginManager;
+
     LocalizationDataBase localizationDataBase;
     ValueDataBase valueDataBase;
     UpgradeDataBase upgradeDataBase;
@@ -180,6 +182,9 @@ public class GoogleSheetDownloader : MonoBehaviour
         }
 
         CheckPercent(100);
+
+        loginManager.NowLoaded();
+
         isActive = true;
     }
 

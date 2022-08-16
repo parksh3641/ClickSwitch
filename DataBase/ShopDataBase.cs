@@ -25,6 +25,14 @@ public class ShopDataBase : ScriptableObject
     [Title("Item")]
     public List<ShopClass> itemList = new List<ShopClass>();
 
+    [Space]
+    [Title("Icon")]
+    public List<IconClass> iconList = new List<IconClass>();
+
+    [Space]
+    [Title("ETC")]
+    public List<ShopClass> etcList = new List<ShopClass>();
+
     public void Initialize()
     {
         itemList.Clear();
@@ -34,6 +42,24 @@ public class ShopDataBase : ScriptableObject
             ShopClass shopClass = new ShopClass();
             itemList.Add(shopClass);
         }
+
+        iconList.Clear();
+
+        for (int i = 0; i < System.Enum.GetValues(typeof(IconType)).Length; i++)
+        {
+            IconClass iconClass = new IconClass();
+            IconType iconType = IconType.Icon_0 + i;
+            iconClass.iconType = iconType;
+            iconList.Add(iconClass);
+        }
+
+        etcList.Clear();
+        for (int i = 0; i < System.Enum.GetValues(typeof(ETCType)).Length; i++)
+        {
+            ShopClass shopClass = new ShopClass();
+            etcList.Add(shopClass);
+        }
+
     }
 
     public List<ShopClass> ItemList
@@ -82,6 +108,16 @@ public class ShopDataBase : ScriptableObject
         //itemList = Enumerable.Reverse(itemList).ToList();
     }
 
+    public void SetETC(ShopClass shopClass)
+    {
+        switch(shopClass.itemId)
+        {
+            case "IconBox":
+                etcList[0] = shopClass;
+                break;
+        }
+    }
+
     public void SetItemInstanceId(string itemid, string instanceid)
     {
         for(int i = 0; i < itemList.Count; i ++)
@@ -107,4 +143,33 @@ public class ShopDataBase : ScriptableObject
 
         return itemInstanceId;
     }
+
+    #region Icon
+    public void SetIcon(IconType type, int number)
+    {
+        for (int i = 0; i < iconList.Count; i++)
+        {
+            if (iconList[i].iconType.Equals(type))
+            {
+                iconList[i].count = number;
+                break;
+            }
+        }
+    }
+
+    public IconClass GetIconState(IconType type)
+    {
+        IconClass iconClass = new IconClass();
+        for (int i = 0; i < iconList.Count; i++)
+        {
+            if (iconList[i].iconType.Equals(type))
+            {
+                iconClass = iconList[i];
+            }
+        }
+
+        return iconClass;
+    }
+
+    #endregion
 }

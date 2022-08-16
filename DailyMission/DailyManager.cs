@@ -42,7 +42,7 @@ public class DailyManager : MonoBehaviour
     public void Initialize()
     {
         dailyView.SetActive(true);
-        dailyView.GetComponent<RectTransform>().anchoredPosition = new Vector2(2000, 0);
+        dailyView.GetComponent<RectTransform>().anchoredPosition = new Vector2(4000, 0);
 
         CheckDailyMission();
     }
@@ -78,7 +78,7 @@ public class DailyManager : MonoBehaviour
         else
         {
             open = false;
-            dailyView.GetComponent<RectTransform>().anchoredPosition = new Vector2(2000, 0);
+            dailyView.GetComponent<RectTransform>().anchoredPosition = new Vector2(4000, 0);
 
             if(playerDataBase.DailyMissionCount == 0)
             {
@@ -169,7 +169,7 @@ public class DailyManager : MonoBehaviour
     }
 
 
-    void LoadDailyMission() //데이터베이스에서 로드
+    void LoadDailyMission() //???????????????? ????
     {
         for(int i = 0; i < dailyContents.Length; i ++)
         {
@@ -192,7 +192,7 @@ public class DailyManager : MonoBehaviour
     {
         dailyView.SetActive(true);
 
-        Debug.Log("퀘스트 클리어 여부 업데이트");
+        Debug.Log("?????? ?????? ???? ????????");
 
         for(int i = 0; i < dailyContents.Length; i ++)
         {
@@ -266,12 +266,8 @@ public class DailyManager : MonoBehaviour
 
             lockReceiveObj.SetActive(true);
 
-            alarmIndex--;
-
-            if (alarmIndex == 0)
-            {
-                alarm.SetActive(false);
-            }
+            alarmIndex = 0;
+            alarm.SetActive(false);
         }
 
         FirebaseAnalytics.LogEvent("DailyMission");

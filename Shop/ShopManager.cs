@@ -7,12 +7,30 @@ using UnityEngine.UI;
 
 public class ShopManager : MonoBehaviour
 {
+    ShopClass shopClass;
+
     public GameObject shopView;
 
     public NotionManager notionManager;
 
     public ShopItemContent shopItemContent;
     public RectTransform shopItemTransform;
+
+    [Space]
+    [Title("BuyWindow")]
+    public GameObject buyWindow;
+
+    public Image buyItemBackground;
+    public Image buyItemIcon;
+
+    public Image buyButtonBackground;
+    public Image buyButtonIcon;
+
+    public Text buyCountText;
+    public Text buyPriceText;
+
+    private int buyCount = 0;
+    private int buyPrice = 0;
 
     [Space]
     [Title("Ad")]
@@ -24,8 +42,11 @@ public class ShopManager : MonoBehaviour
     WaitForSeconds waitForSeconds = new WaitForSeconds(1);
 
     List<ShopItemContent> shopContentList = new List<ShopItemContent>();
+    List<ShopItemContent> shopContentETCList = new List<ShopItemContent>();
 
+    Sprite[] vcArray;
     Sprite[] itemArray;
+    Sprite[] etcArray;
 
     PlayerDataBase playerDataBase;
     ShopDataBase shopDataBase;
@@ -34,6 +55,7 @@ public class ShopManager : MonoBehaviour
     private void Awake()
     {
         shopView.SetActive(false);
+        buyWindow.SetActive(false);
 
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
         if (shopDataBase == null) shopDataBase = Resources.Load("ShopDataBase") as ShopDataBase;
@@ -42,7 +64,22 @@ public class ShopManager : MonoBehaviour
 
     public void Initialize()
     {
+        vcArray = imageDataBase.GetVCArray();
         itemArray = imageDataBase.GetItemArray();
+        etcArray = imageDataBase.GetETCArray();
+
+        for (int i = 0; i < shopDataBase.etcList.Count; i++)
+        {
+            ShopItemContent monster = Instantiate(shopItemContent);
+            monster.transform.parent = shopItemTransform;
+            monster.transform.position = Vector3.zero;
+            monster.transform.rotation = Quaternion.identity;
+            monster.transform.localScale = Vector3.one;
+            monster.InitializeETC(this, shopDataBase.etcList[i], etcArray[i]);
+            monster.gameObject.SetActive(true);
+
+            shopContentETCList.Add(monster);
+        }
 
         for (int i = 0; i < shopDataBase.ItemList.Count; i++)
         {
@@ -81,9 +118,61 @@ public class ShopManager : MonoBehaviour
         }
     }
 
-    public void OnBuy(ShopClass shopClass)
+    public void OpenBuyWindow(ShopClass _shopClass, Sprite icon)
     {
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.PurchaseItem(shopClass, CheckBuyItem);
+        buyWindow.SetActive(true);
+
+        shopClass = _shopClass;
+
+        switch (_shopClass.virtualCurrency)
+        {
+            case "GO":
+                buyButtonIcon.sprite = vcArray[0];
+                break;
+            case "ST":
+                buyButtonIcon.sprite = vcArray[1];
+                break;
+        }
+
+        buyItemIcon.sprite = icon;
+
+        buyCount = 1;
+        buyPrice = (int)_shopClass.price;
+
+        buyCountText.text = buyCount.ToString();
+        buyPriceText.text = buyPrice.ToString();
+    }
+
+    public void CloseBuyWindow()
+    {
+        buyWindow.SetActive(false);
+    }
+
+    public void UpBuyCount()
+    {
+        if (buyCount + 1 < 100)
+        {
+            buyCount++;
+        }
+
+        buyCountText.text = buyCount.ToString();
+        buyPriceText.text = (buyPrice * buyCount).ToString();
+    }
+
+    public void DownBuyCount()
+    {
+        if(buyCount - 1 > 0)
+        {
+            buyCount--;
+        }
+
+        buyCountText.text = buyCount.ToString();
+        buyPriceText.text = (buyPrice * buyCount).ToString();
+    }
+
+    public void OnBuyItem()
+    {
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.PurchaseItem(shopClass, CheckBuyItem, buyCount);
     }
 
     public void CheckBuyItem(bool check)
@@ -91,6 +180,8 @@ public class ShopManager : MonoBehaviour
         if (check)
         {
             notionManager.UseNotion(NotionType.SuccessBuyItem);
+
+            CloseBuyWindow();
         }
         else
         {
@@ -104,7 +195,7 @@ public class ShopManager : MonoBehaviour
     {
         if (check)
         {
-            Debug.Log("±§∞Ì ¿·±›");
+            Debug.Log("???? ????");
 
             watchAdLock.SetActive(true);
             GameStateManager.instance.WatchAd = false;
@@ -117,7 +208,7 @@ public class ShopManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("±§∞Ì ¿·±› «ÿ¡¶");
+            Debug.Log("???? ???? ????");
 
             watchAdLock.SetActive(false);
             GameStateManager.instance.WatchAd = true;

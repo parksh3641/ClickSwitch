@@ -38,7 +38,32 @@ public class ShopItemContent : MonoBehaviour
         shopManager = manager;
         shopClass = shop;
         icon.sprite = sprite;
-        countText.text = "x1";
+        countText.text = "";
+
+        switch (shop.virtualCurrency)
+        {
+            case "GO":
+                vcIcon.sprite = vcArray[0];
+                break;
+            case "ST":
+                vcIcon.sprite = vcArray[1];
+                break;
+        }
+
+        priceText.text = shop.price.ToString();
+    }
+
+    public void InitializeETC(ShopManager manager, ShopClass shop, Sprite sprite)
+    {
+        vcArray = imageDataBase.GetVCArray();
+
+        titleText.name = shop.itemId;
+        titleText.ReLoad();
+
+        shopManager = manager;
+        shopClass = shop;
+        icon.sprite = sprite;
+        countText.text = "";
 
         switch (shop.virtualCurrency)
         {
@@ -57,7 +82,8 @@ public class ShopItemContent : MonoBehaviour
     {
         if(!delay)
         {
-            shopManager.OnBuy(shopClass);
+            //shopManager.OnBuy(shopClass);
+            shopManager.OpenBuyWindow(shopClass, icon.sprite);
 
             delay = true;
             StartCoroutine(DelayCourtion());

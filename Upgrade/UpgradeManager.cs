@@ -51,7 +51,7 @@ public class UpgradeManager : MonoBehaviour
 
         Lock.SetActive(false);
 
-        if (playerDataBase.Level < 2)
+        if (playerDataBase.Level < 1)
         {
             Lock.SetActive(true);
         }

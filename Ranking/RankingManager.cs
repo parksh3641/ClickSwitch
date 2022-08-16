@@ -27,9 +27,9 @@ public class RankingManager : MonoBehaviour
     private bool isDelay = false;
 
     [Space]
-    public List<RankContent> rankContentList = new List<RankContent>();
+    List<RankContent> rankContentList = new List<RankContent>();
 
-    public PlayerDataBase playerDataBase;
+    PlayerDataBase playerDataBase;
 
     private void Awake()
     {
@@ -38,6 +38,7 @@ public class RankingManager : MonoBehaviour
             RankContent monster = Instantiate(rankContentPrefab) as RankContent;
             monster.name = "RankContent_" + i;
             monster.transform.position = Vector3.zero;
+            monster.transform.localScale = Vector3.one;
             monster.transform.parent = rankContentParent;
             monster.gameObject.SetActive(false);
 
@@ -210,6 +211,7 @@ public class RankingManager : MonoBehaviour
 
         for(int i = 0; i < rankContentList.Count; i ++)
         {
+            rankContentList[i].transform.localScale = Vector3.one;
             rankContentList[i].gameObject.SetActive(false);
         }
 

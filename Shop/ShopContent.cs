@@ -40,14 +40,20 @@ public class ShopContent : MonoBehaviour
                 switch (GameStateManager.instance.Language)
                 {
                     case LanguageType.Korean:
-                        priceText.text = "₩ 2500";
+                        priceText.text = "₩ 1200";
                         break;
                     default:
-                        priceText.text = "USD $ 2";
+                        priceText.text = "USD $ 0.99";
                         break;
                 }
 
                 price.SetActive(true);
+
+                break;
+            case ShopType.WatchAd:
+                titleText.name = "WatchAd";
+
+                reward.SetActive(true);
 
                 break;
             case ShopType.Coin1000:
@@ -59,17 +65,43 @@ public class ShopContent : MonoBehaviour
                         priceText.text = "₩ 1200";
                         break;
                     default:
-                        priceText.text = "USD $ 1";
+                        priceText.text = "USD $ 0.99";
                         break;
                 }
 
                 price.SetActive(true);
 
                 break;
-            case ShopType.WatchAd:
-                titleText.name = "WatchAd";
+            case ShopType.Coin2000:
+                titleText.name = "Coin2000";
 
-                reward.SetActive(true);
+                switch (GameStateManager.instance.Language)
+                {
+                    case LanguageType.Korean:
+                        priceText.text = "₩ 2500";
+                        break;
+                    default:
+                        priceText.text = "USD $ 1.99";
+                        break;
+                }
+
+                price.SetActive(true);
+
+                break;
+            case ShopType.Coin3000:
+                titleText.name = "Coin3000";
+
+                switch (GameStateManager.instance.Language)
+                {
+                    case LanguageType.Korean:
+                        priceText.text = "₩ 3900";
+                        break;
+                    default:
+                        priceText.text = "USD $ 2.99";
+                        break;
+                }
+
+                price.SetActive(true);
 
                 break;
         }

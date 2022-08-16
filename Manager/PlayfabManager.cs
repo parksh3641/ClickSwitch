@@ -12,7 +12,16 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+#if UNITY_IOS
+using AppleAuth;
+using AppleAuth.Native;
+using AppleAuth.Enums;
+using AppleAuth.Interfaces;
+using AppleAuth.Extensions;
+#endif
+
 using EntityKey = PlayFab.ProfilesModels.EntityKey;
+using System.Text;
 
 public class PlayfabManager : MonoBehaviour
 {
@@ -20,6 +29,7 @@ public class PlayfabManager : MonoBehaviour
 
     public UIManager uiManager;
     public SoundManager soundManager;
+    public OptionContent optionContent;
 
     [ShowInInspector]
     string customId = "";
@@ -28,6 +38,7 @@ public class PlayfabManager : MonoBehaviour
 
 #if UNITY_IOS
     private string AppleUserIdKey = "";
+    private IAppleAuthManager _appleAuthManager;
 
 #endif
 
@@ -73,6 +84,9 @@ public class PlayfabManager : MonoBehaviour
                 case LoginType.Facebook:
                     //OnClickFacebookLogin();
                     break;
+                case LoginType.Apple:
+                    OnClickAppleLogin();
+                    break;
             }
         }
     }
@@ -95,13 +109,31 @@ public class PlayfabManager : MonoBehaviour
 #if UNITY_IOS
     private void IOSActivate()
     {
+        // If the current platform is supported
+        if (AppleAuthManager.IsCurrentPlatformSupported)
+        {
+            // Creates a default JSON deserializer, to transform JSON Native responses to C# instances
+            var deserializer = new PayloadDeserializer();
+            // Creates an Apple Authentication manager with the deserializer
+            _appleAuthManager = new AppleAuthManager(deserializer);
+        }
+        StartCoroutine(AppleAuthUpdate());
+    }
+
+    IEnumerator AppleAuthUpdate()
+    {
+        while (true)
+        {
+            _appleAuthManager?.Update();
+            yield return null;
+        }
     }
 #endif
     #endregion
 
     void LogOut()
     {
-        Debug.Log("�α׾ƿ� �Ǿ����ϴ�.");
+        Debug.Log("???????????? ??????????????????????.");
 
         uiManager.OnLogout();
 
@@ -204,18 +236,18 @@ public class PlayfabManager : MonoBehaviour
     {
 #if UNITY_ANDROID
 
-        Debug.Log("���� �α��� �õ���");
+        Debug.Log("???????????? ?????????????? ??????????????");
 
         //if (Social.localUser.authenticated)
         //{
-        //    Debug.Log("�̹� ���� �α��� �Ǿ��ִ� �����Դϴ�.");
+        //    Debug.Log("???????? ???????????? ?????????????? ???????????????? ??????????????????????.");
         //    return;
         //}
         Social.localUser.Authenticate((bool success) =>
         {
             if (!success)
             {
-                Debug.Log("���� ����� ���� ����!");
+                Debug.Log("???????????? ??????????????????????????? ????????????!");
                 return;
             }
 
@@ -228,7 +260,7 @@ public class PlayfabManager : MonoBehaviour
             },
             result =>
             {
-                Debug.Log("�÷����� ���� �α��� ����!");
+                Debug.Log("???????????????????? ???????????? ?????????????? ????????????!");
 
                 GameStateManager.instance.AutoLogin = true;
                 GameStateManager.instance.Login = LoginType.Google;
@@ -237,7 +269,7 @@ public class PlayfabManager : MonoBehaviour
             },
             error =>
             {
-                Debug.Log("�÷����� ���� �α��� ����!");
+                Debug.Log("???????????????????? ???????????? ?????????????? ????????????!");
 
                 DisplayPlayfabError(error);
             });
@@ -277,6 +309,7 @@ public class PlayfabManager : MonoBehaviour
 
                         GameStateManager.instance.AutoLogin = true;
                         GameStateManager.instance.Login = LoginType.Google;
+                        optionContent.SuccessLink(LoginType.Google);
                     }, error =>
                     {
                         Debug.Log(error.GenerateErrorReport());
@@ -292,70 +325,131 @@ public class PlayfabManager : MonoBehaviour
         {
             Debug.Log("Link Google Account Fail");
         }
-    }
-
 #endif
     }
     #endregion
-
-    #region Facebook Login
-
-    //public void OnClickFacebookLogin()
-    //{
-    //    Debug.Log("���̽��� �α��� �õ�");
-
-    //    FB.Init(OnFacebookInitialized);
-    //}
-
-    //public void OnClickFacebookLogout()
-    //{
-    //    Debug.Log("���̽��� �α׾ƿ�");
-
-    //    FB.LogOut();
-
-    //    LogOut();
-    //}
-
-    //private void OnFacebookInitialized()
-    //{
-    //    if (FB.IsLoggedIn)
-    //        FB.LogOut();
-
-    //    // We invoke basic login procedure and pass in the callback to process the result
-    //    FB.LogInWithReadPermissions(null, OnFacebookLoggedIn);
-    //}
-
-    //private void OnFacebookLoggedIn(ILoginResult result)
-    //{
-    //    if (result == null || string.IsNullOrEmpty(result.Error))
-    //    {
-    //        PlayFabClientAPI.LoginWithFacebook(new LoginWithFacebookRequest
-    //        {
-    //            CreateAccount = true,
-    //            AccessToken = AccessToken.CurrentAccessToken.TokenString
-    //        }, result =>
-    //        {
-    //            Debug.Log("�÷����� ���̽��� �α��� ����!");
-
-    //            GameStateManager.instance.AutoLogin = true;
-    //            GameStateManager.instance.Login = LoginType.Facebook;
-
-    //            OnLoginSuccess(result);
-    //        }
-    //    , error => { Debug.Log(error.GenerateErrorReport()); });
-    //    }
-    //    else
-    //    {
-    //        Debug.Log("�÷����� ���̽��� �α��� ����!");
-    //    }
-    //}
-
-
-    #endregion
-
     #region Apple Login
 
-    #endregion 
+    public void OnClickAppleLogin()
+    {
+#if UNITY_IOS
+        Debug.Log("Try Apple Login");
+        StartCoroutine(AppleLoginCor());
+#endif
+    }
+
+#if UNITY_IOS
+    void SignInWithApple()
+    {
+        var loginArgs = new AppleAuthLoginArgs(LoginOptions.IncludeEmail | LoginOptions.IncludeFullName);
+
+        _appleAuthManager.LoginWithAppleId(
+            loginArgs,
+            credential =>
+            {
+                var appleIdCredential = credential as IAppleIDCredential;
+                if (appleIdCredential != null)
+                {
+                    OnClickAppleLogin(appleIdCredential.IdentityToken);
+                }
+            }, error =>
+            {
+                var authorizationErrorCode = error.GetAuthorizationErrorCode();
+            });
+    }
+
+    IEnumerator AppleLoginCor()
+    {
+        IOSActivate();
+
+        var _newAppleUser = false;
+
+        while (_appleAuthManager == null) yield return null;
+
+        if (!_newAppleUser)
+        {
+            var quickLoginArgs = new AppleAuthQuickLoginArgs();
+
+            _appleAuthManager.QuickLogin(
+                quickLoginArgs,
+                credential =>
+                {
+                    var appleIdCredential = credential as IAppleIDCredential;
+                    if (appleIdCredential != null)
+                    {
+                        OnClickAppleLogin(appleIdCredential.IdentityToken);
+                    }
+                },
+                error =>
+                {
+                    _newAppleUser = true;
+                    SignInWithApple();
+                    var authorizationErrorCode = error.GetAuthorizationErrorCode();
+                });
+        }
+        else
+        {
+            SignInWithApple();
+        }
+        yield return null;
+    }
+
+    public void OnClickAppleLogin(byte[] identityToken)
+    {
+        PlayFabClientAPI.LoginWithApple(new LoginWithAppleRequest
+        {
+            CreateAccount = true,
+            IdentityToken = Encoding.UTF8.GetString(identityToken),
+            TitleId = PlayFabSettings.TitleId
+        }
+        , result =>
+        {
+            Debug.Log("Apple Login Success");
+
+            GameStateManager.instance.AutoLogin = true;
+            GameStateManager.instance.Login = LoginType.Apple;
+
+            OnLoginSuccess(result);
+        }
+        , DisplayPlayfabError);
+    }
+
+    public void OnClickAppleLink(bool forceLink = false)
+    {
+        var quickLoginArgs = new AppleAuthQuickLoginArgs();
+
+        _appleAuthManager.QuickLogin(quickLoginArgs, credential =>
+        {
+            var appleIdCredential = credential as IAppleIDCredential;
+            if (appleIdCredential != null)
+            {
+                TryLinkAppleAccount(appleIdCredential.IdentityToken, forceLink);
+            }
+        }, error =>
+        {
+            var authorizationErrorCode = error.GetAuthorizationErrorCode();
+        });
+    }
+
+    public void TryLinkAppleAccount(byte[] identityToken, bool forceLink)
+    {
+        PlayFabClientAPI.LinkApple(new LinkAppleRequest
+        {
+            ForceLink = forceLink,
+            IdentityToken = Encoding.UTF8.GetString(identityToken)
+        }
+        , result =>
+        {
+            Debug.Log("Link Apple Success!!");
+
+            GameStateManager.instance.AutoLogin = true;
+            GameStateManager.instance.Login = LoginType.Apple;
+            optionContent.SuccessLink(LoginType.Apple);
+        }
+        , DisplayPlayfabError);
+    }
+#endif
+    #endregion
 
     public void OnLoginSuccess(PlayFab.ClientModels.LoginResult result)
     {
@@ -559,6 +653,12 @@ public class PlayfabManager : MonoBehaviour
                         playerDataBase.Slow = (int)list.RemainingUses;
                     }
 
+                    if (list.ItemId.Contains("Icon_"))
+                    {
+                        IconType icon = (IconType)Enum.Parse(typeof(IconType), list.ItemId);
+                        shopDataBase.SetIcon(icon, (int)list.RemainingUses);
+                    }
+
                     shopDataBase.SetItemInstanceId(list.ItemId, list.ItemInstanceId);
                 }
             }
@@ -603,6 +703,10 @@ public class PlayfabManager : MonoBehaviour
                 else if(catalog.ItemClass.Equals("Item"))
                 {
                     shopDataBase.SetItem(shopClass);
+                }
+                else if(catalog.ItemId.Equals("IconBox"))
+                {
+                    shopDataBase.SetETC(shopClass);
                 }
 
             }
@@ -1138,7 +1242,7 @@ public class PlayfabManager : MonoBehaviour
 #region PurchaseItem
     public void PurchaseRemoveAd()
     {
-        Debug.Log("���� ���� ���� �Ϸ�");
+        Debug.Log("???????????? ???????????? ???????????? ????????");
 
         PurchaseItemToRM(shopDataBase.RemoveAds);
 
@@ -1147,7 +1251,7 @@ public class PlayfabManager : MonoBehaviour
 
     public void PurchaseCoin(int number)
     {
-        Debug.Log("���� ���� : " + number);
+        Debug.Log("???????????? ???????????? : " + number);
 
         UpdateAddCurrency(MoneyType.Coin, number);
     }
@@ -1181,65 +1285,76 @@ public class PlayfabManager : MonoBehaviour
         };
         PlayFabClientAPI.PurchaseItem(request, (result) =>
         {
-            Debug.Log(shopClass.itemId + " ���� ����!");
+            Debug.Log(shopClass.itemId + " ???????????? ????????????!");
         }, error =>
         {
-            Debug.Log(shopClass.itemId + " ���� ����!");
+            Debug.Log(shopClass.itemId + " ???????????? ????????????!");
         });
     }
 
-    public void PurchaseItem(ShopClass shopClass, Action<bool> action)
+    public void PurchaseItem(ShopClass shopClass, Action<bool> action, int number)
     {
-        var request = new PurchaseItemRequest()
+        bool failed = false;
+
+        for (int i = 0; i < number; i++)
         {
-            CatalogVersion = shopClass.catalogVersion,
-            ItemId = shopClass.itemId,
-            VirtualCurrency = shopClass.virtualCurrency,
-            Price = (int)shopClass.price
-        };
-        PlayFabClientAPI.PurchaseItem(request, (result) =>
-        {
-            switch(shopClass.itemId)
+            var request = new PurchaseItemRequest()
             {
-                case "Clock":
-                    playerDataBase.Clock += 1;
-                    break;
-                case "Shield":
-                    playerDataBase.Shield += 1;
-                    break;
-                case "Combo":
-                    playerDataBase.Combo += 1;
-                    break;
-                case "Exp":
-                    playerDataBase.Exp += 1;
-                    break;
-                case "Slow":
-                    playerDataBase.Slow += 1;
-                    break;
-            }
+                CatalogVersion = shopClass.catalogVersion,
+                ItemId = shopClass.itemId,
+                VirtualCurrency = shopClass.virtualCurrency,
+                Price = (int)shopClass.price
+            };
 
-            switch (shopClass.virtualCurrency)
+            PlayFabClientAPI.PurchaseItem(request, (result) =>
             {
-                case "GO":
-                    playerDataBase.Coin -= (int)shopClass.price;
-                    break;
-                case "ST":
-                    playerDataBase.Crystal -= (int)shopClass.price;
-                    break;
+                switch (shopClass.itemId)
+                {
+                    case "Clock":
+                        playerDataBase.Clock += 1;
+                        break;
+                    case "Shield":
+                        playerDataBase.Shield += 1;
+                        break;
+                    case "Combo":
+                        playerDataBase.Combo += 1;
+                        break;
+                    case "Exp":
+                        playerDataBase.Exp += 1;
+                        break;
+                    case "Slow":
+                        playerDataBase.Slow += 1;
+                        break;
+                }
+
+                switch (shopClass.virtualCurrency)
+                {
+                    case "GO":
+                        playerDataBase.Coin -= (int)shopClass.price;
+                        break;
+                    case "ST":
+                        playerDataBase.Crystal -= (int)shopClass.price;
+                        break;
+                }
+            }, error =>
+            {
+                failed = true;
+            });
+
+            if(failed)
+            {
+                action.Invoke(false);
+                Debug.Log(shopClass.itemId + " ??? ?? ??!");
+                break;
             }
-            uiManager.RenewalVC();
-            StateManager.instance.ChangeNumber();
+        }
 
-            Debug.Log(shopClass.itemId + " ���� ����!");
-            action.Invoke(true);
+        uiManager.RenewalVC();
+        StateManager.instance.ChangeNumber();
+        soundManager.PlaySFX(GameSfxType.BuyItem);
 
-            soundManager.PlaySFX(GameSfxType.BuyItem);
-        }, error =>
-        {
-            Debug.Log(shopClass.itemId + " ���� ����!");
-            NotionManager.instance.UseNotion(NotionType.LowCoinNotion);
-            action.Invoke(false);
-        });
+        action.Invoke(true);
+        Debug.Log(shopClass.itemId + " ??? ?? ??!");
     }
 
     public void CheckConsumeItem()
