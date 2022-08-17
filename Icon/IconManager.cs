@@ -75,6 +75,8 @@ public class IconManager : MonoBehaviour
         }
 
         iconContentList[playerDataBase.Icon].CheckMark(true);
+
+        Initialize();
     }
 
     public void Initialize()

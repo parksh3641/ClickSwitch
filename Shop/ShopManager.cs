@@ -172,7 +172,16 @@ public class ShopManager : MonoBehaviour
 
     public void OnBuyItem()
     {
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.PurchaseItem(shopClass, CheckBuyItem, buyCount);
+        if(shopClass.itemId.Equals("IconBox"))
+        {
+            if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("IconBox",buyCount);
+
+            CheckBuyItem(true);
+        }
+        else
+        {
+            if (PlayfabManager.instance.isActive) PlayfabManager.instance.PurchaseItem(shopClass, CheckBuyItem, buyCount);
+        }
     }
 
     public void CheckBuyItem(bool check)

@@ -50,13 +50,13 @@ public class GameManager : MonoBehaviour
 
 
     [Title("Value")]
-    private int nowIndex = 0; //현재 값
-    private int setIndex = 1; //세팅용 값
-    private int countIndex = 0; //카운팅 값
+    private int nowIndex = 0;
+    private int setIndex = 1;
+    private int countIndex = 0;
 
-    private int moleIndex = 0; //두더지 위치 값
+    private int moleIndex = 0;
 
-    private int filpCardIndex = 0; //세이브 값
+    private int filpCardIndex = 0;
 
     private int buttonActionNumber = 0;
     private int buttonActionLevelIndex = 0;
@@ -313,7 +313,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Button
-    public void OnGameStartButton() //게임 시작 버튼
+    public void OnGameStartButton() //???? ???? ????
     {
         if(!NetworkConnect.instance.CheckConnectInternet())
         {
@@ -324,12 +324,12 @@ public class GameManager : MonoBehaviour
         if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData(gamePlayType.ToString(), InitializeGame);
     }
 
-    public void OpenGameMenuButton() //게임 시작전 모드 선택 창 열기
+    public void OpenGameMenuButton() //???? ?????? ???? ???? ?? ????
     {
         uiManager.OpenMenu();
     }
 
-    public void ChoiceGameType(GamePlayType type, GameModeType mode) //모드 선택 창에서 옵션 선택
+    public void ChoiceGameType(GamePlayType type, GameModeType mode) //???? ???? ?????? ???? ????
     {
         gamePlayType = type;
 
@@ -367,7 +367,7 @@ public class GameManager : MonoBehaviour
     {
         if (!check)
         {
-            Debug.Log("해당 게임모드가 열려있지 않습니다.");
+            Debug.Log("???? ?????????? ???????? ????????.");
             NotionManager.instance.UseNotion(NotionType.GameModeRockNotion);
             return;
         }
@@ -888,7 +888,7 @@ public class GameManager : MonoBehaviour
 
         if(countIndex <= 5)
         {
-            Debug.Log("두더지 잡기 속도 증가 : " + countIndex);
+            Debug.Log("?????? ???? ???? ???? : " + countIndex);
             waitForMoleCatchSeconds = new WaitForSeconds(ValueManager.instance.GetMoleCatchTime() - (0.05f * countIndex));
             waitForMoleNextSeconds = new WaitForSeconds(ValueManager.instance.GetMoleNextTime() - (0.1f * countIndex));
         }

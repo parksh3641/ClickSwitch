@@ -36,7 +36,7 @@ public class IconContent : MonoBehaviour
         fillAmount.fillAmount = 0f;
     }
 
-    public void Initialize(IconManager manager,IconType type)
+    public void Initialize(IconManager manager, IconType type)
     {
         iconManager = manager;
         iconType = type;
@@ -46,21 +46,18 @@ public class IconContent : MonoBehaviour
         InitState();
     }
 
-    public void InitState() //상태 점S
+    public void InitState()
     {
-        if ((int)iconType > 3)
-        {
-            iconClass = shopDataBase.GetIconState(iconType);
+        iconClass = shopDataBase.GetIconState(iconType);
 
-            if (iconClass.count >= 5)
-            {
-                UnLock();
-            }
-            else
-            {
-                fillAmount.fillAmount = iconClass.count / 5.0f;
-                countText.text = iconClass.count + " / 5";
-            }
+        if (iconClass.count >= 5)
+        {
+            UnLock();
+        }
+        else
+        {
+            fillAmount.fillAmount = iconClass.count / 5.0f;
+            countText.text = iconClass.count + " / 5";
         }
     }
 

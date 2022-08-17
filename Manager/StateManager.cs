@@ -19,6 +19,7 @@ public class StateManager : MonoBehaviour
     public MailBoxManager mailBoxManager;
     public DailyManager dailyManager;
     public UpgradeManager upgradeManager;
+    public IconBoxManager iconBoxManager;
 
     public delegate void PurchasEvent();
     public static event PurchasEvent eChangeNumber;
@@ -45,6 +46,7 @@ public class StateManager : MonoBehaviour
             mailBoxManager.Initialize();
             dailyManager.Initialize();
             upgradeManager.Initialize();
+            iconBoxManager.Initialize();
         }
     }
 

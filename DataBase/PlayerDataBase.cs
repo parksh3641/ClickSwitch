@@ -80,6 +80,8 @@ public class PlayerDataBase : ScriptableObject
     private int exp = 0;
     [SerializeField]
     private int slow = 0;
+    [SerializeField]
+    private int iconBox = 0;
 
     [Space]
     [Title("Reset")]
@@ -127,6 +129,10 @@ public class PlayerDataBase : ScriptableObject
     private int addExpLevel = 0;
 
 
+    public delegate void BoxEvent();
+    public static event BoxEvent eGetBox;
+
+
     public void Initialize()
     {
         coin = 0;
@@ -162,6 +168,7 @@ public class PlayerDataBase : ScriptableObject
         combo = 0;
         exp = 0;
         slow = 0;
+        iconBox = 0;
 
         attendanceDay = "";
         gameMode = "";
@@ -478,6 +485,23 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             slow = value;
+        }
+    }
+
+    public int IconBox
+    {
+        get
+        {
+            return iconBox;
+        }
+        set
+        {
+            iconBox = value;
+
+            if(iconBox > 0)
+            {
+                eGetBox();
+            }
         }
     }
 

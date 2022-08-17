@@ -157,6 +157,18 @@ public class ShopDataBase : ScriptableObject
         }
     }
 
+    public void AddIcon(IconType type)
+    {
+        for (int i = 0; i < iconList.Count; i++)
+        {
+            if (iconList[i].iconType.Equals(type))
+            {
+                iconList[i].count += 1;
+                break;
+            }
+        }
+    }
+
     public IconClass GetIconState(IconType type)
     {
         IconClass iconClass = new IconClass();
@@ -169,6 +181,19 @@ public class ShopDataBase : ScriptableObject
         }
 
         return iconClass;
+    }
+
+    public int GetIconNumber(IconType type)
+    {
+        int number = 0;
+        for (int i = 0; i < iconList.Count; i++)
+        {
+            if (iconList[i].iconType.Equals(type))
+            {
+                number = iconList[i].count;
+            }
+        }
+        return number;
     }
 
     #endregion

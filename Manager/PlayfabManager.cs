@@ -815,6 +815,9 @@ public class PlayfabManager : MonoBehaviour
                        case "AddExpLevel":
                            playerDataBase.AddExpLevel = statistics.Value;
                            break;
+                       case "IconBox":
+                           playerDataBase.IconBox = statistics.Value;
+                           break;
                    }
                }
            })
@@ -939,7 +942,19 @@ public class PlayfabManager : MonoBehaviour
                 }
                 },
                 GeneratePlayStreamEvent = true,
-            }, OnCloudUpdateStats, DisplayPlayfabError);
+            },
+            result =>
+            {
+                OnCloudUpdateStats(result);
+
+                switch(name)
+                {
+                    case "IconBox":
+                        playerDataBase.IconBox += value;
+                        break;
+                }
+            }
+            , DisplayPlayfabError);
         }
         catch (Exception e)
         {
@@ -1241,8 +1256,6 @@ public class PlayfabManager : MonoBehaviour
 #region PurchaseItem
     public void PurchaseRemoveAd()
     {
-        Debug.Log("???????????? ???????????? ???????????? ????????");
-
         PurchaseItemToRM(shopDataBase.RemoveAds);
 
         playerDataBase.RemoveAd = true;
@@ -1250,8 +1263,6 @@ public class PlayfabManager : MonoBehaviour
 
     public void PurchaseCoin(int number)
     {
-        Debug.Log("???????????? ???????????? : " + number);
-
         UpdateAddCurrency(MoneyType.Coin, number);
     }
 
@@ -1343,7 +1354,7 @@ public class PlayfabManager : MonoBehaviour
             if(failed)
             {
                 action.Invoke(false);
-                Debug.Log(shopClass.itemId + " ??? ?? ??!");
+                Debug.Log(shopClass.itemId + " Buy Failed!");
                 break;
             }
         }
@@ -1353,7 +1364,7 @@ public class PlayfabManager : MonoBehaviour
         soundManager.PlaySFX(GameSfxType.BuyItem);
 
         action.Invoke(true);
-        Debug.Log(shopClass.itemId + " ??? ?? ??!");
+        Debug.Log(shopClass.itemId + " Buy Success!");
     }
 
     public void CheckConsumeItem()
@@ -1429,4 +1440,21 @@ public class PlayfabManager : MonoBehaviour
     }
 
 #endregion
+
+    public void GrantItemsToUser(string itemIds, string catalogVersion)
+    {
+        try
+        {
+            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+            {
+                FunctionName = "GrantItemsToUser",
+                FunctionParameter = new { ItemIds = itemIds, CatalogVersion = catalogVersion },
+                GeneratePlayStreamEvent = true,
+            }, OnCloudUpdateStats, DisplayPlayfabError);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e.Message);
+        }
+    }
 }
