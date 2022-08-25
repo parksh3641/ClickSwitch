@@ -23,7 +23,9 @@ public class IconBoxManager : MonoBehaviour
     [Title("Box")]
     public Image boxIcon;
 
+    public Sprite boxInitIcon;
     public Sprite boxOpenIcon;
+    public GameObject boxIconGridView;
     public GameObject boxOpenEffect;
 
     public int boxCount = 0;
@@ -32,6 +34,8 @@ public class IconBoxManager : MonoBehaviour
 
 
     List<IconBoxContent> iconBoxContentList = new List<IconBoxContent>();
+
+    public IconBoxContent goldContent;
 
 
     public SoundManager soundManager;
@@ -45,14 +49,13 @@ public class IconBoxManager : MonoBehaviour
 
         boxView.SetActive(false);
 
-        for(int i = 0; i < buttons.Length; i ++)
+        for (int i = 0; i < buttons.Length; i ++)
         {
             buttons[i].SetActive(false);
         }
 
         PlayerDataBase.eGetBox += OpenBoxView;
     }
-
 
     private void OnApplicationQuit()
     {
@@ -120,6 +123,13 @@ public class IconBoxManager : MonoBehaviour
             iconBoxContentList[i].gameObject.SetActive(false);
         }
 
+        goldContent.gameObject.SetActive(false);
+
+        boxIcon.sprite = boxInitIcon;
+
+        boxIconGridView.SetActive(false);
+        boxOpenEffect.SetActive(false);
+
         Debug.Log("BoxView Reset!");
     }
 
@@ -143,6 +153,13 @@ public class IconBoxManager : MonoBehaviour
 
     void RandomIcon(int number)
     {
+        boxIcon.sprite = boxOpenIcon;
+
+        boxIconGridView.SetActive(true);
+        boxOpenEffect.SetActive(true);
+
+        soundManager.PlaySFX(GameSfxType.BoxOpen);
+
         StartCoroutine(RandomIconCoroution(number));
     }
 
@@ -160,11 +177,14 @@ public class IconBoxManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("이미 5개 이상 보유 하고 있습니다 돈으로 지급하");
+                if (!goldContent.gameObject.activeInHierarchy) goldContent.gameObject.SetActive(true);
 
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 200);
+
+                goldContent.AddGoldCount(200);
+
+                Debug.Log("이미 5개 이상 보유 하고 있습니다 돈으로 지급합니다");
             }
-
-
 
             CheckBoxCount();
             yield return new WaitForSeconds(0.5f);

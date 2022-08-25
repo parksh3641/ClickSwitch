@@ -258,7 +258,7 @@ public class DailyManager : MonoBehaviour
 
             if (PlayfabManager.instance.isActive)
             {
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 10);
+                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 20);
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyMissionClear", 1);
             }
 

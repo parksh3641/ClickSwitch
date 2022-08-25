@@ -1053,6 +1053,8 @@ public class PlayfabManager : MonoBehaviour
                     playerDataBase.Crystal -= number;
                     break;
             }
+
+            uiManager.RenewalVC();
         }
         else
         {

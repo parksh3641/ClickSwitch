@@ -172,8 +172,39 @@ public class ShopManager : MonoBehaviour
 
     public void OnBuyItem()
     {
-        if(shopClass.itemId.Equals("IconBox"))
+        int price = buyPrice * buyCount;
+
+        Debug.Log(price + "만큼 결제중");
+
+        switch (shopClass.virtualCurrency)
         {
+            case "GO":
+                if (playerDataBase.Coin < price)
+                {
+                    CheckBuyItem(false);
+                    return;
+                }
+                else
+                {
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Coin, price);
+                }
+                break;
+            case "ST":
+                if (playerDataBase.Crystal < price)
+                {
+                    CheckBuyItem(false);
+                    return;
+                }
+                else
+                {
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Crystal, price);
+                }
+                break;
+        }
+
+        if (shopClass.itemId.Equals("IconBox"))
+        {
+
             if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("IconBox",buyCount);
 
             CheckBuyItem(true);
@@ -204,7 +235,7 @@ public class ShopManager : MonoBehaviour
     {
         if (check)
         {
-            Debug.Log("???? ????");
+            Debug.Log("Watch Ad Play");
 
             watchAdLock.SetActive(true);
             GameStateManager.instance.WatchAd = false;
@@ -217,7 +248,7 @@ public class ShopManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("???? ???? ????");
+            Debug.Log("Watch Ad Stop");
 
             watchAdLock.SetActive(false);
             GameStateManager.instance.WatchAd = true;

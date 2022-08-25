@@ -80,7 +80,8 @@ public enum GameSfxType
     Fail,
     Click,
     GetMoney,
-    BuyItem
+    BuyItem,
+    BoxOpen
 }
 
 public enum ShopType

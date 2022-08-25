@@ -34,4 +34,11 @@ public class IconBoxContent : MonoBehaviour
 
         countText.text = "x" + count.ToString();
     }
+
+    public void AddGoldCount(int number)
+    {
+        count += number;
+
+        countText.text = "x" + count.ToString();
+    }
 }
