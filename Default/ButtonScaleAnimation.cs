@@ -8,15 +8,23 @@ public class ButtonScaleAnimation : MonoBehaviour
     private float maxScale = 1.15f;
 
     private float speed = 0.015f;
-    private float delay = 5f;
+    public float delay = 5f;
 
     float scale = 0;
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(0.01f);
 
-    private void Start()
+    private void OnEnable()
     {
+        StopAllCoroutines();
         StartCoroutine(ButtonAnimation());
+    }
+
+    public void StopAnim()
+    {
+        StopAllCoroutines();
+
+        transform.localScale = Vector3.one;
     }
 
     IEnumerator ButtonAnimation()

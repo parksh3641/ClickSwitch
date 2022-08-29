@@ -192,7 +192,7 @@ public class DailyManager : MonoBehaviour
     {
         dailyView.SetActive(true);
 
-        Debug.Log("?????? ?????? ???? ????????");
+        Debug.Log("Update DailyMission");
 
         for(int i = 0; i < dailyContents.Length; i ++)
         {

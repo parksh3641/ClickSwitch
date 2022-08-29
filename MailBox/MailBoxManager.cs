@@ -146,6 +146,10 @@ public class MailBoxManager : MonoBehaviour
                 if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, int.Parse(strArray[1]));
 
                 break;
+            case "IconBox":
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("IconBox", int.Parse(strArray[1]));
+
+                break;
             default:
                 int number = 0;
 

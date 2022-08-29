@@ -19,6 +19,8 @@ public class LoginManager : MonoBehaviour
 
     public void OnClick()
     {
+        if (!buttonObj.activeInHierarchy) return;
+
         number += 1;
 
         numberText.text = number.ToString();
@@ -27,5 +29,7 @@ public class LoginManager : MonoBehaviour
     public void NowLoaded()
     {
         buttonObj.SetActive(false);
+
+        numberText.text = "";
     }
 }

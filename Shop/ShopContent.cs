@@ -104,6 +104,21 @@ public class ShopContent : MonoBehaviour
                 price.SetActive(true);
 
                 break;
+            case ShopType.Crystal100:
+                titleText.name = "Crystal100";
+
+                switch (GameStateManager.instance.Language)
+                {
+                    case LanguageType.Korean:
+                        priceText.text = "₩ 1200";
+                        break;
+                    default:
+                        priceText.text = "USD $ 0.99";
+                        break;
+                }
+
+                price.SetActive(true);
+                break;
         }
 
         titleText.ReLoad();

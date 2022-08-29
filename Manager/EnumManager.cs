@@ -90,7 +90,8 @@ public enum ShopType
     WatchAd,
     Coin1000,
     Coin2000,
-    Coin3000
+    Coin3000,
+    Crystal100
 }
 
 public enum ItemType

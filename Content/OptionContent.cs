@@ -10,7 +10,7 @@ public class OptionContent : MonoBehaviour
     public OptionType optionType;
 
     public UnityEvent eChangeLanguage;
-    public UnityEvent eGoogleLogout;
+    public UnityEvent eLogout;
     public UnityEvent eGoogleLink;
     public UnityEvent eAppleLink;
     public UnityEvent eFacebookLogout;
@@ -69,11 +69,11 @@ public class OptionContent : MonoBehaviour
 
                 buttonImg.sprite = buttonList[1];
 
-                buttonText.name = "Logout";
+                buttonText.name = "DeleteAccount";
                 buttonText.ReLoad();
                 buttonText.TextColor(new Color(225 / 255f, 34 / 255f, 12 / 255f));
 
-                button.SetActive(false);
+                button.SetActive(true);
 
                 switch (GameStateManager.instance.Login)
                 {
@@ -91,12 +91,13 @@ public class OptionContent : MonoBehaviour
                             case RuntimePlatform.IPhonePlayer:
                                 buttonText.name = "AppleLink";
                                 break;
+                            default:
+                                button.SetActive(false);
+                                break;
                         }
                         buttonText.ReLoad();
 
                         buttonText.TextColor(new Color(39 / 255f, 220 / 255f, 149 / 255f));
-
-                        button.SetActive(true);
 
                         break;
                     case LoginType.Google:
@@ -109,7 +110,6 @@ public class OptionContent : MonoBehaviour
 
                 break;
             case OptionType.Vibration:
-
                 OnVibration();
                 break;
             case OptionType.SleepMode:
@@ -157,7 +157,6 @@ public class OptionContent : MonoBehaviour
                     case LoginType.None:
                         break;
                     case LoginType.Guest:
-
                         switch (Application.platform)
                         {
                             case RuntimePlatform.Android:
@@ -166,13 +165,19 @@ public class OptionContent : MonoBehaviour
                             case RuntimePlatform.IPhonePlayer:
                                 eAppleLink.Invoke();
                                 break;
+                            default:
+                                eLogout.Invoke();
+                                break;
                         }
                         break;
                     case LoginType.Google:
-                        eGoogleLogout.Invoke();
+                        eLogout.Invoke();
                         break;
                     case LoginType.Facebook:
                         eFacebookLogout.Invoke();
+                        break;
+                    case LoginType.Apple:
+                        eLogout.Invoke();
                         break;
                 }
 
@@ -294,6 +299,10 @@ public class OptionContent : MonoBehaviour
         iconImg.sprite = loginList[(int)GameStateManager.instance.Login - 1];
         iconText.text = GameStateManager.instance.Login.ToString();
 
-        button.SetActive(false);
+        buttonImg.sprite = buttonList[1];
+
+        buttonText.name = "DeleteAccount";
+        buttonText.ReLoad();
+        buttonText.TextColor(new Color(225 / 255f, 34 / 255f, 12 / 255f));
     }
 }

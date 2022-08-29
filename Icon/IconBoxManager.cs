@@ -28,6 +28,8 @@ public class IconBoxManager : MonoBehaviour
     public GameObject boxIconGridView;
     public GameObject boxOpenEffect;
 
+    public ButtonScaleAnimation boxAnim;
+
     public int boxCount = 0;
     private int iconNumber = 0;
     private bool waitBox = false;
@@ -153,6 +155,8 @@ public class IconBoxManager : MonoBehaviour
 
     void RandomIcon(int number)
     {
+        boxAnim.StopAnim();
+
         boxIcon.sprite = boxOpenIcon;
 
         boxIconGridView.SetActive(true);

@@ -22,6 +22,7 @@ using AppleAuth.Extensions;
 
 using EntityKey = PlayFab.ProfilesModels.EntityKey;
 using System.Text;
+using UnityEngine.SceneManagement;
 
 public class PlayfabManager : MonoBehaviour
 {
@@ -131,9 +132,13 @@ public class PlayfabManager : MonoBehaviour
 #endif
     #endregion
 
-    void LogOut()
+    public void LogOut()
     {
-        Debug.Log("???????????? ??????????????????????.");
+#if UNITY_EDITOR
+        OnClickGuestLogout();
+#elif UNITY_ANDROID
+        OnClickGoogleLogout();
+#endif
 
         uiManager.OnLogout();
 
@@ -141,10 +146,16 @@ public class PlayfabManager : MonoBehaviour
         GameStateManager.instance.CustomId = "";
         GameStateManager.instance.AutoLogin = false;
         GameStateManager.instance.Login = LoginType.None;
+
+        Debug.Log("Logout");
+
+        PlayerPrefs.DeleteAll();
+
+        SceneManager.LoadScene("LoginScene");
     }
 
 
-    #region Message
+#region Message
     private void SetEditorOnlyMessage(string message, bool error = false)
     {
 #if UNITY_EDITOR
@@ -154,8 +165,8 @@ public class PlayfabManager : MonoBehaviour
     }
     private void DisplayPlayfabError(PlayFabError error) => SetEditorOnlyMessage("error : " + error.GenerateErrorReport(), true);
 
-    #endregion
-    #region GuestLogin
+#endregion
+#region GuestLogin
     public void OnClickGuestLogin()
     {
         customId = GameStateManager.instance.CustomId;
@@ -221,8 +232,8 @@ public class PlayfabManager : MonoBehaviour
         PlayFabClientAPI.ForgetAllCredentials();
     }
 
-    #endregion
-    #region Google Login
+#endregion
+#region Google Login
     public void OnClickGoogleLogin()
     {
 #if UNITY_ANDROID
@@ -282,7 +293,6 @@ public class PlayfabManager : MonoBehaviour
 #if UNITY_ANDROID
         ((PlayGamesPlatform)Social.Active).SignOut();
 #endif
-        LogOut();
     }
 
     public void OnClickGoogleLink()
@@ -326,8 +336,8 @@ public class PlayfabManager : MonoBehaviour
         }
 #endif
     }
-    #endregion
-    #region Apple Login
+#endregion
+#region Apple Login
 
     public void OnClickAppleLogin()
     {
@@ -448,7 +458,7 @@ public class PlayfabManager : MonoBehaviour
         , DisplayPlayfabError);
     }
 #endif
-    #endregion
+#endregion
 
     public void OnLoginSuccess(PlayFab.ClientModels.LoginResult result)
     {
@@ -600,14 +610,14 @@ public class PlayfabManager : MonoBehaviour
             int gold = result.VirtualCurrency["GO"]; //Get Money
             int crystal = result.VirtualCurrency["ST"]; //Get Money
 
-            if(gold > 100000)
+            if(gold > 1000000)
             {
-                gold = 100000;
+                gold = 1000000;
             }
 
-            if(crystal > 10000)
+            if(crystal > 100000)
             {
-                crystal = 10000;
+                crystal = 100000;
             }
 
             playerDataBase.Coin = gold;
@@ -1266,6 +1276,11 @@ public class PlayfabManager : MonoBehaviour
     public void PurchaseCoin(int number)
     {
         UpdateAddCurrency(MoneyType.Coin, number);
+    }
+
+    public void PurchaseCrystal(int number)
+    {
+        UpdateAddCurrency(MoneyType.Crystal, number);
     }
 
     public void PurchaseItemToRM(ShopClass shopClass)

@@ -22,6 +22,7 @@ public class GameStateManager : MonoBehaviour
     {
         [Title("Developer")]
         public bool isLogin = false;
+        public bool appleInAppPurchase = false;
 
         [Space]
         [Title("GuestLogin")]
@@ -71,6 +72,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.isLogin = value;
+            SaveFile();
+        }
+    }
+
+    public bool AppleInAppPurchase
+    {
+        get
+        {
+            return gameSettings.appleInAppPurchase;
+        }
+        set
+        {
+            gameSettings.appleInAppPurchase = value;
             SaveFile();
         }
     }

@@ -62,6 +62,7 @@ public class GameManager : MonoBehaviour
     private int buttonActionLevelIndex = 0;
     private int buttonActionIndex = 0;
 
+    [Header("TimingAction")]
     private float timingActionValue = 0;
     private float timingActionPlus = 0;
     private float timingActionSpeed = 0;
@@ -73,6 +74,9 @@ public class GameManager : MonoBehaviour
     private float timingActionRangePosX = 0;
     private bool timingActionMove = false;
 
+    public GameObject[] timingActionVector;
+
+    [Header("DragAction")]
     private int dragActionIndex = 0;
 
     private float critical = 0;
@@ -463,11 +467,15 @@ public class GameManager : MonoBehaviour
                 timingActionSpeed = 0.1f;
                 timingActionSaveSpeed = timingActionSpeed;
 
+                timingActionVector[0].SetActive(false);
+                timingActionVector[1].SetActive(false);
+
                 break;
             case GamePlayType.GameChoice6:
 
                 for (int i = 0; i < drageActionList.Count; i++)
                 {
+                    drageActionList[i].Initialize(gamePlayType);
                     drageActionList[i].gameObject.SetActive(false);
                 }
 
@@ -985,7 +993,7 @@ public class GameManager : MonoBehaviour
         {
             if(Random.Range(0 , 2) == 0)
             {
-                if(timingActionRangePosX < 360)
+                if(timingActionRangePosX < 350)
                 {
                     timingActionMove = false;
                 }
@@ -996,7 +1004,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                if (timingActionRangePosX > -360)
+                if (timingActionRangePosX > -350)
                 {
                     timingActionMove = true;
                 }
@@ -1006,8 +1014,26 @@ public class GameManager : MonoBehaviour
                 }
             }
 
+            SetTimingActionVector(timingActionMove);
+
             yield return new WaitForSeconds(2);
         }
     }
+
+    public void SetTimingActionVector(bool check)
+    {
+        timingActionVector[0].SetActive(false);
+        timingActionVector[1].SetActive(false);
+
+        if(check)
+        {
+            timingActionVector[1].SetActive(true);
+        }
+        else
+        {
+            timingActionVector[0].SetActive(true);
+        }
+    }
+
     #endregion
 }

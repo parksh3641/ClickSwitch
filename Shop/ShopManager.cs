@@ -13,6 +13,10 @@ public class ShopManager : MonoBehaviour
 
     public NotionManager notionManager;
 
+    [Space]
+    [Title("InAppPurchase")]
+    public GameObject[] inAppPurchaseObjList;
+
     public ShopItemContent shopItemContent;
     public RectTransform shopItemTransform;
 
@@ -60,6 +64,19 @@ public class ShopManager : MonoBehaviour
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
         if (shopDataBase == null) shopDataBase = Resources.Load("ShopDataBase") as ShopDataBase;
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+    }
+
+    void Start()
+    {
+#if !UNITY_EDITOR && UNITY_IOS
+        if (!GameStateManager.instance.AppleInAppPurchase)
+        {
+            for(int i = 0; i < inAppPurchaseObjList.Length; i ++)
+            {
+                inAppPurchaseObjList[i].gameObject.SetActive(false);
+            }
+        }
+#endif
     }
 
     public void Initialize()
@@ -229,7 +246,7 @@ public class ShopManager : MonoBehaviour
         }
     }
 
-    #region WatchAd
+#region WatchAd
 
     void SetWatchAd(bool check)
     {
@@ -306,5 +323,5 @@ public class ShopManager : MonoBehaviour
         SetWatchAd(true);
     }
 
-    #endregion
+#endregion
 }

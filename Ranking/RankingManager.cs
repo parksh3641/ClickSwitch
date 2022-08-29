@@ -255,19 +255,14 @@ public class RankingManager : MonoBehaviour
             num++;
         }
 
-        if(!isCheck) //랭킹 100위 밖일 경우
+        if(!isCheck)
         {
             PlayfabManager.instance.GetPlayerProfile(GameStateManager.instance.PlayfabId, CheckCountry);
         }
 
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("Icon", SetIcon);
+
         rankContentParent.anchoredPosition = new Vector2(0, -9999);
-
-        Invoke("Delay", 0.5f);
-    }
-
-    void Delay()
-    {
-        isDelay = false;
     }
 
     void CheckCountry(string code)
@@ -348,5 +343,36 @@ public class RankingManager : MonoBehaviour
         }
 
         myRankContent.InitState(999, code, GameStateManager.instance.NickName, number, false);
+    }
+
+    public void SetIcon(GetLeaderboardResult result)
+    {
+        var curBoard = result.Leaderboard;
+
+        foreach (PlayerLeaderboardEntry player in curBoard)
+        {
+            for(int i = 0; i < rankContentList.Count; i ++)
+            {
+                if (rankContentList[i].nickNameText.text.Equals(player.DisplayName) ||
+                    rankContentList[i].nickNameText.text.Equals(player.PlayFabId))
+                {
+                    if(player.StatValue > 0)
+                    {
+                        rankContentList[i].IconState((IconType)player.StatValue);
+                    }
+
+                    continue;
+                }
+            }
+        }
+
+        myRankContent.IconState((IconType)playerDataBase.Icon);
+
+        Invoke("Delay", 0.5f);
+    }
+
+    void Delay()
+    {
+        isDelay = false;
     }
 }

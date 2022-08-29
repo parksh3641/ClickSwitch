@@ -43,10 +43,15 @@ public class NormalContent : MonoBehaviour, IContentEvent
     [Space]
     [Title("FingerSnap")]
     public string[] fingerSnapStrArray;
+    Sprite[] fingerSnapArray;
+
+    ImageDataBase imageDataBase;
 
 
     void Awake()
     {
+        if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+
         failSoundEvent.AddListener(() => { GameObject.FindWithTag("FailSound").GetComponent<AudioSource>().Play(); });
 
         numberText.text = "";
@@ -83,6 +88,7 @@ public class NormalContent : MonoBehaviour, IContentEvent
                 isActive = true;
                 break;
             case GamePlayType.GameChoice6:
+                fingerSnapArray = imageDataBase.GetFingerSnapArray();
                 break;
         }
     }
@@ -138,6 +144,8 @@ public class NormalContent : MonoBehaviour, IContentEvent
     public void FingerSnapReset(int number)
     {
         numberText.text = fingerSnapStrArray[number];
+
+        backgroundImg.sprite = fingerSnapArray[number];
 
         isActive = true;
     }

@@ -13,6 +13,7 @@ public class MailContent : MonoBehaviour
 
     Sprite[] vcArray;
     Sprite[] itemArray;
+    Sprite[] etcArray;
 
     ItemType itemType = ItemType.Clock;
 
@@ -24,6 +25,7 @@ public class MailContent : MonoBehaviour
 
         vcArray = imageDataBase.GetVCArray();
         itemArray = imageDataBase.GetItemArray();
+        etcArray = imageDataBase.GetETCArray();
     }
 
 
@@ -36,6 +38,10 @@ public class MailContent : MonoBehaviour
         else if(name.Contains("Crystal"))
         {
             icon.sprite = vcArray[1];
+        }
+        else if(name.Contains("IconBox"))
+        {
+            icon.sprite = etcArray[0];
         }
         else
         {
