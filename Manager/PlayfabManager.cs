@@ -149,7 +149,7 @@ public class PlayfabManager : MonoBehaviour
 
         Debug.Log("Logout");
 
-        PlayerPrefs.DeleteAll();
+        PlayerPrefs.SetInt("Version", 0);
 
         SceneManager.LoadScene("LoginScene");
     }
