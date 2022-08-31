@@ -7,9 +7,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[System.Serializable]
+public class GameModeLevel
+{
+    public GamePlayType gamePlayType = GamePlayType.GameChoice1;
+    public GameModeType gameModeType = GameModeType.Easy;
+
+    public bool easy = true;
+    public bool normal = false;
+    public bool hard = false;
+}
+
 public class ResetManager : MonoBehaviour
 {
     GamePlayType type = GamePlayType.GameChoice1;
+    GameModeLevel gameModeLevel;
 
     public GameObject gameMenuView;
 
@@ -17,6 +29,10 @@ public class ResetManager : MonoBehaviour
 
     DateTime serverTime;
 
+    [Title("Normal Mode")]
+    public ModeContent[] gameModeContentArray;
+
+    [Space]
     [Title("Perfect Mode")]
     public EventModeContent eventModeContent;
     public GameObject waitForNextEventObj;
@@ -42,6 +58,8 @@ public class ResetManager : MonoBehaviour
             gameMenuView.SetActive(true);
 
             OnCheckAttendanceDay();
+
+            CheckGameMode();
         }
         else
         {
@@ -198,5 +216,23 @@ public class ResetManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         StartCoroutine(RemainTimerCourtion());
+    }
+
+    void CheckGameMode()
+    {
+        for(int i = 0; i < gameModeContentArray.Length; i ++)
+        {
+            gameModeLevel = playerDataBase.GetGameMode(GamePlayType.GameChoice1 + i);
+
+            if(gameModeLevel.normal)
+            {
+                gameModeContentArray[i].UnLock();
+            }
+
+            if(gameModeLevel.gameModeType != GameModeType.Perfect)
+            {
+                gameModeContentArray[i].ChangeGameMode(gameModeLevel.gameModeType);
+            }
+        }
     }
 }

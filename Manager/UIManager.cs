@@ -61,6 +61,11 @@ public class UIManager : MonoBehaviour, IGameEvent
     Sprite[] iconArray;
 
     [Space]
+    [Title("GameMode")]
+    public GameObject gameModeView;
+    public LocalizationContent gameModeText;
+
+    [Space]
     [Title("Ad")]
     public GameObject watchAdLock;
     public Text watchAdCountText;
@@ -185,6 +190,7 @@ public class UIManager : MonoBehaviour, IGameEvent
         cancleUI.SetActive(false);
         networkView.SetActive(false);
         trophyView.SetActive(false);
+        gameModeView.SetActive(false);
     }
 
     private void Start()
@@ -270,7 +276,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     //            }
     //            else
     //            {
-    //                Debug.Log("게임 종료");
+    //                Debug.Log("???? ????");
     //            }
     //        }
     //    }
@@ -321,7 +327,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void RenewalVC()
     {
-        Debug.Log("화폐 갱신");
+        Debug.Log("???? ????");
 
         goldText.text = playerDataBase.Coin.ToString();
         crystalText.text = playerDataBase.Crystal.ToString();
@@ -646,6 +652,9 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         Debug.Log("Game End");
 
+        CloseGamePlayUI();
+        gameEndUI.SetActive(true);
+
         checkClose = false;
         Invoke("WaitCloseGameEnd", 1f);
 
@@ -664,63 +673,105 @@ public class UIManager : MonoBehaviour, IGameEvent
         FirebaseAnalytics.LogEvent(GameStateManager.instance.GamePlayType.ToString(), "GetScore", score);
         FirebaseAnalytics.LogEvent(GameStateManager.instance.GamePlayType.ToString(), "GetCombo", comboManager.GetCombo());
 
-        if (GameStateManager.instance.GameModeType == GameModeType.Perfect)
+        GameModeLevel gameModeLevel = playerDataBase.GetGameMode(GameStateManager.instance.GamePlayType);
+
+        switch (GameStateManager.instance.GameModeType)
         {
-            if (GameStateManager.instance.TryCount > 0)
-            {
-                GameStateManager.instance.TryCount -= 1;
-            }
-
-            float clearScore = 0;
-            bool fail = false;
-
-            clearScore = ValueManager.instance.GetPerfectClearScore(GameStateManager.instance.GamePlayType);
-            fail = GameStateManager.instance.Fail;
-
-            if (score > clearScore && !fail)
-            {
-                Debug.Log("퍼펙트 모드 성공!");
-
-                if (!playerDataBase.GetTrophyIsAcive(GameStateManager.instance.GamePlayType))
+            case GameModeType.Easy:
+                if (score >= ValueManager.instance.GetNormalClearScore(GameStateManager.instance.GamePlayType) && !gameModeLevel.normal)
                 {
-                    trophyView.SetActive(true);
+                    gameModeView.SetActive(true);
 
-                    trophyIcon.sprite = iconArray[(int)GameStateManager.instance.GamePlayType];
+                    gameModeText.name = "Normal";
+                    gameModeText.ReLoad();
 
-                    TrophyData trophyContent = new TrophyData();
-
-                    trophyContent.gamePlayType = GameStateManager.instance.GamePlayType;
-                    trophyContent.isActive = true;
-                    trophyContent.number = 1;
-                    trophyContent.date = DateTime.Today.ToString("yyyy-MM-dd");
+                    gameModeLevel.normal = true;
+                    playerDataBase.SetGameMode(GameStateManager.instance.GamePlayType, gameModeLevel);
 
                     playerData.Clear();
-                    playerData.Add(GameStateManager.instance.GamePlayType.ToString(), JsonUtility.ToJson(trophyContent));
-
-                    playerDataBase.SetTrophyData(trophyContent);
+                    playerData.Add("GameMode_" + (int)gameModeLevel.gamePlayType, JsonUtility.ToJson(gameModeLevel));
 
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.SetPlayerData(playerData);
-
-                    FirebaseAnalytics.LogEvent(GameStateManager.instance.GamePlayType.ToString(), "Trophy", 1);
                 }
-                else
+                break;
+            case GameModeType.Normal:
+                if (score >= ValueManager.instance.GetNormalClearScore(GameStateManager.instance.GamePlayType) && !gameModeLevel.hard)
                 {
-                    TrophyData trophyContent = new TrophyData();
+                    gameModeView.SetActive(true);
 
-                    trophyContent = playerDataBase.GetTrophyData(GameStateManager.instance.GamePlayType);
+                    gameModeText.name = "Hard";
+                    gameModeText.ReLoad();
 
-                    trophyContent.number += 1;
+                    gameModeLevel.hard = true;
+                    playerDataBase.SetGameMode(GameStateManager.instance.GamePlayType, gameModeLevel);
 
                     playerData.Clear();
-                    playerData.Add(GameStateManager.instance.GamePlayType.ToString(), JsonUtility.ToJson(trophyContent));
-
-                    playerDataBase.SetTrophyData(trophyContent);
+                    playerData.Add("GameMode_" + (int)gameModeLevel.gamePlayType, JsonUtility.ToJson(gameModeLevel));
 
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.SetPlayerData(playerData);
-
-                    FirebaseAnalytics.LogEvent(GameStateManager.instance.GamePlayType.ToString(), "Trophy", trophyContent.number);
                 }
-            }
+
+                break;
+            case GameModeType.Hard:
+
+                break;
+            case GameModeType.Perfect:
+                if (GameStateManager.instance.TryCount > 0)
+                {
+                    GameStateManager.instance.TryCount -= 1;
+                }
+
+                float clearScore = 0;
+                bool fail = false;
+
+                clearScore = ValueManager.instance.GetPerfectClearScore(GameStateManager.instance.GamePlayType);
+                fail = GameStateManager.instance.Fail;
+
+                if (score > clearScore && !fail)
+                {
+                    Debug.Log("Get Trophy!");
+
+                    if (!playerDataBase.GetTrophyIsAcive(GameStateManager.instance.GamePlayType))
+                    {
+                        trophyView.SetActive(true);
+
+                        trophyIcon.sprite = iconArray[(int)GameStateManager.instance.GamePlayType];
+
+                        TrophyData trophyContent = new TrophyData();
+
+                        trophyContent.gamePlayType = GameStateManager.instance.GamePlayType;
+                        trophyContent.isActive = true;
+                        trophyContent.number = 1;
+                        trophyContent.date = DateTime.Today.ToString("yyyy-MM-dd");
+
+                        playerData.Clear();
+                        playerData.Add(GameStateManager.instance.GamePlayType.ToString(), JsonUtility.ToJson(trophyContent));
+
+                        playerDataBase.SetTrophyData(trophyContent);
+
+                        if (PlayfabManager.instance.isActive) PlayfabManager.instance.SetPlayerData(playerData);
+
+                        FirebaseAnalytics.LogEvent(GameStateManager.instance.GamePlayType.ToString(), "Trophy", 1);
+                    }
+                    else
+                    {
+                        TrophyData trophyContent = new TrophyData();
+
+                        trophyContent = playerDataBase.GetTrophyData(GameStateManager.instance.GamePlayType);
+
+                        trophyContent.number += 1;
+
+                        playerData.Clear();
+                        playerData.Add(GameStateManager.instance.GamePlayType.ToString(), JsonUtility.ToJson(trophyContent));
+
+                        playerDataBase.SetTrophyData(trophyContent);
+
+                        if (PlayfabManager.instance.isActive) PlayfabManager.instance.SetPlayerData(playerData);
+
+                        FirebaseAnalytics.LogEvent(GameStateManager.instance.GamePlayType.ToString(), "Trophy", trophyContent.number);
+                    }
+                }
+                break;
         }
 
         if (!GameStateManager.instance.WatchAd)
@@ -752,9 +803,6 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         scoreText.text = "";
         comboManager.OnStopCombo();
-
-        CloseGamePlayUI();
-        gameEndUI.SetActive(true);
 
         newRecordObj.SetActive(false);
         newComboObj.SetActive(false);
@@ -952,13 +1000,18 @@ public class UIManager : MonoBehaviour, IGameEvent
         trophyView.SetActive(false);
     }
 
+    public void CloseGameModeView()
+    {
+        gameModeView.SetActive(false);
+    }
+
     #region WatchAd
 
     void SetWatchAd(bool check)
     {
         if(check)
         {
-            Debug.Log("광고 잠금");
+            Debug.Log("???? ????");
 
             watchAdLock.SetActive(true);
             GameStateManager.instance.WatchAd = false;
@@ -971,7 +1024,7 @@ public class UIManager : MonoBehaviour, IGameEvent
         }
         else
         {
-            Debug.Log("광고 잠금 해제");
+            Debug.Log("???? ???? ????");
 
             watchAdLock.SetActive(false);
             GameStateManager.instance.WatchAd = true;
@@ -1089,6 +1142,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         StopAllCoroutines();
 
+        gameStartUI.SetActive(true);
         gameReadyUI.SetActive(false);
         cancleWindowUI.SetActive(false);
 
@@ -1107,7 +1161,6 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         score = 0;
 
-        gameStartUI.SetActive(true);
         SetEtcUI(true);
         modeManager.OffMode();
 
@@ -1134,6 +1187,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         soundManager.PlayBGM(GameBGMType.Lobby);
 
+        gameStartUI.SetActive(true);
         gameEndUI.SetActive(false);
     }
 

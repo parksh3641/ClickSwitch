@@ -44,15 +44,56 @@ public class ValueDataBase : ScriptableObject
     [SerializeField]
     private float gameChoice1Perfect = 0;
     [SerializeField]
+    private float gameChoice1Normal = 0;
+    [SerializeField]
+    private float gameChoice1Hard = 0;
+
+
+    [Space]
+    [SerializeField]
     private float gameChoice2Perfect = 0;
+    [SerializeField]
+    private float gameChoice2Normal = 0;
+    [SerializeField]
+    private float gameChoice2Hard = 0;
+
+
+    [Space]
     [SerializeField]
     private float gameChoice3Perfect = 0;
     [SerializeField]
+    private float gameChoice3Normal = 0;
+    [SerializeField]
+    private float gameChoice3Hard = 0;
+
+
+    [Space]
+    [SerializeField]
     private float gameChoice4Perfect = 0;
+    [SerializeField]
+    private float gameChoice4Normal = 0;
+    [SerializeField]
+    private float gameChoice4Hard = 0;
+
+
+    [Space]
     [SerializeField]
     private float gameChoice5Perfect = 0;
     [SerializeField]
+    private float gameChoice5Normal = 0;
+    [SerializeField]
+    private float gameChoice5Hard = 0;
+
+
+    [Space]
+    [SerializeField]
     private float gameChoice6Perfect = 0;
+    [SerializeField]
+    private float gameChoice6Normal = 0;
+    [SerializeField]
+    private float gameChoice6Hard = 0;
+
+
 
     public void Initialize()
     {
@@ -72,11 +113,29 @@ public class ValueDataBase : ScriptableObject
         addExp = 0;
 
         gameChoice1Perfect = 0;
+        gameChoice1Normal = 0;
+        gameChoice1Hard = 0;
+
         gameChoice2Perfect = 0;
+        gameChoice2Normal = 0;
+        gameChoice2Hard = 0;
+
         gameChoice3Perfect = 0;
+        gameChoice3Normal = 0;
+        gameChoice3Hard = 0;
+
         gameChoice4Perfect = 0;
+        gameChoice4Normal = 0;
+        gameChoice4Hard = 0;
+
         gameChoice5Perfect = 0;
+        gameChoice5Normal = 0;
+        gameChoice5Hard = 0;
+
         gameChoice6Perfect = 0;
+        gameChoice6Normal = 0;
+        gameChoice6Hard = 0;
+
     }
 
     public float AdCoolTime
@@ -223,6 +282,28 @@ public class ValueDataBase : ScriptableObject
             gameChoice1Perfect = value;
         }
     }
+    public float GameChoice1Normal
+    {
+        get
+        {
+            return gameChoice1Normal;
+        }
+        set
+        {
+            gameChoice1Normal = value;
+        }
+    }
+    public float GameChoice1Hard
+    {
+        get
+        {
+            return gameChoice1Hard;
+        }
+        set
+        {
+            gameChoice1Hard = value;
+        }
+    }
 
     public float GameChoice2Perfect
     {
@@ -233,6 +314,28 @@ public class ValueDataBase : ScriptableObject
         set
         {
             gameChoice2Perfect = value;
+        }
+    }
+    public float GameChoice2Normal
+    {
+        get
+        {
+            return gameChoice2Normal;
+        }
+        set
+        {
+            gameChoice2Normal = value;
+        }
+    }
+    public float GameChoice2Hard
+    {
+        get
+        {
+            return gameChoice2Hard;
+        }
+        set
+        {
+            gameChoice2Hard = value;
         }
     }
 
@@ -247,6 +350,28 @@ public class ValueDataBase : ScriptableObject
             gameChoice3Perfect = value;
         }
     }
+    public float GameChoice3Normal
+    {
+        get
+        {
+            return gameChoice3Normal;
+        }
+        set
+        {
+            gameChoice3Normal = value;
+        }
+    }
+    public float GameChoice3Hard
+    {
+        get
+        {
+            return gameChoice3Hard;
+        }
+        set
+        {
+            gameChoice3Hard = value;
+        }
+    }
 
     public float GameChoice4Perfect
     {
@@ -257,6 +382,28 @@ public class ValueDataBase : ScriptableObject
         set
         {
             gameChoice4Perfect = value;
+        }
+    }
+    public float GameChoice4Normal
+    {
+        get
+        {
+            return gameChoice4Normal;
+        }
+        set
+        {
+            gameChoice4Normal = value;
+        }
+    }
+    public float GameChoice4Hard
+    {
+        get
+        {
+            return gameChoice4Hard;
+        }
+        set
+        {
+            gameChoice4Hard = value;
         }
     }
 
@@ -271,6 +418,28 @@ public class ValueDataBase : ScriptableObject
             gameChoice5Perfect = value;
         }
     }
+    public float GameChoice5Normal
+    {
+        get
+        {
+            return gameChoice5Normal;
+        }
+        set
+        {
+            gameChoice5Normal = value;
+        }
+    }
+    public float GameChoice5Hard
+    {
+        get
+        {
+            return gameChoice5Hard;
+        }
+        set
+        {
+            gameChoice5Hard = value;
+        }
+    }
 
     public float GameChoice6Perfect
     {
@@ -281,6 +450,28 @@ public class ValueDataBase : ScriptableObject
         set
         {
             gameChoice6Perfect = value;
+        }
+    }
+    public float GameChoice6Normal
+    {
+        get
+        {
+            return gameChoice6Normal;
+        }
+        set
+        {
+            gameChoice6Normal = value;
+        }
+    }
+    public float GameChoice6Hard
+    {
+        get
+        {
+            return gameChoice6Hard;
+        }
+        set
+        {
+            gameChoice6Hard = value;
         }
     }
 }

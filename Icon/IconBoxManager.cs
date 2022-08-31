@@ -175,7 +175,7 @@ public class IconBoxManager : MonoBehaviour
         {
             int random = Random.Range(3, iconNumber);
 
-            if(shopDataBase.GetIconNumber(IconType.Icon_0 + random) + 1 < 5)
+            if(shopDataBase.GetIconNumber(IconType.Icon_0 + random) + 1 < 6)
             {
                 GetIcon(random);
             }
@@ -187,7 +187,7 @@ public class IconBoxManager : MonoBehaviour
 
                 goldContent.AddGoldCount(200);
 
-                Debug.Log("이미 5개 이상 보유 하고 있습니다 돈으로 지급합니다");
+                Debug.Log("이미 5개 이상 보유 하고 있기에 돈으로 지급합니다");
             }
 
             CheckBoxCount();

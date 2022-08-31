@@ -9,14 +9,20 @@ public class GameManager : MonoBehaviour
 {
     public GamePlayType gamePlayType;
     public GameModeType gameModeType;
+    GameModeLevel level;
 
     public GameObject eventWatchAdView;
 
+    [Title("ChangeGameMode")]
+    public GameObject changeGameModeView;
+    public GameObject hardGameModeLockObj;
+
+    [Space]
     [Title("Prefab")]
     public NormalContent normalContent;
     public ButtonActionContent buttonActionContent;
 
-
+    [Space]
     [Title("GridTransform")]
     public Transform normalTransform;
     public Transform moleCatchTransform;
@@ -25,16 +31,22 @@ public class GameManager : MonoBehaviour
     public Transform buttonActionDownTransform;
     public Transform dragActionTransform;
 
-
+    [Space]
     [Title("GameStartButton")]
+    public Text playText;
     public LocalizationContent gameModeText;
+
     public Image gameModeBackground;
+
     public GameObject tryCountView;
     public Text tryCountText;
     public GameObject tryCountZeroView;
+
+    public LocalizationContent levelText;
+
     Sprite[] modeBackgroundImgArray;
 
-
+    [Space]
     [Title("TimingAction")]
     public NormalContent timingActionContent;
     public Image timingActionFillmount;
@@ -48,7 +60,7 @@ public class GameManager : MonoBehaviour
     WaitForSeconds waitForMoleNextSeconds;
 
 
-
+    [Space]
     [Title("Value")]
     private int nowIndex = 0;
     private int setIndex = 1;
@@ -93,6 +105,8 @@ public class GameManager : MonoBehaviour
     private List<NormalContent> buttonActionDownList = new List<NormalContent>();
     private List<NormalContent> drageActionList = new List<NormalContent>();
 
+    Dictionary<string, string> dicData = new Dictionary<string, string>();
+
     [Title("Manager")]
     public UIManager uiManager;
     public SoundManager soundManager;
@@ -120,6 +134,8 @@ public class GameManager : MonoBehaviour
 
 
         eventWatchAdView.SetActive(false);
+        changeGameModeView.SetActive(false);
+        hardGameModeLockObj.SetActive(true);
 
         numberList.Clear();
 
@@ -316,11 +332,18 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
+    bool noTouch = false;
+
     #region Button
-    public void OnGameStartButton() //???? ???? ????
+    public void OnGameStartButton()
     {
+        if (noTouch) return;
+
+        noTouch = true;
+
         if(!NetworkConnect.instance.CheckConnectInternet())
         {
+            noTouch = false;
             NotionManager.instance.UseNotion(NotionType.NetworkConnectNotion);
             return;
         }
@@ -328,19 +351,22 @@ public class GameManager : MonoBehaviour
         if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetTitleInternalData(gamePlayType.ToString(), InitializeGame);
     }
 
-    public void OpenGameMenuButton() //???? ?????? ???? ???? ?? ????
+    public void OpenGameMenuButton()
     {
         uiManager.OpenMenu();
+
+        CloseGameMode();
     }
 
-    public void ChoiceGameType(GamePlayType type, GameModeType mode) //???? ???? ?????? ???? ????
+    public void ChoiceGameType(GamePlayType type, GameModeType mode)
     {
         gamePlayType = type;
+        gameModeType = mode;
 
-        gameModeBackground.sprite = modeBackgroundImgArray[(int)mode];
+        gameModeBackground.sprite = modeBackgroundImgArray[(int)gameModeType];
 
         GameStateManager.instance.GamePlayType = gamePlayType;
-        GameStateManager.instance.GameModeType = mode;
+        GameStateManager.instance.GameModeType = gameModeType;
 
         gameModeText.name = gamePlayType.ToString();
         gameModeText.ReLoad();
@@ -350,18 +376,66 @@ public class GameManager : MonoBehaviour
         tryCountView.SetActive(false);
         tryCountZeroView.SetActive(false);
 
-        if (mode == GameModeType.Perfect)
+        //levelText.name = gameModeType.ToString();
+        //levelText.ReLoad();
+
+        playText.color = new Color(0, 122 / 255f, 89 / 255f);
+        gameModeText.GetComponent<Text>().color = new Color(0, 122 / 255f, 89 / 255f);
+
+        switch (gameModeType)
         {
-            if(GameStateManager.instance.TryCount > 0)
-            {
-                tryCountView.SetActive(true);
-                tryCountText.text = GameStateManager.instance.TryCount.ToString();
-            }
-            else
-            {
-                if(!GameStateManager.instance.EventWatchAd) tryCountZeroView.SetActive(true);
-            }
+            case GameModeType.Easy:
+                break;
+            case GameModeType.Normal:
+                break;
+            case GameModeType.Hard:
+                playText.color = new Color(67 / 255f, 83 / 255f, 108 / 255f);
+                gameModeText.GetComponent<Text>().color = new Color(67 / 255f, 83 / 255f, 108 / 255f);
+                break;
+            case GameModeType.Perfect:
+                if (GameStateManager.instance.TryCount > 0)
+                {
+                    tryCountView.SetActive(true);
+                    tryCountText.text = GameStateManager.instance.TryCount.ToString();
+                }
+                else
+                {
+                    if (!GameStateManager.instance.EventWatchAd) tryCountZeroView.SetActive(true);
+                }
+                break;
         }
+
+        playerDataBase.ChangeGameMode(gamePlayType, gameModeType);
+
+        level = playerDataBase.GetGameMode(gamePlayType);
+
+        dicData.Clear();
+        dicData.Add("GameMode_" + (int)level.gamePlayType, JsonUtility.ToJson(level));
+
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.SetPlayerData(dicData);
+
+        CloseGameMode();
+    }
+
+    public void ChangeGameMode(GamePlayType type)
+    {
+        gamePlayType = type;
+
+        changeGameModeView.SetActive(true);
+
+        level = playerDataBase.GetGameMode(gamePlayType);
+
+        if (level.hard) hardGameModeLockObj.SetActive(false);
+    }
+
+    public void CloseGameMode()
+    {
+        changeGameModeView.SetActive(false);
+    }
+
+    public void ChoiceGameType(int number)
+    {
+        ChoiceGameType(gamePlayType, GameModeType.Easy + number);
     }
 
     #endregion
@@ -371,8 +445,9 @@ public class GameManager : MonoBehaviour
     {
         if (!check)
         {
-            Debug.Log("???? ?????????? ???????? ????????.");
+            Debug.Log("This game locked to server.");
             NotionManager.instance.UseNotion(NotionType.GameModeRockNotion);
+            noTouch = false;
             return;
         }
 
@@ -400,6 +475,7 @@ public class GameManager : MonoBehaviour
         uiManager.OpenGamePlayUI(gamePlayType);
 
         FirebaseAnalytics.LogEvent(gamePlayType.ToString());
+        FirebaseAnalytics.LogEvent(gameModeType.ToString());
 
         if (PlayfabManager.instance.isActive) PlayfabManager.instance.CheckConsumeItem();
 
@@ -487,6 +563,8 @@ public class GameManager : MonoBehaviour
         }
 
         eGameStart();
+
+        noTouch = false;
     }
 
     void CheckPlusScore(int number)

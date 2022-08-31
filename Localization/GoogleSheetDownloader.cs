@@ -269,20 +269,61 @@ public class GoogleSheetDownloader : MonoBehaviour
                 case "GameChoice1Perfect":
                     valueDataBase.GameChoice1Perfect = value;
                     break;
+                case "GameChoice1Normal":
+                    valueDataBase.GameChoice1Normal = value;
+                    break;
+                case "GameChoice1Hard":
+                    valueDataBase.GameChoice1Hard = value;
+                    break;
+
                 case "GameChoice2Perfect":
                     valueDataBase.GameChoice2Perfect = value;
                     break;
+                case "GameChoice2Normal":
+                    valueDataBase.GameChoice2Normal = value;
+                    break;
+                case "GameChoice2Hard":
+                    valueDataBase.GameChoice2Hard = value;
+                    break;
+
                 case "GameChoice3Perfect":
                     valueDataBase.GameChoice3Perfect = value;
                     break;
+                case "GameChoice3Normal":
+                    valueDataBase.GameChoice3Normal = value;
+                    break;
+                case "GameChoice3Hard":
+                    valueDataBase.GameChoice3Hard = value;
+                    break;
+
                 case "GameChoice4Perfect":
                     valueDataBase.GameChoice4Perfect = value;
                     break;
+                case "GameChoice4Normal":
+                    valueDataBase.GameChoice4Normal = value;
+                    break;
+                case "GameChoice4Hard":
+                    valueDataBase.GameChoice4Hard = value;
+                    break;
+
                 case "GameChoice5Perfect":
                     valueDataBase.GameChoice5Perfect = value;
                     break;
+                case "GameChoice5Normal":
+                    valueDataBase.GameChoice5Normal = value;
+                    break;
+                case "GameChoice5Hard":
+                    valueDataBase.GameChoice5Hard = value;
+                    break;
+
                 case "GameChoice6Perfect":
                     valueDataBase.GameChoice6Perfect = value;
+                    break;
+                case "GameChoice6Normal":
+                    valueDataBase.GameChoice6Normal = value;
+                    break;
+                case "GameChoice6Hard":
+                    valueDataBase.GameChoice6Hard = value;
                     break;
 
             }

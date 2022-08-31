@@ -20,53 +20,60 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private int totalCombo = 0;
 
+    [Space]
     [SerializeField]
     private int bestSpeedTouchScore = 0;
 
     [SerializeField]
     private int bestSpeedTouchCombo = 0;
 
+    [Space]
     [SerializeField]
     private int bestMoleCatchScore = 0;
 
     [SerializeField]
     private int bestMoleCatchCombo = 0;
 
+    [Space]
     [SerializeField]
     private int bestFilpCardScore = 0;
 
     [SerializeField]
     private int bestFilpCardCombo = 0;
 
+    [Space]
     [SerializeField]
     private int bestButtonActionScore = 0;
 
     [SerializeField]
     private int bestButtonActionCombo = 0;
 
+    [Space]
     [SerializeField]
     private int bestTimingActionScore = 0;
 
     [SerializeField]
     private int bestTimingActionCombo = 0;
 
+    [Space]
     [SerializeField]
     private int bestDragActionScore = 0;
 
     [SerializeField]
     private int bestDragActionCombo = 0;
 
+    [Title("GameMode")]
+    [SerializeField]
+    public List<GameModeLevel> gameModeLevelList = new List<GameModeLevel>();
+
     [Space]
     [Title("Player")]
     [SerializeField]
     private int level = 0;
-
     [SerializeField]
     private int experience = 0;
-
     [SerializeField]
     private int icon = 0;
-
 
     [Space]
     [Title("Item")]
@@ -111,6 +118,7 @@ public class PlayerDataBase : ScriptableObject
     private int dailyMissionCount = 0;
     [SerializeField]
     private bool dailyMissionClear = false;
+    [Space]
     [SerializeField]
     private List<DailyMission> dailyMissionList = new List<DailyMission>();
     [SerializeField]
@@ -199,6 +207,15 @@ public class PlayerDataBase : ScriptableObject
         criticalLevel = 0;
         burningLevel = 0;
         addExpLevel = 0;
+
+        gameModeLevelList.Clear();
+
+        for (int i = 0; i < System.Enum.GetValues(typeof(GamePlayType)).Length; i++)
+        {
+            GameModeLevel level = new GameModeLevel();
+            level.gamePlayType = GamePlayType.GameChoice1 + i;
+            gameModeLevelList.Add(level);
+        }
     }
 
     public int TotalScore
@@ -818,4 +835,44 @@ public class PlayerDataBase : ScriptableObject
     }
 
     #endregion
+
+    public void SetGameMode(GamePlayType type, GameModeLevel level)
+    {
+        for (int i = 0; i < gameModeLevelList.Count; i++)
+        {
+            if (gameModeLevelList[i].gamePlayType.Equals(type))
+            {
+                gameModeLevelList[i] = level;
+                break;
+            }
+        }
+    }
+
+    public GameModeLevel GetGameMode(GamePlayType type)
+    {
+        GameModeLevel level = new GameModeLevel();
+
+        for (int i = 0; i < gameModeLevelList.Count; i++)
+        {
+            if (gameModeLevelList[i].gamePlayType.Equals(type))
+            {
+                level = gameModeLevelList[i];
+                break;
+            }
+        }
+
+        return level;
+    }
+
+    public void ChangeGameMode(GamePlayType type, GameModeType mode)
+    {
+        for (int i = 0; i < gameModeLevelList.Count; i++)
+        {
+            if (gameModeLevelList[i].gamePlayType.Equals(type))
+            {
+                gameModeLevelList[i].gameModeType = mode;
+                break;
+            }
+        }
+    }
 }

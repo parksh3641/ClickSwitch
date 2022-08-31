@@ -99,4 +99,62 @@ public class ValueManager : MonoBehaviour
         return clearScore;
     }
 
+    public float GetNormalClearScore(GamePlayType type)
+    {
+        float clearScore = 0;
+
+        switch (type)
+        {
+            case GamePlayType.GameChoice1:
+                clearScore = valueDataBase.GameChoice1Normal;
+                break;
+            case GamePlayType.GameChoice2:
+                clearScore = valueDataBase.GameChoice2Normal;
+                break;
+            case GamePlayType.GameChoice3:
+                clearScore = valueDataBase.GameChoice3Normal;
+                break;
+            case GamePlayType.GameChoice4:
+                clearScore = valueDataBase.GameChoice4Normal;
+                break;
+            case GamePlayType.GameChoice5:
+                clearScore = valueDataBase.GameChoice5Normal;
+                break;
+            case GamePlayType.GameChoice6:
+                clearScore = valueDataBase.GameChoice6Normal;
+                break;
+        }
+
+        return clearScore;
+    }
+
+    public float GetHardClearScore(GamePlayType type)
+    {
+        float clearScore = 0;
+
+        switch (type)
+        {
+            case GamePlayType.GameChoice1:
+                clearScore = valueDataBase.GameChoice1Hard;
+                break;
+            case GamePlayType.GameChoice2:
+                clearScore = valueDataBase.GameChoice2Hard;
+                break;
+            case GamePlayType.GameChoice3:
+                clearScore = valueDataBase.GameChoice3Hard;
+                break;
+            case GamePlayType.GameChoice4:
+                clearScore = valueDataBase.GameChoice4Hard;
+                break;
+            case GamePlayType.GameChoice5:
+                clearScore = valueDataBase.GameChoice5Hard;
+                break;
+            case GamePlayType.GameChoice6:
+                clearScore = valueDataBase.GameChoice6Hard;
+                break;
+        }
+
+        return clearScore;
+    }
+
 }

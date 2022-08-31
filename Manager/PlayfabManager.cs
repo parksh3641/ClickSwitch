@@ -861,27 +861,34 @@ public class PlayfabManager : MonoBehaviour
         var request = new GetUserDataRequest() { PlayFabId = GameStateManager.instance.PlayfabId };
         PlayFabClientAPI.GetUserData(request, (result) =>
         {
+
             TrophyData trophyData = new TrophyData();
             DailyMission dailyMission = new DailyMission();
+            GameModeLevel level = new GameModeLevel();
 
             foreach (var eachData in result.Data)
             {
                 string key = eachData.Key;
 
-                if(key.Contains("GameChoice"))
+                if (key.Contains("GameChoice"))
                 {
                     trophyData = JsonUtility.FromJson<TrophyData>(eachData.Value.Value);
                     playerDataBase.SetTrophyData(trophyData);
                 }
-                else if(key.Contains("DailyMission"))
+                else if (key.Contains("DailyMission"))
                 {
                     string[] number = key.Split('_');
                     dailyMission = JsonUtility.FromJson<DailyMission>(eachData.Value.Value);
                     playerDataBase.SetDailyMission(dailyMission, int.Parse(number[1]));
                 }
+                else if (key.Contains("GameMode"))
+                {
+                    string[] number = key.Split('_');
+                    level = JsonUtility.FromJson<GameModeLevel>(eachData.Value.Value);
+                    playerDataBase.SetGameMode(GamePlayType.GameChoice1 + int.Parse(number[1]), level);
 
+                }
             }
-
         }, DisplayPlayfabError);
 
         return true;

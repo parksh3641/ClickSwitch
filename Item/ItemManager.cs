@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ItemManager : MonoBehaviour
 {
     public ItemContent[] itemContents;
+
+    public LocalizationContent selectItemText;
 
 
     PlayerDataBase playerDataBase;
@@ -92,5 +95,8 @@ public class ItemManager : MonoBehaviour
 
                 break;
         }
+
+        selectItemText.name = "Information_" + type.ToString();
+        selectItemText.ReLoad();
     }
 }
