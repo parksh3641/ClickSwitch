@@ -12,7 +12,7 @@ public interface IContentEvent
     void MoleReset();
     void NormalReset(int number);
     void FilpCardReset(int number);
-    void NormalFirst();
+    void SpeedTouchFirst();
     void Choice();
     void ChoiceAction(bool check);
 

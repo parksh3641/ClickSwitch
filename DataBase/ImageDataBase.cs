@@ -7,6 +7,9 @@ using UnityEngine.UI;
 [CreateAssetMenu(fileName = "ImageDataBase", menuName = "ScriptableObjects/ImageDataBase")]
 public class ImageDataBase : ScriptableObject
 {
+    [Title("FilpCard")]
+    public Sprite[] filpCardArray;
+
     [Title("FingerSnap")]
     public Sprite[] fingerSnapArray;
 
@@ -36,6 +39,10 @@ public class ImageDataBase : ScriptableObject
 
 
 
+    public Sprite[] GetFilpCardArray()
+    {
+        return filpCardArray;
+    }
 
     public Sprite[] GetFingerSnapArray()
     {

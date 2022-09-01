@@ -327,7 +327,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void RenewalVC()
     {
-        Debug.Log("???? ????");
+        Debug.Log("Renewal VC");
 
         goldText.text = playerDataBase.Coin.ToString();
         crystalText.text = playerDataBase.Crystal.ToString();
@@ -656,7 +656,7 @@ public class UIManager : MonoBehaviour, IGameEvent
         gameEndUI.SetActive(true);
 
         checkClose = false;
-        Invoke("WaitCloseGameEnd", 1f);
+        Invoke("WaitCloseGameEnd", 1.5f);
 
         soundManager.PlayBGM(GameBGMType.End);
 
@@ -670,15 +670,29 @@ public class UIManager : MonoBehaviour, IGameEvent
             networkView.SetActive(false);
         }
 
-        FirebaseAnalytics.LogEvent(GameStateManager.instance.GamePlayType.ToString(), "GetScore", score);
-        FirebaseAnalytics.LogEvent(GameStateManager.instance.GamePlayType.ToString(), "GetCombo", comboManager.GetCombo());
+        //FirebaseAnalytics.LogEvent(GameStateManager.instance.GamePlayType.ToString(), "GetScore", score);
+        //FirebaseAnalytics.LogEvent(GameStateManager.instance.GamePlayType.ToString(), "GetCombo", comboManager.GetCombo());
+
+        switch (GameStateManager.instance.GameModeType)
+        {
+            case GameModeType.Easy:
+                break;
+            case GameModeType.Normal:
+                score = score + (score * 0.1f);
+                break;
+            case GameModeType.Hard:
+                score = score + (score * 0.2f);
+                break;
+            case GameModeType.Perfect:
+                break;
+        }
 
         GameModeLevel gameModeLevel = playerDataBase.GetGameMode(GameStateManager.instance.GamePlayType);
 
         switch (GameStateManager.instance.GameModeType)
         {
             case GameModeType.Easy:
-                if (score >= ValueManager.instance.GetNormalClearScore(GameStateManager.instance.GamePlayType) && !gameModeLevel.normal)
+                if ((int)score >= ValueManager.instance.GetNormalClearScore(GameStateManager.instance.GamePlayType) && !gameModeLevel.normal)
                 {
                     gameModeView.SetActive(true);
 
@@ -695,7 +709,7 @@ public class UIManager : MonoBehaviour, IGameEvent
                 }
                 break;
             case GameModeType.Normal:
-                if (score >= ValueManager.instance.GetNormalClearScore(GameStateManager.instance.GamePlayType) && !gameModeLevel.hard)
+                if ((int)score >= ValueManager.instance.GetNormalClearScore(GameStateManager.instance.GamePlayType) && !gameModeLevel.hard)
                 {
                     gameModeView.SetActive(true);
 
@@ -727,7 +741,7 @@ public class UIManager : MonoBehaviour, IGameEvent
                 clearScore = ValueManager.instance.GetPerfectClearScore(GameStateManager.instance.GamePlayType);
                 fail = GameStateManager.instance.Fail;
 
-                if (score > clearScore && !fail)
+                if ((int)score > clearScore && !fail)
                 {
                     Debug.Log("Get Trophy!");
 
@@ -839,7 +853,7 @@ public class UIManager : MonoBehaviour, IGameEvent
                 break;
         }
 
-        if(Comparison(score,bestScore))
+        if(Comparison((int)score, bestScore))
         {
             Debug.Log("Best Score !");
             newRecordObj.SetActive(true);

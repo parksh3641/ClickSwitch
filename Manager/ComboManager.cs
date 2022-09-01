@@ -158,7 +158,22 @@ public class ComboManager : MonoBehaviour
 
     IEnumerator WaitNotionUICorution()
     {
-        waitTimer = ValueManager.instance.GetFilpCardRememberTime();
+        switch (GameStateManager.instance.GameModeType)
+        {
+            case GameModeType.Easy:
+                waitTimer = ValueManager.instance.GetFilpCardRememberTime();
+                break;
+            case GameModeType.Normal:
+                waitTimer = ValueManager.instance.GetFilpCardRememberTime() * 1.5f;
+                break;
+            case GameModeType.Hard:
+                waitTimer = ValueManager.instance.GetFilpCardRememberTime() * 2f;
+                break;
+            case GameModeType.Perfect:
+                waitTimer = ValueManager.instance.GetFilpCardRememberTime();
+                break;
+        }
+        //waitTimer = ValueManager.instance.GetFilpCardRememberTime();
         waitSaveTimer =  waitTimer;
 
         waitFillAmount.fillAmount = 1;

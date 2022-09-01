@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public GameModeType gameModeType;
     GameModeLevel level;
 
+    [Space]
     public GameObject eventWatchAdView;
 
     [Title("ChangeGameMode")]
@@ -24,11 +25,23 @@ public class GameManager : MonoBehaviour
 
     [Space]
     [Title("GridTransform")]
-    public Transform normalTransform;
-    public Transform moleCatchTransform;
-    public Transform filpCardTransform;
+    public Transform speedTouchEasyTransform;
+    public Transform speedTouchNormalTransform;
+    public Transform speedTouchHardTransform;
+    [Space]
+    public Transform moleCatchEasyTransform;
+    public Transform moleCatchHardTransform;
+    [Space]
+    public Transform filpCardEasyTransform;
+    public Transform filpCardNormalTransform;
+    public Transform filpCardHardTransform;
+    [Space]
     public Transform buttonActionUpTransform;
-    public Transform buttonActionDownTransform;
+
+    public Transform buttonActionDownEasyTransform;
+    public Transform buttonActionDownNormalTransform;
+    public Transform buttonActionDownHardTransform;
+    [Space]
     public Transform dragActionTransform;
 
     [Space]
@@ -51,6 +64,7 @@ public class GameManager : MonoBehaviour
     public NormalContent timingActionContent;
     public Image timingActionFillmount;
     public GameObject timingActionCheckRange;
+    public NormalContent timingActionButton;
 
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(1);
@@ -58,6 +72,7 @@ public class GameManager : MonoBehaviour
     WaitForSeconds waitForSecSeconds = new WaitForSeconds(0.01f);
     WaitForSeconds waitForMoleCatchSeconds;
     WaitForSeconds waitForMoleNextSeconds;
+    WaitForSeconds waitForFilpCardSeconds;
 
 
     [Space]
@@ -66,7 +81,7 @@ public class GameManager : MonoBehaviour
     private int setIndex = 1;
     private int countIndex = 0;
 
-    private int moleIndex = 0;
+    private bool moleClone = false;
 
     private int filpCardIndex = 0;
 
@@ -98,14 +113,28 @@ public class GameManager : MonoBehaviour
 
     [Title("List")]
     private Queue<int> numberList = new Queue<int>();
-    private List<NormalContent> normalContentList = new List<NormalContent>();
-    private List<NormalContent> moleCatchContentList = new List<NormalContent>();
-    private List<NormalContent> filpCardList = new List<NormalContent>();
+
+    private List<NormalContent> speedTouchEasyList = new List<NormalContent>();
+    private List<NormalContent> speedTouchNormalList = new List<NormalContent>();
+    private List<NormalContent> speedTouchHardList = new List<NormalContent>();
+
+    private List<NormalContent> moleCatchEasyList = new List<NormalContent>();
+    private List<NormalContent> moleCatchHardList = new List<NormalContent>();
+
+    private List<NormalContent> filpCardEasyList = new List<NormalContent>();
+    private List<NormalContent> filpCardNormalList = new List<NormalContent>();
+    private List<NormalContent> filpCardHardList = new List<NormalContent>();
+
+
     private List<ButtonActionContent> buttonActionUpList = new List<ButtonActionContent>();
-    private List<NormalContent> buttonActionDownList = new List<NormalContent>();
+    private List<NormalContent> buttonActionDownEasyList = new List<NormalContent>();
+    private List<NormalContent> buttonActionDownNormalList = new List<NormalContent>();
+
     private List<NormalContent> drageActionList = new List<NormalContent>();
 
     Dictionary<string, string> dicData = new Dictionary<string, string>();
+
+    private List<NormalContent> targetContentList = new List<NormalContent>();
 
     [Title("Manager")]
     public UIManager uiManager;
@@ -145,34 +174,84 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 9; i ++)
         {
             NormalContent content = Instantiate(normalContent);
-            content.transform.parent = normalTransform;
+            content.transform.parent = speedTouchEasyTransform;
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.gameObject.SetActive(false);
-            normalContentList.Add(content);
-        }
-
-        for (int i = 0; i < 9; i++)
-        {
-            NormalContent content = Instantiate(normalContent);
-            content.transform.parent = moleCatchTransform;
-            content.transform.localPosition = Vector3.zero;
-            content.transform.localScale = Vector3.one;
-            content.gameObject.SetActive(false);
-            moleCatchContentList.Add(content);
+            speedTouchEasyList.Add(content);
         }
 
         for (int i = 0; i < 16; i++)
         {
             NormalContent content = Instantiate(normalContent);
-            content.transform.parent = filpCardTransform;
+            content.transform.parent = speedTouchNormalTransform;
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.gameObject.SetActive(false);
-            filpCardList.Add(content);
+            speedTouchNormalList.Add(content);
         }
 
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 25; i++)
+        {
+            NormalContent content = Instantiate(normalContent);
+            content.transform.parent = speedTouchHardTransform;
+            content.transform.localPosition = Vector3.zero;
+            content.transform.localScale = Vector3.one;
+            content.gameObject.SetActive(false);
+            speedTouchHardList.Add(content);
+        }
+
+        for (int i = 0; i < 9; i++)
+        {
+            NormalContent content = Instantiate(normalContent);
+            content.transform.parent = moleCatchEasyTransform;
+            content.transform.localPosition = Vector3.zero;
+            content.transform.localScale = Vector3.one;
+            content.gameObject.SetActive(false);
+            moleCatchEasyList.Add(content);
+        }
+
+        for (int i = 0; i < 16; i++)
+        {
+            NormalContent content = Instantiate(normalContent);
+            content.transform.parent = moleCatchHardTransform;
+            content.transform.localPosition = Vector3.zero;
+            content.transform.localScale = Vector3.one;
+            content.gameObject.SetActive(false);
+            moleCatchHardList.Add(content);
+        }
+
+        for (int i = 0; i < 16; i++)
+        {
+            NormalContent content = Instantiate(normalContent);
+            content.transform.parent = filpCardEasyTransform;
+            content.transform.localPosition = Vector3.zero;
+            content.transform.localScale = Vector3.one;
+            content.gameObject.SetActive(false);
+            filpCardEasyList.Add(content);
+        }
+
+        for (int i = 0; i < 25; i++)
+        {
+            NormalContent content = Instantiate(normalContent);
+            content.transform.parent = filpCardNormalTransform;
+            content.transform.localPosition = Vector3.zero;
+            content.transform.localScale = Vector3.one;
+            content.gameObject.SetActive(false);
+            filpCardNormalList.Add(content);
+        }
+
+        for (int i = 0; i < 36; i++)
+        {
+            NormalContent content = Instantiate(normalContent);
+            content.transform.parent = filpCardHardTransform;
+            content.transform.localPosition = Vector3.zero;
+            content.transform.localScale = Vector3.one;
+            content.gameObject.SetActive(false);
+            filpCardHardList.Add(content);
+        }
+
+        for (int i = 0; i < 12; i++)
         {
             ButtonActionContent content = Instantiate(buttonActionContent);
             content.transform.parent = buttonActionUpTransform;
@@ -185,12 +264,23 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 6; i++)
         {
             NormalContent content = Instantiate(normalContent);
-            content.transform.parent = buttonActionDownTransform;
+            content.transform.parent = buttonActionDownEasyTransform;
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.gameObject.SetActive(false);
-            buttonActionDownList.Add(content);
+            buttonActionDownEasyList.Add(content);
         }
+
+        for (int i = 0; i < 8; i++)
+        {
+            NormalContent content = Instantiate(normalContent);
+            content.transform.parent = buttonActionDownNormalTransform;
+            content.transform.localPosition = Vector3.zero;
+            content.transform.localScale = Vector3.one;
+            content.gameObject.SetActive(false);
+            buttonActionDownNormalList.Add(content);
+        }
+
 
         for (int i = 0; i < 10; i++)
         {
@@ -244,29 +334,29 @@ public class GameManager : MonoBehaviour
 
     private void CreateUnDuplicateRandom()
     {
-        ShuffleList(normalContentList);
+        ShuffleList(targetContentList);
 
-        for (int i = 0; i < normalContentList.Count; i++)
+        for (int i = 0; i < targetContentList.Count; i++)
         {
-            normalContentList[i].NormalReset(setIndex);
-            normalContentList[i].gameObject.SetActive(false);
-            normalContentList[i].gameObject.SetActive(true);
+            targetContentList[i].NormalReset(setIndex);
+            targetContentList[i].gameObject.SetActive(false);
+            targetContentList[i].gameObject.SetActive(true);
 
             setIndex++;
         }
 
-        normalContentList[0].NormalFirst();
+        targetContentList[0].SpeedTouchFirst();
 
         countIndex = setIndex;
     }
 
     private void CreateMoleRandom()
     {
-        for (int i = 0; i < moleCatchContentList.Count; i++)
+        for (int i = 0; i < targetContentList.Count; i++)
         {
-            moleCatchContentList[i].MoleReset();
-            moleCatchContentList[i].gameObject.SetActive(false);
-            moleCatchContentList[i].gameObject.SetActive(true);
+            targetContentList[i].MoleReset();
+            targetContentList[i].gameObject.SetActive(false);
+            targetContentList[i].gameObject.SetActive(true);
         }
 
         waitForMoleCatchSeconds = new WaitForSeconds(ValueManager.instance.GetMoleCatchTime());
@@ -275,16 +365,16 @@ public class GameManager : MonoBehaviour
 
     private void CreateFilpCardRandom()
     {
-        ShuffleList(filpCardList);
+        ShuffleList(targetContentList);
 
         int j = 1;
         int k = 0;
 
-        for(int i = 0; i < filpCardList.Count; i ++)
+        for(int i = 0; i < targetContentList.Count; i ++)
         {
-            filpCardList[i].FilpCardReset(k);
-            filpCardList[i].gameObject.SetActive(false);
-            filpCardList[i].gameObject.SetActive(true);
+            targetContentList[i].FilpCardReset(k);
+            targetContentList[i].gameObject.SetActive(false);
+            targetContentList[i].gameObject.SetActive(true);
 
             if (j % 2 == 0)
             {
@@ -302,15 +392,30 @@ public class GameManager : MonoBehaviour
             buttonActionUpList[i].gameObject.SetActive(false);
         }
 
-        //ShuffleList(buttonActionUpList);
-
         numberList.Clear();
 
         int number = 0;
+        int maxNumber = 0;
+
+        switch (gameModeType)
+        {
+            case GameModeType.Easy:
+                maxNumber = 6;
+                break;
+            case GameModeType.Normal:
+                maxNumber = 8;
+                break;
+            case GameModeType.Hard:
+                maxNumber = 8;
+                break;
+            case GameModeType.Perfect:
+                maxNumber = 6;
+                break;
+        }
 
         for (int i = 0; i < buttonActionLevelIndex; i++)
         {
-            number = Random.Range(0, buttonActionUpList.Count);
+            number = Random.Range(0, maxNumber);
             numberList.Enqueue(number);
             buttonActionUpList[i].Initialize(number);
             buttonActionUpList[i].gameObject.SetActive(true);
@@ -327,6 +432,21 @@ public class GameManager : MonoBehaviour
 
         drageActionList[nowIndex].transform.localPosition = Vector3.zero;
         drageActionList[nowIndex].FingerSnapReset(dragActionIndex);
+
+        switch (gameModeType)
+        {
+            case GameModeType.Easy:
+                drageActionList[nowIndex].FingerSnapBackground(dragActionIndex, false);
+                break;
+            case GameModeType.Normal:
+                break;
+            case GameModeType.Hard:
+                drageActionList[nowIndex].FingerSnapBackground(dragActionIndex, true);
+                break;
+            case GameModeType.Perfect:
+                drageActionList[nowIndex].FingerSnapBackground(dragActionIndex, false);
+                break;
+        }
         drageActionList[nowIndex].gameObject.SetActive(true);
     }
 
@@ -487,9 +607,33 @@ public class GameManager : MonoBehaviour
                 setIndex = 1;
                 countIndex = 0;
 
-                for (int i = 0; i < normalContentList.Count; i++)
+                speedTouchEasyTransform.gameObject.SetActive(false);
+                speedTouchNormalTransform.gameObject.SetActive(false);
+                speedTouchHardTransform.gameObject.SetActive(false);
+
+                switch (gameModeType)
                 {
-                    normalContentList[i].Initialize(gamePlayType);
+                    case GameModeType.Easy:
+                        targetContentList = speedTouchEasyList;
+                        speedTouchEasyTransform.gameObject.SetActive(true);
+                        break;
+                    case GameModeType.Normal:
+                        targetContentList = speedTouchNormalList;
+                        speedTouchNormalTransform.gameObject.SetActive(true);
+                        break;
+                    case GameModeType.Hard:
+                        targetContentList = speedTouchHardList;
+                        speedTouchHardTransform.gameObject.SetActive(true);
+                        break;
+                    case GameModeType.Perfect:
+                        targetContentList = speedTouchEasyList;
+                        speedTouchEasyTransform.gameObject.SetActive(true);
+                        break;
+                }
+
+                for (int i = 0; i < targetContentList.Count; i++)
+                {
+                    targetContentList[i].Initialize(gamePlayType);
                 }
 
                 CreateUnDuplicateRandom();
@@ -499,9 +643,33 @@ public class GameManager : MonoBehaviour
 
                 countIndex = 0;
 
-                for (int i = 0; i < moleCatchContentList.Count; i++)
+                moleCatchEasyTransform.gameObject.SetActive(false);
+                moleCatchHardTransform.gameObject.SetActive(false);
+
+                switch (gameModeType)
                 {
-                    moleCatchContentList[i].Initialize(gamePlayType);
+                    case GameModeType.Easy:
+                        targetContentList = moleCatchEasyList;
+                        moleCatchEasyTransform.gameObject.SetActive(true);
+                        break;
+                    case GameModeType.Normal:
+                        targetContentList = moleCatchEasyList;
+                        moleCatchEasyTransform.gameObject.SetActive(true);
+                        break;
+                    case GameModeType.Hard:
+                        targetContentList = moleCatchHardList;
+                        moleCatchHardTransform.gameObject.SetActive(true);
+                        break;
+                    case GameModeType.Perfect:
+                        targetContentList = moleCatchEasyList;
+                        moleCatchEasyTransform.gameObject.SetActive(true);
+                        break;
+                }
+
+                for (int i = 0; i < targetContentList.Count; i++)
+                {
+                    targetContentList[i].Initialize(gamePlayType);
+                    targetContentList[i].index = i;
                 }
 
                 CreateMoleRandom();
@@ -512,9 +680,37 @@ public class GameManager : MonoBehaviour
                 nowIndex = 0;
                 filpCardIndex = -1;
 
-                for (int i = 0; i < filpCardList.Count; i++)
+                filpCardEasyTransform.gameObject.SetActive(false);
+                filpCardNormalTransform.gameObject.SetActive(false);
+                filpCardHardTransform.gameObject.SetActive(false);
+
+                switch (gameModeType)
                 {
-                    filpCardList[i].Initialize(gamePlayType);
+                    case GameModeType.Easy:
+                        targetContentList = filpCardEasyList;
+                        waitForFilpCardSeconds = new WaitForSeconds(ValueManager.instance.GetFilpCardRememberTime());
+                        filpCardEasyTransform.gameObject.SetActive(true);
+                        break;
+                    case GameModeType.Normal:
+                        targetContentList = filpCardNormalList;
+                        waitForFilpCardSeconds = new WaitForSeconds(ValueManager.instance.GetFilpCardRememberTime() * 1.5f);
+                        filpCardNormalTransform.gameObject.SetActive(true);
+                        break;
+                    case GameModeType.Hard:
+                        targetContentList = filpCardHardList;
+                        waitForFilpCardSeconds = new WaitForSeconds(ValueManager.instance.GetFilpCardRememberTime() * 2f);
+                        filpCardHardTransform.gameObject.SetActive(true);
+                        break;
+                    case GameModeType.Perfect:
+                        targetContentList = filpCardEasyList;
+                        waitForFilpCardSeconds = new WaitForSeconds(ValueManager.instance.GetFilpCardRememberTime());
+                        filpCardEasyTransform.gameObject.SetActive(true);
+                        break;
+                }
+
+                for (int i = 0; i < targetContentList.Count; i++)
+                {
+                    targetContentList[i].Initialize(gamePlayType);
                 }
 
                 CreateFilpCardRandom();
@@ -526,11 +722,37 @@ public class GameManager : MonoBehaviour
                 buttonActionLevelIndex = 1;
                 buttonActionIndex = 0;
 
-                for (int i = 0; i < buttonActionDownList.Count; i++)
+                buttonActionDownEasyTransform.gameObject.SetActive(false);
+                buttonActionDownNormalTransform.gameObject.SetActive(false);
+
+                switch (gameModeType)
                 {
-                    buttonActionDownList[i].Initialize(gamePlayType);
-                    buttonActionDownList[i].ButtonActionReset(i);
-                    buttonActionDownList[i].gameObject.SetActive(true);
+                    case GameModeType.Easy:
+                        targetContentList = buttonActionDownEasyList;
+                        buttonActionDownEasyTransform.gameObject.SetActive(true);
+                        break;
+                    case GameModeType.Normal:
+                        targetContentList = buttonActionDownNormalList;
+                        buttonActionDownNormalTransform.gameObject.SetActive(true);
+
+                        break;
+                    case GameModeType.Hard:
+                        targetContentList = buttonActionDownNormalList;
+                        buttonActionDownNormalTransform.gameObject.SetActive(true);
+
+                        ShuffleList(targetContentList);
+                        break;
+                    case GameModeType.Perfect:
+                        targetContentList = buttonActionDownEasyList;
+                        buttonActionDownEasyTransform.gameObject.SetActive(true);
+                        break;
+                }
+
+                for (int i = 0; i < targetContentList.Count; i++)
+                {
+                    targetContentList[i].Initialize(gamePlayType);
+                    targetContentList[i].ButtonActionReset(i);
+                    targetContentList[i].gameObject.SetActive(true);
                 }
 
                 CreateButtonActionRandom();
@@ -539,12 +761,42 @@ public class GameManager : MonoBehaviour
             case GamePlayType.GameChoice5:
                 timingActionContent.Initialize(gamePlayType);
 
+                timingActionFillmount.fillAmount = 0.5f;
+                timingActionCheckRange.transform.localPosition = Vector3.zero;
+
                 timingActionPlus = 5;
-                timingActionSpeed = 0.1f;
-                timingActionSaveSpeed = timingActionSpeed;
+
+                timingActionCheckRange_1 = 0;
+                timingActionCheckRange_2 = 0;
+
+                timingActionRangePosX = 0;
+                timingActionMove = false;
 
                 timingActionVector[0].SetActive(false);
                 timingActionVector[1].SetActive(false);
+
+                timingActionButton.gameObject.SetActive(false);
+
+                switch (gameModeType)
+                {
+                    case GameModeType.Easy:
+                        timingActionSpeed = 0.1f;
+                        break;
+                    case GameModeType.Normal:
+                        timingActionSpeed = 0.125f;
+                        break;
+                    case GameModeType.Hard:
+                        timingActionPlus = 2.5f;
+                        timingActionSpeed = 0.125f;
+                        timingActionButton.gameObject.SetActive(true);
+                        timingActionButton.Initialize(gamePlayType);
+                        break;
+                    case GameModeType.Perfect:
+                        timingActionSpeed = 0.1f;
+                        break;
+                }
+
+                timingActionSaveSpeed = timingActionSpeed;
 
                 break;
             case GamePlayType.GameChoice6:
@@ -621,11 +873,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    bool mole = false;
+    bool hitMole = false;
 
     public void CheckMole(int index, System.Action<bool> action)
     {
-        if(index == moleIndex)
+        if(index == 0)
         {
             soundManager.PlaySFX(GameSfxType.Click);
 
@@ -633,9 +885,9 @@ public class GameManager : MonoBehaviour
 
             CheckPlusScore(30);
 
-            mole = true;
+            hitMole = true;
         }
-        else
+        else if (index == 1)
         {
             if (GameStateManager.instance.Shield)
             {
@@ -656,6 +908,10 @@ public class GameManager : MonoBehaviour
 
                 if (!GameStateManager.instance.Fail) GameStateManager.instance.Fail = true;
             }
+        }
+        else
+        {
+            action(false);
         }
     }
 
@@ -687,7 +943,7 @@ public class GameManager : MonoBehaviour
                 filpCardIndex = -1;
                 nowIndex++;
 
-                if(nowIndex >= filpCardList.Count / 2)
+                if(nowIndex >= targetContentList.Count / 2)
                 {
                     filpCardIndex = -1;
                     nowIndex = 0;
@@ -718,7 +974,7 @@ public class GameManager : MonoBehaviour
 
                     filpCardIndex = -1;
 
-                    MinusScore(10);
+                    MinusScore(5);
 
                     if(!GameStateManager.instance.Fail) GameStateManager.instance.Fail = true;
                 }
@@ -738,9 +994,20 @@ public class GameManager : MonoBehaviour
 
             if (numberList.Count == 0)
             {
-                if(buttonActionLevelIndex < 6)
+                switch (gameModeType)
                 {
-                    buttonActionLevelIndex += 1;
+                    case GameModeType.Hard:
+                        if (buttonActionLevelIndex < 12)
+                        {
+                            buttonActionLevelIndex += 1;
+                        }
+                        break;
+                    default:
+                        if (buttonActionLevelIndex < 6)
+                        {
+                            buttonActionLevelIndex += 1;
+                        }
+                        break;
                 }
 
                 Debug.Log("Reset");
@@ -771,6 +1038,9 @@ public class GameManager : MonoBehaviour
                 action?.Invoke(false);
 
                 MinusScore(20);
+
+                buttonActionLevelIndex = 1;
+                CreateButtonActionRandom();
 
                 if (!GameStateManager.instance.Fail) GameStateManager.instance.Fail = true;
             }
@@ -896,10 +1166,27 @@ public class GameManager : MonoBehaviour
 
                 break;
             case GamePlayType.GameChoice2:
-                StartCoroutine("MoleCatchCoroution");
+
+                moleClone = false;
+
+                switch (GameStateManager.instance.GameModeType)
+                {
+                    case GameModeType.Easy:
+                        break;
+                    case GameModeType.Normal:
+                        moleClone = true;
+                        break;
+                    case GameModeType.Hard:
+                        moleClone = true;
+                        break;
+                    case GameModeType.Perfect:
+                        break;
+                }
+
+                StartCoroutine(MoleCatchCoroution());
                 break;
             case GamePlayType.GameChoice3:
-                StartCoroutine("FilpCardCoroution");
+                StartCoroutine(FilpCardCoroution());
                 break;
             case GamePlayType.GameChoice4:
                 break;
@@ -907,8 +1194,8 @@ public class GameManager : MonoBehaviour
                 timingActionValue = 50;
                 timingActionFillmount.fillAmount = 0.5f;
 
-                StartCoroutine("TimingActionCoroution");
-                StartCoroutine("MoveTimingActionRange");
+                StartCoroutine(TimingActionCoroution());
+                StartCoroutine(MoveTimingActionRange());
                 break;
             case GamePlayType.GameChoice6:
                 break;
@@ -970,36 +1257,49 @@ public class GameManager : MonoBehaviour
     #region Corution
     IEnumerator MoleCatchCoroution()
     {
-        ShuffleList(moleCatchContentList);
+        ShuffleList(targetContentList);
+
+        for(int i = 0; i < targetContentList.Count; i ++)
+        {
+            targetContentList[i].MoleReset();
+        }
 
         if(countIndex <= 5)
         {
-            Debug.Log("?????? ???? ???? ???? : " + countIndex);
             waitForMoleCatchSeconds = new WaitForSeconds(ValueManager.instance.GetMoleCatchTime() - (0.05f * countIndex));
             waitForMoleNextSeconds = new WaitForSeconds(ValueManager.instance.GetMoleNextTime() - (0.1f * countIndex));
         }
 
-        mole = false;
+        hitMole = false;
 
-        moleIndex = 0;
+        targetContentList[0].SetMole();
 
-        moleCatchContentList[0].SetMole();
+        if (moleClone)
+        {
+            int random = Random.Range(0, 100);
+
+            if(random >= 50)
+            {
+                targetContentList[1].SetMoleClone();
+            }
+        }
 
         yield return waitForMoleCatchSeconds;
 
-        if(!mole)
+        targetContentList[0].MoleReset();
+        targetContentList[1].MoleReset();
+
+        if (!hitMole)
         {
             countIndex = 0;
             MinusScore(0);
         }
-
-        moleIndex = -1;
-
-        moleCatchContentList[0].MoleReset();
+        else
+        {
+            countIndex += 1;
+        }
 
         yield return waitForMoleNextSeconds;
-
-        countIndex += 1;
 
         StartCoroutine(MoleCatchCoroution());
     }
@@ -1009,18 +1309,25 @@ public class GameManager : MonoBehaviour
         isActive = false;
         eGamePause();
 
-        for (int i = 0; i < filpCardList.Count; i ++ )
+        for (int i = 0; i < targetContentList.Count; i ++ )
         {
-            filpCardList[i].filpCardImg.enabled = true;
+            if(i == targetContentList.Count - 1 && gameModeType == GameModeType.Normal)
+            {
+                targetContentList[i].NotFilpCard();
+            }
+            else
+            {
+                targetContentList[i].filpCardImg.enabled = true;
+            }
         }
 
         uiManager.WaitNotionUI(gamePlayType);
 
-        yield return new WaitForSeconds(ValueManager.instance.GetFilpCardRememberTime());
+        yield return waitForFilpCardSeconds;
 
-        for (int i = 0; i < filpCardList.Count; i++)
+        for (int i = 0; i < targetContentList.Count; i++)
         {
-            filpCardList[i].filpCardImg.enabled = false;
+            targetContentList[i].filpCardImg.enabled = false;
         }
 
         isActive = true;
@@ -1030,6 +1337,7 @@ public class GameManager : MonoBehaviour
     IEnumerator TimingActionCoroution()
     {
         float wait = 0;
+
         while(true)
         {
             wait += 0.01f;
@@ -1052,7 +1360,7 @@ public class GameManager : MonoBehaviour
 
             timingActionCheckRange.transform.localPosition = new Vector3(timingActionRangePosX, 0, 0);
 
-            timingActionCheckRange_1 = (timingActionCheckRange.transform.localPosition.x + 400) / 1000 ;
+            timingActionCheckRange_1 = (timingActionCheckRange.transform.localPosition.x + 400) / 1000;
             timingActionCheckRange_2 = timingActionCheckRange_1 + 0.2f;
 
             if (wait > 0.3f)
@@ -1071,7 +1379,7 @@ public class GameManager : MonoBehaviour
         {
             if(Random.Range(0 , 2) == 0)
             {
-                if(timingActionRangePosX < 350)
+                if(timingActionRangePosX < 360)
                 {
                     timingActionMove = false;
                 }
@@ -1082,7 +1390,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                if (timingActionRangePosX > -350)
+                if (timingActionRangePosX > -360)
                 {
                     timingActionMove = true;
                 }
@@ -1092,7 +1400,19 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            SetTimingActionVector(timingActionMove);
+            switch (gameModeType)
+            {
+                case GameModeType.Easy:
+                    SetTimingActionVector(timingActionMove);
+                    break;
+                case GameModeType.Normal:
+                    break;
+                case GameModeType.Hard:
+                    break;
+                case GameModeType.Perfect:
+                    SetTimingActionVector(timingActionMove);
+                    break;
+            }
 
             yield return new WaitForSeconds(2);
         }

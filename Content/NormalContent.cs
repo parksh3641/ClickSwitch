@@ -34,7 +34,7 @@ public class NormalContent : MonoBehaviour, IContentEvent
     [Space]
     [Title("FilpCard")]
     public Image filpCardImg;
-    public Sprite[] filpCardImgList;
+    Sprite[] filpCardImgList;
 
     [Space]
     [Title("ButtonAction")]
@@ -51,6 +51,8 @@ public class NormalContent : MonoBehaviour, IContentEvent
     void Awake()
     {
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+
+        filpCardImgList = imageDataBase.GetFilpCardArray();
 
         failSoundEvent.AddListener(() => { GameObject.FindWithTag("FailSound").GetComponent<AudioSource>().Play(); });
 
@@ -106,7 +108,7 @@ public class NormalContent : MonoBehaviour, IContentEvent
         isActive = true;
     }
 
-    public void NormalFirst()
+    public void SpeedTouchFirst()
     {
         backgroundImg.sprite = backgroundImgList[1];
     }
@@ -116,12 +118,25 @@ public class NormalContent : MonoBehaviour, IContentEvent
         moleImg.sprite = moleImgList[0];
         moleImg.enabled = false;
 
-        isActive = true;
+        isActive = false;
     }
 
     public void SetMole()
     {
         moleImg.enabled = true;
+        moleImg.color = new Color(1, 1, 1);
+
+        index = 0;
+        isActive = true;
+    }
+
+    public void SetMoleClone() //가짜 두더지
+    {
+        moleImg.enabled = true;
+        moleImg.color = new Color(100 / 255f, 100 / 255f, 100 / 255f);
+
+        index = 1;
+        isActive = true;
     }
 
     public void FilpCardReset(int number)
@@ -130,7 +145,16 @@ public class NormalContent : MonoBehaviour, IContentEvent
         filpCardImg.enabled = false;
         index = number;
 
+        backgroundImg.sprite = backgroundImgList[0];
+
         isActive = true;
+    }
+
+    public void NotFilpCard()
+    {
+        backgroundImg.sprite = backgroundImgList[1];
+
+        isActive = false;
     }
 
     public void ButtonActionReset(int number)
@@ -145,9 +169,19 @@ public class NormalContent : MonoBehaviour, IContentEvent
     {
         numberText.text = fingerSnapStrArray[number];
 
-        backgroundImg.sprite = fingerSnapArray[number];
-
         isActive = true;
+    }
+
+    public void FingerSnapBackground(int number, bool check)
+    {
+        if(check)
+        {
+            backgroundImg.sprite = fingerSnapArray[Random.Range(0,4)];
+        }
+        else
+        {
+            backgroundImg.sprite = fingerSnapArray[number];
+        }
     }
 
     public void MoveFingerSnap(int number)
@@ -187,10 +221,10 @@ public class NormalContent : MonoBehaviour, IContentEvent
 
     public void ChoiceMoleAction(bool check)
     {
+        isActive = false;
+
         if (check)
         {
-            isActive = false;
-
             moleImg.sprite = moleImgList[1];
         }
         else

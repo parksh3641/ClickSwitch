@@ -145,7 +145,12 @@ public enum RewardType
 {
     Coin = 0,
     Crystal,
+    Clock,
+    Shield,
+    Combo,
     Exp,
+    Slow,
+    IconBox
 }
 
 public enum UpgradeType
