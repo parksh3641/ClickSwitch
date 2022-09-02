@@ -150,6 +150,10 @@ public class ComboManager : MonoBehaviour
 
                 fillamount.fillAmount = timer / comboTimer;
             }
+            else
+            {
+                combo = 0;
+            }
         }
 
         yield return new WaitForSeconds(0.01f);

@@ -310,6 +310,12 @@ public class GameManager : MonoBehaviour
         {
             Application.targetFrameRate = 60;
         }
+
+        GameStateManager.instance.Clock = false;
+        GameStateManager.instance.Shield = false;
+        GameStateManager.instance.Combo = false;
+        GameStateManager.instance.Exp = false;
+        GameStateManager.instance.Slow = false;
     }
 
     #region Setting

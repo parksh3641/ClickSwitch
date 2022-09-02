@@ -23,11 +23,18 @@ public class ProfileManager : MonoBehaviour
 
     public List<ProfileContent> profileContentList = new List<ProfileContent>();
 
+    ImageDataBase imageDataBase;
+    Sprite[] iconArray;
 
     public PlayerDataBase playerDataBase;
 
     private void Awake()
     {
+        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+        if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+
+        iconArray = imageDataBase.GetIconArray();
+
         profileContentList.Clear();
 
         for (int i = 0; i < 6; i ++)
@@ -43,8 +50,6 @@ public class ProfileManager : MonoBehaviour
         profileView.SetActive(false);
 
         profileTransform.anchoredPosition = new Vector2(0, -999);
-
-        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
     }
 
     public void OpenProfile()
@@ -72,12 +77,12 @@ public class ProfileManager : MonoBehaviour
             nickNameText.text = GameStateManager.instance.CustomId;
         }
 
-        profileContentList[0].InitState(LocalizationManager.instance.GetString("GameChoice1"), playerDataBase.BestSpeedTouchScore, playerDataBase.BestSpeedTouchCombo);
-        profileContentList[1].InitState(LocalizationManager.instance.GetString("GameChoice2"), playerDataBase.BestMoleCatchScore, playerDataBase.BestMoleCatchCombo);
-        profileContentList[2].InitState(LocalizationManager.instance.GetString("GameChoice3"), playerDataBase.BestFilpCardScore, playerDataBase.BestFilpCardCombo);
-        profileContentList[3].InitState(LocalizationManager.instance.GetString("GameChoice4"), playerDataBase.BestButtonActionScore, playerDataBase.BestButtonActionCombo);
-        profileContentList[4].InitState(LocalizationManager.instance.GetString("GameChoice5"), playerDataBase.BestTimingActionScore, playerDataBase.BestTimingActionCombo);
-        profileContentList[5].InitState(LocalizationManager.instance.GetString("GameChoice6"), playerDataBase.BestDragActionScore, playerDataBase.BestDragActionCombo);
+        profileContentList[0].InitState(LocalizationManager.instance.GetString("GameChoice1"), playerDataBase.BestSpeedTouchScore, playerDataBase.BestSpeedTouchCombo, iconArray[0]);
+        profileContentList[1].InitState(LocalizationManager.instance.GetString("GameChoice2"), playerDataBase.BestMoleCatchScore, playerDataBase.BestMoleCatchCombo, iconArray[1]);
+        profileContentList[2].InitState(LocalizationManager.instance.GetString("GameChoice3"), playerDataBase.BestFilpCardScore, playerDataBase.BestFilpCardCombo, iconArray[2]);
+        profileContentList[3].InitState(LocalizationManager.instance.GetString("GameChoice4"), playerDataBase.BestButtonActionScore, playerDataBase.BestButtonActionCombo, iconArray[3]);
+        profileContentList[4].InitState(LocalizationManager.instance.GetString("GameChoice5"), playerDataBase.BestTimingActionScore, playerDataBase.BestTimingActionCombo, iconArray[4]);
+        profileContentList[5].InitState(LocalizationManager.instance.GetString("GameChoice6"), playerDataBase.BestDragActionScore, playerDataBase.BestDragActionCombo, iconArray[5]);
 
         totalScoreText.text = " : " + playerDataBase.TotalScore.ToString();
         totalComboText.text = " : " + playerDataBase.TotalCombo.ToString();
