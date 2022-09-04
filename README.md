@@ -6,6 +6,6 @@
 -------------
 **[구글 플레이 스토어 다운 받기](https://play.google.com/store/apps/details?id=com.unity3d.toucharcade)**
 
-**[앱 스토어 다운 받기]()**
+**[앱 스토어 다운 받기](https://apps.apple.com/kr/app/%ED%84%B0%EC%B9%98%EC%9D%98-%EA%B3%A0%EC%88%98-tap-arcade/id1637056029)**
 
 -------------
