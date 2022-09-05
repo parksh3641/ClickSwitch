@@ -38,6 +38,7 @@ public class GameStateManager : MonoBehaviour
 
         [Space]
         [Title("Setting")]
+        public bool playGame = false;
         public GamePlayType gamePlayType = GamePlayType.GameChoice1;
         public GameModeType gameModeType = GameModeType.Easy;
         public bool music = true;
@@ -162,6 +163,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.login = value;
+            SaveFile();
+        }
+    }
+
+    public bool PlayGame
+    {
+        get
+        {
+            return gameSettings.playGame;
+        }
+        set
+        {
+            gameSettings.playGame = value;
             SaveFile();
         }
     }

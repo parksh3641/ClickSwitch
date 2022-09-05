@@ -10,6 +10,7 @@ public class ShopManager : MonoBehaviour
     ShopClass shopClass;
 
     public GameObject shopView;
+    public GameObject shopMoneyView;
 
     public NotionManager notionManager;
 
@@ -59,6 +60,7 @@ public class ShopManager : MonoBehaviour
     private void Awake()
     {
         shopView.SetActive(false);
+        shopMoneyView.SetActive(false);
         buyWindow.SetActive(false);
 
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
@@ -119,6 +121,7 @@ public class ShopManager : MonoBehaviour
         if (!shopView.activeSelf)
         {
             shopView.SetActive(true);
+            shopMoneyView.SetActive(true);
 
             if (!GameStateManager.instance.WatchAd)
             {
@@ -132,6 +135,7 @@ public class ShopManager : MonoBehaviour
         else
         {
             shopView.SetActive(false);
+            shopMoneyView.SetActive(false);
         }
     }
 
@@ -190,8 +194,6 @@ public class ShopManager : MonoBehaviour
     public void OnBuyItem()
     {
         int price = buyPrice * buyCount;
-
-        Debug.Log(price + "만큼 결제중");
 
         switch (shopClass.virtualCurrency)
         {

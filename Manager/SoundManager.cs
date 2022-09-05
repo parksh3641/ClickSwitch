@@ -75,6 +75,11 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    public void StopBGM()
+    {
+        musicAudio.Stop();
+    }
+
     public void PlayBGM(GameBGMType type)
     {
         int random = 0;
@@ -90,6 +95,8 @@ public class SoundManager : MonoBehaviour
                 }
 
                 random = Random.Range(0, soundDataBase.lobbyAudioClipList.Count);
+
+                musicAudio.pitch = 1;
 
                 musicAudio.clip = soundDataBase.lobbyAudioClipList[random];
                 break;

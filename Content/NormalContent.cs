@@ -86,7 +86,7 @@ public class NormalContent : MonoBehaviour, IContentEvent
                 break;
             case GamePlayType.GameChoice5:
                 clickText.gameObject.SetActive(true);
-                clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().CheckTimingAction(); });
+                //clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().CheckTimingAction(); });
                 isActive = true;
                 break;
             case GamePlayType.GameChoice6:
@@ -130,7 +130,7 @@ public class NormalContent : MonoBehaviour, IContentEvent
         isActive = true;
     }
 
-    public void SetMoleClone() //가짜 두더지
+    public void SetMoleClone()
     {
         moleImg.enabled = true;
         moleImg.color = new Color(100 / 255f, 100 / 255f, 100 / 255f);
@@ -168,6 +168,8 @@ public class NormalContent : MonoBehaviour, IContentEvent
     public void FingerSnapReset(int number)
     {
         numberText.text = fingerSnapStrArray[number];
+
+        backgroundImg.sprite = backgroundImgList[0];
 
         isActive = true;
     }

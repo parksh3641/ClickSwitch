@@ -139,7 +139,7 @@ public class ComboManager : MonoBehaviour
     }
 
 
-    #region Corution
+    #region Coroution
     IEnumerator TimerCoroutine()
     {
         if (!pause)
@@ -148,11 +148,11 @@ public class ComboManager : MonoBehaviour
             {
                 timer -= 0.01f;
 
-                fillamount.fillAmount = timer / comboTimer;
+                if(GameStateManager.instance.PlayGame) fillamount.fillAmount = timer / comboTimer;
             }
             else
             {
-                combo = 0;
+                if(GameStateManager.instance.PlayGame) combo = 0;
             }
         }
 

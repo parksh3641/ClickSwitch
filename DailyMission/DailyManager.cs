@@ -158,7 +158,9 @@ public class DailyManager : MonoBehaviour
             dailyMission.missionType = dailyMissionList.dailyMissions[missionIndexs[i]].missionType;
             dailyMission.goal = dailyMissionList.dailyMissions[missionIndexs[i]].goal;
             dailyMission.clear = false;
- 
+
+            if (dailyMission.goal == 0) dailyMission.goal = 1;
+
             dailyMissionData.Clear();
             dailyMissionData.Add("DailyMission_" + i, JsonUtility.ToJson(dailyMission));
 

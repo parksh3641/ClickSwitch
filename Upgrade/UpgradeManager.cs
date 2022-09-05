@@ -24,6 +24,7 @@ public class UpgradeManager : MonoBehaviour
         if (upgradeDataBase == null) upgradeDataBase = Resources.Load("UpgradeDataBase") as UpgradeDataBase;
 
         upgradeView.SetActive(false);
+        Lock.SetActive(false);
 
         upgradeTransform.anchoredPosition = new Vector2(0, -999);
     }
@@ -51,10 +52,10 @@ public class UpgradeManager : MonoBehaviour
 
         Lock.SetActive(false);
 
-        if (playerDataBase.Level < 1)
-        {
-            Lock.SetActive(true);
-        }
+        //if (playerDataBase.Level < 1)
+        //{
+        //    Lock.SetActive(true);
+        //}
     }
 
     public void OpenUpgrade()

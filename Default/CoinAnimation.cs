@@ -25,8 +25,8 @@ public class CoinAnimation : MonoBehaviour
 
     [Space]
     [Title("Text")]
-    public Text coinText;
-    public Text crystalText;
+    public Text[] coinText;
+    public Text[] crystalText;
 
     [Space]
     [Title("Prefab")]
@@ -110,7 +110,7 @@ public class CoinAnimation : MonoBehaviour
         StartCoroutine(OnPlayExpCoroution());
     }
 
-    IEnumerator OnPlayCoinCoroution(int money, int plus, List<CoinContent> list, Transform target, Text text)
+    IEnumerator OnPlayCoinCoroution(int money, int plus, List<CoinContent> list, Transform target, Text[] text)
     {
         for (int i = 0; i < list.Count; i++)
         {
@@ -164,7 +164,8 @@ public class CoinAnimation : MonoBehaviour
                 money += 1;
             }
 
-            text.text = money.ToString();
+            text[0].text = money.ToString();
+            text[1].text = money.ToString();
 
             yield return new WaitForSeconds(0.01f);
         }

@@ -91,6 +91,7 @@ public class LevelManager : MonoBehaviour
         levelupView.SetActive(true);
 
         levelUpText.text = (level + 1).ToString();
+        if (level + 1 > 29) level = 29;
         coinUpText.text = LocalizationManager.instance.GetString("Bouns") + " + " + (level + 1) + "%";
 
         soundManager.PlaySFX(GameSfxType.LevelUp);

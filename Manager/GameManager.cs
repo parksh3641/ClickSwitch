@@ -139,7 +139,6 @@ public class GameManager : MonoBehaviour
     [Title("Manager")]
     public UIManager uiManager;
     public SoundManager soundManager;
-    public WarningController warningController;
     public TouchManager touchManager;
     public PlayerDataBase playerDataBase;
     public UpgradeDataBase upgradeDataBase;
@@ -453,6 +452,7 @@ public class GameManager : MonoBehaviour
                 drageActionList[nowIndex].FingerSnapBackground(dragActionIndex, false);
                 break;
         }
+
         drageActionList[nowIndex].gameObject.SetActive(true);
     }
 
@@ -792,8 +792,7 @@ public class GameManager : MonoBehaviour
                         timingActionSpeed = 0.125f;
                         break;
                     case GameModeType.Hard:
-                        timingActionPlus = 2.5f;
-                        timingActionSpeed = 0.125f;
+                        timingActionSpeed = 0.15f;
                         timingActionButton.gameObject.SetActive(true);
                         timingActionButton.Initialize(gamePlayType);
                         break;
@@ -866,10 +865,6 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                soundManager.PlaySFX(GameSfxType.Fail);
-
-                warningController.Hit();
-
                 action(false);
 
                 MinusScore(20);
@@ -903,10 +898,6 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                soundManager.PlaySFX(GameSfxType.Fail);
-
-                warningController.Hit();
-
                 action(false);
                 countIndex = 0;
 
@@ -971,10 +962,6 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
-                    soundManager.PlaySFX(GameSfxType.Fail);
-
-                    warningController.Hit();
-
                     action?.Invoke(2);
                     saveAction?.Invoke(2);
 
@@ -1037,10 +1024,6 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                soundManager.PlaySFX(GameSfxType.Fail);
-
-                warningController.Hit();
-
                 action?.Invoke(false);
 
                 MinusScore(20);
@@ -1066,11 +1049,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void CheckTimingAction2()
+    {
+        if (timingActionValue > 0)
+        {
+            timingActionValue -= timingActionPlus;
+        }
+        else
+        {
+            timingActionValue = 0;
+        }
+    }
+
     void CheckTimingActionRange()
     {
         if(timingActionFillmount.fillAmount >= timingActionCheckRange_1 && timingActionFillmount.fillAmount <= timingActionCheckRange_2)
         {
-            soundManager.PlaySFX(GameSfxType.Click);
+            if (GameStateManager.instance.PlayGame) soundManager.PlaySFX(GameSfxType.Click);
 
             if (timingActionFillmount.fillAmount >= timingActionCheckRange_1 + 0.1f && timingActionFillmount.fillAmount <= timingActionCheckRange_2 - 0.05f)
             {
@@ -1099,10 +1094,6 @@ public class GameManager : MonoBehaviour
             else
             {
                 Debug.Log("Failure");
-
-                soundManager.PlaySFX(GameSfxType.Fail);
-
-                warningController.Hit();
 
                 MinusScore(5);
 
@@ -1152,10 +1143,6 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                soundManager.PlaySFX(GameSfxType.Fail);
-
-                warningController.Hit();
-
                 MinusScore(20);
             }
         }
@@ -1357,9 +1344,12 @@ public class GameManager : MonoBehaviour
                 timingActionRangePosX -= timingActionSpeed * 3;
             }
 
-            if (timingActionValue > 0)
+            if(gameModeType != GameModeType.Hard)
             {
-                timingActionValue -= timingActionSpeed;
+                if (timingActionValue > 0)
+                {
+                    timingActionValue -= timingActionSpeed;
+                }
             }
 
             timingActionFillmount.fillAmount = timingActionValue / 100f;
@@ -1385,7 +1375,7 @@ public class GameManager : MonoBehaviour
         {
             if(Random.Range(0 , 2) == 0)
             {
-                if(timingActionRangePosX < 360)
+                if(timingActionRangePosX < 300)
                 {
                     timingActionMove = false;
                 }
@@ -1396,7 +1386,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                if (timingActionRangePosX > -360)
+                if (timingActionRangePosX > -300)
                 {
                     timingActionMove = true;
                 }

@@ -20,11 +20,13 @@ public class UIManager : MonoBehaviour, IGameEvent
     public LocalizationContent infoBestScoreText;
     public LocalizationContent infoBestComboText;
 
+    public WarningController warningController;
+
     [Space]
     [Title("CurrneyUI")]
     public GameObject virtualCurrencyUI;
-    public Text goldText;
-    public Text crystalText;
+    public Text[] goldText;
+    public Text[] crystalText;
 
     public GameObject gamePlayView;
     public GameObject[] gamePlayUI;
@@ -40,6 +42,8 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     [Space]
     [Title("EndUI")]
+    public GameObject gameEndAnimView;
+    public BarAnimation gameEndAnimation;
     public GameObject gameEndUI;
     public GameObject newRecordObj;
     public GameObject newComboObj;
@@ -170,8 +174,10 @@ public class UIManager : MonoBehaviour, IGameEvent
         infoBestScoreText.gameObject.SetActive(false);
         infoBestComboText.gameObject.SetActive(false);
 
-        goldText.text = "0";
-        crystalText.text = "0";
+        goldText[0].text = "0";
+        goldText[1].text = "0";
+        crystalText[0].text = "0";
+        crystalText[1].text = "0";
 
         gameOptionUI.SetActive(false);
         languageUI.SetActive(false);
@@ -185,6 +191,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         gameStartUI.SetActive(true);
         gameReadyUI.SetActive(false);
+        gameEndAnimView.SetActive(false);
         gameEndUI.SetActive(false);
         cancleWindowUI.SetActive(false);
         cancleUI.SetActive(false);
@@ -329,8 +336,10 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         Debug.Log("Renewal VC");
 
-        goldText.text = playerDataBase.Coin.ToString();
-        crystalText.text = playerDataBase.Crystal.ToString();
+        goldText[0].text = playerDataBase.Coin.ToString();
+        goldText[1].text = playerDataBase.Coin.ToString();
+        crystalText[0].text = playerDataBase.Crystal.ToString();
+        crystalText[1].text = playerDataBase.Crystal.ToString();
     }
 
     public void SetItem()
@@ -457,6 +466,9 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         infoBestScoreText.SetNumber(bestScore);
         infoBestComboText.SetNumber(bestCombo);
+
+        comboManager.barAnimation.OnReset();
+        gameEndAnimation.OnReset();
     }
 
     public void CloseGamePlayUI()
@@ -621,13 +633,13 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         Debug.Log("Game Start");
 
+        GameStateManager.instance.PlayGame = true;
+
         pause = false;
 
         StartCoroutine("ReadyTimerCorution", ValueManager.instance.GetReadyTime());
 
         SetEtcUI(false);
-
-        comboManager.barAnimation.OnReset();
 
         modeManager.OnMode();
     }
@@ -644,6 +656,25 @@ public class UIManager : MonoBehaviour, IGameEvent
         }
     }
 
+    public void GameEndAnimation()
+    {
+        GameStateManager.instance.PlayGame = false;
+
+        gameEndAnimView.SetActive(true);
+        gameEndAnimation.PlayAnimation();
+
+        soundManager.StopBGM();
+        soundManager.PlaySFX(GameSfxType.GameOver);
+
+        StartCoroutine(GameEndCoroution());
+    }
+
+    IEnumerator GameEndCoroution()
+    {
+        yield return new WaitForSeconds(3f);
+        GameEnd();
+    }
+
     float money = 0;
     float exp = 0;
     float plus = 0;
@@ -653,10 +684,8 @@ public class UIManager : MonoBehaviour, IGameEvent
         Debug.Log("Game End");
 
         CloseGamePlayUI();
+        gameEndAnimView.SetActive(false);
         gameEndUI.SetActive(true);
-
-        checkClose = false;
-        Invoke("WaitCloseGameEnd", 1.5f);
 
         soundManager.PlayBGM(GameBGMType.End);
 
@@ -1000,8 +1029,6 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         goldAnimation.OnPlayExpAnimation();
 
-
-
         nowScoreText.text = score.ToString();
         nowComboText.text = combo.ToString();
         getExpText.text = ((int)exp).ToString();
@@ -1193,26 +1220,19 @@ public class UIManager : MonoBehaviour, IGameEvent
         return check;
     }
 
-    bool checkClose = false;
-
     public void CloseGameEnd()
     {
-        if (!checkClose) return;
-
         soundManager.PlayBGM(GameBGMType.Lobby);
 
         gameStartUI.SetActive(true);
         gameEndUI.SetActive(false);
     }
 
-    void WaitCloseGameEnd()
-    {
-        checkClose = true;
-    }
-
 
     public void PlusScore(int index)
     {
+        if (index == 0 || gameEndAnimView.activeInHierarchy) return;
+
         score += index;
         scoreText.text = LocalizationManager.instance.GetString("Score") + " : " + score.ToString();
 
@@ -1240,10 +1260,15 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void MinusScore(int index)
     {
-        if(GameStateManager.instance.Vibration)
+        if (index == 0 || gameEndAnimView.activeInHierarchy) return;
+
+        if (GameStateManager.instance.Vibration)
         {
             Handheld.Vibrate();
         }
+
+        soundManager.PlaySFX(GameSfxType.Fail);
+        warningController.Hit();
 
         score = (score - index >= 0) ? score -= index : score = 0;
         scoreText.text = LocalizationManager.instance.GetString("Score") + " : " + score.ToString();
@@ -1341,7 +1366,9 @@ public class UIManager : MonoBehaviour, IGameEvent
         timerText.text = "";
         soundManager.HighTimer();
 
-        GameEnd();
+        //GameEnd();
+
+        GameEndAnimation();
     }
 
     #endregion
