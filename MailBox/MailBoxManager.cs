@@ -10,7 +10,7 @@ using UnityEngine.UI;
 public class MailBoxManager : MonoBehaviour
 {
     public GameObject mailView;
-
+    public GameObject showVCView;
 
 
     public GameObject alarm;
@@ -42,6 +42,7 @@ public class MailBoxManager : MonoBehaviour
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
 
         mailView.SetActive(false);
+        showVCView.SetActive(false);
 
         alarm.SetActive(false);
         noMailObj.SetActive(false);
@@ -69,8 +70,9 @@ public class MailBoxManager : MonoBehaviour
         if (!mailView.activeSelf)
         {
             mailView.SetActive(true);
+            showVCView.SetActive(true);
 
-            if(!firstLoad)
+            if (!firstLoad)
             {
                 firstLoad = true;
 
@@ -94,6 +96,7 @@ public class MailBoxManager : MonoBehaviour
         else
         {
             mailView.SetActive(false);
+            showVCView.SetActive(false);
         }
     }
 

@@ -10,7 +10,7 @@ public class ShopManager : MonoBehaviour
     ShopClass shopClass;
 
     public GameObject shopView;
-    public GameObject shopMoneyView;
+    public GameObject showVCView;
 
     public NotionManager notionManager;
 
@@ -60,7 +60,7 @@ public class ShopManager : MonoBehaviour
     private void Awake()
     {
         shopView.SetActive(false);
-        shopMoneyView.SetActive(false);
+        showVCView.SetActive(false);
         buyWindow.SetActive(false);
 
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
@@ -121,7 +121,7 @@ public class ShopManager : MonoBehaviour
         if (!shopView.activeSelf)
         {
             shopView.SetActive(true);
-            shopMoneyView.SetActive(true);
+            showVCView.SetActive(true);
 
             if (!GameStateManager.instance.WatchAd)
             {
@@ -135,7 +135,7 @@ public class ShopManager : MonoBehaviour
         else
         {
             shopView.SetActive(false);
-            shopMoneyView.SetActive(false);
+            showVCView.SetActive(false);
         }
     }
 
