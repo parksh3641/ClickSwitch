@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class DailyManager : MonoBehaviour
 {
     public GameObject dailyView;
+    public GameObject showVCView;
 
     public GameObject alarm;
 
@@ -35,6 +36,7 @@ public class DailyManager : MonoBehaviour
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
 
         dailyView.SetActive(false);
+        showVCView.SetActive(false);
         alarm.SetActive(false);
         lockReceiveObj.SetActive(true);
     }
@@ -74,13 +76,17 @@ public class DailyManager : MonoBehaviour
         {
             open = true;
             dailyView.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+
+            showVCView.SetActive(true);
         }
         else
         {
             open = false;
             dailyView.GetComponent<RectTransform>().anchoredPosition = new Vector2(4000, 0);
 
-            if(playerDataBase.DailyMissionCount == 0)
+            showVCView.SetActive(false);
+
+            if (playerDataBase.DailyMissionCount == 0)
             {
                 OnCheckAlarm();
             }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class UpgradeManager : MonoBehaviour
 {
     public GameObject upgradeView;
+    public GameObject showVCView;
 
     public GameObject Lock;
 
@@ -24,6 +25,7 @@ public class UpgradeManager : MonoBehaviour
         if (upgradeDataBase == null) upgradeDataBase = Resources.Load("UpgradeDataBase") as UpgradeDataBase;
 
         upgradeView.SetActive(false);
+        showVCView.SetActive(false);
         Lock.SetActive(false);
 
         upgradeTransform.anchoredPosition = new Vector2(0, -999);
@@ -63,11 +65,13 @@ public class UpgradeManager : MonoBehaviour
         if (!upgradeView.activeSelf)
         {
             upgradeView.SetActive(true);
+            showVCView.SetActive(true);
 
         }
         else
         {
             upgradeView.SetActive(false);
+            showVCView.SetActive(false);
         }
     }
 }

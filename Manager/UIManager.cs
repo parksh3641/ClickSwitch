@@ -16,6 +16,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public Text timerText;
     public Text scoreText;
+    public LocalizationContent levelText;
 
     public LocalizationContent infoBestScoreText;
     public LocalizationContent infoBestComboText;
@@ -81,6 +82,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     public GameObject languageUI;
     public GameObject[] etcUI;
     public LanguageContent[] languageContentArray;
+    public Text versionText2;
 
     [Space]
     [Title("CancleUI")]
@@ -170,6 +172,9 @@ public class UIManager : MonoBehaviour, IGameEvent
         timerText.text = "";
         timerText.color = new Color(1, 1, 0);
         scoreText.text = "";
+
+        versionText.text = "v" + Application.version;
+        versionText2.text = "v" + Application.version;
 
         infoBestScoreText.gameObject.SetActive(false);
         infoBestComboText.gameObject.SetActive(false);
@@ -291,8 +296,6 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void SetLoginUI()
     {
-        versionText.text = "v" + Application.version;
-
         platformText.text = LocalizationManager.instance.GetString("Platform");
 
         for (int i = 0; i < loginButtonList.Length; i++)
@@ -621,14 +624,16 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void OnUpdate()
     {
-#if UNITY_ANDROID
+#if UNITY_EDITOR
+        Application.OpenURL("https://apps.apple.com/kr/app/??????-????-tap-arcade/id1637056029");
+#elif UNITY_ANDROID
         Application.OpenURL("https://play.google.com/store/apps/details?id=com.unity3d.toucharcade");
 #elif UNITY_IOS
-        Application.OpenURL("https://play.google.com/store/apps/details?id=com.unity3d.toucharcade");
+        Application.OpenURL("https://apps.apple.com/kr/app/??????-????-tap-arcade/id1637056029");
 #endif
     }
 
-    #endregion
+#endregion
     public void GameStart()
     {
         Debug.Log("Game Start");
@@ -640,6 +645,9 @@ public class UIManager : MonoBehaviour, IGameEvent
         StartCoroutine("ReadyTimerCorution", ValueManager.instance.GetReadyTime());
 
         SetEtcUI(false);
+
+        levelText.name = "Info_" + GameStateManager.instance.GameModeType.ToString();
+        levelText.ReLoad();
 
         modeManager.OnMode();
     }

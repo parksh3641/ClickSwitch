@@ -880,7 +880,7 @@ public class GameManager : MonoBehaviour
     {
         if(index == 0)
         {
-            soundManager.PlaySFX(GameSfxType.Click);
+            soundManager.PlaySFX(GameSfxType.Oha);
 
             action(true);
 
@@ -1069,7 +1069,7 @@ public class GameManager : MonoBehaviour
 
             if (timingActionFillmount.fillAmount >= timingActionCheckRange_1 + 0.1f && timingActionFillmount.fillAmount <= timingActionCheckRange_2 - 0.05f)
             {
-                CheckPlusScore(10);
+                CheckPlusScore(15);
             }
             else
             {
@@ -1257,7 +1257,7 @@ public class GameManager : MonoBehaviour
             targetContentList[i].MoleReset();
         }
 
-        if(countIndex <= 5)
+        if(countIndex <= 8)
         {
             waitForMoleCatchSeconds = new WaitForSeconds(ValueManager.instance.GetMoleCatchTime() - (0.05f * countIndex));
             waitForMoleNextSeconds = new WaitForSeconds(ValueManager.instance.GetMoleNextTime() - (0.1f * countIndex));
@@ -1289,7 +1289,14 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            countIndex += 1;
+            if(gameModeType == GameModeType.Hard)
+            {
+                countIndex += 2;
+            }
+            else
+            {
+                countIndex += 1;
+            }
         }
 
         yield return waitForMoleNextSeconds;

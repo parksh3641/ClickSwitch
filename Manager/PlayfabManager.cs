@@ -1129,7 +1129,7 @@ public class PlayfabManager : MonoBehaviour
         PlayFabServerAPI.GetTitleInternalData(new PlayFab.ServerModels.GetTitleDataRequest(),
             result =>
             {
-                if (name.Contains("Version"))
+                if (name.Equals("AOSVersion") || name.Equals("IOSVersion"))
                 {
                     if (result.Data[name].Equals(Application.version))
                     {

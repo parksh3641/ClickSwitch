@@ -82,7 +82,8 @@ public enum GameSfxType
     GetMoney,
     BuyItem,
     BoxOpen,
-    GameOver
+    GameOver,
+    Oha
 }
 
 public enum ShopType
