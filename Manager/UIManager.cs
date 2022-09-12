@@ -624,16 +624,16 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void OnUpdate()
     {
-#if UNITY_EDITOR
-        Application.OpenURL("https://apps.apple.com/kr/app/??????-????-tap-arcade/id1637056029");
-#elif UNITY_ANDROID
+#if UNITY_ANDROID
         Application.OpenURL("https://play.google.com/store/apps/details?id=com.unity3d.toucharcade");
 #elif UNITY_IOS
-        Application.OpenURL("https://apps.apple.com/kr/app/??????-????-tap-arcade/id1637056029");
+        Application.OpenURL("https://apps.apple.com/us/app/gosu-of-touch-tap-arcade/id1637056029");
+#else
+        Application.OpenURL("https://apps.apple.com/us/app/gosu-of-touch-tap-arcade/id1637056029");
 #endif
     }
 
-#endregion
+    #endregion
     public void GameStart()
     {
         Debug.Log("Game Start");

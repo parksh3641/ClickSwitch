@@ -1140,7 +1140,7 @@ public class PlayfabManager : MonoBehaviour
                         action?.Invoke(false);
                     }
                 }
-                else if(name.Equals("CheckVersion"))
+                else
                 {
                     if (result.Data[name].Equals("ON"))
                     {
