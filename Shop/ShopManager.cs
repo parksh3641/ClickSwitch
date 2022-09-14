@@ -70,15 +70,7 @@ public class ShopManager : MonoBehaviour
 
     void Start()
     {
-#if !UNITY_EDITOR && UNITY_IOS
-        if (!GameStateManager.instance.AppleInAppPurchase)
-        {
-            for(int i = 0; i < inAppPurchaseObjList.Length; i ++)
-            {
-                inAppPurchaseObjList[i].gameObject.SetActive(false);
-            }
-        }
-#endif
+
     }
 
     public void Initialize()
