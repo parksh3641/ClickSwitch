@@ -14,6 +14,7 @@ public class OptionContent : MonoBehaviour
     public UnityEvent eGoogleLink;
     public UnityEvent eAppleLink;
     public UnityEvent eFacebookLogout;
+    public UnityEvent eRestorePurchases;
 
     public Image iconImg;
     public Text iconText;
@@ -115,6 +116,14 @@ public class OptionContent : MonoBehaviour
             case OptionType.SleepMode:
                 OnSleepMode();
                 break;
+            case OptionType.RestorePurchases:
+                iconImg.sprite = iconList[6];
+     
+
+                buttonText.name = "RestorePurchases";
+                buttonText.ReLoad();
+                buttonText.TextColor(new Color(39 / 255f, 220 / 255f, 149 / 255f));
+                break;
         }
     }
 
@@ -209,6 +218,9 @@ public class OptionContent : MonoBehaviour
                 }
 
                 OnSleepMode();
+                break;
+            case OptionType.RestorePurchases:
+                eRestorePurchases.Invoke();
                 break;
         }
     }

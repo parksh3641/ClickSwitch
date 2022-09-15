@@ -497,7 +497,11 @@ public class UIManager : MonoBehaviour, IGameEvent
         else
         {
             gameOptionUI.SetActive(true);
-            Time.timeScale = 0;
+
+            if(GameStateManager.instance.PlayGame)
+            {
+                Time.timeScale = 0;
+            }
         }
     }
 

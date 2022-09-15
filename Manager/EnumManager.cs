@@ -31,7 +31,8 @@ public enum OptionType
     Language,
     Logout,
     Vibration,
-    SleepMode
+    SleepMode,
+    RestorePurchases
 }
 
 public enum LanguageType

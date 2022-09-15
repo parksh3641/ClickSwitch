@@ -36,6 +36,7 @@ public class PlayfabManager : MonoBehaviour
     string customId = "";
 
     public bool isActive = false;
+    public bool isDelay = false;
 
 #if UNITY_IOS
     private string AppleUserIdKey = "";
@@ -57,6 +58,9 @@ public class PlayfabManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+
+        isActive = false;
+        isDelay = false;
 
 #if UNITY_ANDROID
         GoogleActivate();
@@ -1480,5 +1484,46 @@ public class PlayfabManager : MonoBehaviour
         {
             Debug.LogError(e.Message);
         }
+    }
+
+    public void RestorePurchases()
+    {
+        if (isDelay) return;
+
+        PlayFabClientAPI.GetUserInventory(new GetUserInventoryRequest(), result =>
+        {
+            var Inventory = result.Inventory;
+
+            if (Inventory != null)
+            {
+                for (int i = 0; i < Inventory.Count; i++)
+                {
+                    inventoryList.Add(Inventory[i]);
+                }
+
+                foreach (ItemInstance list in inventoryList)
+                {
+                    if (list.ItemId.Equals("RemoveAds"))
+                    {
+                        playerDataBase.RemoveAd = true;
+                    }
+                }
+            }
+            else
+            {
+                return;
+            }
+
+        }, DisplayPlayfabError);
+
+        NotionManager.instance.UseNotion(NotionType.RestorePurchasesNotion);
+
+        isDelay = true;
+        Invoke("WaitDelay", 2f);
+    }
+
+    void WaitDelay()
+    {
+        isDelay = false;
     }
 }
