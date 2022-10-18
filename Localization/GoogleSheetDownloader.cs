@@ -54,13 +54,13 @@ public class GoogleSheetDownloader : MonoBehaviour
 
     IEnumerator LoadingCoroution()
     {
-        messageText.text = "Downloading";
+        messageText.text = LocalizationManager.instance.GetString("Downloading");
         yield return new WaitForSeconds(0.5f);
-        messageText.text = "Downloading.";
+        messageText.text = LocalizationManager.instance.GetString("Downloading") + ".";
         yield return new WaitForSeconds(0.5f);
-        messageText.text = "Downloading..";
+        messageText.text = LocalizationManager.instance.GetString("Downloading") + "..";
         yield return new WaitForSeconds(0.5f);
-        messageText.text = "Downloading...";
+        messageText.text = LocalizationManager.instance.GetString("Downloading") + "...";
         yield return new WaitForSeconds(0.5f);
         StartCoroutine(LoadingCoroution());
     }

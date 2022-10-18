@@ -220,13 +220,13 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         if(loadingUI.gameObject.activeInHierarchy)
         {
-            messageText.text = "Login";
+            messageText.text = LocalizationManager.instance.GetString("Login");
             yield return new WaitForSeconds(0.5f);
-            messageText.text = "Login.";
+            messageText.text = LocalizationManager.instance.GetString("Login") + ".";
             yield return new WaitForSeconds(0.5f);
-            messageText.text = "Login..";
+            messageText.text = LocalizationManager.instance.GetString("Login") + "..";
             yield return new WaitForSeconds(0.5f);
-            messageText.text = "Login...";
+            messageText.text = LocalizationManager.instance.GetString("Login") + "...";
             yield return new WaitForSeconds(0.5f);
         }
         else
@@ -413,6 +413,11 @@ public class UIManager : MonoBehaviour, IGameEvent
     public void CloseMenu()
     {
         resetManager.gameMenuView.SetActive(false);
+    }
+
+    public void CheckMenu()
+    {
+        resetManager.CheckGameMode();
     }
 
     public void OpenGamePlayUI(GamePlayType type)

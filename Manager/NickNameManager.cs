@@ -67,7 +67,7 @@ public class NickNameManager : MonoBehaviour
     {
         if (playerDataBase.Coin >= 100)
         {
-            string Check = Regex.Replace(inputField.text, @"[^a-zA-Z0-9°¡-ÆR]", "", RegexOptions.Singleline);
+            string Check = Regex.Replace(inputField.text, @"[^0-9a-zA-Z?-?]", "", RegexOptions.Singleline);
             Check = Regex.Replace(inputField.text, @"[^\w\.@-]", "", RegexOptions.Singleline);
 
             for(int i = 0; i < lines.Length; i ++)
@@ -75,7 +75,7 @@ public class NickNameManager : MonoBehaviour
                 if (inputField.text.Contains(lines[i]))
                 {
                     NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
-                    Debug.Log("Æ¯¼ö¹®ÀÚ´Â »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.");
+                    Debug.Log("?????????? ?????? ?? ????????.");
                     return;
                 }
             }
@@ -103,31 +103,31 @@ public class NickNameManager : MonoBehaviour
                     else
                     {
                         NotionManager.instance.UseNotion(NotionType.NickNameNotion1);
-                        Debug.Log("Áßº¹µÈ ´Ð³×ÀÓ ÀÔ´Ï´Ù.");
+                        Debug.Log("?????? ?????? ??????.");
                     }
                 }
                 else
                 {
                     NotionManager.instance.UseNotion(NotionType.NickNameNotion2);
-                    Debug.Log("2±ÛÀÚ ÀÌ»óÀÌ¾î¾ß ÇÕ´Ï´Ù.");
+                    Debug.Log("2???? ?????????? ??????.");
                 }
             }
             else
             {
                 NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
-                Debug.Log("Æ¯¼ö¹®ÀÚ´Â »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.");
+                Debug.Log("?????????? ?????? ?? ????????.");
             }
         }
         else
         {
             NotionManager.instance.UseNotion(NotionType.NickNameNotion4);
-            Debug.Log("°ñµå°¡ ºÎÁ·ÇÕ´Ï´Ù.");
+            Debug.Log("?????? ??????????.");
         }
     }
 
     public void CheckFreeNickName()
     {
-            string Check = Regex.Replace(inputFieldFree.text, @"[^a-zA-Z0-9°¡-ÆR]", "", RegexOptions.Singleline);
+            string Check = Regex.Replace(inputFieldFree.text, @"[^a-zA-Z0-9??-?R]", "", RegexOptions.Singleline);
             Check = Regex.Replace(inputFieldFree.text, @"[^\w\.@-]", "", RegexOptions.Singleline);
 
             for (int i = 0; i < lines.Length; i++)
@@ -135,7 +135,7 @@ public class NickNameManager : MonoBehaviour
                 if (inputFieldFree.text.Contains(lines[i]))
                 {
                     NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
-                    Debug.Log("Æ¯¼ö¹®ÀÚ´Â »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.");
+                    Debug.Log("?????????? ?????? ?? ????????.");
                     return;
                 }
             }
@@ -163,25 +163,25 @@ public class NickNameManager : MonoBehaviour
                 else
                 {
                     NotionManager.instance.UseNotion(NotionType.NickNameNotion1);
-                    Debug.Log("Áßº¹µÈ ´Ð³×ÀÓ ÀÔ´Ï´Ù.");
+                    Debug.Log("?????? ?????? ??????.");
                 }
             }
             else
             {
                 NotionManager.instance.UseNotion(NotionType.NickNameNotion2);
-                Debug.Log("2±ÛÀÚ ÀÌ»óÀÌ¾î¾ß ÇÕ´Ï´Ù.");
+                Debug.Log("2???? ?????????? ??????.");
             }
         }
         else
         {
             NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
-            Debug.Log("Æ¯¼ö¹®ÀÚ´Â »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.");
+            Debug.Log("?????????? ?????? ?? ????????.");
         }
     }
 
     public void Success()
     {
-        Debug.Log("´Ð³×ÀÓ º¯°æ ¼º°ø!");
+        Debug.Log("?????? ???? ????!");
 
         NotionManager.instance.UseNotion(NotionType.NickNameNotion6);
 
@@ -196,7 +196,7 @@ public class NickNameManager : MonoBehaviour
 
     public void FreeSuccess()
     {
-        Debug.Log("´Ð³×ÀÓ º¯°æ ¼º°ø!");
+        Debug.Log("?????? ???? ????!");
 
         NotionManager.instance.UseNotion(NotionType.NickNameNotion6);
 
@@ -208,7 +208,7 @@ public class NickNameManager : MonoBehaviour
     public void Failure()
     {
         NotionManager.instance.UseNotion(NotionType.NickNameNotion5);
-        Debug.Log("ÀÌ¹Ì Á¸ÀçÇÏ´Â ´Ð³×ÀÓ ÀÔ´Ï´Ù.");
+        Debug.Log("???? ???????? ?????? ??????.");
     }
 
     public void CopyId()

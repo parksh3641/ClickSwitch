@@ -218,7 +218,7 @@ public class ResetManager : MonoBehaviour
         StartCoroutine(RemainTimerCourtion());
     }
 
-    void CheckGameMode()
+    public void CheckGameMode()
     {
         for(int i = 0; i < gameModeContentArray.Length; i ++)
         {

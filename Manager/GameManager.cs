@@ -480,8 +480,7 @@ public class GameManager : MonoBehaviour
     public void OpenGameMenuButton()
     {
         uiManager.OpenMenu();
-
-        CloseGameMode();
+        changeGameModeView.SetActive(false);
     }
 
     public void ChoiceGameType(GamePlayType type, GameModeType mode)
@@ -496,8 +495,6 @@ public class GameManager : MonoBehaviour
 
         gameModeText.name = gamePlayType.ToString();
         gameModeText.ReLoad();
-
-        uiManager.CloseMenu();
 
         tryCountView.SetActive(false);
         tryCountZeroView.SetActive(false);
@@ -540,7 +537,7 @@ public class GameManager : MonoBehaviour
 
         if (PlayfabManager.instance.isActive) PlayfabManager.instance.SetPlayerData(dicData);
 
-        CloseGameMode();
+        if (!changeMode) uiManager.CloseMenu();
     }
 
     public void ChangeGameMode(GamePlayType type)
@@ -554,14 +551,18 @@ public class GameManager : MonoBehaviour
         if (level.hard) hardGameModeLockObj.SetActive(false);
     }
 
-    public void CloseGameMode()
-    {
-        changeGameModeView.SetActive(false);
-    }
+    bool changeMode = false;
 
     public void ChoiceGameType(int number)
     {
+        changeMode = true;
+
         ChoiceGameType(gamePlayType, GameModeType.Easy + number);
+
+        uiManager.CheckMenu();
+        changeGameModeView.SetActive(false);
+
+        changeMode = false;
     }
 
     #endregion
