@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Sirenix.OdinInspector;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,10 +10,18 @@ public class ShopContent : MonoBehaviour
 
     public Image mainIcon;
     public LocalizationContent titleText;
-    public Text priceText;
 
+    [Space]
+    [Title("Obj")]
     public GameObject price;
-    public GameObject reward;
+    public GameObject coin;
+    public GameObject crystal;
+
+    [Space]
+    [Title("Text")]
+    public Text priceText;
+    public Text coinText;
+    public Text crystalText;
 
     Sprite[] mainIconArray;
 
@@ -25,7 +34,8 @@ public class ShopContent : MonoBehaviour
         mainIconArray = imageDataBase.GetShopArray();
 
         price.SetActive(false);
-        reward.SetActive(false);
+        coin.SetActive(false);
+        crystal.SetActive(false);
     }
 
     void Start()
@@ -53,56 +63,31 @@ public class ShopContent : MonoBehaviour
             case ShopType.WatchAd:
                 titleText.name = "WatchAd";
 
-                reward.SetActive(true);
+                coinText.text = "400";
+
+                coin.SetActive(true);
 
                 break;
             case ShopType.Coin1000:
                 titleText.name = "Coin1000";
 
-                switch (GameStateManager.instance.Language)
-                {
-                    case LanguageType.Korean:
-                        priceText.text = "₩ 1200";
-                        break;
-                    default:
-                        priceText.text = "USD $ 0.99";
-                        break;
-                }
+                crystalText.text = "60";
 
-                price.SetActive(true);
-
+                crystal.SetActive(true);
                 break;
             case ShopType.Coin2000:
                 titleText.name = "Coin2000";
 
-                switch (GameStateManager.instance.Language)
-                {
-                    case LanguageType.Korean:
-                        priceText.text = "₩ 2500";
-                        break;
-                    default:
-                        priceText.text = "USD $ 1.99";
-                        break;
-                }
+                crystalText.text = "500";
 
-                price.SetActive(true);
-
+                crystal.SetActive(true);
                 break;
             case ShopType.Coin3000:
                 titleText.name = "Coin3000";
 
-                switch (GameStateManager.instance.Language)
-                {
-                    case LanguageType.Korean:
-                        priceText.text = "₩ 3900";
-                        break;
-                    default:
-                        priceText.text = "USD $ 2.99";
-                        break;
-                }
+                crystalText.text = "4500";
 
-                price.SetActive(true);
-
+                crystal.SetActive(true);
                 break;
             case ShopType.Crystal100:
                 titleText.name = "Crystal100";
@@ -118,6 +103,46 @@ public class ShopContent : MonoBehaviour
                 }
 
                 price.SetActive(true);
+                break;
+            case ShopType.Crystal200:
+                titleText.name = "Crystal200";
+
+                switch (GameStateManager.instance.Language)
+                {
+                    case LanguageType.Korean:
+                        priceText.text = "₩ 6000";
+                        break;
+                    default:
+                        priceText.text = "USD $ 4.99";
+                        break;
+                }
+
+                price.SetActive(true);
+                break;
+            case ShopType.Crystal300:
+                titleText.name = "Crystal300";
+
+                switch (GameStateManager.instance.Language)
+                {
+                    case LanguageType.Korean:
+                        priceText.text = "₩ 12000";
+                        break;
+                    default:
+                        priceText.text = "USD $ 9.99";
+                        break;
+                }
+
+                price.SetActive(true);
+                break;
+            case ShopType.DailyReward:
+                titleText.name = "DailyReward";
+
+                coinText.text = "150";
+
+                coin.SetActive(true);
+
+                break;
+            case ShopType.PaidReward:
                 break;
         }
 

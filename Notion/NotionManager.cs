@@ -151,5 +151,6 @@ public enum NotionType
     LowCrystalNotion,
     UpgradeSuccess,
     UpgradeMax,
-    RestorePurchasesNotion
+    RestorePurchasesNotion,
+    NowReceivedNotion
 }

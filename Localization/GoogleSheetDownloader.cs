@@ -380,7 +380,7 @@ public class GoogleSheetDownloader : MonoBehaviour
         else
         {
             StopAllCoroutines();
-            messageText.text = "Reconnect internet...";
+            messageText.text = LocalizationManager.instance.GetString("NetworkConnectNotion");
             StartCoroutine(DelayCorution());
         }
     }

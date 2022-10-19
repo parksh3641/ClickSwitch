@@ -45,7 +45,6 @@ public class GameStateManager : MonoBehaviour
         public bool sfx = true;
         public bool vibration = true;
         public bool sleepMode = false;
-        public bool watchAd = true;
 
         [Space]
         [Title("Item")]
@@ -56,10 +55,18 @@ public class GameStateManager : MonoBehaviour
         public bool slow = false;
 
         [Space]
-        [Title("Event")]
+        [Title("Game Event")]
         public bool fail = false;
         public int tryCount = 2;
+
+        [Space]
+        [Title("Ad")]
+        public bool watchAd = true;
         public bool eventWatchAd = false;
+
+        [Space]
+        [Title("Daily")]
+        public bool dailyReward = false;
     }
 
     #region Data
@@ -360,6 +367,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.eventWatchAd = value;
+            SaveFile();
+        }
+    }
+
+    public bool DailyReward
+    {
+        get
+        {
+            return gameSettings.dailyReward;
+        }
+        set
+        {
+            gameSettings.dailyReward = value;
             SaveFile();
         }
     }

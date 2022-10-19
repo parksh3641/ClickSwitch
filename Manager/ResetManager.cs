@@ -87,6 +87,7 @@ public class ResetManager : MonoBehaviour
 
             GameStateManager.instance.TryCount = 2;
             GameStateManager.instance.EventWatchAd = false;
+            GameStateManager.instance.DailyReward = false;
         }
 
         if (ComparisonDate(playerDataBase.AttendanceDay, time))
@@ -135,6 +136,7 @@ public class ResetManager : MonoBehaviour
 
             GameStateManager.instance.TryCount = 2;
             GameStateManager.instance.EventWatchAd = false;
+            GameStateManager.instance.DailyReward = false;
         }
         else
         {

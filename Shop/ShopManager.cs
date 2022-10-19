@@ -19,7 +19,15 @@ public class ShopManager : MonoBehaviour
     public GameObject[] inAppPurchaseObjList;
 
     public ShopItemContent shopItemContent;
-    public RectTransform shopItemTransform;
+    public RectTransform[] scrollViewTransform;
+
+    [Space]
+    [Title("TopMenu")]
+    public Image[] topMenuImgArray;
+    public Sprite[] topMenuSpriteArray;
+
+    [Title("ScrollView")]
+    public GameObject[] scrollVeiwArray;
 
     [Space]
     [Title("BuyWindow")]
@@ -40,8 +48,10 @@ public class ShopManager : MonoBehaviour
     [Space]
     [Title("Ad")]
     public GameObject watchAdLock;
+    public GameObject dailyLock;
     public Text watchAdCountText;
 
+    private int topNumber = 0;
     private int adCoolTime = 0;
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(1);
@@ -70,7 +80,6 @@ public class ShopManager : MonoBehaviour
 
     void Start()
     {
-
     }
 
     public void Initialize()
@@ -82,7 +91,7 @@ public class ShopManager : MonoBehaviour
         for (int i = 0; i < shopDataBase.etcList.Count; i++)
         {
             ShopItemContent monster = Instantiate(shopItemContent);
-            monster.transform.parent = shopItemTransform;
+            monster.transform.parent = scrollViewTransform[1];
             monster.transform.position = Vector3.zero;
             monster.transform.rotation = Quaternion.identity;
             monster.transform.localScale = Vector3.one;
@@ -95,7 +104,7 @@ public class ShopManager : MonoBehaviour
         for (int i = 0; i < shopDataBase.ItemList.Count; i++)
         {
             ShopItemContent monster = Instantiate(shopItemContent);
-            monster.transform.parent = shopItemTransform;
+            monster.transform.parent = scrollViewTransform[1];
             monster.transform.position = Vector3.zero;
             monster.transform.rotation = Quaternion.identity;
             monster.transform.localScale = Vector3.one;
@@ -105,7 +114,22 @@ public class ShopManager : MonoBehaviour
             shopContentList.Add(monster);
         }
 
-        shopItemTransform.anchoredPosition = new Vector2(0, -9999);
+        for (int i = 0; i < scrollViewTransform.Length; i ++)
+        {
+            scrollViewTransform[i].anchoredPosition = new Vector2(0, -4999);
+        }
+
+        if (!GameStateManager.instance.DailyReward)
+        {
+            dailyLock.SetActive(false);
+        }
+        else
+        {
+            dailyLock.SetActive(true);
+        }
+
+        topNumber = -1;
+        ChangeTopMenu(0);
     }
 
     public void OpenShop()
@@ -159,6 +183,32 @@ public class ShopManager : MonoBehaviour
     public void CloseBuyWindow()
     {
         buyWindow.SetActive(false);
+    }
+
+    public void ChangeTopMenu(int number)
+    {
+        if (topNumber != number)
+        {
+            topNumber = number;
+
+            for (int i = 0; i < topMenuImgArray.Length; i++)
+            {
+                topMenuImgArray[i].sprite = topMenuSpriteArray[0];
+            }
+            topMenuImgArray[number].sprite = topMenuSpriteArray[1];
+
+            ChangeShopView(topNumber);
+        }
+    }
+
+    public void ChangeShopView(int number)
+    {
+        for(int i = 0; i < scrollVeiwArray.Length; i ++)
+        {
+            scrollVeiwArray[i].SetActive(false);
+        }
+
+        scrollVeiwArray[number].SetActive(true);
     }
 
     public void UpBuyCount()
@@ -310,12 +360,101 @@ public class ShopManager : MonoBehaviour
 
     public void SuccessWatchAd()
     {
-        NotionManager.instance.UseNotion(NotionType.SuccessWatchAd);
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 400);
 
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 300);
+        NotionManager.instance.UseNotion(NotionType.SuccessWatchAd);
 
         SetWatchAd(true);
     }
 
-#endregion
+    public void CustomReward(int number)
+    {
+        CustomReward(ShopType.RemoveAds + number);
+    }
+
+    public void CustomReward(ShopType type)
+    {
+        Debug.Log(type);
+        switch (type)
+        {
+            case ShopType.Coin1000:
+                if(playerDataBase.Coin + 1000 < 10000000)
+                {
+                    if (playerDataBase.Crystal >= 60)
+                    {
+                        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Crystal, 60);
+                        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 1000);
+
+                        NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
+                    }
+                    else
+                    {
+                        NotionManager.instance.UseNotion(NotionType.LowCrystalNotion);
+                    }
+                }
+                else
+                {
+                    NotionManager.instance.UseNotion(NotionType.FailBuyItem);
+                }
+                break;
+            case ShopType.Coin2000:
+                if (playerDataBase.Coin + 10000 < 10000000)
+                {
+                    if (playerDataBase.Crystal >= 500)
+                    {
+                        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Crystal, 500);
+                        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 10000);
+
+                        NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
+                    }
+                    else
+                    {
+                        NotionManager.instance.UseNotion(NotionType.LowCrystalNotion);
+                    }
+                }
+                else
+                {
+                    NotionManager.instance.UseNotion(NotionType.FailBuyItem);
+                }
+                break;
+            case ShopType.Coin3000:
+                if (playerDataBase.Coin + 100000 < 10000000)
+                {
+                    if (playerDataBase.Crystal >= 4500)
+                    {
+                        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Crystal, 4500);
+                        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 100000);
+
+                        NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
+                    }
+                    else
+                    {
+                        NotionManager.instance.UseNotion(NotionType.LowCrystalNotion);
+                    }
+                }
+                else
+                {
+                    NotionManager.instance.UseNotion(NotionType.FailBuyItem);
+                }
+                break;
+            case ShopType.DailyReward:
+                if(!GameStateManager.instance.DailyReward && !dailyLock.activeInHierarchy)
+                {
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 150);
+
+                    dailyLock.SetActive(true);
+
+                    NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
+
+                    GameStateManager.instance.DailyReward = true;
+                }
+                else
+                {
+                    NotionManager.instance.UseNotion(NotionType.NowReceivedNotion);
+                }
+                break;
+        }
+    }
+
+    #endregion
 }

@@ -94,7 +94,11 @@ public enum ShopType
     Coin1000,
     Coin2000,
     Coin3000,
-    Crystal100
+    Crystal100,
+    Crystal200,
+    Crystal300,
+    DailyReward,
+    PaidReward
 }
 
 public enum ItemType
@@ -127,7 +131,15 @@ public enum IconType
     Icon_11,
     Icon_12,
     Icon_13,
-    Icon_14
+    Icon_14,
+    Icon_15,
+    Icon_16,
+    Icon_17,
+    Icon_18,
+    Icon_19,
+    Icon_20,
+    Icon_21,
+    Icon_22,
 }
 
 public enum AdType

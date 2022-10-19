@@ -93,10 +93,6 @@ public class IconManager : MonoBehaviour
                 {
                     iconContentList[i].UnLock();
                 }
-                else
-                {
-
-                }
             }
 
             iconType++;

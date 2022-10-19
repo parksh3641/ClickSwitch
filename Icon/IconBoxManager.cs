@@ -66,7 +66,9 @@ public class IconBoxManager : MonoBehaviour
 
     public void Initialize()
     {
-        iconNumber = System.Enum.GetValues(typeof(IconType)).Length;
+        //iconNumber = System.Enum.GetValues(typeof(IconType)).Length;
+
+        iconNumber = 15;
 
         for (int i = 0; i < iconNumber; i++)
         {
@@ -187,7 +189,7 @@ public class IconBoxManager : MonoBehaviour
 
                 goldContent.AddGoldCount(200);
 
-                Debug.Log("이미 5개 이상 보유 하고 있기에 돈으로 지급합니다");
+                Debug.Log("Icon Coin Reward");
             }
 
             CheckBoxCount();
