@@ -44,8 +44,9 @@ public class PlayfabManager : MonoBehaviour
 
 #endif
 
-    public PlayerDataBase playerDataBase;
-    public ShopDataBase shopDataBase;
+    PlayerDataBase playerDataBase;
+    ShopDataBase shopDataBase;
+
 
     [Header("Entity")]
     private string entityId;
@@ -670,6 +671,12 @@ public class PlayfabManager : MonoBehaviour
                     {
                         IconType icon = (IconType)Enum.Parse(typeof(IconType), list.ItemId);
                         shopDataBase.SetIcon(icon, (int)list.RemainingUses);
+                    }
+
+                    if (list.ItemId.Contains("Banner_"))
+                    {
+                        BannerType banner = (BannerType)Enum.Parse(typeof(BannerType), list.ItemId);
+                        shopDataBase.SetBanner(banner, (int)list.RemainingUses);
                     }
 
                     shopDataBase.SetItemInstanceId(list.ItemId, list.ItemInstanceId);

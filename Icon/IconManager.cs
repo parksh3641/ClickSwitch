@@ -20,18 +20,22 @@ public class IconManager : MonoBehaviour
 
     public Image profileIcon;
 
+    public Text plusScoreText;
+
     bool delay = false;
 
 
     public List<IconContent> iconContentList = new List<IconContent>();
 
-    public ImageDataBase imageDataBase;
-    public PlayerDataBase playerDataBase;
+    PlayerDataBase playerDataBase;
+    ImageDataBase imageDataBase;
+    ShopDataBase shopDataBase;
 
     private void Awake()
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+        if (shopDataBase == null) shopDataBase = Resources.Load("ShopDataBase") as ShopDataBase;
 
         for (int i = 0; i < System.Enum.GetValues(typeof(IconType)).Length; i ++)
         {
@@ -75,6 +79,10 @@ public class IconManager : MonoBehaviour
         }
 
         iconContentList[playerDataBase.Icon].CheckMark(true);
+
+        int plusScore = shopDataBase.GetIconHoldNumber();
+
+        plusScoreText.text = LocalizationManager.instance.GetString("PlusScoreInfo") + " +" + (0.5f * plusScore).ToString() + "%";
 
         Initialize();
     }

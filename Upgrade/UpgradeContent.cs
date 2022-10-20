@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class UpgradeContent : MonoBehaviour
 {
-    UpgradeType upgradeType = UpgradeType.StartTime;
+    public UpgradeType upgradeType = UpgradeType.StartTime;
 
     public Image icon;
 
@@ -81,7 +81,7 @@ public class UpgradeContent : MonoBehaviour
         if (level >= 10)
         {
             nextValueText.text = "-";
-            upgradeValueText.text = "Max";
+            upgradeValueText.text = LocalizationManager.instance.GetString("Max");
         }
         else
         {

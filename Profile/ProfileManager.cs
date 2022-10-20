@@ -11,10 +11,17 @@ public class ProfileManager : MonoBehaviour
     [Title("Player")]
     public Text nickNameText;
     public Image iconImg;
+
+    [Space]
+    [Title("Text")]
+    public Text plusScoreText;
+    public Text plusExpText;
+    public Text plusCoinText;
     public Text totalScoreText;
     public Text totalComboText;
 
 
+    [Space]
     [Title("Infomation")]
     public ProfileContent profileContent;
 
@@ -26,12 +33,16 @@ public class ProfileManager : MonoBehaviour
     ImageDataBase imageDataBase;
     Sprite[] iconArray;
 
-    public PlayerDataBase playerDataBase;
+    PlayerDataBase playerDataBase;
+    ShopDataBase shopDataBase;
+    UpgradeDataBase upgradeDataBase;
 
     private void Awake()
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+        if (shopDataBase == null) shopDataBase = Resources.Load("ShopDataBase") as ShopDataBase;
+        if (upgradeDataBase == null) upgradeDataBase = Resources.Load("UpgradeDataBase") as UpgradeDataBase;
 
         iconArray = imageDataBase.GetIconArray();
 
@@ -46,6 +57,12 @@ public class ProfileManager : MonoBehaviour
             monster.gameObject.SetActive(true);
             profileContentList.Add(monster);
         }
+
+        plusScoreText.text = "0%";
+        plusExpText.text = "0%";
+        plusCoinText.text = "0%";
+        totalScoreText.text = "0";
+        totalComboText.text = "0";
 
         profileView.SetActive(false);
 
@@ -84,7 +101,24 @@ public class ProfileManager : MonoBehaviour
         profileContentList[4].InitState(LocalizationManager.instance.GetString("GameChoice5"), playerDataBase.BestTimingActionScore, playerDataBase.BestTimingActionCombo, iconArray[4]);
         profileContentList[5].InitState(LocalizationManager.instance.GetString("GameChoice6"), playerDataBase.BestDragActionScore, playerDataBase.BestDragActionCombo, iconArray[5]);
 
-        totalScoreText.text = " : " + playerDataBase.TotalScore.ToString();
-        totalComboText.text = " : " + playerDataBase.TotalCombo.ToString();
+        totalScoreText.text = playerDataBase.TotalScore.ToString();
+        totalComboText.text = playerDataBase.TotalCombo.ToString();
+
+        int plusScore = shopDataBase.GetIconHoldNumber();
+
+        plusScoreText.text = (0.5f * plusScore).ToString() + "%";
+
+        float plusExp = playerDataBase.AddExpLevel * upgradeDataBase.addExp.addValue;
+
+        plusExpText.text = plusExp.ToString() + "%";
+
+        int plusCoin = playerDataBase.Level + 1;
+
+        if(plusCoin >= 30)
+        {
+            plusCoin = 30;
+        }
+
+        plusCoinText.text = plusCoin.ToString() + "%";
     }
 }

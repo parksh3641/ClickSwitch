@@ -142,6 +142,33 @@ public enum IconType
     Icon_22,
 }
 
+public enum BannerType
+{
+    Banner_0,
+    Banner_1,
+    Banner_2,
+    Banner_3,
+    Banner_4,
+    Banner_5,
+    Banner_6,
+    Banner_7,
+    Banner_8,
+    Banner_9,
+    Banner_10,
+    Banner_11,
+    Banner_12,
+    Banner_13,
+    Banner_14,
+    Banner_15,
+    Banner_16,
+    Banner_17,
+    Banner_18,
+    Banner_19,
+    Banner_20,
+    Banner_21,
+    Banner_22,
+}
+
 public enum AdType
 {
     CoinX2,

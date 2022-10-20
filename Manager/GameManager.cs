@@ -483,6 +483,11 @@ public class GameManager : MonoBehaviour
         changeGameModeView.SetActive(false);
     }
 
+    public void CloseGameModeView()
+    {
+        changeGameModeView.SetActive(false);
+    }
+
     public void ChoiceGameType(GamePlayType type, GameModeType mode)
     {
         gamePlayType = type;

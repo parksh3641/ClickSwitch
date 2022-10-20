@@ -33,17 +33,22 @@ public class ShopDataBase : ScriptableObject
     [Title("ETC")]
     public List<ShopClass> etcList = new List<ShopClass>();
 
+    [Space]
+    [Title("Banner")]
+    public List<BannerClass> bannerList = new List<BannerClass>();
+
     public void Initialize()
     {
         itemList.Clear();
+        iconList.Clear();
+        etcList.Clear();
+        bannerList.Clear();
 
-        for(int i = 0; i < System.Enum.GetValues(typeof(ItemType)).Length; i ++)
+        for (int i = 0; i < System.Enum.GetValues(typeof(ItemType)).Length; i ++)
         {
             ShopClass shopClass = new ShopClass();
             itemList.Add(shopClass);
         }
-
-        iconList.Clear();
 
         for (int i = 0; i < System.Enum.GetValues(typeof(IconType)).Length; i++)
         {
@@ -53,11 +58,18 @@ public class ShopDataBase : ScriptableObject
             iconList.Add(iconClass);
         }
 
-        etcList.Clear();
         for (int i = 0; i < System.Enum.GetValues(typeof(ETCType)).Length; i++)
         {
             ShopClass shopClass = new ShopClass();
             etcList.Add(shopClass);
+        }
+
+        for (int i = 0; i < System.Enum.GetValues(typeof(BannerType)).Length; i++)
+        {
+            BannerClass bannerClass = new BannerClass();
+            BannerType bannerType = BannerType.Banner_0 + i;
+            bannerClass.bannerType = bannerType;
+            bannerList.Add(bannerClass);
         }
 
     }
@@ -194,6 +206,34 @@ public class ShopDataBase : ScriptableObject
             }
         }
         return number;
+    }
+
+    public int GetIconHoldNumber()
+    {
+        int number = 0;
+        for (int i = 0; i < iconList.Count; i++)
+        {
+            if(iconList[i].count >= 5)
+            {
+                number++;
+            }
+        }
+        return number + 3;
+    }
+
+    #endregion
+
+    #region Banner
+    public void SetBanner(BannerType type, int number)
+    {
+        for (int i = 0; i < bannerList.Count; i++)
+        {
+            if (bannerList[i].bannerType.Equals(type))
+            {
+                bannerList[i].count = number;
+                break;
+            }
+        }
     }
 
     #endregion

@@ -37,6 +37,8 @@ public class ImageDataBase : ScriptableObject
     [Title("Upgrade")]
     public Sprite[] upgradeIconArray;
 
+    [Title("Banner")]
+    public Sprite[] bannerArray;
 
 
     public Sprite[] GetFilpCardArray()
@@ -97,5 +99,10 @@ public class ImageDataBase : ScriptableObject
     public Sprite[] GetUpgradeArray()
     {
         return upgradeIconArray;
+    }
+
+    public Sprite[] GetBannerArray()
+    {
+        return bannerArray;
     }
 }

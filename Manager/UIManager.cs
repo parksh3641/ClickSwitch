@@ -137,15 +137,17 @@ public class UIManager : MonoBehaviour, IGameEvent
     public DailyManager dailyManager;
     public ModeManager modeManager;
     public UpgradeManager upgradeManager;
+    public BannerManager bannerManager;
 
     [Title("Animation")]
     public CoinAnimation goldAnimation;
 
 
     [Title("DataBase")]
-    public PlayerDataBase playerDataBase;
-    public UpgradeDataBase upgradeDataBase;
+    PlayerDataBase playerDataBase;
+    UpgradeDataBase upgradeDataBase;
     ImageDataBase imageDataBase;
+    ShopDataBase shopDataBase;
 
     private Dictionary<string, string> playerData = new Dictionary<string, string>();
 
@@ -158,6 +160,7 @@ public class UIManager : MonoBehaviour, IGameEvent
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
         if (upgradeDataBase == null) upgradeDataBase = Resources.Load("UpgradeDataBase") as UpgradeDataBase;
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+        if (shopDataBase == null) shopDataBase = Resources.Load("ShopDataBase") as ShopDataBase;
 
         iconArray = imageDataBase.GetIconArray();
 
@@ -606,6 +609,13 @@ public class UIManager : MonoBehaviour, IGameEvent
         FirebaseAnalytics.LogEvent("OpenUpgrade");
     }
 
+    public void OpenBanner()
+    {
+        bannerManager.OpenBanner();
+
+        FirebaseAnalytics.LogEvent("OpenBanner");
+    }
+
     public void OnLoginSuccess()
     {
         loadingUI.FadeIn();
@@ -733,6 +743,10 @@ public class UIManager : MonoBehaviour, IGameEvent
                 break;
         }
 
+        int plusScore = shopDataBase.GetIconHoldNumber();
+
+        score = score + (score * (plusScore * 0.005f));
+
         GameModeLevel gameModeLevel = playerDataBase.GetGameMode(GameStateManager.instance.GamePlayType);
 
         switch (GameStateManager.instance.GameModeType)
@@ -853,7 +867,7 @@ public class UIManager : MonoBehaviour, IGameEvent
         {
             report.getScore = (int)score;
         }
-
+        
         if(report.getCombo < comboManager.GetCombo())
         {
             report.getCombo = comboManager.GetCombo();
@@ -1000,7 +1014,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
                 plus = level / 100.0f;
 
-                plusGoldText.text = "+ " + level + "%";
+                plusGoldText.text = "+" + level + "%";
             }
 
             if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, (int)(money + (money * plus)));
@@ -1034,10 +1048,10 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         if(GameStateManager.instance.Exp)
         {
-            expPlus += 50;
+            expPlus += 30;
         }
 
-        plusExpText.text = "+ " + expPlus + "%";
+        plusExpText.text = "+" + expPlus + "%";
 
         exp = exp + (exp * (expPlus /100));
 
