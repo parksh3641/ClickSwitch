@@ -74,6 +74,8 @@ public class PlayerDataBase : ScriptableObject
     private int experience = 0;
     [SerializeField]
     private int icon = 0;
+    [SerializeField]
+    private int banner = 0;
 
     [Space]
     [Title("Item")]
@@ -170,6 +172,7 @@ public class PlayerDataBase : ScriptableObject
         level = 0;
         experience = 0;
         icon = 0;
+        banner = 0;
 
         clock = 0;
         shield = 0;
@@ -442,6 +445,18 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             icon = value;
+        }
+    }
+
+    public int Banner
+    {
+        get
+        {
+            return banner;
+        }
+        set
+        {
+            banner = value;
         }
     }
 

@@ -7,6 +7,7 @@ public class RankContent : MonoBehaviour
 {
     public GameObject frame;
 
+    public Image banner;
     public Text indexText;
     public Image indexRankImg;
     public Sprite[] rankIconList;
@@ -19,11 +20,11 @@ public class RankContent : MonoBehaviour
 
     private void Awake()
     {
+        if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+
         indexText.text = "";
         nickNameText.text = "";
         scoreText.text = "";
-
-        if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
     }
 
     public void InitState(int index, string country, string nickName, int score, bool checkMy)
@@ -38,6 +39,7 @@ public class RankContent : MonoBehaviour
             indexRankImg.enabled = false;
         }
 
+        banner.sprite = imageDataBase.GetBannerArray(BannerType.Banner_0);
         indexText.text = index.ToString();
         nickNameText.text = nickName;
         iconImg.sprite = imageDataBase.GetProfileIconArray(IconType.Icon_0);
@@ -58,4 +60,8 @@ public class RankContent : MonoBehaviour
         iconImg.sprite = imageDataBase.GetProfileIconArray(type);
     }
 
+    public void BannerState(BannerType type)
+    {
+        banner.sprite = imageDataBase.GetBannerArray(type);
+    }
 }

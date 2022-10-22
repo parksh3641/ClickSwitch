@@ -413,6 +413,12 @@ public class UIManager : MonoBehaviour, IGameEvent
         resetManager.OpenMenu();
     }
 
+    public void OpenMenuToTrophy()
+    {
+        resetManager.OpenMenu();
+        trophyManager.OpenTrophy();
+    }
+
     public void CloseMenu()
     {
         resetManager.gameMenuView.SetActive(false);
@@ -734,10 +740,10 @@ public class UIManager : MonoBehaviour, IGameEvent
             case GameModeType.Easy:
                 break;
             case GameModeType.Normal:
-                score = score + (score * 0.1f);
+                score = score + (score * 0.15f);
                 break;
             case GameModeType.Hard:
-                score = score + (score * 0.2f);
+                score = score + (score * 0.3f);
                 break;
             case GameModeType.Perfect:
                 break;
@@ -1063,6 +1069,8 @@ public class UIManager : MonoBehaviour, IGameEvent
         nowScoreText.text = score.ToString();
         nowComboText.text = combo.ToString();
         getExpText.text = ((int)exp).ToString();
+
+        profileManager.Initialize();
 
         GameReset();
     }

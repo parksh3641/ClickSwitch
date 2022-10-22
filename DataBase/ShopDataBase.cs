@@ -236,5 +236,19 @@ public class ShopDataBase : ScriptableObject
         }
     }
 
+    public BannerClass GetBannerState(BannerType type)
+    {
+        BannerClass bannerClass = new BannerClass();
+        for (int i = 0; i < bannerList.Count; i++)
+        {
+            if (bannerList[i].bannerType.Equals(type))
+            {
+                bannerClass = bannerList[i];
+            }
+        }
+
+        return bannerClass;
+    }
+
     #endregion
 }

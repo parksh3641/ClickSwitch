@@ -368,6 +368,32 @@ public class RankingManager : MonoBehaviour
 
         myRankContent.IconState((IconType)playerDataBase.Icon);
 
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("Banner", SetBanner);
+    }
+
+    public void SetBanner(GetLeaderboardResult result)
+    {
+        var curBoard = result.Leaderboard;
+
+        foreach (PlayerLeaderboardEntry player in curBoard)
+        {
+            for (int i = 0; i < rankContentList.Count; i++)
+            {
+                if (rankContentList[i].nickNameText.text.Equals(player.DisplayName) ||
+                    rankContentList[i].nickNameText.text.Equals(player.PlayFabId))
+                {
+                    if (player.StatValue > 0)
+                    {
+                        rankContentList[i].BannerState((BannerType)player.StatValue);
+                    }
+
+                    continue;
+                }
+            }
+        }
+
+        myRankContent.BannerState((BannerType)playerDataBase.Banner);
+
         Invoke("Delay", 0.5f);
     }
 

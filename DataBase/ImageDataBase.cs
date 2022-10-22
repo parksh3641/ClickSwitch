@@ -105,4 +105,9 @@ public class ImageDataBase : ScriptableObject
     {
         return bannerArray;
     }
+
+    public Sprite GetBannerArray(BannerType type)
+    {
+        return bannerArray[(int)type];
+    }
 }

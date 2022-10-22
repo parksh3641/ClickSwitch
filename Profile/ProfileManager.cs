@@ -8,6 +8,12 @@ public class ProfileManager : MonoBehaviour
 {
     public GameObject profileView;
 
+    [Space]
+    [Title("Main")]
+    public Text mainNickNameText;
+    public Text mainTotalScoreText;
+    public Text mainTotalComboText;
+
     [Title("Player")]
     public Text nickNameText;
     public Image iconImg;
@@ -81,6 +87,21 @@ public class ProfileManager : MonoBehaviour
         {
             profileView.SetActive(false);
         }
+    }
+
+    public void Initialize()
+    {
+        if (GameStateManager.instance.NickName != null)
+        {
+            mainNickNameText.text = GameStateManager.instance.NickName;
+        }
+        else
+        {
+            mainNickNameText.text = GameStateManager.instance.CustomId;
+        }
+
+        mainTotalScoreText.text = playerDataBase.TotalScore.ToString();
+        mainTotalComboText.text = playerDataBase.TotalCombo.ToString();
     }
 
     void SetProfile()

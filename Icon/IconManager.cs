@@ -12,17 +12,20 @@ public class IconClass
 
 public class IconManager : MonoBehaviour
 {
+    IconType iconType = IconType.Icon_0;
+
     public GameObject iconView;
 
     public IconContent iconContent;
     public RectTransform iconContentTransform;
 
 
+    public Image mainIcon;
     public Image profileIcon;
 
     public Text plusScoreText;
 
-    bool delay = false;
+    public GameObject saveLockObject;
 
 
     public List<IconContent> iconContentList = new List<IconContent>();
@@ -51,16 +54,15 @@ public class IconManager : MonoBehaviour
         }
 
         iconView.SetActive(false);
+        saveLockObject.SetActive(false);
 
-        iconContentTransform.anchoredPosition = new Vector2(0, -999);
+        iconContentTransform.anchoredPosition = new Vector2(0, -9999);
     }
 
     public void OpenIcon()
     {
         if (!iconView.activeSelf)
         {
-            delay = false;
-
             iconView.SetActive(true);
 
             CheckMyIcon();
@@ -108,31 +110,49 @@ public class IconManager : MonoBehaviour
 
         iconType = IconType.Icon_0;
 
+        mainIcon.sprite = imageDataBase.GetProfileIconArray(iconType + playerDataBase.Icon);
         profileIcon.sprite = imageDataBase.GetProfileIconArray(iconType + playerDataBase.Icon);
     }
 
     public void UseIcon(IconType type)
     {
-        if ((int)type == playerDataBase.Icon) return;
+        if ((int)type == playerDataBase.Icon)
+        {
+            saveLockObject.SetActive(true);
+        }
+        else
+        {
+            saveLockObject.SetActive(false);
+        }
 
-        if (delay) return;
+        for (int i = 0; i < iconContentList.Count; i++)
+        {
+            iconContentList[i].CheckMark(false);
+        }
 
-        profileIcon.sprite = imageDataBase.GetProfileIconArray(type);
+        iconContentList[(int)type].CheckMark(true);
 
-        playerDataBase.Icon = (int)type;
-
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Icon", (int)type);
-
-        CheckMyIcon();
-
-        delay = true;
-        StartCoroutine(WaitDelay());
+        iconType = type;
     }
 
-    IEnumerator WaitDelay()
+    public void SaveIcon()
     {
-        yield return new WaitForSeconds(0.5f);
-        delay = false;
+        playerDataBase.Icon = (int)iconType;
 
+        mainIcon.sprite = imageDataBase.GetProfileIconArray(iconType);
+        profileIcon.sprite = imageDataBase.GetProfileIconArray(iconType);
+
+        for (int i = 0; i < iconContentList.Count; i++)
+        {
+            iconContentList[i].CheckMark(false);
+        }
+
+        iconContentList[(int)iconType].CheckMark(true);
+
+        saveLockObject.SetActive(true);
+
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Icon", (int)iconType);
+
+        NotionManager.instance.UseNotion(NotionType.SaveNotion);
     }
 }

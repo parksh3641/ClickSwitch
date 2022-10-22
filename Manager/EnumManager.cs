@@ -165,8 +165,6 @@ public enum BannerType
     Banner_18,
     Banner_19,
     Banner_20,
-    Banner_21,
-    Banner_22,
 }
 
 public enum AdType

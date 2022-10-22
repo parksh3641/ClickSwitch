@@ -8,6 +8,7 @@ public class StateManager : MonoBehaviour
 
     public bool isInit = false;
 
+    public ProfileManager profileManager;
     public NickNameManager nickNameManager;
     public ShopManager shopManager;
     public ItemManager itemManager;
@@ -36,6 +37,7 @@ public class StateManager : MonoBehaviour
         {
             isInit = true;
 
+            profileManager.Initialize();
             nickNameManager.Initialize();
             shopManager.Initialize();
             itemManager.Initialize();

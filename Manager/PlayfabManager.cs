@@ -839,6 +839,9 @@ public class PlayfabManager : MonoBehaviour
                        case "IconBox":
                            playerDataBase.IconBox = statistics.Value;
                            break;
+                       case "Banner":
+                           playerDataBase.Banner = statistics.Value;
+                           break;
                    }
                }
            })
