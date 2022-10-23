@@ -138,6 +138,13 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private int addExpLevel = 0;
 
+    [Space]
+    [Title("Progress")]
+    [SerializeField]
+    private string freeProgress = "";
+    [SerializeField]
+    private string paidProgress = "";
+
 
     public delegate void BoxEvent();
     public static event BoxEvent eGetBox;
@@ -219,6 +226,9 @@ public class PlayerDataBase : ScriptableObject
             level.gamePlayType = GamePlayType.GameChoice1 + i;
             gameModeLevelList.Add(level);
         }
+
+        freeProgress = "000000000000000000000000000000";
+        paidProgress = "000000000000000000000000000000";
     }
 
     public int TotalScore
@@ -612,6 +622,31 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public string FreeProgress
+    {
+        get
+        {
+            return freeProgress;
+        }
+        set
+        {
+            freeProgress = value;
+        }
+    }
+
+    public string PaidProgress
+    {
+        get
+        {
+            return paidProgress;
+        }
+        set
+        {
+            paidProgress = value;
+        }
+    }
+
+
     public void SetTrophyData(TrophyData data)
     {
         trophyDataList.Add(data);
@@ -890,4 +925,19 @@ public class PlayerDataBase : ScriptableObject
             }
         }
     }
+
+    #region Progress
+    public void SetProgress(RewardReceiveType type, string str)
+    {
+        switch (type)
+        {
+            case RewardReceiveType.Free:
+                freeProgress = str;
+                break;
+            case RewardReceiveType.Paid:
+                paidProgress = str;
+                break;
+        }
+    }
+    #endregion
 }

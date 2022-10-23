@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -10,6 +10,8 @@ public class NickNameManager : MonoBehaviour
     public GameObject nickNameView;
 
     public GameObject nickNameFirstView;
+
+    public ProfileManager profileManager;
 
     public Text nickNameText;
     public InputField inputField;
@@ -67,7 +69,7 @@ public class NickNameManager : MonoBehaviour
     {
         if (playerDataBase.Coin >= 100)
         {
-            string Check = Regex.Replace(inputField.text, @"[^0-9a-zA-Z?-?]", "", RegexOptions.Singleline);
+            string Check = Regex.Replace(inputField.text, @"[^a-zA-Z0-9가-힣]", "", RegexOptions.Singleline);
             Check = Regex.Replace(inputField.text, @"[^\w\.@-]", "", RegexOptions.Singleline);
 
             for(int i = 0; i < lines.Length; i ++)
@@ -75,7 +77,6 @@ public class NickNameManager : MonoBehaviour
                 if (inputField.text.Contains(lines[i]))
                 {
                     NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
-                    Debug.Log("?????????? ?????? ?? ????????.");
                     return;
                 }
             }
@@ -103,31 +104,27 @@ public class NickNameManager : MonoBehaviour
                     else
                     {
                         NotionManager.instance.UseNotion(NotionType.NickNameNotion1);
-                        Debug.Log("?????? ?????? ??????.");
                     }
                 }
                 else
                 {
                     NotionManager.instance.UseNotion(NotionType.NickNameNotion2);
-                    Debug.Log("2???? ?????????? ??????.");
                 }
             }
             else
             {
                 NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
-                Debug.Log("?????????? ?????? ?? ????????.");
             }
         }
         else
         {
             NotionManager.instance.UseNotion(NotionType.NickNameNotion4);
-            Debug.Log("?????? ??????????.");
         }
     }
 
     public void CheckFreeNickName()
     {
-            string Check = Regex.Replace(inputFieldFree.text, @"[^a-zA-Z0-9??-?R]", "", RegexOptions.Singleline);
+            string Check = Regex.Replace(inputFieldFree.text, @"[^a-zA-Z0-9가-힣]", "", RegexOptions.Singleline);
             Check = Regex.Replace(inputFieldFree.text, @"[^\w\.@-]", "", RegexOptions.Singleline);
 
             for (int i = 0; i < lines.Length; i++)
@@ -135,7 +132,6 @@ public class NickNameManager : MonoBehaviour
                 if (inputFieldFree.text.Contains(lines[i]))
                 {
                     NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
-                    Debug.Log("?????????? ?????? ?? ????????.");
                     return;
                 }
             }
@@ -163,27 +159,22 @@ public class NickNameManager : MonoBehaviour
                 else
                 {
                     NotionManager.instance.UseNotion(NotionType.NickNameNotion1);
-                    Debug.Log("?????? ?????? ??????.");
                 }
             }
             else
             {
                 NotionManager.instance.UseNotion(NotionType.NickNameNotion2);
-                Debug.Log("2???? ?????????? ??????.");
             }
         }
         else
         {
             NotionManager.instance.UseNotion(NotionType.NickNameNotion3);
-            Debug.Log("?????????? ?????? ?? ????????.");
         }
     }
 
     public void Success()
     {
-        Debug.Log("?????? ???? ????!");
-
-        NotionManager.instance.UseNotion(NotionType.NickNameNotion6);
+        profileManager.Initialize();
 
         nickNameText.text = GameStateManager.instance.NickName;
 
@@ -191,13 +182,13 @@ public class NickNameManager : MonoBehaviour
 
         if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Coin, 100);
 
+        NotionManager.instance.UseNotion(NotionType.NickNameNotion6);
+
         nickNameView.SetActive(false);
     }
 
     public void FreeSuccess()
     {
-        Debug.Log("?????? ???? ????!");
-
         NotionManager.instance.UseNotion(NotionType.NickNameNotion6);
 
         nickNameText.text = GameStateManager.instance.NickName;
@@ -208,7 +199,6 @@ public class NickNameManager : MonoBehaviour
     public void Failure()
     {
         NotionManager.instance.UseNotion(NotionType.NickNameNotion5);
-        Debug.Log("???? ???????? ?????? ??????.");
     }
 
     public void CopyId()

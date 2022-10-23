@@ -14,7 +14,7 @@ public class ItemContent : MonoBehaviour
 
     public GameObject frame;
 
-    Sprite[] itemBackgroundArray;
+    Sprite[] rankArray;
     Sprite[] itemArray;
 
 
@@ -28,7 +28,7 @@ public class ItemContent : MonoBehaviour
     {
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDatabase") as ImageDataBase;
 
-        itemBackgroundArray = imageDataBase.GetItemBackgroundArray();
+        rankArray = imageDataBase.GetRankArray();
         itemArray = imageDataBase.GetItemArray();
     }
 
@@ -38,7 +38,24 @@ public class ItemContent : MonoBehaviour
         itemType = type;
         count = number;
 
-        background.sprite = itemBackgroundArray[(int)itemType];
+        switch (type)
+        {
+            case ItemType.Clock:
+                background.sprite = rankArray[0];
+                break;
+            case ItemType.Shield:
+                background.sprite = rankArray[0];
+                break;
+            case ItemType.Combo:
+                background.sprite = rankArray[0];
+                break;
+            case ItemType.Exp:
+                background.sprite = rankArray[1];
+                break;
+            case ItemType.Slow:
+                background.sprite = rankArray[1];
+                break;
+        }
         icon.sprite = itemArray[(int)itemType];
         countText.text = count.ToString();
 

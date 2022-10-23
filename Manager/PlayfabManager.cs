@@ -900,7 +900,14 @@ public class PlayfabManager : MonoBehaviour
                     string[] number = key.Split('_');
                     level = JsonUtility.FromJson<GameModeLevel>(eachData.Value.Value);
                     playerDataBase.SetGameMode(GamePlayType.GameChoice1 + int.Parse(number[1]), level);
-
+                }
+                else if (key.Contains("FreeProgress"))
+                {
+                    playerDataBase.SetProgress(RewardReceiveType.Free, eachData.Value.Value);
+                }
+                else if (key.Contains("PaidProgress"))
+                {
+                    playerDataBase.SetProgress(RewardReceiveType.Paid, eachData.Value.Value);
                 }
             }
         }, DisplayPlayfabError);

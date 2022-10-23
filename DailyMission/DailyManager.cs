@@ -229,7 +229,7 @@ public class DailyManager : MonoBehaviour
     {
         NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
 
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 100);
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 300);
 
         playerDataBase.SetDailyMissionClear(dailyMission);
 
@@ -266,7 +266,8 @@ public class DailyManager : MonoBehaviour
 
             if (PlayfabManager.instance.isActive)
             {
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 20);
+                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 500);
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("IconBox", 1);
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyMissionClear", 1);
             }
 

@@ -11,12 +11,15 @@ public class LevelManager : MonoBehaviour
     public Image profileFillamount;
 
     public GameObject levelupView;
+    public GameObject showVCView;
 
     public Text levelUpText; //´ÙÀ½ ·¹º§
-    public Text coinUpText; //ÄÚÀÎ È¹µæ·®
+    public Text bounsInfoText; //ÄÚÀÎ È¹µæ·®
+    public Text coinText;
 
     private int level = 0;
     private int exp = 0;
+    private int coin = 0;
 
     private float defaultExp = 1000;
     private float addExp = 100;
@@ -89,17 +92,24 @@ public class LevelManager : MonoBehaviour
     public void OpenLevelView()
     {
         levelupView.SetActive(true);
+        showVCView.SetActive(true);
 
         levelUpText.text = (level + 1).ToString();
         if (level + 1 > 29) level = 29;
-        coinUpText.text = LocalizationManager.instance.GetString("Bouns") + " + " + (level + 1) + "%";
+        bounsInfoText.text = LocalizationManager.instance.GetString("PlusCoinInfo") + " +" + (level + 1) + "%";
+
+        coin = 500 + ((level + 1) * 100);
+
+        coinText.text = "x" + coin.ToString();
+
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, coin);
 
         soundManager.PlaySFX(GameSfxType.LevelUp);
-
     }
 
     public void CloseLevelView()
     {
         levelupView.SetActive(false);
+        showVCView.SetActive(false);
     }
 }

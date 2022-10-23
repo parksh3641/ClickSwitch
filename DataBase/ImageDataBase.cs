@@ -7,6 +7,9 @@ using UnityEngine.UI;
 [CreateAssetMenu(fileName = "ImageDataBase", menuName = "ScriptableObjects/ImageDataBase")]
 public class ImageDataBase : ScriptableObject
 {
+    [Title("Rank")]
+    public Sprite[] rankArray;
+
     [Title("FilpCard")]
     public Sprite[] filpCardArray;
 
@@ -22,24 +25,27 @@ public class ImageDataBase : ScriptableObject
     [Title("Country")]
     public Sprite[] countryArray;
 
-    [Title("Profile Icon")]
-    public Sprite[] profileIconArray;
-
     [Title("Shop")]
     public Sprite[] shopArray;
     public Sprite[] vcArray;
 
     [Title("Item")]
-    public Sprite[] itemBackgroundArray;
     public Sprite[] itemArray;
     public Sprite[] etcArray;
 
     [Title("Upgrade")]
     public Sprite[] upgradeIconArray;
 
+    [Title("Profile Icon")]
+    public Sprite[] profileIconArray;
+
     [Title("Banner")]
     public Sprite[] bannerArray;
 
+    public Sprite[] GetRankArray()
+    {
+        return rankArray;
+    }
 
     public Sprite[] GetFilpCardArray()
     {
@@ -61,6 +67,11 @@ public class ImageDataBase : ScriptableObject
         return modeBackgroundArray;
     }
 
+    public Sprite[] GetProfileIconArray()
+    {
+        return profileIconArray;
+    }
+
     public Sprite GetProfileIconArray(IconType type)
     {
         return profileIconArray[(int)type];
@@ -79,11 +90,6 @@ public class ImageDataBase : ScriptableObject
     public Sprite[] GetVCArray()
     {
         return vcArray;
-    }
-
-    public Sprite[] GetItemBackgroundArray()
-    {
-        return itemBackgroundArray;
     }
 
     public Sprite[] GetItemArray()

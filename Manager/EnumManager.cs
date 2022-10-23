@@ -140,6 +140,11 @@ public enum IconType
     Icon_20,
     Icon_21,
     Icon_22,
+    Icon_23,
+    Icon_24,
+    Icon_25,
+    Icon_26,
+    Icon_27,
 }
 
 public enum BannerType
@@ -190,7 +195,9 @@ public enum RewardType
     Combo,
     Exp,
     Slow,
-    IconBox
+    IconBox,
+    Icon,
+    Banner,
 }
 
 public enum UpgradeType
@@ -198,5 +205,13 @@ public enum UpgradeType
     StartTime,
     Critical,
     Burning,
-    AddExp
+    AddExp,
+    //AddGold,
+    //ComboTime
+}
+
+public enum RewardReceiveType
+{
+    Free,
+    Paid
 }

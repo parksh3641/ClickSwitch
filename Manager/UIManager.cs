@@ -138,6 +138,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     public ModeManager modeManager;
     public UpgradeManager upgradeManager;
     public BannerManager bannerManager;
+    public ProgressManager progressManager;
 
     [Title("Animation")]
     public CoinAnimation goldAnimation;
@@ -360,38 +361,30 @@ public class UIManager : MonoBehaviour, IGameEvent
         if (GameStateManager.instance.Clock)
         {
             itemUseContentArray[0].UseItem();
-
-            FirebaseAnalytics.LogEvent("ItemUse : Timer");
         }
         if (GameStateManager.instance.Shield)
         {
             itemUseContentArray[1].UseItem();
-
-            FirebaseAnalytics.LogEvent("ItemUse : Shield");
         }
         if (GameStateManager.instance.Combo)
         {
             itemUseContentArray[2].UseItem();
-
-            FirebaseAnalytics.LogEvent("ItemUse : Combo");
         }
         if (GameStateManager.instance.Exp)
         {
             itemUseContentArray[3].UseItem();
-
-            FirebaseAnalytics.LogEvent("ItemUse : Exp");
         }
         if (GameStateManager.instance.Slow)
         {
             itemUseContentArray[4].UseItem();
-
-            FirebaseAnalytics.LogEvent("ItemUse : Slow");
         }
     }
 
     public void UsedItem(ItemType type)
     {
         itemUseContentArray[(int)type].UsedItem();
+
+        FirebaseAnalytics.LogEvent(type.ToString());
     }
 
     void SetEtcUI(bool check)
@@ -620,6 +613,13 @@ public class UIManager : MonoBehaviour, IGameEvent
         bannerManager.OpenBanner();
 
         FirebaseAnalytics.LogEvent("OpenBanner");
+    }
+
+    public void OpenProgress()
+    {
+        progressManager.OpenProgress();
+
+        FirebaseAnalytics.LogEvent("OpenProgress");
     }
 
     public void OnLoginSuccess()
@@ -1001,7 +1001,7 @@ public class UIManager : MonoBehaviour, IGameEvent
         UpdateTotalCombo();
 
 
-        money = (int)(score / 5);
+        money = (int)(score / 3);
 
         int level = playerDataBase.Level + 1;
 
@@ -1066,7 +1066,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         goldAnimation.OnPlayExpAnimation();
 
-        nowScoreText.text = score.ToString();
+        nowScoreText.text = ((int)score).ToString();
         nowComboText.text = combo.ToString();
         getExpText.text = ((int)exp).ToString();
 

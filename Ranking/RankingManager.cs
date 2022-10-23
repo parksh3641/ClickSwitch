@@ -145,7 +145,7 @@ public class RankingManager : MonoBehaviour
                 }
                 else
                 {
-                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("MoleCatchScore", SetRanking);
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("MoleCatchCombo", SetRanking);
                 }
 
                 break;
