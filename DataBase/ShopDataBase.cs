@@ -181,6 +181,18 @@ public class ShopDataBase : ScriptableObject
         }
     }
 
+    public void AddIconAll(IconType type)
+    {
+        for (int i = 0; i < iconList.Count; i++)
+        {
+            if (iconList[i].iconType.Equals(type))
+            {
+                iconList[i].count = 5;
+                break;
+            }
+        }
+    }
+
     public IconClass GetIconState(IconType type)
     {
         IconClass iconClass = new IconClass();

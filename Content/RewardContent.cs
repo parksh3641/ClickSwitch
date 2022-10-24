@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class RewardContent : MonoBehaviour
 {
     RewardClass rewardClass;
+    public int index = 0;
 
     [Title("Main")]
     public RectTransform main;
@@ -15,6 +16,7 @@ public class RewardContent : MonoBehaviour
     [Space]
     public Image icon;
     public Text countText;
+    public LocalizationContent nameText;
 
     [Space]
     [Title("Banner")]
@@ -22,7 +24,12 @@ public class RewardContent : MonoBehaviour
     public Image bannerIcon;
     public Text nickNameText;
 
+    [Space]
+    [Title("Paid")]
+    public GameObject paidEffect;
+    public GameObject paidFocus;
 
+    [Space]
     public GameObject lockObject;
     public GameObject checkMark;
 
@@ -50,18 +57,24 @@ public class RewardContent : MonoBehaviour
         iconArray = imageDataBase.GetProfileIconArray();
         bannerArray = imageDataBase.GetBannerArray();
 
+        paidEffect.gameObject.SetActive(false);
+        paidFocus.SetActive(false);
         lockObject.SetActive(true);
         checkMark.SetActive(false);
         bannerObject.SetActive(false);
     }
 
-    public void Initialize(ProgressManager manager, RewardClass _rewardClass)
+    public void Initialize(ProgressManager manager, RewardClass _rewardClass, int number)
     {
         progressManager = manager;
 
         rewardClass = _rewardClass;
 
+        index = number;
+
         countText.text = "x" + rewardClass.count.ToString();
+
+        nameText.name = "";
 
         switch (rewardClass.rewardType)
         {
@@ -110,14 +123,16 @@ public class RewardContent : MonoBehaviour
                 mainBackground.sprite = rankArray[2];
 
                 countText.text = "";
-
+                nameText.name = LocalizationManager.instance.GetString("Icon");
                 break;
             case RewardType.Banner:
                 icon.gameObject.SetActive(false);
-                mainBackground.sprite = rankArray[3];
+                mainBackground.sprite = rankArray[2];
 
                 main.sizeDelta = new Vector2(350, 200);
+                paidFocus.GetComponent<RectTransform>().sizeDelta = new Vector2(360, 210);
                 lockObject.GetComponent<RectTransform>().sizeDelta = new Vector2(350, 200);
+
                 bannerObject.SetActive(true);
                 bannerIcon.sprite = bannerArray[(int)rewardClass.bannerType];
 
@@ -131,15 +146,21 @@ public class RewardContent : MonoBehaviour
                 }
 
                 countText.text = "";
-
+                nameText.name = LocalizationManager.instance.GetString("Banner");
                 break;
         }
-        UnLock();
-    }
 
-    public void InitState()
-    {
+        switch (rewardClass.rewardReceiveType)
+        {
+            case RewardReceiveType.Free:
+                break;
+            case RewardReceiveType.Paid:
+                paidEffect.gameObject.SetActive(true);
+                paidFocus.SetActive(true);
+                break;
+        }
 
+        nameText.ReLoad();
     }
 
     public void UnLock()
@@ -156,7 +177,10 @@ public class RewardContent : MonoBehaviour
     {
         if(!lockObject.activeInHierarchy)
         {
-            progressManager.Receive(rewardClass);
+            progressManager.ReceiveButton(rewardClass, index);
+
+            lockObject.SetActive(true);
+            CheckMark(true);
         }
     }
 }

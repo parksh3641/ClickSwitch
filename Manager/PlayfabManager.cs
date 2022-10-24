@@ -642,7 +642,12 @@ public class PlayfabManager : MonoBehaviour
                         playerDataBase.RemoveAd = true;
                     }
 
-                    if(list.ItemId.Equals("Clock"))
+                    if (list.ItemId.Equals("PaidProgress"))
+                    {
+                        playerDataBase.PaidProgress = true;
+                    }
+
+                    if (list.ItemId.Equals("Clock"))
                     {
                         playerDataBase.Clock = (int)list.RemainingUses;
                     }
@@ -1503,6 +1508,23 @@ public class PlayfabManager : MonoBehaviour
         }
     }
 
+    public void GrantItemToUser(string catalogversion, List<string> itemIds)
+    {
+        try
+        {
+            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+            {
+                FunctionName = "GrantItemToUser",
+                FunctionParameter = new { CatalogVersion = catalogversion, ItemIds = itemIds },
+                GeneratePlayStreamEvent = true,
+            }, OnCloudUpdateStats, DisplayPlayfabError);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e.Message);
+        }
+    }
+
     public void RestorePurchases()
     {
         if (isDelay) return;
@@ -1523,6 +1545,11 @@ public class PlayfabManager : MonoBehaviour
                     if (list.ItemId.Equals("RemoveAds"))
                     {
                         playerDataBase.RemoveAd = true;
+                    }
+
+                    if (list.ItemId.Equals("PaidProgress"))
+                    {
+                        playerDataBase.PaidProgress = true;
                     }
                 }
             }

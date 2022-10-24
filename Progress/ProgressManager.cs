@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ProgressManager : MonoBehaviour
 {
@@ -10,19 +12,26 @@ public class ProgressManager : MonoBehaviour
     public ProgressContent progressContent;
     public RectTransform progressContentTransform;
 
+    public Text totalScoreText;
+    public Text levelText;
+    public Image fillAmount;
+
+    public SoundManager soundManager;
 
     List<ProgressContent> progressContentList = new List<ProgressContent>();
 
     Dictionary<string, string> playerData = new Dictionary<string, string>();
-
+    List<string> rewardID = new List<string>();
 
     PlayerDataBase playerDataBase;
     ProgressDataBase progressDataBase;
+    ShopDataBase shopDataBase;
 
     private void Awake()
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
         if (progressDataBase == null) progressDataBase = Resources.Load("ProgressDataBase") as ProgressDataBase;
+        if (shopDataBase == null) shopDataBase = Resources.Load("ShopDataBase") as ShopDataBase;
 
         progressView.SetActive(false);
 
@@ -67,21 +76,119 @@ public class ProgressManager : MonoBehaviour
 
     public void CheckProgress()
     {
+        int score = playerDataBase.TotalScore;
+        int level = score / 300;
+        int goal = (level + 1) * 300;
 
+        if (level >= 29) level = 29;
+
+        totalScoreText.text = playerDataBase.TotalScore + " / " + goal.ToString();
+
+        levelText.text = (level + 2).ToString();
+
+        fillAmount.fillAmount = score * 1.0f / goal;
+
+        for (int i = 0; i < level + 1; i ++)
+        {
+            if(playerDataBase.GetProgress(progressDataBase.freeRewardList[i].rewardReceiveType, i) == false)
+            {
+                progressContentList[i].UnLockFree();
+            }
+            else
+            {
+                progressContentList[i].CheckMarkFree();
+            }
+
+            if (playerDataBase.PaidProgress)
+            {
+                if (playerDataBase.GetProgress(progressDataBase.paidRewardList[i].rewardReceiveType, i) == false)
+                {
+                    progressContentList[i].UnLockPaid();
+                }
+                else
+                {
+                    progressContentList[i].CheckMarkPaid();
+                }
+            }
+        }
     }
 
-    public void Receive(RewardClass rewardClass)
+    public void ReceiveButton(RewardClass rewardClass, int number)
     {
+        switch (rewardClass.rewardType) //보상 주기
+        {
+            case RewardType.Coin:
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, rewardClass.count);
+                break;
+            case RewardType.Crystal:
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, rewardClass.count);
+                break;
+            case RewardType.Clock:
+                ReceiveItem(rewardClass);
+                break;
+            case RewardType.Shield:
+                ReceiveItem(rewardClass);
+                break;
+            case RewardType.Combo:
+                ReceiveItem(rewardClass);
+                break;
+            case RewardType.Exp:
+                ReceiveItem(rewardClass);
+                break;
+            case RewardType.Slow:
+                ReceiveItem(rewardClass);
+                break;
+            case RewardType.IconBox:
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("IconBox", rewardClass.count);
+                break;
+            case RewardType.Icon:
+                shopDataBase.AddIconAll(rewardClass.iconType);
 
+                for(int i = 0; i < 5; i ++)
+                {
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GrantItemsToUser(rewardClass.iconType.ToString(), "Icon");
+                }
+                break;
+            case RewardType.Banner:
+                shopDataBase.SetBanner(rewardClass.bannerType, 1);
+
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GrantItemsToUser(rewardClass.bannerType.ToString(), "Banner");
+                break;
+        }
+
+        playerDataBase.UpdateProgress(rewardClass.rewardReceiveType, number);
+
+        NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
+
+        soundManager.PlaySFX(GameSfxType.Success);
+    }
+
+    void ReceiveItem(RewardClass rewardClass)
+    {
+        rewardID.Clear();
+
+        rewardID.Add((rewardClass.rewardType).ToString());
+
+        playerDataBase.SetItemCount((ItemType)Enum.Parse(typeof(ItemType), rewardClass.rewardType.ToString()), rewardClass.count);
+
+        for (int i = 0; i < rewardClass.count; i ++)
+        {
+            if (PlayfabManager.instance.isActive) PlayfabManager.instance.GrantItemToUser("Shop", rewardID);
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        SaveProgress();
     }
 
     public void SaveProgress()
     {
         playerData.Clear();
 
-        string freeProgress = playerDataBase.FreeProgress;
+        string freeProgress = playerDataBase.FreeProgressData;
 
-        if(freeProgress.Length < 1)
+        if(freeProgress.Length < 29)
         {
             freeProgress = "000000000000000000000000000000";
         }
@@ -92,9 +199,9 @@ public class ProgressManager : MonoBehaviour
 
         playerData.Clear();
 
-        string paidProgress = playerDataBase.FreeProgress;
+        string paidProgress = playerDataBase.PaidProgressData;
 
-        if (paidProgress.Length < 1)
+        if (paidProgress.Length < 29)
         {
             paidProgress = "000000000000000000000000000000";
         }

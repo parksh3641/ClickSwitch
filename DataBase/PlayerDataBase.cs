@@ -103,6 +103,8 @@ public class PlayerDataBase : ScriptableObject
     [Title("Purchase")]
     [SerializeField]
     private bool removeAd = false;
+    [SerializeField]
+    private bool paidProgress = false;
 
     [Space]
     [Title("Trophy")]
@@ -141,9 +143,9 @@ public class PlayerDataBase : ScriptableObject
     [Space]
     [Title("Progress")]
     [SerializeField]
-    private string freeProgress = "";
+    private string freeProgressData = "";
     [SerializeField]
-    private string paidProgress = "";
+    private string paidProgressData = "";
 
 
     public delegate void BoxEvent();
@@ -192,6 +194,7 @@ public class PlayerDataBase : ScriptableObject
         gameMode = "";
 
         removeAd = false;
+        paidProgress = false;
 
         trophyDataList.Clear();
 
@@ -227,8 +230,8 @@ public class PlayerDataBase : ScriptableObject
             gameModeLevelList.Add(level);
         }
 
-        freeProgress = "000000000000000000000000000000";
-        paidProgress = "000000000000000000000000000000";
+        freeProgressData = "000000000000000000000000000000";
+        paidProgressData = "000000000000000000000000000000";
     }
 
     public int TotalScore
@@ -609,6 +612,17 @@ public class PlayerDataBase : ScriptableObject
             removeAd = value;
         }
     }
+    public bool PaidProgress
+    {
+        get
+        {
+            return paidProgress;
+        }
+        set
+        {
+            paidProgress = value;
+        }
+    }
 
     public int NewsAlarm
     {
@@ -622,27 +636,27 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
-    public string FreeProgress
+    public string FreeProgressData
     {
         get
         {
-            return freeProgress;
+            return freeProgressData;
         }
         set
         {
-            freeProgress = value;
+            freeProgressData = value;
         }
     }
 
-    public string PaidProgress
+    public string PaidProgressData
     {
         get
         {
-            return paidProgress;
+            return paidProgressData;
         }
         set
         {
-            paidProgress = value;
+            paidProgressData = value;
         }
     }
 
@@ -932,10 +946,38 @@ public class PlayerDataBase : ScriptableObject
         switch (type)
         {
             case RewardReceiveType.Free:
-                freeProgress = str;
+                freeProgressData = str;
                 break;
             case RewardReceiveType.Paid:
-                paidProgress = str;
+                paidProgressData = str;
+                break;
+        }
+    }
+
+    public bool GetProgress(RewardReceiveType type, int number)
+    {
+        bool check = false;
+        switch (type)
+        {
+            case RewardReceiveType.Free:
+                if(FreeProgressData.Substring(number, 1).Equals("1")) check = true;
+                break;
+            case RewardReceiveType.Paid:
+                if (PaidProgressData.Substring(number, 1).Equals("1")) check = true;
+                break;
+        }
+        return check;
+    }
+
+    public void UpdateProgress(RewardReceiveType type, int number)
+    {
+        switch (type)
+        {
+            case RewardReceiveType.Free:
+                FreeProgressData = FreeProgressData.ReplaceAt(number, char.Parse("1"));
+                break;
+            case RewardReceiveType.Paid:
+                paidProgressData = paidProgressData.ReplaceAt(number, char.Parse("1"));
                 break;
         }
     }

@@ -13,7 +13,27 @@ public class ProgressContent : MonoBehaviour
     {
         numberText.text = (number + 1).ToString();
 
-        rewardContents[0].Initialize(manager, freeRewardClass);
-        rewardContents[1].Initialize(manager, paidRewardClass);
+        rewardContents[0].Initialize(manager, freeRewardClass, number);
+        rewardContents[1].Initialize(manager, paidRewardClass, number);
+    }
+
+    public void UnLockFree()
+    {
+        rewardContents[0].UnLock();
+    }
+
+    public void CheckMarkFree()
+    {
+        rewardContents[0].CheckMark(true);
+    }
+
+    public void UnLockPaid()
+    {
+        rewardContents[1].UnLock();
+    }
+
+    public void CheckMarkPaid()
+    {
+        rewardContents[1].CheckMark(true);
     }
 }

@@ -890,7 +890,7 @@ public class GameManager : MonoBehaviour
 
             action(true);
 
-            CheckPlusScore(30);
+            CheckPlusScore(40);
 
             hitMole = true;
         }
@@ -907,7 +907,7 @@ public class GameManager : MonoBehaviour
                 action(false);
                 countIndex = 0;
 
-                MinusScore(20);
+                MinusScore(10);
 
                 if (!GameStateManager.instance.Fail) GameStateManager.instance.Fail = true;
             }
@@ -941,7 +941,7 @@ public class GameManager : MonoBehaviour
                 action?.Invoke(1);
                 saveAction?.Invoke(1);
 
-                CheckPlusScore(20);
+                CheckPlusScore(30);
 
                 filpCardIndex = -1;
                 nowIndex++;
@@ -1032,7 +1032,7 @@ public class GameManager : MonoBehaviour
             {
                 action?.Invoke(false);
 
-                MinusScore(20);
+                MinusScore(10);
 
                 buttonActionLevelIndex = 1;
                 CreateButtonActionRandom();
@@ -1075,7 +1075,7 @@ public class GameManager : MonoBehaviour
 
             if (timingActionFillmount.fillAmount >= timingActionCheckRange_1 + 0.1f && timingActionFillmount.fillAmount <= timingActionCheckRange_2 - 0.05f)
             {
-                CheckPlusScore(15);
+                CheckPlusScore(20);
             }
             else
             {
@@ -1149,7 +1149,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                MinusScore(20);
+                MinusScore(10);
             }
         }
     }

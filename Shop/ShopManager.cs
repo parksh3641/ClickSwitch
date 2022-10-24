@@ -265,7 +265,6 @@ public class ShopManager : MonoBehaviour
 
         if (shopClass.itemId.Equals("IconBox"))
         {
-
             if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("IconBox",buyCount);
 
             CheckBuyItem(true);

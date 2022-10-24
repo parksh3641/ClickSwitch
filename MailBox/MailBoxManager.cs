@@ -241,22 +241,36 @@ public class MailBoxManager : MonoBehaviour
 
     public void GrantItemToUser(string catalogversion, List<string> itemIds)
     {
-        PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+        try
         {
-            FunctionName = "GrantItemToUser",
-            FunctionParameter = new { CatalogVersion = catalogversion, ItemIds = itemIds },
-            GeneratePlayStreamEvent = true,
-        }, OnCloudUpdateStats, DisplayPlayfabError);
+            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+            {
+                FunctionName = "GrantItemToUser",
+                FunctionParameter = new { CatalogVersion = catalogversion, ItemIds = itemIds },
+                GeneratePlayStreamEvent = true,
+            }, OnCloudUpdateStats, DisplayPlayfabError);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e.Message);
+        }
     }
 
     public void SetInventoryCustomData(string itemInstanceID, Dictionary<string, string> datas)
     {
-        PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+        try
         {
-            FunctionName = "UpdateUserInventoryItemCustomData",
-            FunctionParameter = new { Data = datas, ItemInstanceId = itemInstanceID },
-            GeneratePlayStreamEvent = true,
-        }, OnCloudUpdateStats, DisplayPlayfabError);
+            PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
+            {
+                FunctionName = "UpdateUserInventoryItemCustomData",
+                FunctionParameter = new { Data = datas, ItemInstanceId = itemInstanceID },
+                GeneratePlayStreamEvent = true,
+            }, OnCloudUpdateStats, DisplayPlayfabError);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e.Message);
+        }
     }
 
     private void OnCloudUpdateStats(ExecuteCloudScriptResult result)

@@ -35,7 +35,7 @@ public class IconBoxManager : MonoBehaviour
     private bool waitBox = false;
 
 
-    List<IconBoxContent> iconBoxContentList = new List<IconBoxContent>();
+    public List<IconBoxContent> iconBoxContentList = new List<IconBoxContent>();
 
     public IconBoxContent goldContent;
 
@@ -68,7 +68,7 @@ public class IconBoxManager : MonoBehaviour
     {
         //iconNumber = System.Enum.GetValues(typeof(IconType)).Length;
 
-        iconNumber = 15;
+        iconNumber = 19;
 
         for (int i = 0; i < iconNumber; i++)
         {
