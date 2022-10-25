@@ -54,7 +54,7 @@ public class BannerManager : MonoBehaviour
         }
 
         bannerView.SetActive(false);
-        saveLockObject.SetActive(false);
+        saveLockObject.SetActive(true);
 
         bannerContentTransform.anchoredPosition = new Vector2(0, -9999);
     }
@@ -112,6 +112,17 @@ public class BannerManager : MonoBehaviour
 
             bannerType++;
         }
+
+        int number = playerDataBase.GetActiveTrophyNumber();
+
+        if (number >= 1) bannerContentList[13].UnLock();
+        if (number >= 2) bannerContentList[14].UnLock();
+        if (number >= 3) bannerContentList[15].UnLock();
+        if (number >= 4) bannerContentList[16].UnLock();
+        if (number >= 5) bannerContentList[17].UnLock();
+        if (number >= 6) bannerContentList[18].UnLock();
+        if (number >= 7) bannerContentList[19].UnLock();
+        if (number >= 8) bannerContentList[20].UnLock();
 
         bannerType = BannerType.Banner_0;
 

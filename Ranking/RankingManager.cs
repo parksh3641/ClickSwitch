@@ -9,9 +9,12 @@ using UnityEngine.UI;
 public class RankingManager : MonoBehaviour
 {
     public GameObject rankingView;
+
     public RankContent rankContentPrefab;
     public RankContent myRankContent;
     public RectTransform rankContentParent;
+    public RectTransform topMenuTransform;
+
     [Space]
     [Title("TopMenu")]
     public Image[] topMenuImgArray;
@@ -19,8 +22,10 @@ public class RankingManager : MonoBehaviour
 
     [Space]
     [Title("SubMenu")]
+    public Image[] contentIconArray;
     public Image[] contentImgArray;
     public Sprite[] contentSpriteArray;
+    Sprite[] iconArray;
 
     private int topNumber = 0;
     private int openNumber = 0;
@@ -30,10 +35,20 @@ public class RankingManager : MonoBehaviour
     List<RankContent> rankContentList = new List<RankContent>();
 
     PlayerDataBase playerDataBase;
+    ImageDataBase imageDataBase;
 
     private void Awake()
     {
-        for(int i = 0; i < 100; i ++)
+        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+        if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+        iconArray = imageDataBase.GetIconArray();
+
+        for(int i = 0; i < contentIconArray.Length; i ++)
+        {
+            contentIconArray[i].sprite = iconArray[i];
+        }
+
+        for (int i = 0; i < 100; i ++)
         {
             RankContent monster = Instantiate(rankContentPrefab) as RankContent;
             monster.name = "RankContent_" + i;
@@ -47,10 +62,10 @@ public class RankingManager : MonoBehaviour
 
         rankingView.SetActive(false);
 
-        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
-
         topNumber = -1;
         openNumber = -1;
+
+        topMenuTransform.anchoredPosition = new Vector2(9999, 0);
     }
 
     public void OpenRanking()
@@ -193,6 +208,28 @@ public class RankingManager : MonoBehaviour
                 }
 
                 break;
+            case 7:
+                if (topNumber == 0)
+                {
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("LeftRightScore", SetRanking);
+                }
+                else
+                {
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("LeftRightCombo", SetRanking);
+                }
+
+                break;
+            case 8:
+                if (topNumber == 0)
+                {
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("CoinRushScore", SetRanking);
+                }
+                else
+                {
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GetLeaderboarder("CoinRushCombo", SetRanking);
+                }
+
+                break;
         }
 
         isDelay = true;
@@ -235,7 +272,7 @@ public class RankingManager : MonoBehaviour
                 isMine = true;
                 isCheck = true;
 
-                myRankContent.InitState(index, location, nickName, player.StatValue, false);
+                myRankContent.InitState(index, location, nickName, player.StatValue, true);
             }
             else if(player.DisplayName != null)
             {
@@ -244,7 +281,7 @@ public class RankingManager : MonoBehaviour
                     isMine = true;
                     isCheck = true;
 
-                    myRankContent.InitState(index, location, nickName, player.StatValue, false);
+                    myRankContent.InitState(index, location, nickName, player.StatValue, true);
                 }
             }
 
@@ -340,9 +377,29 @@ public class RankingManager : MonoBehaviour
                     number = playerDataBase.BestDragActionCombo;
                 }
                 break;
+            case 7:
+                if (topNumber == 0)
+                {
+                    number = playerDataBase.BestLeftRightScore;
+                }
+                else
+                {
+                    number = playerDataBase.BestLeftRightCombo;
+                }
+                break;
+            case 8:
+                if (topNumber == 0)
+                {
+                    number = playerDataBase.BestCoinRushScore;
+                }
+                else
+                {
+                    number = playerDataBase.BestCoinRushCombo;
+                }
+                break;
         }
 
-        myRankContent.InitState(999, code, GameStateManager.instance.NickName, number, false);
+        myRankContent.InitState(999, code, GameStateManager.instance.NickName, number, true);
     }
 
     public void SetIcon(GetLeaderboardResult result)

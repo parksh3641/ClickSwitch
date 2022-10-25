@@ -29,6 +29,9 @@ public class PlayfabManager : MonoBehaviour
     public static PlayfabManager instance;
 
     public UIManager uiManager;
+    public ShopManager shopManager;
+    public ProgressManager progressManager;
+
     public SoundManager soundManager;
     public OptionContent optionContent;
 
@@ -733,6 +736,10 @@ public class PlayfabManager : MonoBehaviour
                 {
                     shopDataBase.SetETC(shopClass);
                 }
+                else if (catalog.ItemId.Equals("PaidProgress"))
+                {
+                    shopDataBase.PaidProgress = shopClass;
+                }
 
             }
         }, (error) =>
@@ -840,6 +847,12 @@ public class PlayfabManager : MonoBehaviour
                            break;
                        case "AddExpLevel":
                            playerDataBase.AddExpLevel = statistics.Value;
+                           break;
+                       case "AddGoldLevel":
+                           playerDataBase.AddGoldLevel = statistics.Value;
+                           break;
+                       case "ComboTimeLevel":
+                           playerDataBase.ComboTimeLevel = statistics.Value;
                            break;
                        case "IconBox":
                            playerDataBase.IconBox = statistics.Value;
@@ -1306,14 +1319,25 @@ public class PlayfabManager : MonoBehaviour
         playerDataBase.RemoveAd = true;
     }
 
+    public void PurchasePaidProgress()
+    {
+        PurchaseItemToRM(shopDataBase.PaidProgress);
+
+        playerDataBase.PaidProgress = true;
+    }
+
     public void PurchaseCoin(int number)
     {
         UpdateAddCurrency(MoneyType.Coin, number);
+
+        NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
     }
 
     public void PurchaseCrystal(int number)
     {
         UpdateAddCurrency(MoneyType.Crystal, number);
+
+        NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
     }
 
     public void PurchaseItemToRM(ShopClass shopClass)
@@ -1345,10 +1369,21 @@ public class PlayfabManager : MonoBehaviour
         };
         PlayFabClientAPI.PurchaseItem(request, (result) =>
         {
-            Debug.Log(shopClass.itemId + " ???????????? ????????????!");
+            shopManager.CheckPurchaseItem();
+
+            if (shopClass.itemId.Equals("PaidProgress"))
+            {
+                progressManager.BuyPaidProgress();
+            }
+
+            Debug.Log(shopClass.itemId + " Buy Success!");
+
+            NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
         }, error =>
         {
-            Debug.Log(shopClass.itemId + " ???????????? ????????????!");
+            Debug.Log(shopClass.itemId + " Buy failed!");
+
+            NotionManager.instance.UseNotion(NotionType.FailBuyItem);
         });
     }
 

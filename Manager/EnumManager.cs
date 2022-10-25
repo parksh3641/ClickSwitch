@@ -21,7 +21,9 @@ public enum GamePlayType
     GameChoice3,
     GameChoice4,
     GameChoice5,
-    GameChoice6
+    GameChoice6,
+    GameChoice7,
+    GameChoice8
 }
 
 public enum OptionType
@@ -98,7 +100,7 @@ public enum ShopType
     Crystal200,
     Crystal300,
     DailyReward,
-    PaidReward
+    PaidProgress
 }
 
 public enum ItemType
@@ -170,6 +172,7 @@ public enum BannerType
     Banner_18,
     Banner_19,
     Banner_20,
+    Banner_21,
 }
 
 public enum AdType
@@ -206,8 +209,8 @@ public enum UpgradeType
     Critical,
     Burning,
     AddExp,
-    //AddGold,
-    //ComboTime
+    AddGold,
+    ComboTime
 }
 
 public enum RewardReceiveType

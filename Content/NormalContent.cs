@@ -38,6 +38,7 @@ public class NormalContent : MonoBehaviour, IContentEvent
 
     [Space]
     [Title("ButtonAction")]
+    public Image buttonActionImg;
     public string[] buttonActionStrArray;
 
     [Space]
@@ -60,6 +61,7 @@ public class NormalContent : MonoBehaviour, IContentEvent
 
         moleImg.enabled = false;
         filpCardImg.enabled = false;
+        buttonActionImg.enabled = false;
 
         clickText.gameObject.SetActive(false);
     }
@@ -85,8 +87,9 @@ public class NormalContent : MonoBehaviour, IContentEvent
                 clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().CheckButtonAction(index, ChoiceButtonAction); });
                 break;
             case GamePlayType.GameChoice5:
-                clickText.gameObject.SetActive(true);
+                //clickText.gameObject.SetActive(true);
                 //clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().CheckTimingAction(); });
+                buttonActionImg.enabled = true;
                 isActive = true;
                 break;
             case GamePlayType.GameChoice6:

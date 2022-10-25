@@ -20,6 +20,7 @@ public class ShopDataBase : ScriptableObject
 {
     [Title("GooglePlay")]
     public ShopClass removeAds;
+    public ShopClass paidProgress;
 
     [Space]
     [Title("Item")]
@@ -39,6 +40,9 @@ public class ShopDataBase : ScriptableObject
 
     public void Initialize()
     {
+        removeAds = new ShopClass();
+        paidProgress = new ShopClass();
+
         itemList.Clear();
         iconList.Clear();
         etcList.Clear();
@@ -92,6 +96,18 @@ public class ShopDataBase : ScriptableObject
         set
         {
             removeAds = value;
+        }
+    }
+
+    public ShopClass PaidProgress
+    {
+        get
+        {
+            return paidProgress;
+        }
+        set
+        {
+            paidProgress = value;
         }
     }
 

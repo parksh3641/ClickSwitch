@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
 
     [Space]
     [Title("GameStartButton")]
+    public Image icon;
     public Text playText;
     public LocalizationContent gameModeText;
 
@@ -57,6 +58,7 @@ public class GameManager : MonoBehaviour
 
     public LocalizationContent levelText;
 
+    Sprite[] iconArray;
     Sprite[] modeBackgroundImgArray;
 
     [Space]
@@ -94,6 +96,7 @@ public class GameManager : MonoBehaviour
     private float timingActionPlus = 0;
     private float timingActionSpeed = 0;
     private float timingActionSaveSpeed = 0;
+    private float timingActionRange = 0;
 
     private float timingActionCheckRange_1 = 0;
     private float timingActionCheckRange_2 = 0;
@@ -156,6 +159,7 @@ public class GameManager : MonoBehaviour
     {
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
         modeBackgroundImgArray = imageDataBase.GetModeBackgroundArray();
+        iconArray = imageDataBase.GetIconArray();
 
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
         if (upgradeDataBase == null) upgradeDataBase = Resources.Load("UpgradeDataBase") as UpgradeDataBase;
@@ -494,6 +498,7 @@ public class GameManager : MonoBehaviour
         gameModeType = mode;
 
         gameModeBackground.sprite = modeBackgroundImgArray[(int)gameModeType];
+        icon.sprite = iconArray[(int)gamePlayType];
 
         GameStateManager.instance.GamePlayType = gamePlayType;
         GameStateManager.instance.GameModeType = gameModeType;
@@ -789,16 +794,19 @@ public class GameManager : MonoBehaviour
 
                 timingActionButton.gameObject.SetActive(false);
 
+                timingActionRange = 300;
+
                 switch (gameModeType)
                 {
                     case GameModeType.Easy:
                         timingActionSpeed = 0.1f;
                         break;
                     case GameModeType.Normal:
-                        timingActionSpeed = 0.125f;
+                        timingActionSpeed = 0.15f;
                         break;
                     case GameModeType.Hard:
-                        timingActionSpeed = 0.15f;
+                        timingActionSpeed = 0.3f;
+                        timingActionRange = 200;
                         timingActionButton.gameObject.SetActive(true);
                         timingActionButton.Initialize(gamePlayType);
                         break;
@@ -1388,7 +1396,7 @@ public class GameManager : MonoBehaviour
         {
             if(Random.Range(0 , 2) == 0)
             {
-                if(timingActionRangePosX < 300)
+                if(timingActionRangePosX < timingActionRange)
                 {
                     timingActionMove = false;
                 }
@@ -1399,7 +1407,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                if (timingActionRangePosX > -300)
+                if (timingActionRangePosX > -timingActionRange)
                 {
                     timingActionMove = true;
                 }

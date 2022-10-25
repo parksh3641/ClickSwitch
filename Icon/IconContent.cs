@@ -50,14 +50,30 @@ public class IconContent : MonoBehaviour
     {
         iconClass = shopDataBase.GetIconState(iconType);
 
-        if (iconClass.count >= 5)
+        if((int)iconClass.iconType >= 19)
         {
-            UnLock();
+            if (iconClass.count >= 1)
+            {
+                UnLock();
+            }
+            else
+            {
+                fillAmount.fillAmount = iconClass.count / 1.0f;
+                countText.text = iconClass.count + " / 1";
+            }
+
         }
         else
         {
-            fillAmount.fillAmount = iconClass.count / 5.0f;
-            countText.text = iconClass.count + " / 5";
+            if (iconClass.count >= 5)
+            {
+                UnLock();
+            }
+            else
+            {
+                fillAmount.fillAmount = iconClass.count / 5.0f;
+                countText.text = iconClass.count + " / 5";
+            }
         }
     }
 

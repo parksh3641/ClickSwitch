@@ -33,8 +33,14 @@ public class ComboManager : MonoBehaviour
 
     bool pause = false;
 
+    PlayerDataBase playerDataBase;
+    UpgradeDataBase upgradeDataBase;
+
     private void Awake()
     {
+        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+        if (upgradeDataBase == null) upgradeDataBase = Resources.Load("UpgradeDataBase") as UpgradeDataBase;
+
         comboText.text = "";
         fillamount.fillAmount = 0;
 
@@ -59,6 +65,10 @@ public class ComboManager : MonoBehaviour
         bestCombo = number;
 
         if (GameStateManager.instance.Combo) comboTimer += 0.5f;
+
+        float comboTime = playerDataBase.ComboTimeLevel * upgradeDataBase.comboTime.addValue;
+
+        comboTimer += comboTime;
     }
 
     public void OnStartCombo()

@@ -1018,7 +1018,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
                 doubleCoinObj.SetActive(true);
 
-                plus = level / 100.0f;
+                plus = (level + playerDataBase.AddGoldLevel) / 100.0f;
 
                 plusGoldText.text = "+" + level + "%";
             }

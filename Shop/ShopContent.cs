@@ -95,7 +95,7 @@ public class ShopContent : MonoBehaviour
                 switch (GameStateManager.instance.Language)
                 {
                     case LanguageType.Korean:
-                        priceText.text = "₩ 1200";
+                        priceText.text = "₩ 1500";
                         break;
                     default:
                         priceText.text = "USD $ 0.99";
@@ -110,7 +110,7 @@ public class ShopContent : MonoBehaviour
                 switch (GameStateManager.instance.Language)
                 {
                     case LanguageType.Korean:
-                        priceText.text = "₩ 3000";
+                        priceText.text = "₩ 3700";
                         break;
                     default:
                         priceText.text = "USD $ 2.49";
@@ -142,7 +142,20 @@ public class ShopContent : MonoBehaviour
                 coin.SetActive(true);
 
                 break;
-            case ShopType.PaidReward:
+            case ShopType.PaidProgress:
+                titleText.name = "PaidProgress";
+
+                switch (GameStateManager.instance.Language)
+                {
+                    case LanguageType.Korean:
+                        priceText.text = "₩ 3700";
+                        break;
+                    default:
+                        priceText.text = "USD $ 2.49";
+                        break;
+                }
+
+                price.SetActive(true);
                 break;
         }
 

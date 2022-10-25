@@ -1,3 +1,4 @@
+Ôªøusing Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,13 +9,19 @@ public class ProgressManager : MonoBehaviour
 {
     public GameObject progressView;
     public GameObject showVCView;
-
-    public ProgressContent progressContent;
-    public RectTransform progressContentTransform;
+    public GameObject sPurchaseView;
 
     public Text totalScoreText;
     public Text levelText;
     public Image fillAmount;
+
+    [Space]
+    [Title("Purchase")]
+    public Text priceText;
+    public GameObject[] purchaseObj;
+
+    public ProgressContent progressContent;
+    public RectTransform progressContentTransform;
 
     public SoundManager soundManager;
 
@@ -34,6 +41,7 @@ public class ProgressManager : MonoBehaviour
         if (shopDataBase == null) shopDataBase = Resources.Load("ShopDataBase") as ShopDataBase;
 
         progressView.SetActive(false);
+        sPurchaseView.SetActive(false);
 
         progressContentTransform.anchoredPosition = new Vector2(0, 9999);
     }
@@ -74,8 +82,32 @@ public class ProgressManager : MonoBehaviour
         }
     }
 
+    public void OpenPurchaseView()
+    {
+        if (!sPurchaseView.activeSelf)
+        {
+            sPurchaseView.SetActive(true);
+
+            switch (GameStateManager.instance.Language)
+            {
+                case LanguageType.Korean:
+                    priceText.text = "‚Ç© 3700";
+                    break;
+                default:
+                    priceText.text = "USD $ 2.49";
+                    break;
+            }
+        }
+        else
+        {
+            sPurchaseView.SetActive(false);
+        }
+    }
+
     public void CheckProgress()
     {
+        CheckPurchaseButton();
+
         int score = playerDataBase.TotalScore;
         int level = score / 300;
         int goal = (level + 1) * 300;
@@ -113,9 +145,24 @@ public class ProgressManager : MonoBehaviour
         }
     }
 
+    public void CheckPurchaseButton()
+    {
+        purchaseObj[0].SetActive(false);
+        purchaseObj[1].SetActive(false);
+
+        if (!playerDataBase.PaidProgress)
+        {
+            purchaseObj[0].SetActive(true);
+        }
+        else
+        {
+            purchaseObj[1].SetActive(true);
+        }
+    }
+
     public void ReceiveButton(RewardClass rewardClass, int number)
     {
-        switch (rewardClass.rewardType) //∫∏ªÛ ¡÷±‚
+        switch (rewardClass.rewardType) //Î≥¥ÏÉÅ Ï£ºÍ∏∞
         {
             case RewardType.Coin:
                 if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, rewardClass.count);
@@ -144,10 +191,7 @@ public class ProgressManager : MonoBehaviour
             case RewardType.Icon:
                 shopDataBase.AddIconAll(rewardClass.iconType);
 
-                for(int i = 0; i < 5; i ++)
-                {
-                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.GrantItemsToUser(rewardClass.iconType.ToString(), "Icon");
-                }
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.GrantItemsToUser(rewardClass.iconType.ToString(), "Icon");
                 break;
             case RewardType.Banner:
                 shopDataBase.SetBanner(rewardClass.bannerType, 1);
@@ -210,5 +254,12 @@ public class ProgressManager : MonoBehaviour
         if (PlayfabManager.instance.isActive) PlayfabManager.instance.SetPlayerData(playerData);
 
         Debug.Log("Save Progress");
+    }
+
+    public void BuyPaidProgress()
+    {
+        CheckProgress();
+
+        sPurchaseView.SetActive(false);
     }
 }

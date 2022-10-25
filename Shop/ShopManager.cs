@@ -16,7 +16,8 @@ public class ShopManager : MonoBehaviour
 
     [Space]
     [Title("InAppPurchase")]
-    public GameObject[] inAppPurchaseObjList;
+    public GameObject removeAd;
+    public GameObject paidProgress;
 
     public ShopItemContent shopItemContent;
     public RectTransform[] scrollViewTransform;
@@ -80,6 +81,7 @@ public class ShopManager : MonoBehaviour
 
     void Start()
     {
+
     }
 
     public void Initialize()
@@ -130,6 +132,21 @@ public class ShopManager : MonoBehaviour
 
         topNumber = -1;
         ChangeTopMenu(0);
+
+        CheckPurchaseItem();
+    }
+
+    public void CheckPurchaseItem()
+    {
+        if(playerDataBase.RemoveAd)
+        {
+            removeAd.SetActive(false);
+        }
+
+        if(playerDataBase.PaidProgress)
+        {
+            paidProgress.SetActive(false);
+        }
     }
 
     public void OpenShop()

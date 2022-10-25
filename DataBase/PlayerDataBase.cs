@@ -9,58 +9,62 @@ public class PlayerDataBase : ScriptableObject
     [Title("Money")]
     [SerializeField]
     private int coin = 0;
-
     [SerializeField]
     private int crystal = 0;
 
     [Space]
     [SerializeField]
     private int totalScore = 0;
-
     [SerializeField]
     private int totalCombo = 0;
 
     [Space]
     [SerializeField]
     private int bestSpeedTouchScore = 0;
-
     [SerializeField]
     private int bestSpeedTouchCombo = 0;
 
     [Space]
     [SerializeField]
     private int bestMoleCatchScore = 0;
-
     [SerializeField]
     private int bestMoleCatchCombo = 0;
 
     [Space]
     [SerializeField]
     private int bestFilpCardScore = 0;
-
     [SerializeField]
     private int bestFilpCardCombo = 0;
 
     [Space]
     [SerializeField]
     private int bestButtonActionScore = 0;
-
     [SerializeField]
     private int bestButtonActionCombo = 0;
 
     [Space]
     [SerializeField]
     private int bestTimingActionScore = 0;
-
     [SerializeField]
     private int bestTimingActionCombo = 0;
 
     [Space]
     [SerializeField]
     private int bestDragActionScore = 0;
-
     [SerializeField]
     private int bestDragActionCombo = 0;
+
+    [Space]
+    [SerializeField]
+    private int bestLeftRightScore = 0;
+    [SerializeField]
+    private int bestLeftRightCombo = 0;
+
+    [Space]
+    [SerializeField]
+    private int bestCoinRushScore = 0;
+    [SerializeField]
+    private int bestCoinRushCombo = 0;
 
     [Title("GameMode")]
     [SerializeField]
@@ -139,6 +143,10 @@ public class PlayerDataBase : ScriptableObject
     private int burningLevel = 0;
     [SerializeField]
     private int addExpLevel = 0;
+    [SerializeField]
+    private int addGoldLevel = 0;
+    [SerializeField]
+    private int comboTimeLevel = 0;
 
     [Space]
     [Title("Progress")]
@@ -178,6 +186,12 @@ public class PlayerDataBase : ScriptableObject
         bestDragActionScore = 0;
         bestDragActionCombo = 0;
 
+        bestLeftRightScore = 0;
+        bestLeftRightCombo = 0;
+
+        bestCoinRushScore = 0;
+        bestCoinRushCombo = 0;
+
         level = 0;
         experience = 0;
         icon = 0;
@@ -216,10 +230,12 @@ public class PlayerDataBase : ScriptableObject
             OnResetDailyMissionReport();
         }
 
-        StartTimeLevel = 0;
+        startTimeLevel = 0;
         criticalLevel = 0;
         burningLevel = 0;
         addExpLevel = 0;
+        addGoldLevel = 0;
+        comboTimeLevel = 0;
 
         gameModeLevelList.Clear();
 
@@ -424,6 +440,55 @@ public class PlayerDataBase : ScriptableObject
             bestDragActionCombo = value;
         }
     }
+
+    public int BestLeftRightScore
+    {
+        get
+        {
+            return bestLeftRightScore;
+        }
+        set
+        {
+            bestLeftRightScore = value;
+        }
+    }
+
+    public int BestLeftRightCombo
+    {
+        get
+        {
+            return bestLeftRightCombo;
+        }
+        set
+        {
+            bestLeftRightCombo = value;
+        }
+    }
+
+    public int BestCoinRushScore
+    {
+        get
+        {
+            return bestCoinRushScore;
+        }
+        set
+        {
+            bestCoinRushScore = value;
+        }
+    }
+
+    public int BestCoinRushCombo
+    {
+        get
+        {
+            return bestCoinRushCombo;
+        }
+        set
+        {
+            bestCoinRushCombo = value;
+        }
+    }
+
 
     public int Level
     {
@@ -696,6 +761,21 @@ public class PlayerDataBase : ScriptableObject
         return trophyData;
     }
 
+    public int GetActiveTrophyNumber()
+    {
+        int number = 0;
+
+        for (int i = 0; i < trophyDataList.Count; i++)
+        {
+            if (trophyDataList[i].isActive)
+            {
+                number++;
+            }
+        }
+
+        return number;
+    }
+
     public void SetItemCount(ItemType type, int number)
     {
         switch (type)
@@ -875,6 +955,30 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public int AddGoldLevel
+    {
+        get
+        {
+            return addGoldLevel;
+        }
+        set
+        {
+            addGoldLevel = value;
+        }
+    }
+
+    public int ComboTimeLevel
+    {
+        get
+        {
+            return comboTimeLevel;
+        }
+        set
+        {
+            comboTimeLevel = value;
+        }
+    }
+
     public int GetLevel(UpgradeType type)
     {
         int level = 0;
@@ -892,6 +996,12 @@ public class PlayerDataBase : ScriptableObject
                 break;
             case UpgradeType.AddExp:
                 level = AddExpLevel;
+                break;
+            case UpgradeType.AddGold:
+                level = AddGoldLevel;
+                break;
+            case UpgradeType.ComboTime:
+                level = ComboTimeLevel;
                 break;
         }
 

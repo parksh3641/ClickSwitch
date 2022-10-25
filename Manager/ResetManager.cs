@@ -108,7 +108,7 @@ public class ResetManager : MonoBehaviour
                     type = GamePlayType.GameChoice6;
                     break;
                 case System.DayOfWeek.Sunday:
-                    type = GamePlayType.GameChoice1;
+                    type = GamePlayType.GameChoice7;
                     break;
                 case System.DayOfWeek.Thursday:
                     type = GamePlayType.GameChoice4;

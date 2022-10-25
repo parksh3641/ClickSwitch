@@ -362,6 +362,12 @@ public class GoogleSheetDownloader : MonoBehaviour
                 case "AddExp":
                     upgradeDataBase.AddExp = upgradeInformation;
                     break;
+                case "AddGold":
+                    upgradeDataBase.AddGold = upgradeInformation;
+                    break;
+                case "ComboTime":
+                    upgradeDataBase.ComboTime = upgradeInformation;
+                    break;
             }
         }
     }

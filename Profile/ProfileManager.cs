@@ -54,7 +54,7 @@ public class ProfileManager : MonoBehaviour
 
         profileContentList.Clear();
 
-        for (int i = 0; i < 6; i ++)
+        for (int i = 0; i < 8; i ++)
         {
             ProfileContent monster = Instantiate(profileContent);
             monster.transform.parent = profileTransform;
@@ -121,6 +121,8 @@ public class ProfileManager : MonoBehaviour
         profileContentList[3].InitState(LocalizationManager.instance.GetString("GameChoice4"), playerDataBase.BestButtonActionScore, playerDataBase.BestButtonActionCombo, iconArray[3]);
         profileContentList[4].InitState(LocalizationManager.instance.GetString("GameChoice5"), playerDataBase.BestTimingActionScore, playerDataBase.BestTimingActionCombo, iconArray[4]);
         profileContentList[5].InitState(LocalizationManager.instance.GetString("GameChoice6"), playerDataBase.BestDragActionScore, playerDataBase.BestDragActionCombo, iconArray[5]);
+        profileContentList[6].InitState(LocalizationManager.instance.GetString("GameChoice7"), playerDataBase.BestLeftRightScore, playerDataBase.BestLeftRightCombo, iconArray[6]);
+        profileContentList[7].InitState(LocalizationManager.instance.GetString("GameChoice8"), playerDataBase.BestCoinRushScore, playerDataBase.BestCoinRushCombo, iconArray[7]);
 
         totalScoreText.text = playerDataBase.TotalScore.ToString();
         totalComboText.text = playerDataBase.TotalCombo.ToString();
@@ -139,6 +141,8 @@ public class ProfileManager : MonoBehaviour
         {
             plusCoin = 30;
         }
+
+        plusCoin += playerDataBase.AddGoldLevel;
 
         plusCoinText.text = plusCoin.ToString() + "%";
     }

@@ -69,6 +69,13 @@ public class UpgradeContent : MonoBehaviour
             case UpgradeType.AddExp:
                 upgradeInformation = upgradeDataBase.AddExp;
                 break;
+            case UpgradeType.AddGold:
+                upgradeInformation = upgradeDataBase.AddGold;
+                break;
+            case UpgradeType.ComboTime:
+                upgradeInformation = upgradeDataBase.ComboTime;
+                unit = "s";
+                break;
             default:
                 upgradeInformation = upgradeDataBase.StartTime;
                 break;
@@ -97,7 +104,7 @@ public class UpgradeContent : MonoBehaviour
             switch (upgradeType)
             {
                 case UpgradeType.StartTime:
-                    if(playerDataBase.StartTimeLevel >= 10)
+                    if (playerDataBase.StartTimeLevel >= 10)
                     {
                         NotionManager.instance.UseNotion(NotionType.UpgradeMax);
                         return;
@@ -137,9 +144,28 @@ public class UpgradeContent : MonoBehaviour
 
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("AddExpLevel", playerDataBase.AddExpLevel);
                     break;
+                case UpgradeType.AddGold:
+                    if (playerDataBase.AddGoldLevel >= 10)
+                    {
+                        NotionManager.instance.UseNotion(NotionType.UpgradeMax);
+                        return;
+                    }
+                    playerDataBase.AddGoldLevel += 1;
+
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("AddGoldLevel", playerDataBase.AddGoldLevel);
+                    break;
+                case UpgradeType.ComboTime:
+                    if (playerDataBase.ComboTimeLevel >= 10)
+                    {
+                        NotionManager.instance.UseNotion(NotionType.UpgradeMax);
+                        return;
+                    }
+                    playerDataBase.ComboTimeLevel += 1;
+
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("ComboTimeLevel", playerDataBase.ComboTimeLevel);
+                    break;
                 default:
                     return;
-                    break;
             }
 
             if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Coin, upgradeValue);

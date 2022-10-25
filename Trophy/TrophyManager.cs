@@ -16,7 +16,7 @@ public class TrophyManager : MonoBehaviour
     public GameObject trophyView;
 
     public TrophyContent trophyContent;
-    public Transform trophyContentTransform;
+    public RectTransform trophyContentTransform;
 
 
     List<TrophyContent> trophyContentList = new List<TrophyContent>();
@@ -26,11 +26,13 @@ public class TrophyManager : MonoBehaviour
     private void Awake()
     {
         trophyView.SetActive(false);
+
+        trophyContentTransform.anchoredPosition = new Vector2(0, -999);
     }
 
     public void Initialize()
     {
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 8; i++)
         {
             TrophyContent monster = Instantiate(trophyContent);
             monster.transform.parent = trophyContentTransform;

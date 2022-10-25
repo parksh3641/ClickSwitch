@@ -149,6 +149,9 @@ public class BannerContent : MonoBehaviour
             case BannerType.Banner_20:
                 lockText.name = "LockTrophy8";
                 break;
+            case BannerType.Banner_21:
+                lockText.name = "None";
+                break;
         }
 
         lockText.ReLoad();

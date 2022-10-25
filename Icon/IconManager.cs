@@ -54,7 +54,7 @@ public class IconManager : MonoBehaviour
         }
 
         iconView.SetActive(false);
-        saveLockObject.SetActive(false);
+        saveLockObject.SetActive(true);
 
         iconContentTransform.anchoredPosition = new Vector2(0, -9999);
     }
