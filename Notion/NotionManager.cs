@@ -153,5 +153,7 @@ public enum NotionType
     UpgradeMax,
     RestorePurchasesNotion,
     NowReceivedNotion,
-    SaveNotion
+    SaveNotion,
+    CorrectNotion,
+    WrongNotion
 }

@@ -79,6 +79,10 @@ public class GoogleAdsManager : MonoBehaviour
                     shopManager.SuccessWatchAd();
 
                     break;
+                case 3:
+                    gameManager.SuccessCoinRushAd();
+
+                    break;
             }
             return;
         }
@@ -168,6 +172,9 @@ public class GoogleAdsManager : MonoBehaviour
                 break;
             case AdType.ShopWatchAd:
                 shopManager.SuccessWatchAd();
+                break;
+            case AdType.CoinRushTryCount:
+                gameManager.SuccessCoinRushAd();
                 break;
         }
     }

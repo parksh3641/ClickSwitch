@@ -179,7 +179,8 @@ public enum AdType
 {
     CoinX2,
     TryCount,
-    ShopWatchAd
+    ShopWatchAd,
+    CoinRushTryCount
 }
 
 public enum MissionType

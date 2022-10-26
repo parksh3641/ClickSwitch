@@ -38,13 +38,22 @@ public class NormalContent : MonoBehaviour, IContentEvent
 
     [Space]
     [Title("ButtonAction")]
-    public Image buttonActionImg;
     public string[] buttonActionStrArray;
+
+    [Space]
+    [Title("TimingAction")]
+    public Image timingActionImg;
 
     [Space]
     [Title("FingerSnap")]
     public string[] fingerSnapStrArray;
     Sprite[] fingerSnapArray;
+
+    [Space]
+    [Title("LeftRightAction")]
+    public Image leftRightImage;
+    public Sprite[] leftRightArray;
+    public Sprite[] leftRightBackgroundArray;
 
     ImageDataBase imageDataBase;
 
@@ -58,10 +67,10 @@ public class NormalContent : MonoBehaviour, IContentEvent
         failSoundEvent.AddListener(() => { GameObject.FindWithTag("FailSound").GetComponent<AudioSource>().Play(); });
 
         numberText.text = "";
-
         moleImg.enabled = false;
         filpCardImg.enabled = false;
-        buttonActionImg.enabled = false;
+        timingActionImg.enabled = false;
+        leftRightImage.enabled = false;
 
         clickText.gameObject.SetActive(false);
     }
@@ -87,13 +96,16 @@ public class NormalContent : MonoBehaviour, IContentEvent
                 clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().CheckButtonAction(index, ChoiceButtonAction); });
                 break;
             case GamePlayType.GameChoice5:
-                //clickText.gameObject.SetActive(true);
-                //clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().CheckTimingAction(); });
-                buttonActionImg.enabled = true;
+                timingActionImg.enabled = true;
                 isActive = true;
                 break;
             case GamePlayType.GameChoice6:
                 fingerSnapArray = imageDataBase.GetFingerSnapArray();
+                break;
+            case GamePlayType.GameChoice7:
+
+                break;
+            case GamePlayType.GameChoice8:
                 break;
         }
     }
@@ -196,6 +208,25 @@ public class NormalContent : MonoBehaviour, IContentEvent
         clickEvent.Invoke();
 
         StartCoroutine(MoveCoroution());
+    }
+
+    public void LeftRightReset(int number)
+    {
+        leftRightImage.enabled = true;
+        isActive = true;
+
+        index = number;
+
+        leftRightImage.sprite = leftRightArray[number];
+
+        clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().CheckLeftRightAction(index); });
+    }
+
+    public void LeftRightRandomBackground()
+    {
+        int random = Random.Range(0, leftRightBackgroundArray.Length - 1);
+
+        backgroundImg.sprite = leftRightBackgroundArray[random];
     }
 
 

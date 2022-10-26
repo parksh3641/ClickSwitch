@@ -94,6 +94,24 @@ public class ValueDataBase : ScriptableObject
     private float gameChoice6Hard = 0;
 
 
+    [Space]
+    [SerializeField]
+    private float gameChoice7Perfect = 0;
+    [SerializeField]
+    private float gameChoice7Normal = 0;
+    [SerializeField]
+    private float gameChoice7Hard = 0;
+
+
+    [Space]
+    [SerializeField]
+    private float gameChoice8Perfect = 0;
+    [SerializeField]
+    private float gameChoice8Normal = 0;
+    [SerializeField]
+    private float gameChoice8Hard = 0;
+
+
 
     public void Initialize()
     {
@@ -135,6 +153,14 @@ public class ValueDataBase : ScriptableObject
         gameChoice6Perfect = 0;
         gameChoice6Normal = 0;
         gameChoice6Hard = 0;
+
+        gameChoice7Perfect = 0;
+        gameChoice7Normal = 0;
+        gameChoice7Hard = 0;
+
+        gameChoice8Perfect = 0;
+        gameChoice8Normal = 0;
+        gameChoice8Hard = 0;
 
     }
 
@@ -472,6 +498,74 @@ public class ValueDataBase : ScriptableObject
         set
         {
             gameChoice6Hard = value;
+        }
+    }
+
+    public float GameChoice7Perfect
+    {
+        get
+        {
+            return gameChoice7Perfect;
+        }
+        set
+        {
+            gameChoice7Perfect = value;
+        }
+    }
+    public float GameChoice7Normal
+    {
+        get
+        {
+            return gameChoice7Normal;
+        }
+        set
+        {
+            gameChoice7Normal = value;
+        }
+    }
+    public float GameChoice7Hard
+    {
+        get
+        {
+            return gameChoice7Hard;
+        }
+        set
+        {
+            gameChoice7Hard = value;
+        }
+    }
+
+    public float GameChoice8Perfect
+    {
+        get
+        {
+            return gameChoice8Perfect;
+        }
+        set
+        {
+            gameChoice8Perfect = value;
+        }
+    }
+    public float GameChoice8Normal
+    {
+        get
+        {
+            return gameChoice8Normal;
+        }
+        set
+        {
+            gameChoice8Normal = value;
+        }
+    }
+    public float GameChoice8Hard
+    {
+        get
+        {
+            return gameChoice8Hard;
+        }
+        set
+        {
+            gameChoice8Hard = value;
         }
     }
 }

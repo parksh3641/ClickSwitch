@@ -109,8 +109,8 @@ public class ProgressManager : MonoBehaviour
         CheckPurchaseButton();
 
         int score = playerDataBase.TotalScore;
-        int level = score / 300;
-        int goal = (level + 1) * 300;
+        int level = score / 400;
+        int goal = (level + 1) * 400;
 
         if (level >= 29) level = 29;
 

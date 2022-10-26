@@ -46,6 +46,7 @@ public class ComboManager : MonoBehaviour
 
         combo = 0;
 
+        notion.gameObject.SetActive(false);
         comboObject.SetActive(false);
 
         GameManager.eGamePause += GamePause;

@@ -58,11 +58,13 @@ public class GameStateManager : MonoBehaviour
         [Title("Game Event")]
         public bool fail = false;
         public int tryCount = 2;
+        public int coinRushTryCount = 1;
 
         [Space]
         [Title("Ad")]
         public bool watchAd = true;
         public bool eventWatchAd = false;
+        public bool coinRushWatchAd = false;
 
         [Space]
         [Title("Daily")]
@@ -358,6 +360,19 @@ public class GameStateManager : MonoBehaviour
         }
     }
 
+    public int CoinRushTryCount
+    {
+        get
+        {
+            return gameSettings.coinRushTryCount;
+        }
+        set
+        {
+            gameSettings.coinRushTryCount = value;
+            SaveFile();
+        }
+    }
+
     public bool EventWatchAd
     {
         get
@@ -367,6 +382,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.eventWatchAd = value;
+            SaveFile();
+        }
+    }
+
+    public bool CoinRushWatchAd
+    {
+        get
+        {
+            return gameSettings.coinRushWatchAd;
+        }
+        set
+        {
+            gameSettings.coinRushWatchAd = value;
             SaveFile();
         }
     }

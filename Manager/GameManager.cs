@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     [Title("Prefab")]
     public NormalContent normalContent;
     public ButtonActionContent buttonActionContent;
+    public LeftRightActionContent leftRightActionContent;
 
     [Space]
     [Title("GridTransform")]
@@ -43,6 +44,8 @@ public class GameManager : MonoBehaviour
     public Transform buttonActionDownHardTransform;
     [Space]
     public Transform dragActionTransform;
+    [Space]
+    public Transform leftRightActionUpTransform;
 
     [Space]
     [Title("GameStartButton")]
@@ -55,6 +58,7 @@ public class GameManager : MonoBehaviour
     public GameObject tryCountView;
     public Text tryCountText;
     public GameObject tryCountZeroView;
+    public GameObject[] tryCountButton;
 
     public LocalizationContent levelText;
 
@@ -63,10 +67,27 @@ public class GameManager : MonoBehaviour
 
     [Space]
     [Title("TimingAction")]
-    public NormalContent timingActionContent;
+    public NormalContent timingActionButton1;
+    public NormalContent timingActionButton2;
+
     public Image timingActionFillmount;
     public GameObject timingActionCheckRange;
-    public NormalContent timingActionButton;
+    public GameObject[] timingActionVector;
+
+
+    [Space]
+    [Title("LeftRightAction")]
+    public NormalContent leftRightActionButton1;
+    public NormalContent leftRightActionButton2;
+
+
+    [Space]
+    [Title("CoinRushAction")]
+    public GameObject coinRushLockObject;
+    public GameObject plusCoinObject;
+    public Text questionText;
+    public InputField answerInputText;
+    public Text plusCoinText;
 
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(1);
@@ -104,10 +125,17 @@ public class GameManager : MonoBehaviour
     private float timingActionRangePosX = 0;
     private bool timingActionMove = false;
 
-    public GameObject[] timingActionVector;
-
     [Header("DragAction")]
     private int dragActionIndex = 0;
+
+    [Header("LeftRightAction")]
+    private int leftRightActionIndex = 0;
+    private int leftRightActionNumber = 0;
+
+    [Header("CoinRush")]
+    private int coinRushMax = 0;
+    private int coinRushNumber = 0;
+    private int coinRushPasscode = 0;
 
     private float critical = 0;
 
@@ -133,7 +161,10 @@ public class GameManager : MonoBehaviour
     private List<NormalContent> buttonActionDownEasyList = new List<NormalContent>();
     private List<NormalContent> buttonActionDownNormalList = new List<NormalContent>();
 
-    private List<NormalContent> drageActionList = new List<NormalContent>();
+    private List<NormalContent> dragActionList = new List<NormalContent>();
+
+    private List<LeftRightActionContent> leftRightActionUpList = new List<LeftRightActionContent>();
+
 
     Dictionary<string, string> dicData = new Dictionary<string, string>();
 
@@ -153,7 +184,7 @@ public class GameManager : MonoBehaviour
     public static event GameEvent eGameStart, eGamePause, eGameEnd;
 
     public delegate void ScoreEvent(int number);
-    public static event ScoreEvent PlusScore, MinusScore;
+    public static event ScoreEvent PlusScore, MinusScore, PlusCoin;
 
     private void Awake()
     {
@@ -294,7 +325,17 @@ public class GameManager : MonoBehaviour
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.gameObject.SetActive(false);
-            drageActionList.Add(content);
+            dragActionList.Add(content);
+        }
+
+        for (int i = 0; i < 8; i++)
+        {
+            LeftRightActionContent content = Instantiate(leftRightActionContent);
+            content.transform.parent = leftRightActionUpTransform;
+            content.transform.localPosition = Vector3.zero;
+            content.transform.localScale = Vector3.one;
+            content.gameObject.SetActive(false);
+            leftRightActionUpList.Add(content);
         }
     }
 
@@ -439,25 +480,82 @@ public class GameManager : MonoBehaviour
     {
         dragActionIndex = Random.Range(0, 4);
 
-        drageActionList[nowIndex].transform.localPosition = Vector3.zero;
-        drageActionList[nowIndex].FingerSnapReset(dragActionIndex);
+        dragActionList[nowIndex].transform.localPosition = Vector3.zero;
+        dragActionList[nowIndex].FingerSnapReset(dragActionIndex);
 
         switch (gameModeType)
         {
             case GameModeType.Easy:
-                drageActionList[nowIndex].FingerSnapBackground(dragActionIndex, false);
+                dragActionList[nowIndex].FingerSnapBackground(dragActionIndex, false);
                 break;
             case GameModeType.Normal:
                 break;
             case GameModeType.Hard:
-                drageActionList[nowIndex].FingerSnapBackground(dragActionIndex, true);
+                dragActionList[nowIndex].FingerSnapBackground(dragActionIndex, true);
                 break;
             case GameModeType.Perfect:
-                drageActionList[nowIndex].FingerSnapBackground(dragActionIndex, false);
+                dragActionList[nowIndex].FingerSnapBackground(dragActionIndex, false);
                 break;
         }
 
-        drageActionList[nowIndex].gameObject.SetActive(true);
+        dragActionList[nowIndex].gameObject.SetActive(true);
+    }
+
+    private void CreateLeftRightActionRandom()
+    {
+        numberList.Clear();
+
+        int number = 0;
+
+        for (int i = leftRightActionUpList.Count - 1; i > -1; i--)
+        {
+            number = Random.Range(0, 2);
+            numberList.Enqueue(number);
+            leftRightActionUpList[i].Initialize(number);
+
+            switch (gameModeType)
+            {
+                case GameModeType.Hard:
+                    leftRightActionUpList[i].RandomBackground();
+                    break;
+            }
+
+            leftRightActionUpList[i].gameObject.SetActive(true);
+        }
+
+        leftRightActionNumber = leftRightActionUpList.Count - 1;
+
+        leftRightActionIndex = numberList.Dequeue();
+    }
+
+    private void RandomCoinRush()
+    {
+        coinRushPasscode = 0;
+
+        int first = 0;
+        int second = 0;
+
+        switch (gameModeType)
+        {
+            case GameModeType.Easy:
+                first = Random.Range(1, 100);
+                second = Random.Range(1, 100);
+
+                break;
+            case GameModeType.Normal:
+                first = Random.Range(100, 1000);
+                second = Random.Range(100, 1000);
+
+                break;
+            case GameModeType.Hard:
+                first = Random.Range(1000, 5000);
+                second = Random.Range(1000, 5000);
+
+                break;
+        }
+
+        coinRushPasscode = first + second;
+        questionText.text = first.ToString() + " + " + second.ToString() + " = ?";
     }
 
     #endregion
@@ -533,8 +631,36 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
-                    if (!GameStateManager.instance.EventWatchAd) tryCountZeroView.SetActive(true);
+                    if (!GameStateManager.instance.EventWatchAd)
+                    {
+                        tryCountZeroView.SetActive(true);
+
+                        tryCountButton[0].SetActive(true);
+                        tryCountButton[1].SetActive(false);
+                    }
                 }
+                break;
+        }
+
+        switch (gamePlayType)
+        {
+            case GamePlayType.GameChoice8:
+                if (GameStateManager.instance.CoinRushTryCount > 0)
+                {
+                    tryCountView.SetActive(true);
+                    tryCountText.text = GameStateManager.instance.CoinRushTryCount.ToString();
+                }
+                else
+                {
+                    if (!GameStateManager.instance.CoinRushWatchAd)
+                    {
+                        tryCountZeroView.SetActive(true);
+
+                        tryCountButton[0].SetActive(false);
+                        tryCountButton[1].SetActive(true);
+                    }
+                }
+
                 break;
         }
 
@@ -582,7 +708,7 @@ public class GameManager : MonoBehaviour
     {
         if (!check)
         {
-            Debug.Log("This game locked to server.");
+            Debug.Log("This Game locked to server.");
             NotionManager.instance.UseNotion(NotionType.GameModeRockNotion);
             noTouch = false;
             return;
@@ -595,10 +721,39 @@ public class GameManager : MonoBehaviour
                 if (!GameStateManager.instance.EventWatchAd)
                 {
                     eventWatchAdView.SetActive(true);
+
+                    tryCountButton[0].SetActive(true);
+                    tryCountButton[1].SetActive(false);
                     return;
                 }
                 else
                 {
+                    noTouch = false;
+                    NotionManager.instance.UseNotion(NotionType.FailEventTry);
+                    return;
+                }
+            }
+            else
+            {
+                GameStateManager.instance.TryCount -= 1;
+            }
+        }
+
+        if (GameStateManager.instance.GamePlayType == GamePlayType.GameChoice8)
+        {
+            if (GameStateManager.instance.CoinRushTryCount <= 0)
+            {
+                if (!GameStateManager.instance.CoinRushWatchAd)
+                {
+                    eventWatchAdView.SetActive(true);
+
+                    tryCountButton[0].SetActive(false);
+                    tryCountButton[1].SetActive(true);
+                    return;
+                }
+                else
+                {
+                    noTouch = false;
                     NotionManager.instance.UseNotion(NotionType.FailEventTry);
                     return;
                 }
@@ -613,6 +768,7 @@ public class GameManager : MonoBehaviour
 
         FirebaseAnalytics.LogEvent(gamePlayType.ToString());
         FirebaseAnalytics.LogEvent(gameModeType.ToString());
+        FirebaseAnalytics.LogEvent(gamePlayType + " / " + gameModeType);
 
         if (PlayfabManager.instance.isActive) PlayfabManager.instance.CheckConsumeItem();
 
@@ -776,7 +932,7 @@ public class GameManager : MonoBehaviour
 
                 break;
             case GamePlayType.GameChoice5:
-                timingActionContent.Initialize(gamePlayType);
+                timingActionButton1.Initialize(gamePlayType);
 
                 timingActionFillmount.fillAmount = 0.5f;
                 timingActionCheckRange.transform.localPosition = Vector3.zero;
@@ -792,7 +948,7 @@ public class GameManager : MonoBehaviour
                 timingActionVector[0].SetActive(false);
                 timingActionVector[1].SetActive(false);
 
-                timingActionButton.gameObject.SetActive(false);
+                timingActionButton2.gameObject.SetActive(false);
 
                 timingActionRange = 300;
 
@@ -807,8 +963,8 @@ public class GameManager : MonoBehaviour
                     case GameModeType.Hard:
                         timingActionSpeed = 0.3f;
                         timingActionRange = 200;
-                        timingActionButton.gameObject.SetActive(true);
-                        timingActionButton.Initialize(gamePlayType);
+                        timingActionButton2.gameObject.SetActive(true);
+                        timingActionButton2.Initialize(gamePlayType);
                         break;
                     case GameModeType.Perfect:
                         timingActionSpeed = 0.1f;
@@ -820,15 +976,76 @@ public class GameManager : MonoBehaviour
                 break;
             case GamePlayType.GameChoice6:
 
-                for (int i = 0; i < drageActionList.Count; i++)
+                for (int i = 0; i < dragActionList.Count; i++)
                 {
-                    drageActionList[i].Initialize(gamePlayType);
-                    drageActionList[i].gameObject.SetActive(false);
+                    dragActionList[i].Initialize(gamePlayType);
+                    dragActionList[i].gameObject.SetActive(false);
                 }
 
                 nowIndex = 0;
 
                 RandomFingerSnap();
+
+                break;
+            case GamePlayType.GameChoice7:
+
+                leftRightActionIndex = 0;
+
+                int random = Random.Range(0, 2);
+
+                if(random == 0)
+                {
+                    leftRightActionButton1.LeftRightReset(0);
+                    leftRightActionButton2.LeftRightReset(1);
+                }
+                else
+                {
+                    leftRightActionButton1.LeftRightReset(1);
+                    leftRightActionButton2.LeftRightReset(0);
+                }
+
+                switch (gameModeType)
+                {
+                    case GameModeType.Normal:
+                        leftRightActionButton1.LeftRightRandomBackground();
+                        leftRightActionButton2.LeftRightRandomBackground();
+                        break;
+                    case GameModeType.Hard:
+                        leftRightActionButton1.LeftRightRandomBackground();
+                        leftRightActionButton2.LeftRightRandomBackground();
+                        break;
+                }
+
+                CreateLeftRightActionRandom();
+
+                break;
+            case GamePlayType.GameChoice8:
+                coinRushMax = 0;
+                coinRushNumber = 0;
+
+                switch (gameModeType)
+                {
+                    case GameModeType.Easy:
+                        coinRushMax = 200;
+
+                        break;
+                    case GameModeType.Normal:
+                        coinRushMax = 300;
+
+                        break;
+                    case GameModeType.Hard:
+                        coinRushMax = 500;
+
+                        break;
+                }
+
+                questionText.text = "";
+                plusCoinText.text = "0";
+
+                coinRushLockObject.SetActive(false);
+                plusCoinObject.SetActive(false);
+
+                RandomCoinRush();
 
                 break;
         }
@@ -1050,7 +1267,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     public void CheckTimingAction()
     {
         if(timingActionValue < 100)
@@ -1136,11 +1352,11 @@ public class GameManager : MonoBehaviour
 
             CheckPlusScore(10);
 
-            drageActionList[nowIndex].MoveFingerSnap(dragActionIndex);
+            dragActionList[nowIndex].MoveFingerSnap(dragActionIndex);
 
             nowIndex++;
 
-            if (nowIndex > drageActionList.Count - 1)
+            if (nowIndex > dragActionList.Count - 1)
             {
                 nowIndex = 0;
             }
@@ -1159,6 +1375,84 @@ public class GameManager : MonoBehaviour
             {
                 MinusScore(10);
             }
+        }
+    }
+
+    public void CheckLeftRightAction(int index)
+    {
+        if (leftRightActionIndex.Equals(index))
+        {
+            soundManager.PlaySFX(GameSfxType.Click);
+
+            CheckPlusScore(5);
+
+            if(leftRightActionNumber < 0)
+            {
+                leftRightActionNumber = leftRightActionUpList.Count - 1;
+            }
+
+            leftRightActionUpList[leftRightActionNumber].gameObject.SetActive(false);
+            leftRightActionUpList[leftRightActionNumber].transform.SetAsFirstSibling();
+            leftRightActionUpList[leftRightActionNumber].gameObject.SetActive(true);
+
+            int number = Random.Range(0, 2);
+            numberList.Enqueue(number);
+            leftRightActionUpList[leftRightActionNumber].Initialize(number);
+
+            leftRightActionNumber--;
+            leftRightActionIndex = numberList.Dequeue();
+        }
+        else
+        {
+            if (GameStateManager.instance.Shield)
+            {
+                GameStateManager.instance.Shield = false;
+                soundManager.PlaySFX(GameSfxType.Shield);
+                uiManager.UsedItem(ItemType.Shield);
+            }
+            else
+            {
+                MinusScore(5);
+
+                if (!GameStateManager.instance.Fail) GameStateManager.instance.Fail = true;
+            }
+        }
+    }
+
+
+    public void CheckCoinRush()
+    {
+        PlusScore(3);
+
+        if (coinRushNumber + 2 <= coinRushMax)
+        {
+            coinRushNumber += 2;
+            PlusCoin(2);
+        }
+        else
+        {
+            coinRushNumber = coinRushMax;
+        }
+
+        plusCoinText.text = coinRushNumber.ToString();
+    }
+
+    public void CheckCoinRushAnswer()
+    {
+        if(int.Parse(answerInputText.text) == coinRushPasscode)
+        {
+            coinRushLockObject.SetActive(false);
+            plusCoinObject.SetActive(true);
+
+            soundManager.PlaySFX(GameSfxType.Success);
+
+            NotionManager.instance.UseNotion(NotionType.CorrectNotion);
+        }
+        else
+        {
+            soundManager.PlaySFX(GameSfxType.Fail);
+
+            NotionManager.instance.UseNotion(NotionType.WrongNotion);
         }
     }
 
@@ -1206,6 +1500,11 @@ public class GameManager : MonoBehaviour
                 break;
             case GamePlayType.GameChoice6:
                 break;
+            case GamePlayType.GameChoice7:
+                break;
+            case GamePlayType.GameChoice8:
+                coinRushLockObject.SetActive(true);
+                break;
         }
 
         if (GameStateManager.instance.Slow) Time.timeScale = 0.9f;
@@ -1228,22 +1527,36 @@ public class GameManager : MonoBehaviour
         GameStateManager.instance.Exp = false;
         GameStateManager.instance.Slow = false;
 
-        tryCountText.text = GameStateManager.instance.TryCount.ToString();
-
         StopAllCoroutines();
 
-        if(GameStateManager.instance.GameModeType == GameModeType.Perfect && GameStateManager.instance.TryCount <= 0)
+        if(GameStateManager.instance.GameModeType == GameModeType.Perfect)
         {
-            tryCountView.SetActive(false);
+            if(GameStateManager.instance.TryCount <= 0)
+            {
+                tryCountView.SetActive(false);
 
-            if (!GameStateManager.instance.EventWatchAd) tryCountZeroView.SetActive(true);
+                if (!GameStateManager.instance.EventWatchAd) tryCountZeroView.SetActive(true);
+            }
+
+            tryCountText.text = GameStateManager.instance.TryCount.ToString();
         }
+
+        if(GameStateManager.instance.GamePlayType == GamePlayType.GameChoice8)
+        {
+            if (GameStateManager.instance.CoinRushTryCount <= 0)
+            {
+                tryCountView.SetActive(false);
+
+                if (!GameStateManager.instance.CoinRushWatchAd) tryCountZeroView.SetActive(true);
+            }
+
+            tryCountText.text = GameStateManager.instance.CoinRushTryCount.ToString();
+        }
+
     }
 
     public void SuccessWatchAd()
     {
-        NotionManager.instance.UseNotion(NotionType.AddTryCount);
-
         GameStateManager.instance.EventWatchAd = true;
         GameStateManager.instance.TryCount += 1;
         tryCountText.text = GameStateManager.instance.TryCount.ToString();
@@ -1252,16 +1565,38 @@ public class GameManager : MonoBehaviour
 
         tryCountView.SetActive(true);
         tryCountZeroView.SetActive(false);
+
+        noTouch = false;
+
+        NotionManager.instance.UseNotion(NotionType.AddTryCount);
+    }
+
+    public void SuccessCoinRushAd()
+    {
+        GameStateManager.instance.CoinRushWatchAd = true;
+        GameStateManager.instance.CoinRushTryCount += 1;
+        tryCountText.text = GameStateManager.instance.CoinRushTryCount.ToString();
+
+        eventWatchAdView.SetActive(false);
+
+        tryCountView.SetActive(true);
+        tryCountZeroView.SetActive(false);
+
+        noTouch = false;
+
+        NotionManager.instance.UseNotion(NotionType.AddTryCount);
     }
 
     public void CloseEventWatchAd()
     {
         eventWatchAdView.SetActive(false);
+
+        noTouch = false;
     }
 
     #endregion
 
-    #region Corution
+    #region Coroution
     IEnumerator MoleCatchCoroution()
     {
         ShuffleList(targetContentList);

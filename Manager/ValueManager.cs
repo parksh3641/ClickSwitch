@@ -94,6 +94,12 @@ public class ValueManager : MonoBehaviour
             case GamePlayType.GameChoice6:
                 clearScore = valueDataBase.GameChoice6Perfect;
                 break;
+            case GamePlayType.GameChoice7:
+                clearScore = valueDataBase.GameChoice7Perfect;
+                break;
+            case GamePlayType.GameChoice8:
+                clearScore = valueDataBase.GameChoice8Perfect;
+                break;
         }
 
         return clearScore;
@@ -123,6 +129,12 @@ public class ValueManager : MonoBehaviour
             case GamePlayType.GameChoice6:
                 clearScore = valueDataBase.GameChoice6Normal;
                 break;
+            case GamePlayType.GameChoice7:
+                clearScore = valueDataBase.GameChoice7Normal;
+                break;
+            case GamePlayType.GameChoice8:
+                clearScore = valueDataBase.GameChoice8Normal;
+                break;
         }
 
         return clearScore;
@@ -151,6 +163,12 @@ public class ValueManager : MonoBehaviour
                 break;
             case GamePlayType.GameChoice6:
                 clearScore = valueDataBase.GameChoice6Hard;
+                break;
+            case GamePlayType.GameChoice7:
+                clearScore = valueDataBase.GameChoice7Hard;
+                break;
+            case GamePlayType.GameChoice8:
+                clearScore = valueDataBase.GameChoice8Hard;
                 break;
         }
 

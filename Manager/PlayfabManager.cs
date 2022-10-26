@@ -814,6 +814,18 @@ public class PlayfabManager : MonoBehaviour
                        case "DragActionCombo":
                            playerDataBase.BestDragActionCombo = statistics.Value;
                            break;
+                       case "LeftRightScore":
+                           playerDataBase.BestLeftRightScore = statistics.Value;
+                           break;
+                       case "LeftRightCombo":
+                           playerDataBase.BestLeftRightCombo = statistics.Value;
+                           break;
+                       case "CoinRushScore":
+                           playerDataBase.BestCoinRushScore = statistics.Value;
+                           break;
+                       case "CoinRushCombo":
+                           playerDataBase.BestCoinRushCombo = statistics.Value;
+                           break;
                        case "AttendanceDay":
                            playerDataBase.AttendanceDay = statistics.Value.ToString();
                            break;

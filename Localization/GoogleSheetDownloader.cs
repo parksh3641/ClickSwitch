@@ -326,6 +326,26 @@ public class GoogleSheetDownloader : MonoBehaviour
                     valueDataBase.GameChoice6Hard = value;
                     break;
 
+                case "GameChoice7Perfect":
+                    valueDataBase.GameChoice7Perfect = value;
+                    break;
+                case "GameChoice7Normal":
+                    valueDataBase.GameChoice7Normal = value;
+                    break;
+                case "GameChoice7Hard":
+                    valueDataBase.GameChoice7Hard = value;
+                    break;
+
+                case "GameChoice8Perfect":
+                    valueDataBase.GameChoice8Perfect = value;
+                    break;
+                case "GameChoice8Normal":
+                    valueDataBase.GameChoice8Normal = value;
+                    break;
+                case "GameChoice8Hard":
+                    valueDataBase.GameChoice8Hard = value;
+                    break;
+
             }
         }
     }

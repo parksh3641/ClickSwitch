@@ -103,6 +103,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     [Space]
     [Title("NotionUI")]
     public Notion scoreNotion;
+    public Notion coinNotion;
 
     [Space]
     [Title("Network")]
@@ -114,6 +115,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     private int bestScore = 0;
     private int bestCombo = 0;
     private int adCoolTime = 0;
+    private int plusCoin = 0;
 
     [Title("Bool")]
     [SerializeField]
@@ -172,6 +174,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         GameManager.PlusScore += this.PlusScore;
         GameManager.MinusScore += this.MinusScore;
+        GameManager.PlusCoin += this.PlusCoin;
 
         timerText.text = "";
         timerText.color = new Color(1, 1, 0);
@@ -187,6 +190,9 @@ public class UIManager : MonoBehaviour, IGameEvent
         goldText[1].text = "0";
         crystalText[0].text = "0";
         crystalText[1].text = "0";
+
+        scoreNotion.gameObject.SetActive(false);
+        coinNotion.gameObject.SetActive(false);
 
         gameOptionUI.SetActive(false);
         languageUI.SetActive(false);
@@ -322,6 +328,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         GameManager.PlusScore -= this.PlusScore;
         GameManager.MinusScore -= this.MinusScore;
+        GameManager.PlusCoin -= this.PlusCoin;
     }
 
     private void OnApplicationFocus(bool focus)
@@ -436,6 +443,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         bestScore = 0;
         bestCombo = 0;
+        plusCoin = 0;
 
         switch (type)
         {
@@ -462,6 +470,14 @@ public class UIManager : MonoBehaviour, IGameEvent
             case GamePlayType.GameChoice6:
                 bestScore = playerDataBase.BestDragActionScore;
                 bestCombo = playerDataBase.BestDragActionCombo;
+                break;
+            case GamePlayType.GameChoice7:
+                bestScore = playerDataBase.BestLeftRightScore;
+                bestCombo = playerDataBase.BestLeftRightCombo;
+                break;
+            case GamePlayType.GameChoice8:
+                bestScore = playerDataBase.BestCoinRushScore;
+                bestCombo = playerDataBase.BestCoinRushCombo;
                 break;
             default:
                 bestScore = 0;
@@ -775,7 +791,7 @@ public class UIManager : MonoBehaviour, IGameEvent
                 }
                 break;
             case GameModeType.Normal:
-                if ((int)score >= ValueManager.instance.GetNormalClearScore(GameStateManager.instance.GamePlayType) && !gameModeLevel.hard)
+                if ((int)score >= ValueManager.instance.GetHardClearScore(GameStateManager.instance.GamePlayType) && !gameModeLevel.hard)
                 {
                     gameModeView.SetActive(true);
 
@@ -796,11 +812,6 @@ public class UIManager : MonoBehaviour, IGameEvent
 
                 break;
             case GameModeType.Perfect:
-                if (GameStateManager.instance.TryCount > 0)
-                {
-                    GameStateManager.instance.TryCount -= 1;
-                }
-
                 float clearScore = 0;
                 bool fail = false;
 
@@ -850,6 +861,16 @@ public class UIManager : MonoBehaviour, IGameEvent
 
                         FirebaseAnalytics.LogEvent(GameStateManager.instance.GamePlayType.ToString(), "Trophy", trophyContent.number);
                     }
+                }
+                break;
+        }
+
+        switch (GameStateManager.instance.GamePlayType)
+        {
+            case GamePlayType.GameChoice8:
+                if (GameStateManager.instance.CoinRushTryCount > 0)
+                {
+                    GameStateManager.instance.CoinRushTryCount -= 1;
                 }
                 break;
         }
@@ -917,9 +938,17 @@ public class UIManager : MonoBehaviour, IGameEvent
                 bestScore = playerDataBase.BestDragActionScore;
                 bestCombo = playerDataBase.BestDragActionCombo;
                 break;
+            case GamePlayType.GameChoice7:
+                bestScore = playerDataBase.BestLeftRightScore;
+                bestCombo = playerDataBase.BestLeftRightCombo;
+                break;
+            case GamePlayType.GameChoice8:
+                bestScore = playerDataBase.BestCoinRushScore;
+                bestCombo = playerDataBase.BestCoinRushCombo;
+                break;
         }
 
-        if(Comparison((int)score, bestScore))
+        if (Comparison((int)score, bestScore))
         {
             Debug.Log("Best Score !");
             newRecordObj.SetActive(true);
@@ -949,6 +978,14 @@ public class UIManager : MonoBehaviour, IGameEvent
                 case GamePlayType.GameChoice6:
                     playerDataBase.BestDragActionScore = (int)score;
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("DragActionScore", (int)score);
+                    break;
+                case GamePlayType.GameChoice7:
+                    playerDataBase.BestLeftRightScore = (int)score;
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("LeftRightScore", (int)score);
+                    break;
+                case GamePlayType.GameChoice8:
+                    playerDataBase.BestCoinRushScore = (int)score;
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("CoinRushScore", (int)score);
                     break;
             }
 
@@ -992,6 +1029,14 @@ public class UIManager : MonoBehaviour, IGameEvent
                     playerDataBase.BestDragActionCombo = combo;
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("DragActionCombo", combo);
                     break;
+                case GamePlayType.GameChoice7:
+                    playerDataBase.BestLeftRightCombo = combo;
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("LeftRightCombo", combo);
+                    break;
+                case GamePlayType.GameChoice8:
+                    playerDataBase.BestCoinRushCombo = combo;
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("CoinRushCombo", combo);
+                    break;
             }
 
             bestCombo = combo;
@@ -1001,7 +1046,7 @@ public class UIManager : MonoBehaviour, IGameEvent
         UpdateTotalCombo();
 
 
-        money = (int)(score / 3);
+        money = (int)(score / 3) + plusCoin;
 
         int level = playerDataBase.Level + 1;
 
@@ -1169,7 +1214,8 @@ public class UIManager : MonoBehaviour, IGameEvent
     void UpdateTotalScore()
     {
         int nowTotalScore = playerDataBase.BestSpeedTouchScore + playerDataBase.BestMoleCatchScore + playerDataBase.BestFilpCardScore + 
-            playerDataBase.BestButtonActionScore + playerDataBase.BestTimingActionScore + playerDataBase.BestDragActionScore;
+            playerDataBase.BestButtonActionScore + playerDataBase.BestTimingActionScore + playerDataBase.BestDragActionScore
+            + playerDataBase.BestLeftRightScore + playerDataBase.BestCoinRushScore;
 
         if (Comparison(nowTotalScore, playerDataBase.TotalScore))
         {
@@ -1183,7 +1229,8 @@ public class UIManager : MonoBehaviour, IGameEvent
     void UpdateTotalCombo()
     {
         int nowTotalCombo = playerDataBase.BestSpeedTouchCombo + playerDataBase.BestMoleCatchCombo + playerDataBase.BestFilpCardCombo + 
-            playerDataBase.BestButtonActionCombo + playerDataBase.BestTimingActionCombo + playerDataBase.BestDragActionCombo;
+            playerDataBase.BestButtonActionCombo + playerDataBase.BestTimingActionCombo + playerDataBase.BestDragActionCombo
+            + playerDataBase.BestLeftRightCombo + playerDataBase.BestCoinRushCombo;
 
         if (Comparison(nowTotalCombo, playerDataBase.TotalCombo))
         {
@@ -1295,6 +1342,15 @@ public class UIManager : MonoBehaviour, IGameEvent
         scoreNotion.gameObject.SetActive(true);
 
         comboManager.OnStartCombo();
+    }
+
+    public void PlusCoin(int index)
+    {
+        plusCoin += index;
+
+        coinNotion.gameObject.SetActive(false);
+        coinNotion.txt.text = "+" + index.ToString();
+        coinNotion.gameObject.SetActive(true);
     }
 
     public void MinusScore(int index)
