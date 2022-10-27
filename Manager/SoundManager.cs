@@ -133,7 +133,7 @@ public class SoundManager : MonoBehaviour
         {
             if(sfxAudio[i].name.Equals(type.ToString()))
             {
-                sfxAudio[i].Play();
+                if(!sfxAudio[i].isPlaying) sfxAudio[i].Play();
             }
         }
     }

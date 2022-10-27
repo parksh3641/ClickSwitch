@@ -339,7 +339,9 @@ public class UIManager : MonoBehaviour, IGameEvent
         }
         else
         {
-            if(cancleUI.activeSelf)
+            if (GameStateManager.instance.DontStopGame) return;
+
+            if (cancleUI.activeSelf)
             {
                 OpenGameStop();
             }
@@ -634,6 +636,15 @@ public class UIManager : MonoBehaviour, IGameEvent
     public void OpenProgress()
     {
         progressManager.OpenProgress();
+
+        if(gameStartUI.activeInHierarchy)
+        {
+            gameStartUI.SetActive(false);
+        }
+        else
+        {
+            gameStartUI.SetActive(true);
+        }
 
         FirebaseAnalytics.LogEvent("OpenProgress");
     }
@@ -1081,7 +1092,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         exp = 0;
 
-        exp += 100;
+        if(score >= 100) exp += 100;
 
         exp += ((int)score / 20);
 
@@ -1264,6 +1275,7 @@ public class UIManager : MonoBehaviour, IGameEvent
         Debug.Log("Game Stop");
 
         Time.timeScale = 1;
+        GameStateManager.instance.DontStopGame = false;
 
         soundManager.PlayBGM(GameBGMType.Lobby);
 

@@ -29,6 +29,8 @@ public class GoogleSheetDownloader : MonoBehaviour
     {
         Time.timeScale = 1;
 
+        messageText.text = "";
+
         barFillAmount.fillAmount = 0f;
         barPercentText.text = "0%";
 

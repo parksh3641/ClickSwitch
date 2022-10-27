@@ -50,10 +50,10 @@ public class ShopContent : MonoBehaviour
                 switch (GameStateManager.instance.Language)
                 {
                     case LanguageType.Korean:
-                        priceText.text = "₩ 1200";
+                        priceText.text = "₩ 3000";
                         break;
                     default:
-                        priceText.text = "USD $ 0.99";
+                        priceText.text = "USD $ 1.99";
                         break;
                 }
 
@@ -110,10 +110,10 @@ public class ShopContent : MonoBehaviour
                 switch (GameStateManager.instance.Language)
                 {
                     case LanguageType.Korean:
-                        priceText.text = "₩ 3700";
+                        priceText.text = "₩ 4400";
                         break;
                     default:
-                        priceText.text = "USD $ 2.49";
+                        priceText.text = "USD $ 2.99";
                         break;
                 }
 
@@ -125,7 +125,7 @@ public class ShopContent : MonoBehaviour
                 switch (GameStateManager.instance.Language)
                 {
                     case LanguageType.Korean:
-                        priceText.text = "₩ 6000";
+                        priceText.text = "₩ 7500";
                         break;
                     default:
                         priceText.text = "USD $ 4.99";
@@ -148,10 +148,10 @@ public class ShopContent : MonoBehaviour
                 switch (GameStateManager.instance.Language)
                 {
                     case LanguageType.Korean:
-                        priceText.text = "₩ 3700";
+                        priceText.text = "₩ 4400";
                         break;
                     default:
-                        priceText.text = "USD $ 2.49";
+                        priceText.text = "USD $ 2.99";
                         break;
                 }
 

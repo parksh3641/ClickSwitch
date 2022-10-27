@@ -8,6 +8,9 @@ public class ProfileManager : MonoBehaviour
 {
     public GameObject profileView;
 
+    public GameObject removeAd;
+    public GameObject paidProgress;
+
     [Space]
     [Title("Main")]
     public Text mainNickNameText;
@@ -71,6 +74,8 @@ public class ProfileManager : MonoBehaviour
         totalComboText.text = "0";
 
         profileView.SetActive(false);
+        removeAd.SetActive(false);
+        paidProgress.SetActive(false);
 
         profileTransform.anchoredPosition = new Vector2(0, -999);
     }
@@ -145,5 +150,20 @@ public class ProfileManager : MonoBehaviour
         plusCoin += playerDataBase.AddGoldLevel;
 
         plusCoinText.text = plusCoin.ToString() + "%";
+
+        CheckPurchaseItem();
+
+    }
+    public void CheckPurchaseItem()
+    {
+        if (playerDataBase.RemoveAd)
+        {
+            removeAd.SetActive(true);
+        }
+
+        if (playerDataBase.PaidProgress)
+        {
+            paidProgress.SetActive(true);
+        }
     }
 }

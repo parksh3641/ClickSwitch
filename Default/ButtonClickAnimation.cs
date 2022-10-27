@@ -10,7 +10,7 @@ public class ButtonClickAnimation : MonoBehaviour, IPointerDownHandler, IPointer
 
     void Awake()
     {
-        if(clickSoundEvent == null) clickSoundEvent.AddListener(() => { GameObject.FindWithTag("ClickSound").GetComponent<AudioSource>().Play(); });
+        clickSoundEvent.AddListener(() => { GameObject.FindWithTag("ClickSound").GetComponent<AudioSource>().Play(); });
     }
 
     public void OnPointerDown(PointerEventData eventData)

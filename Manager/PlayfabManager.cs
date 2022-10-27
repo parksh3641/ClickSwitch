@@ -30,6 +30,7 @@ public class PlayfabManager : MonoBehaviour
 
     public UIManager uiManager;
     public ShopManager shopManager;
+    public ProfileManager profileManager;
     public ProgressManager progressManager;
 
     public SoundManager soundManager;
@@ -1382,6 +1383,7 @@ public class PlayfabManager : MonoBehaviour
         PlayFabClientAPI.PurchaseItem(request, (result) =>
         {
             shopManager.CheckPurchaseItem();
+            profileManager.CheckPurchaseItem();
 
             if (shopClass.itemId.Equals("PaidProgress"))
             {

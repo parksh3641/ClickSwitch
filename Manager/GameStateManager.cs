@@ -56,6 +56,7 @@ public class GameStateManager : MonoBehaviour
 
         [Space]
         [Title("Game Event")]
+        public bool dontStopGame = false;
         public bool fail = false;
         public int tryCount = 2;
         public int coinRushTryCount = 1;
@@ -408,6 +409,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.dailyReward = value;
+            SaveFile();
+        }
+    }
+
+    public bool DontStopGame
+    {
+        get
+        {
+            return gameSettings.dontStopGame;
+        }
+        set
+        {
+            gameSettings.dontStopGame = value;
             SaveFile();
         }
     }

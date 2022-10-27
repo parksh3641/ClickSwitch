@@ -178,8 +178,6 @@ public class NickNameManager : MonoBehaviour
 
         nickNameText.text = GameStateManager.instance.NickName;
 
-        playerDataBase.Coin -= 100;
-
         if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Coin, 100);
 
         NotionManager.instance.UseNotion(NotionType.NickNameNotion6);
@@ -189,9 +187,11 @@ public class NickNameManager : MonoBehaviour
 
     public void FreeSuccess()
     {
-        NotionManager.instance.UseNotion(NotionType.NickNameNotion6);
+        profileManager.Initialize();
 
         nickNameText.text = GameStateManager.instance.NickName;
+
+        NotionManager.instance.UseNotion(NotionType.NickNameNotion6);
 
         nickNameFirstView.SetActive(false);
     }

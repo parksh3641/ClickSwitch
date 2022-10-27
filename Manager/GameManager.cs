@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public GamePlayType gamePlayType;
+    public GamePlayType saveGamePlayType;
     public GameModeType gameModeType;
     GameModeLevel level;
 
@@ -587,6 +588,8 @@ public class GameManager : MonoBehaviour
 
     public void CloseGameModeView()
     {
+        gamePlayType = saveGamePlayType;
+
         changeGameModeView.SetActive(false);
     }
 
@@ -678,11 +681,12 @@ public class GameManager : MonoBehaviour
 
     public void ChangeGameMode(GamePlayType type)
     {
+        saveGamePlayType = gamePlayType;
         gamePlayType = type;
 
         changeGameModeView.SetActive(true);
 
-        level = playerDataBase.GetGameMode(gamePlayType);
+        level = playerDataBase.GetGameMode(type);
 
         if (level.hard) hardGameModeLockObj.SetActive(false);
     }
@@ -1020,8 +1024,13 @@ public class GameManager : MonoBehaviour
 
                 break;
             case GamePlayType.GameChoice8:
+
+                GameStateManager.instance.DontStopGame = true;
+
                 coinRushMax = 0;
                 coinRushNumber = 0;
+
+                answerInputText.text = "";
 
                 switch (gameModeType)
                 {
@@ -1424,6 +1433,8 @@ public class GameManager : MonoBehaviour
     {
         PlusScore(3);
 
+        soundManager.PlaySFX(GameSfxType.GetMoney);
+
         if (coinRushNumber + 2 <= coinRushMax)
         {
             coinRushNumber += 2;
@@ -1441,6 +1452,8 @@ public class GameManager : MonoBehaviour
     {
         if(int.Parse(answerInputText.text) == coinRushPasscode)
         {
+            GameStateManager.instance.DontStopGame = false;
+
             coinRushLockObject.SetActive(false);
             plusCoinObject.SetActive(true);
 
