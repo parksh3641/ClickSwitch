@@ -177,7 +177,7 @@ public class IconBoxManager : MonoBehaviour
         {
             int random = Random.Range(3, iconNumber);
 
-            if(shopDataBase.GetIconNumber(IconType.Icon_0 + random) + 1 < 6)
+            if(shopDataBase.GetIconNumber(IconType.Icon_0 + random) + 1 < 3)
             {
                 GetIcon(random);
             }

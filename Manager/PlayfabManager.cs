@@ -1155,6 +1155,8 @@ public class PlayfabManager : MonoBehaviour
                 failAction?.Invoke();
             }
             Debug.LogError(error.GenerateErrorReport());
+
+            NotionManager.instance.UseNotion(NotionType.NickNameNotion5);
         });
     }
 

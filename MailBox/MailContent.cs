@@ -8,12 +8,14 @@ public class MailContent : MonoBehaviour
 {
     public UnityEvent unityEvent;
 
+    public Image backgroundImg;
     public Image icon;
     public Text numberText;
 
     Sprite[] vcArray;
     Sprite[] itemArray;
     Sprite[] etcArray;
+    Sprite[] rankArray;
 
     ItemType itemType = ItemType.Clock;
 
@@ -26,6 +28,7 @@ public class MailContent : MonoBehaviour
         vcArray = imageDataBase.GetVCArray();
         itemArray = imageDataBase.GetItemArray();
         etcArray = imageDataBase.GetETCArray();
+        rankArray = imageDataBase.GetRankArray();
     }
 
 
@@ -34,14 +37,17 @@ public class MailContent : MonoBehaviour
         if(name.Contains("Coin"))
         {
             icon.sprite = vcArray[0];
+            backgroundImg.sprite = rankArray[0];
         }
         else if(name.Contains("Crystal"))
         {
             icon.sprite = vcArray[1];
+            backgroundImg.sprite = rankArray[1];
         }
         else if(name.Contains("IconBox"))
         {
             icon.sprite = etcArray[0];
+            backgroundImg.sprite = rankArray[1];
         }
         else
         {

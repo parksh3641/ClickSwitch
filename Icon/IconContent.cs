@@ -65,14 +65,14 @@ public class IconContent : MonoBehaviour
         }
         else
         {
-            if (iconClass.count >= 5)
+            if (iconClass.count >= 3)
             {
                 UnLock();
             }
             else
             {
-                fillAmount.fillAmount = iconClass.count / 5.0f;
-                countText.text = iconClass.count + " / 5";
+                fillAmount.fillAmount = iconClass.count / 3.0f;
+                countText.text = iconClass.count + " / 3";
             }
         }
     }

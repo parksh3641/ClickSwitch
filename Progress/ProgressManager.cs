@@ -91,10 +91,10 @@ public class ProgressManager : MonoBehaviour
             switch (GameStateManager.instance.Language)
             {
                 case LanguageType.Korean:
-                    priceText.text = "₩ 3700";
+                    priceText.text = "₩ 4400";
                     break;
                 default:
-                    priceText.text = "USD $ 2.49";
+                    priceText.text = "USD $ 2.99";
                     break;
             }
         }

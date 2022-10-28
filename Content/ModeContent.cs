@@ -82,6 +82,7 @@ public class ModeContent : MonoBehaviour
                 outline.enabled = true;
                 break;
             case GamePlayType.GameChoice8:
+                outline.enabled = true;
                 break;
         }
     }
