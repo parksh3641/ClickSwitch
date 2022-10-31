@@ -26,7 +26,7 @@ public class LocalizationContent : MonoBehaviour
     {
         if (name.Length > 0) text.text = LocalizationManager.instance.GetString(name);
 
-        LocalizationManager.instance.AddContent(this);
+        if(LocalizationManager.instance != null) LocalizationManager.instance.AddContent(this);
     }
 
     public void ReLoad()

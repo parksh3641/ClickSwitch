@@ -376,7 +376,7 @@ public class ShopManager : MonoBehaviour
 
     public void SuccessWatchAd()
     {
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 400);
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 500);
 
         NotionManager.instance.UseNotion(NotionType.SuccessWatchAd);
 

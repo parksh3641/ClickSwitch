@@ -63,7 +63,7 @@ public class ShopContent : MonoBehaviour
             case ShopType.WatchAd:
                 titleText.name = "WatchAd";
 
-                coinText.text = "400";
+                coinText.text = "500";
 
                 coin.SetActive(true);
 

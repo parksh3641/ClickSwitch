@@ -23,6 +23,7 @@ using AppleAuth.Extensions;
 using EntityKey = PlayFab.ProfilesModels.EntityKey;
 using System.Text;
 using UnityEngine.SceneManagement;
+using Firebase.Analytics;
 
 public class PlayfabManager : MonoBehaviour
 {
@@ -1332,6 +1333,8 @@ public class PlayfabManager : MonoBehaviour
         PurchaseItemToRM(shopDataBase.RemoveAds);
 
         playerDataBase.RemoveAd = true;
+
+        FirebaseAnalytics.LogEvent("Purchase : RemoveAds");
     }
 
     public void PurchasePaidProgress()
@@ -1339,11 +1342,15 @@ public class PlayfabManager : MonoBehaviour
         PurchaseItemToRM(shopDataBase.PaidProgress);
 
         playerDataBase.PaidProgress = true;
+
+        FirebaseAnalytics.LogEvent("Purchase : PaidProgress");
     }
 
     public void PurchaseCoin(int number)
     {
         UpdateAddCurrency(MoneyType.Coin, number);
+
+        FirebaseAnalytics.LogEvent("PurchaseCoin : " + number);
 
         NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
     }
@@ -1351,6 +1358,8 @@ public class PlayfabManager : MonoBehaviour
     public void PurchaseCrystal(int number)
     {
         UpdateAddCurrency(MoneyType.Crystal, number);
+
+        FirebaseAnalytics.LogEvent("PurchaseCrystal : " + number);
 
         NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
     }
@@ -1596,11 +1605,18 @@ public class PlayfabManager : MonoBehaviour
                     if (list.ItemId.Equals("RemoveAds"))
                     {
                         playerDataBase.RemoveAd = true;
+
+                        shopManager.CheckPurchaseItem();
+                        profileManager.CheckPurchaseItem();
                     }
 
                     if (list.ItemId.Equals("PaidProgress"))
                     {
                         playerDataBase.PaidProgress = true;
+
+                        shopManager.CheckPurchaseItem();
+                        profileManager.CheckPurchaseItem();
+                        progressManager.BuyPaidProgress();
                     }
                 }
             }
