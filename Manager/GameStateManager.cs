@@ -45,6 +45,7 @@ public class GameStateManager : MonoBehaviour
         public bool sfx = true;
         public bool vibration = true;
         public bool sleepMode = false;
+        public bool inAppReview = false;
 
         [Space]
         [Title("Item")]
@@ -58,7 +59,7 @@ public class GameStateManager : MonoBehaviour
         [Title("Game Event")]
         public bool dontStopGame = false;
         public bool fail = false;
-        public int tryCount = 2;
+        public int tryCount = 1;
         public int coinRushTryCount = 1;
 
         [Space]
@@ -266,6 +267,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.sleepMode = value;
+            SaveFile();
+        }
+    }
+
+    public bool InAppReview
+    {
+        get
+        {
+            return gameSettings.inAppReview;
+        }
+        set
+        {
+            gameSettings.inAppReview = value;
             SaveFile();
         }
     }

@@ -64,6 +64,11 @@ public class RewardContent : MonoBehaviour
         bannerObject.SetActive(false);
     }
 
+    private void OnEnable()
+    {
+        if (nameText.name.Length > 0) nameText.ReLoad();
+    }
+
     public void Initialize(ProgressManager manager, RewardClass _rewardClass, int number)
     {
         progressManager = manager;

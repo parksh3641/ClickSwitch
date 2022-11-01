@@ -1565,7 +1565,6 @@ public class GameManager : MonoBehaviour
 
             tryCountText.text = GameStateManager.instance.CoinRushTryCount.ToString();
         }
-
     }
 
     public void SuccessWatchAd()

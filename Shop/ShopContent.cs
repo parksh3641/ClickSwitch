@@ -19,7 +19,7 @@ public class ShopContent : MonoBehaviour
 
     [Space]
     [Title("Text")]
-    public Text priceText;
+    public LocalizationContent priceText;
     public Text coinText;
     public Text crystalText;
 
@@ -47,15 +47,7 @@ public class ShopContent : MonoBehaviour
             case ShopType.RemoveAds:
                 titleText.name = "RemoveAds";
 
-                switch (GameStateManager.instance.Language)
-                {
-                    case LanguageType.Korean:
-                        priceText.text = "₩ 3000";
-                        break;
-                    default:
-                        priceText.text = "USD $ 1.99";
-                        break;
-                }
+                priceText.name = "ShopRemoveAds";
 
                 price.SetActive(true);
 
@@ -92,45 +84,21 @@ public class ShopContent : MonoBehaviour
             case ShopType.Crystal100:
                 titleText.name = "Crystal100";
 
-                switch (GameStateManager.instance.Language)
-                {
-                    case LanguageType.Korean:
-                        priceText.text = "₩ 1500";
-                        break;
-                    default:
-                        priceText.text = "USD $ 0.99";
-                        break;
-                }
+                priceText.name = "ShopCrystal100";
 
                 price.SetActive(true);
                 break;
             case ShopType.Crystal200:
                 titleText.name = "Crystal200";
 
-                switch (GameStateManager.instance.Language)
-                {
-                    case LanguageType.Korean:
-                        priceText.text = "₩ 4400";
-                        break;
-                    default:
-                        priceText.text = "USD $ 2.99";
-                        break;
-                }
+                priceText.name = "ShopCrystal200";
 
                 price.SetActive(true);
                 break;
             case ShopType.Crystal300:
                 titleText.name = "Crystal300";
 
-                switch (GameStateManager.instance.Language)
-                {
-                    case LanguageType.Korean:
-                        priceText.text = "₩ 7500";
-                        break;
-                    default:
-                        priceText.text = "USD $ 4.99";
-                        break;
-                }
+                priceText.name = "ShopCrystal300";
 
                 price.SetActive(true);
                 break;
@@ -145,20 +113,13 @@ public class ShopContent : MonoBehaviour
             case ShopType.PaidProgress:
                 titleText.name = "PaidProgress";
 
-                switch (GameStateManager.instance.Language)
-                {
-                    case LanguageType.Korean:
-                        priceText.text = "₩ 4400";
-                        break;
-                    default:
-                        priceText.text = "USD $ 2.99";
-                        break;
-                }
+                priceText.name = "ShopPaidProgress";
 
                 price.SetActive(true);
                 break;
         }
 
+        priceText.ReLoad();
         titleText.ReLoad();
     }
 }

@@ -43,8 +43,6 @@ public class ModeContent : MonoBehaviour
         iconImgArray = imageDataBase.GetIconArray();
         modeBackgroundImgArray = imageDataBase.GetModeBackgroundArray();
 
-        outline.enabled = false;
-
         if (lockObj != null) lockObj.SetActive(true);
     }
 
@@ -58,6 +56,8 @@ public class ModeContent : MonoBehaviour
 
     void CheckIconOutline()
     {
+        outline.enabled = false;
+
         switch (gamePlayType)
         {
             case GamePlayType.GameChoice1:

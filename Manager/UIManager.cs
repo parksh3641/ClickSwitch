@@ -141,6 +141,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     public UpgradeManager upgradeManager;
     public BannerManager bannerManager;
     public ProgressManager progressManager;
+    public ReviewManager reviewManager;
 
     [Title("Animation")]
     public CoinAnimation goldAnimation;
@@ -1324,6 +1325,13 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         gameStartUI.SetActive(true);
         gameEndUI.SetActive(false);
+
+
+        if (!GameStateManager.instance.InAppReview && playerDataBase.TotalScore >= 1000)
+        {
+            reviewManager.OpenReview();
+        }
+
     }
 
 

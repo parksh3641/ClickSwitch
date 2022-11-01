@@ -27,6 +27,8 @@ public class ResetManager : MonoBehaviour
 
     public Text nextEventText;
 
+    string localization = "";
+
     DateTime serverTime;
 
     [Title("Normal Mode")]
@@ -60,6 +62,10 @@ public class ResetManager : MonoBehaviour
             OnCheckAttendanceDay();
 
             CheckGameMode();
+
+            nextEventText.text = "";
+
+            localization = LocalizationManager.instance.GetString("NextEvent");
         }
         else
         {
@@ -85,7 +91,7 @@ public class ResetManager : MonoBehaviour
             if (PlayfabManager.instance.isActive)
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceDay", int.Parse(playerDataBase.AttendanceDay));
 
-            GameStateManager.instance.TryCount = 2;
+            GameStateManager.instance.TryCount = 1;
             GameStateManager.instance.EventWatchAd = false;
             GameStateManager.instance.DailyReward = false;
             GameStateManager.instance.CoinRushTryCount = 1;
@@ -136,7 +142,7 @@ public class ResetManager : MonoBehaviour
             if (PlayfabManager.instance.isActive)
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceDay", int.Parse(playerDataBase.AttendanceDay));
 
-            GameStateManager.instance.TryCount = 2;
+            GameStateManager.instance.TryCount = 1;
             GameStateManager.instance.EventWatchAd = false;
             GameStateManager.instance.DailyReward = false;
             GameStateManager.instance.CoinRushTryCount = 1;
@@ -217,7 +223,7 @@ public class ResetManager : MonoBehaviour
     {
         serverTime = serverTime.AddSeconds(-1);
 
-        nextEventText.text = " " + serverTime.ToString("hh:mm:ss");
+        nextEventText.text = localization + " : " + serverTime.ToString("hh:mm:ss");
 
         yield return new WaitForSeconds(1f);
 

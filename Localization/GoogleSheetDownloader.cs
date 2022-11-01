@@ -14,6 +14,9 @@ public class GoogleSheetDownloader : MonoBehaviour
     const string UpgradeURL = "https://docs.google.com/spreadsheets/d/1nTQjgAQ631ayvzsWQeXt0PwTpneVV5sPs173vgpg05w/export?format=tsv&gid=374819877";
 
     public bool isActive = false;
+    public bool isLocalization = false;
+
+    public float percent = 0;
 
     public Text messageText;
     public Image barFillAmount;
@@ -56,15 +59,28 @@ public class GoogleSheetDownloader : MonoBehaviour
 
     IEnumerator LoadingCoroution()
     {
-        messageText.text = LocalizationManager.instance.GetString("Downloading");
-        yield return new WaitForSeconds(0.5f);
-        messageText.text = LocalizationManager.instance.GetString("Downloading") + ".";
-        yield return new WaitForSeconds(0.5f);
-        messageText.text = LocalizationManager.instance.GetString("Downloading") + "..";
-        yield return new WaitForSeconds(0.5f);
-        messageText.text = LocalizationManager.instance.GetString("Downloading") + "...";
-        yield return new WaitForSeconds(0.5f);
-        StartCoroutine(LoadingCoroution());
+        if(!isLocalization)
+        {
+            if(percent <= 0.25f)
+            {
+                percent += 0.01f;
+                barFillAmount.fillAmount = percent;
+            }
+            yield return new WaitForSeconds(1f);
+            StartCoroutine(LoadingCoroution());
+        }
+        else
+        {
+            messageText.text = LocalizationManager.instance.GetString("Downloading");
+            yield return new WaitForSeconds(0.5f);
+            messageText.text = LocalizationManager.instance.GetString("Downloading") + ".";
+            yield return new WaitForSeconds(0.5f);
+            messageText.text = LocalizationManager.instance.GetString("Downloading") + "..";
+            yield return new WaitForSeconds(0.5f);
+            messageText.text = LocalizationManager.instance.GetString("Downloading") + "...";
+            yield return new WaitForSeconds(0.5f);
+            StartCoroutine(LoadingCoroution());
+        }
     }
 
     IEnumerator DownloadFile()
@@ -79,6 +95,8 @@ public class GoogleSheetDownloader : MonoBehaviour
             yield return www.SendWebRequest();
             SetLocalization(www.downloadHandler.text);
             Debug.Log("Localization File Download Complete!");
+
+            isLocalization = true;
 
             CheckPercent(25);
 
@@ -126,6 +144,8 @@ public class GoogleSheetDownloader : MonoBehaviour
 
                 CheckPercent(25);
             }
+
+            isLocalization = true;
 
             if (!File.Exists(SystemPath.GetPath() + "Value.txt"))
             {

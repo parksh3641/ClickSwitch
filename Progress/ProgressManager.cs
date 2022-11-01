@@ -17,7 +17,7 @@ public class ProgressManager : MonoBehaviour
 
     [Space]
     [Title("Purchase")]
-    public Text priceText;
+    public LocalizationContent priceText;
     public GameObject[] purchaseObj;
 
     public ProgressContent progressContent;
@@ -88,15 +88,8 @@ public class ProgressManager : MonoBehaviour
         {
             sPurchaseView.SetActive(true);
 
-            switch (GameStateManager.instance.Language)
-            {
-                case LanguageType.Korean:
-                    priceText.text = "₩ 4400";
-                    break;
-                default:
-                    priceText.text = "USD $ 2.99";
-                    break;
-            }
+            priceText.name = "ShopPaidProgress";
+            priceText.ReLoad();
         }
         else
         {

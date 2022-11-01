@@ -14,6 +14,9 @@ public class DailyManager : MonoBehaviour
 
     public Text timerText;
 
+    string localization = "";
+    string localization2 = "";
+
     public DailyContent[] dailyContents;
 
     public Text clearText;
@@ -78,6 +81,13 @@ public class DailyManager : MonoBehaviour
             dailyView.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
 
             showVCView.SetActive(true);
+
+            timerText.text = "";
+
+            localization = LocalizationManager.instance.GetString("NextQuest");
+            localization2 = LocalizationManager.instance.GetString("GetClearReward");
+
+            clearText.text = localization2 + " " + playerDataBase.DailyMissionCount + " / 3";
         }
         else
         {
@@ -177,14 +187,14 @@ public class DailyManager : MonoBehaviour
     }
 
 
-    void LoadDailyMission() //???????????????? ????
+    void LoadDailyMission()
     {
         for(int i = 0; i < dailyContents.Length; i ++)
         {
             dailyContents[i].Initialize(playerDataBase.GetDailyMission(i), i, this);
         }
 
-        clearText.text = playerDataBase.DailyMissionCount + " / 3";
+        clearText.text = localization2 + " " + playerDataBase.DailyMissionCount + " / 3";
 
         if (playerDataBase.DailyMissionCount >= 3 && !playerDataBase.DailyMissionClear)
         {
@@ -246,7 +256,7 @@ public class DailyManager : MonoBehaviour
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyMissionCount", playerDataBase.DailyMissionCount);
         }
 
-        clearText.text = playerDataBase.DailyMissionCount + " / 3";
+        clearText.text = localization2 + " " + playerDataBase.DailyMissionCount + " / 3";
 
         if (playerDataBase.DailyMissionCount >= 3)
         {
@@ -321,7 +331,7 @@ public class DailyManager : MonoBehaviour
             n = "0" + k.ToString();
         }
 
-        timerText.text = " : " + l + ":" + m + ":" + n;
+        timerText.text = localization + " : " + l + ":" + m + ":" + n;
 
         yield return new WaitForSeconds(1);
         StartCoroutine(DailyMissionTimer());
