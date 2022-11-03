@@ -26,6 +26,8 @@ public class ReviewManager : MonoBehaviour
 
     public void OpenURL()
     {
+        appReviewView.SetActive(false);
+
 #if UNITY_ANDROID
         Application.OpenURL("https://play.google.com/store/apps/details?id=com.unity3d.toucharcade");
 #elif UNITY_IOS
