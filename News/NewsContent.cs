@@ -29,7 +29,7 @@ public class NewsContent : MonoBehaviour
             case LanguageType.English:
                 dateText = date.ToString("MM/dd/yyyy");
                 break;
-            case LanguageType.Japenese:
+            case LanguageType.Japanese:
                 dateText = date.ToString("yyyy/MM/dd");
                 break;
             case LanguageType.Chinese:

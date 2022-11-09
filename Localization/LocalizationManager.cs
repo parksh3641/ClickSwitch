@@ -56,7 +56,7 @@ public class LocalizationManager : MonoBehaviour
                     case LanguageType.English:
                         str = item.english;
                         break;
-                    case LanguageType.Japenese:
+                    case LanguageType.Japanese:
                         str = item.japanese;
                         break;
                     case LanguageType.Chinese:
@@ -83,11 +83,20 @@ public class LocalizationManager : MonoBehaviour
                     case LanguageType.Bengali:
                         str = item.bengali;
                         break;
+                    case LanguageType.Indonesian:
+                        str = item.indonesian;
+                        break;
+                    case LanguageType.Italian:
+                        str = item.italian;
+                        break;
+                    case LanguageType.Dutch:
+                        str = item.dutch;
+                        break;
                 }
             }
         }
 
-        if(str.Length == 0)
+        if (str.Length == 0)
         {
             str = name;
         }
@@ -111,7 +120,7 @@ public class LocalizationManager : MonoBehaviour
 
     public void ChangeJapanese()
     {
-        ChangeLanguage(LanguageType.Japenese);
+        ChangeLanguage(LanguageType.Japanese);
 
         eChangeLanguage.Invoke();
     }
@@ -169,6 +178,27 @@ public class LocalizationManager : MonoBehaviour
         eChangeLanguage.Invoke();
     }
 
+    public void ChangeIndonesian()
+    {
+        ChangeLanguage(LanguageType.Indonesian);
+
+        eChangeLanguage.Invoke();
+    }
+
+    public void ChangeItalian()
+    {
+        ChangeLanguage(LanguageType.Italian);
+
+        eChangeLanguage.Invoke();
+    }
+
+    public void ChangeDutch()
+    {
+        ChangeLanguage(LanguageType.Dutch);
+
+        eChangeLanguage.Invoke();
+    }
+
     public void ChangeLanguage(LanguageType type)
     {
         Debug.Log("Change Language : " + type);
@@ -186,7 +216,7 @@ public class LocalizationManager : MonoBehaviour
             case LanguageType.English:
                 iso = "en";
                 break;
-            case LanguageType.Japenese:
+            case LanguageType.Japanese:
                 iso = "ja";
                 break;
             case LanguageType.Chinese:
@@ -212,6 +242,15 @@ public class LocalizationManager : MonoBehaviour
                 break;
             case LanguageType.Bengali:
                 iso = "bn";
+                break;
+            case LanguageType.Indonesian:
+                iso = "id";
+                break;
+            case LanguageType.Italian:
+                iso = "it";
+                break;
+            case LanguageType.Dutch:
+                iso = "nl";
                 break;
             default:
                 iso = "en";

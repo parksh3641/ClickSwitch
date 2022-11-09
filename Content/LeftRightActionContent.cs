@@ -9,15 +9,31 @@ public class LeftRightActionContent : MonoBehaviour
 
     public Image icon;
     public Image backgroundImg;
+    public Image focus;
 
     public Sprite[] iconArray;
     public Sprite[] backgroundImgArray;
+
+    private void Awake()
+    {
+        focus.enabled = false;
+    }
+
+    private void OnDisable()
+    {
+        focus.enabled = false;
+    }
 
     public void Initialize(int number)
     {
         index = number;
 
         icon.sprite = iconArray[number];
+    }
+
+    public void First()
+    {
+        focus.enabled = true;
     }
 
     public void RandomBackground()

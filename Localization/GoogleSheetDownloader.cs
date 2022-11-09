@@ -235,6 +235,9 @@ public class GoogleSheetDownloader : MonoBehaviour
             content.spanish = column[9].Replace('$', '\n');
             content.arabic = column[10].Replace('$', '\n');
             content.bengali = column[11].Replace('$', '\n');
+            content.indonesian = column[12].Replace('$', '\n');
+            content.italian = column[13].Replace('$', '\n');
+            content.dutch = column[14].Replace('$', '\n');
 
             localizationDataBase.SetLocalization(content);
         }

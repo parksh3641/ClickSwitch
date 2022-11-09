@@ -20,6 +20,7 @@ public class UpgradeContent : MonoBehaviour
 
     private int level = 0;
     private int upgradeValue = 0;
+    private int maxLevel = 20;
 
     SoundManager soundManager;
 
@@ -47,7 +48,7 @@ public class UpgradeContent : MonoBehaviour
         icon.sprite = upgradeIcon[(int)type];
 
         level = playerDataBase.GetLevel(type);
-        levelText.text = "Lv. " + level + "/10";
+        levelText.text = "Lv. " + level + "/" + maxLevel.ToString();
 
         titleText.name = type.ToString();
         titleText.ReLoad();
@@ -85,7 +86,7 @@ public class UpgradeContent : MonoBehaviour
 
         upgradeValue = upgradeInformation.price + (upgradeInformation.addPrice * level);
 
-        if (level >= 10)
+        if (level >= maxLevel)
         {
             nextValueText.text = "-";
             upgradeValueText.text = LocalizationManager.instance.GetString("Max");
@@ -104,7 +105,7 @@ public class UpgradeContent : MonoBehaviour
             switch (upgradeType)
             {
                 case UpgradeType.StartTime:
-                    if (playerDataBase.StartTimeLevel >= 10)
+                    if (playerDataBase.StartTimeLevel >= maxLevel)
                     {
                         NotionManager.instance.UseNotion(NotionType.UpgradeMax);
                         return;
@@ -115,7 +116,7 @@ public class UpgradeContent : MonoBehaviour
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("StartTimeLevel", playerDataBase.StartTimeLevel);
                     break;
                 case UpgradeType.Critical:
-                    if (playerDataBase.CriticalLevel >= 10)
+                    if (playerDataBase.CriticalLevel >= maxLevel)
                     {
                         NotionManager.instance.UseNotion(NotionType.UpgradeMax);
                         return;
@@ -125,7 +126,7 @@ public class UpgradeContent : MonoBehaviour
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("CriticalLevel", playerDataBase.CriticalLevel);
                     break;
                 case UpgradeType.Burning:
-                    if (playerDataBase.BurningLevel >= 10)
+                    if (playerDataBase.BurningLevel >= maxLevel)
                     {
                         NotionManager.instance.UseNotion(NotionType.UpgradeMax);
                         return;
@@ -135,7 +136,7 @@ public class UpgradeContent : MonoBehaviour
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("BurningLevel", playerDataBase.BurningLevel);
                     break;
                 case UpgradeType.AddExp:
-                    if (playerDataBase.AddExpLevel >= 10)
+                    if (playerDataBase.AddExpLevel >= maxLevel)
                     {
                         NotionManager.instance.UseNotion(NotionType.UpgradeMax);
                         return;
@@ -145,7 +146,7 @@ public class UpgradeContent : MonoBehaviour
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("AddExpLevel", playerDataBase.AddExpLevel);
                     break;
                 case UpgradeType.AddGold:
-                    if (playerDataBase.AddGoldLevel >= 10)
+                    if (playerDataBase.AddGoldLevel >= maxLevel)
                     {
                         NotionManager.instance.UseNotion(NotionType.UpgradeMax);
                         return;
@@ -155,7 +156,7 @@ public class UpgradeContent : MonoBehaviour
                     if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("AddGoldLevel", playerDataBase.AddGoldLevel);
                     break;
                 case UpgradeType.ComboTime:
-                    if (playerDataBase.ComboTimeLevel >= 10)
+                    if (playerDataBase.ComboTimeLevel >= maxLevel)
                     {
                         NotionManager.instance.UseNotion(NotionType.UpgradeMax);
                         return;

@@ -35,4 +35,7 @@ public class LocalizationData
     public string spanish = "";
     public string arabic = "";
     public string bengali = "";
+    public string indonesian = "";
+    public string italian = "";
+    public string dutch = "";
 }

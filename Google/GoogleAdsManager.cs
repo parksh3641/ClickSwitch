@@ -31,9 +31,9 @@ public class GoogleAdsManager : MonoBehaviour
 #if UNITY_ANDROID
         adUnitId = "ca-app-pub-6754544778509872/8238444835";
 #elif UNITY_IOS
-            adUnitId = "ca-app-pub-6754544778509872/7165886378";
+        adUnitId = "ca-app-pub-6754544778509872/7165886378";
 #else
-            adUnitId = "unexpected_platform";
+        adUnitId = "unexpected_platform";
 #endif
 
         this.rewardedAd = new RewardedAd(adUnitId);

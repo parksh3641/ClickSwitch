@@ -18,7 +18,7 @@ public class SystemManager : MonoBehaviour
             }
             else if (Application.systemLanguage == SystemLanguage.Japanese)
             {
-                GameStateManager.instance.Language = LanguageType.Japenese;
+                GameStateManager.instance.Language = LanguageType.Japanese;
             }
             else if (Application.systemLanguage == SystemLanguage.Chinese)
             {
@@ -43,6 +43,18 @@ public class SystemManager : MonoBehaviour
             else if (Application.systemLanguage == SystemLanguage.Arabic)
             {
                 GameStateManager.instance.Language = LanguageType.Arabic;
+            }
+            else if (Application.systemLanguage == SystemLanguage.Indonesian)
+            {
+                GameStateManager.instance.Language = LanguageType.Indonesian;
+            }
+            else if (Application.systemLanguage == SystemLanguage.Italian)
+            {
+                GameStateManager.instance.Language = LanguageType.Italian;
+            }
+            else if (Application.systemLanguage == SystemLanguage.Dutch)
+            {
+                GameStateManager.instance.Language = LanguageType.Dutch;
             }
             else
             {

@@ -1471,7 +1471,6 @@ public class PlayfabManager : MonoBehaviour
 
         uiManager.RenewalVC();
         StateManager.instance.ChangeNumber();
-        soundManager.PlaySFX(GameSfxType.BuyItem);
 
         action.Invoke(true);
         Debug.Log(shopClass.itemId + " Buy Success!");

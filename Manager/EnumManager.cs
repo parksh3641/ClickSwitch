@@ -42,7 +42,7 @@ public enum LanguageType
     Default = 0,
     Korean,
     English,
-    Japenese,
+    Japanese,
     Chinese,
     Indian,
     Portuguese,
@@ -50,7 +50,10 @@ public enum LanguageType
     German,
     Spanish,
     Arabic,
-    Bengali
+    Bengali,
+    Indonesian,
+    Italian,
+    Dutch
 }
 
 public enum LoginType
@@ -86,7 +89,11 @@ public enum GameSfxType
     BuyItem,
     BoxOpen,
     GameOver,
-    Oha
+    Oha,
+    Three,
+    Two,
+    One,
+    Go
 }
 
 public enum ShopType

@@ -64,6 +64,8 @@ public class ShopManager : MonoBehaviour
     Sprite[] itemArray;
     Sprite[] etcArray;
 
+    public SoundManager soundManager;
+
     PlayerDataBase playerDataBase;
     ShopDataBase shopDataBase;
     ImageDataBase imageDataBase;
@@ -279,6 +281,8 @@ public class ShopManager : MonoBehaviour
                 }
                 break;
         }
+
+        soundManager.PlaySFX(GameSfxType.BuyItem);
 
         if (shopClass.itemId.Equals("IconBox"))
         {

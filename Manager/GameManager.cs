@@ -527,6 +527,8 @@ public class GameManager : MonoBehaviour
         leftRightActionNumber = leftRightActionUpList.Count - 1;
 
         leftRightActionIndex = numberList.Dequeue();
+
+        LeftRightFirst();
     }
 
     private void RandomCoinRush()
@@ -1410,6 +1412,8 @@ public class GameManager : MonoBehaviour
 
             leftRightActionNumber--;
             leftRightActionIndex = numberList.Dequeue();
+
+            LeftRightFirst();
         }
         else
         {
@@ -1425,6 +1429,18 @@ public class GameManager : MonoBehaviour
 
                 if (!GameStateManager.instance.Fail) GameStateManager.instance.Fail = true;
             }
+        }
+    }
+
+    public void LeftRightFirst()
+    {
+        if (leftRightActionNumber < 0)
+        {
+            leftRightActionUpList[leftRightActionUpList.Count - 1].First();
+        }
+        else
+        {
+            leftRightActionUpList[leftRightActionNumber].First();
         }
     }
 
