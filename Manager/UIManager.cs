@@ -1435,22 +1435,6 @@ public class UIManager : MonoBehaviour, IGameEvent
         {
             if (!pause)
             {
-                switch(number)
-                {
-                    case 4:
-                        soundManager.PlaySFX(GameSfxType.Three);
-                        break;
-                    case 3:
-                        soundManager.PlaySFX(GameSfxType.Two);
-                        break;
-                    case 2:
-                        soundManager.PlaySFX(GameSfxType.One);
-                        break;
-                    case 1:
-                        soundManager.PlaySFX(GameSfxType.Go);
-                        break;
-                }
-
                 number -= 1;
                 gameReadyText.text = number.ToString();
             }

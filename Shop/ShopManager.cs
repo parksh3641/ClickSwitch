@@ -12,6 +12,8 @@ public class ShopManager : MonoBehaviour
     public GameObject shopView;
     public GameObject showVCView;
 
+    public GameObject alarm;
+
     public NotionManager notionManager;
 
     [Space]
@@ -75,6 +77,7 @@ public class ShopManager : MonoBehaviour
         shopView.SetActive(false);
         showVCView.SetActive(false);
         buyWindow.SetActive(false);
+        alarm.SetActive(false);
 
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
         if (shopDataBase == null) shopDataBase = Resources.Load("ShopDataBase") as ShopDataBase;
@@ -83,7 +86,7 @@ public class ShopManager : MonoBehaviour
 
     void Start()
     {
-
+        if(!GameStateManager.instance.DailyReward) alarm.SetActive(true);
     }
 
     public void Initialize()
@@ -398,12 +401,12 @@ public class ShopManager : MonoBehaviour
         switch (type)
         {
             case ShopType.Coin1000:
-                if(playerDataBase.Coin + 1000 < 10000000)
+                if(playerDataBase.Coin + 2000 < 10000000)
                 {
                     if (playerDataBase.Crystal >= 60)
                     {
                         if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Crystal, 60);
-                        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 1000);
+                        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 2000);
 
                         NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
                     }
@@ -418,12 +421,12 @@ public class ShopManager : MonoBehaviour
                 }
                 break;
             case ShopType.Coin2000:
-                if (playerDataBase.Coin + 10000 < 10000000)
+                if (playerDataBase.Coin + 20000 < 10000000)
                 {
                     if (playerDataBase.Crystal >= 500)
                     {
                         if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Crystal, 500);
-                        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 10000);
+                        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 20000);
 
                         NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
                     }
@@ -438,12 +441,12 @@ public class ShopManager : MonoBehaviour
                 }
                 break;
             case ShopType.Coin3000:
-                if (playerDataBase.Coin + 100000 < 10000000)
+                if (playerDataBase.Coin + 200000 < 10000000)
                 {
                     if (playerDataBase.Crystal >= 4500)
                     {
                         if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Crystal, 4500);
-                        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 100000);
+                        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 200000);
 
                         NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
                     }
@@ -472,6 +475,8 @@ public class ShopManager : MonoBehaviour
                 {
                     NotionManager.instance.UseNotion(NotionType.NowReceivedNotion);
                 }
+
+                alarm.SetActive(false);
                 break;
         }
     }

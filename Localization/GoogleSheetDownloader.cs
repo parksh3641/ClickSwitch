@@ -65,6 +65,7 @@ public class GoogleSheetDownloader : MonoBehaviour
             {
                 percent += 0.01f;
                 barFillAmount.fillAmount = percent;
+                barPercentText.text = ((int)(percent * 100)).ToString() + "%";
             }
             yield return new WaitForSeconds(1f);
             StartCoroutine(LoadingCoroution());
