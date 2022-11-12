@@ -239,6 +239,10 @@ public class ShopManager : MonoBehaviour
         {
             buyCount++;
         }
+        else
+        {
+            buyCount = 1;
+        }
 
         buyCountText.text = buyCount.ToString();
         buyPriceText.text = (buyPrice * buyCount).ToString();
@@ -249,6 +253,10 @@ public class ShopManager : MonoBehaviour
         if(buyCount - 1 > 0)
         {
             buyCount--;
+        }
+        else
+        {
+            buyCount = 99;
         }
 
         buyCountText.text = buyCount.ToString();
