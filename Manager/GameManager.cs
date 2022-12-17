@@ -1475,7 +1475,7 @@ public class GameManager : MonoBehaviour
 
             soundManager.PlaySFX(GameSfxType.Success);
 
-            NotionManager.instance.UseNotion(NotionType.CorrectNotion);
+            NotionManager.instance.UseNotion(NotionType.TouchTreasureNotion);
         }
         else
         {

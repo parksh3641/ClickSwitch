@@ -17,6 +17,7 @@ public class UpgradeContent : MonoBehaviour
     public Text nextValueText;
 
     public Text upgradeValueText;
+    public GameObject maxObj;
 
     private int level = 0;
     private int upgradeValue = 0;
@@ -89,12 +90,14 @@ public class UpgradeContent : MonoBehaviour
         if (level >= maxLevel)
         {
             nextValueText.text = "-";
-            upgradeValueText.text = LocalizationManager.instance.GetString("Max");
+            upgradeValueText.text = "";
+            maxObj.SetActive(true);
         }
         else
         {
             nextValueText.text = (upgradeInformation.value + (upgradeInformation.addValue * (level + 1))).ToString() + unit;
             upgradeValueText.text = upgradeValue.ToString();
+            maxObj.SetActive(false);
         }
     }
 

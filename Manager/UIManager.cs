@@ -502,6 +502,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         comboManager.barAnimation.OnReset();
         gameEndAnimation.OnReset();
+        gameEndAnimView.SetActive(false);
     }
 
     public void CloseGamePlayUI()
@@ -749,6 +750,7 @@ public class UIManager : MonoBehaviour, IGameEvent
         Debug.Log("Game End");
 
         CloseGamePlayUI();
+        gameEndAnimation.OnReset();
         gameEndAnimView.SetActive(false);
         gameEndUI.SetActive(true);
 
