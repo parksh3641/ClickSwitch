@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class ItemManager : MonoBehaviour
 {
+    public GameObject itemView;
+
     public ItemContent[] itemContents;
 
     public LocalizationContent selectItemText;
@@ -15,6 +17,8 @@ public class ItemManager : MonoBehaviour
     private void Awake()
     {
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+
+        itemView.SetActive(false);
     }
 
     void OnEnable()
@@ -25,6 +29,21 @@ public class ItemManager : MonoBehaviour
     void OnDisable()
     {
         StateManager.eChangeNumber -= Initialize;
+    }
+
+    public void OpenItem()
+    {
+        if (!itemView.activeSelf)
+        {
+            itemView.SetActive(true);
+
+            Initialize();
+
+        }
+        else
+        {
+            itemView.SetActive(false);
+        }
     }
 
     public void Initialize()

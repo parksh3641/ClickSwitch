@@ -51,7 +51,7 @@ public class ProgressManager : MonoBehaviour
         for(int i = 0; i < progressDataBase.freeRewardList.Count; i ++)
         {
             ProgressContent monster = Instantiate(progressContent);
-            monster.name = "ProgressContent" + i;
+            monster.name = "ProgressContent_" + i;
             monster.transform.position = Vector3.zero;
             monster.transform.localScale = Vector3.one;
             monster.transform.parent = progressContentTransform;
@@ -99,6 +99,11 @@ public class ProgressManager : MonoBehaviour
 
     public void CheckProgress()
     {
+        for(int i = 0; i < progressContentList.Count; i ++)
+        {
+            progressContentList[i].transform.localScale = Vector3.one;
+        }
+
         CheckPurchaseButton();
 
         int score = playerDataBase.TotalScore;

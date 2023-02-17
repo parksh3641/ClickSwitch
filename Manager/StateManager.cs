@@ -41,7 +41,7 @@ public class StateManager : MonoBehaviour
             profileManager.Initialize();
             nickNameManager.Initialize();
             shopManager.Initialize();
-            itemManager.Initialize();
+            //itemManager.Initialize();
             iconManager.Initialize();
             newsManager.Initialize();
             levelManager.Initialize();

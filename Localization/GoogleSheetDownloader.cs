@@ -19,8 +19,10 @@ public class GoogleSheetDownloader : MonoBehaviour
     public float percent = 0;
 
     public Text messageText;
-    public Image barFillAmount;
     public Text barPercentText;
+
+    public GameObject bar;
+    public Image barFillAmount;
 
     public LoginManager loginManager;
 
@@ -34,6 +36,7 @@ public class GoogleSheetDownloader : MonoBehaviour
 
         messageText.text = "";
 
+        bar.SetActive(true);
         barFillAmount.fillAmount = 0f;
         barPercentText.text = "0%";
 
@@ -66,6 +69,7 @@ public class GoogleSheetDownloader : MonoBehaviour
                 percent += 0.01f;
                 barFillAmount.fillAmount = percent;
                 barPercentText.text = ((int)(percent * 100)).ToString() + "%";
+                messageText.text = "Downloading...";
             }
             yield return new WaitForSeconds(1f);
             StartCoroutine(LoadingCoroution());
@@ -203,6 +207,8 @@ public class GoogleSheetDownloader : MonoBehaviour
         {
             Debug.Log("BadWord File is exists");
         }
+
+        bar.SetActive(false);
 
         CheckPercent(100);
 

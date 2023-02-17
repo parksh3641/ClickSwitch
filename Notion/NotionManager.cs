@@ -155,5 +155,6 @@ public enum NotionType
     NowReceivedNotion,
     SaveNotion,
     CorrectNotion,
-    WrongNotion
+    WrongNotion,
+    TouchTreasureNotion
 }

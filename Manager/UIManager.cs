@@ -144,6 +144,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     public BannerManager bannerManager;
     public ProgressManager progressManager;
     public ReviewManager reviewManager;
+    public ItemManager itemManager;
 
     [Title("Animation")]
     public CoinAnimation goldAnimation;
@@ -502,6 +503,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         comboManager.barAnimation.OnReset();
         gameEndAnimation.OnReset();
+        gameEndAnimView.SetActive(false);
     }
 
     public void CloseGamePlayUI()
@@ -695,6 +697,8 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         Debug.Log("Game Start");
 
+        itemManager.OpenItem();
+
         GameStateManager.instance.PlayGame = true;
 
         pause = false;
@@ -749,6 +753,7 @@ public class UIManager : MonoBehaviour, IGameEvent
         Debug.Log("Game End");
 
         CloseGamePlayUI();
+        gameEndAnimation.OnReset();
         gameEndAnimView.SetActive(false);
         gameEndUI.SetActive(true);
 

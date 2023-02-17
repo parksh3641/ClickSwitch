@@ -239,6 +239,10 @@ public class ShopManager : MonoBehaviour
         {
             buyCount++;
         }
+        else
+        {
+            buyCount = 1;
+        }
 
         buyCountText.text = buyCount.ToString();
         buyPriceText.text = (buyPrice * buyCount).ToString();
@@ -249,6 +253,10 @@ public class ShopManager : MonoBehaviour
         if(buyCount - 1 > 0)
         {
             buyCount--;
+        }
+        else
+        {
+            buyCount = 99;
         }
 
         buyCountText.text = buyCount.ToString();
@@ -383,7 +391,7 @@ public class ShopManager : MonoBehaviour
 
     public void SuccessWatchAd()
     {
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 500);
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 1000);
 
         NotionManager.instance.UseNotion(NotionType.SuccessWatchAd);
 
