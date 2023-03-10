@@ -184,10 +184,11 @@ public enum BannerType
 
 public enum AdType
 {
-    CoinX2,
+    CoinX3,
     TryCount,
     ShopWatchAd,
-    CoinRushTryCount
+    CoinRushTryCount,
+    DailyMissonX3
 }
 
 public enum MissionType

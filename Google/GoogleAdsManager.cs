@@ -9,11 +9,12 @@ using System.Collections;
 
 public class GoogleAdsManager : MonoBehaviour
 {
-    public AdType adType = AdType.CoinX2;
+    public AdType adType = AdType.CoinX3;
 
     public UIManager uIManager;
     public GameManager gameManager;
     public ShopManager shopManager;
+    public DailyManager dailyManager;
 
     string adUnitId;
 
@@ -59,7 +60,7 @@ public class GoogleAdsManager : MonoBehaviour
 
     public void Show(int number)
     {
-        adType = AdType.CoinX2;
+        adType = AdType.CoinX3;
         adType += number;
 
 
@@ -81,6 +82,10 @@ public class GoogleAdsManager : MonoBehaviour
                     break;
                 case 3:
                     gameManager.SuccessCoinRushAd();
+
+                    break;
+                case 4:
+                    dailyManager.SuccessRewardAd();
 
                     break;
             }
@@ -164,7 +169,7 @@ public class GoogleAdsManager : MonoBehaviour
     {
         switch (adType)
         {
-            case AdType.CoinX2:
+            case AdType.CoinX3:
                 uIManager.SuccessWatchAd();
                 break;
             case AdType.TryCount:
@@ -175,6 +180,9 @@ public class GoogleAdsManager : MonoBehaviour
                 break;
             case AdType.CoinRushTryCount:
                 gameManager.SuccessCoinRushAd();
+                break;
+            case AdType.DailyMissonX3:
+                dailyManager.SuccessRewardAd();
                 break;
         }
     }

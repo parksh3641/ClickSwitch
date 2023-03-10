@@ -391,7 +391,7 @@ public class ShopManager : MonoBehaviour
 
     public void SuccessWatchAd()
     {
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 1000);
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 1500);
 
         NotionManager.instance.UseNotion(NotionType.SuccessWatchAd);
 
@@ -471,7 +471,7 @@ public class ShopManager : MonoBehaviour
             case ShopType.DailyReward:
                 if(!GameStateManager.instance.DailyReward && !dailyLock.activeInHierarchy)
                 {
-                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 150);
+                    if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 300);
 
                     dailyLock.SetActive(true);
 

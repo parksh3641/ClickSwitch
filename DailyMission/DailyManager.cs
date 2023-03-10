@@ -20,7 +20,7 @@ public class DailyManager : MonoBehaviour
     public DailyContent[] dailyContents;
 
     public Text clearText;
-    public GameObject lockReceiveObj;
+    public GameObject[] lockReceiveObj;
 
     private int alarmIndex = 0;
     private bool open = false;
@@ -41,7 +41,8 @@ public class DailyManager : MonoBehaviour
         dailyView.SetActive(false);
         showVCView.SetActive(false);
         alarm.SetActive(false);
-        lockReceiveObj.SetActive(true);
+        lockReceiveObj[0].SetActive(true);
+        lockReceiveObj[1].SetActive(true);
     }
 
     public void Initialize()
@@ -198,7 +199,8 @@ public class DailyManager : MonoBehaviour
 
         if (playerDataBase.DailyMissionCount >= 3 && !playerDataBase.DailyMissionClear)
         {
-            lockReceiveObj.SetActive(false);
+            lockReceiveObj[0].SetActive(false);
+            lockReceiveObj[1].SetActive(false);
             OnSetAlarm();
         }
 
@@ -260,7 +262,8 @@ public class DailyManager : MonoBehaviour
 
         if (playerDataBase.DailyMissionCount >= 3)
         {
-            lockReceiveObj.SetActive(false);
+            lockReceiveObj[0].SetActive(false);
+            lockReceiveObj[1].SetActive(false);
 
             OnSetAlarm();
         }
@@ -270,26 +273,52 @@ public class DailyManager : MonoBehaviour
 
     public void ReceiveCrystal()
     {
-        if (!lockReceiveObj.activeInHierarchy && !playerDataBase.DailyMissionClear)
+        if (!lockReceiveObj[0].activeInHierarchy && !playerDataBase.DailyMissionClear)
         {
             NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
 
             if (PlayfabManager.instance.isActive)
             {
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 500);
+                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 2000);
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("IconBox", 1);
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyMissionClear", 1);
             }
 
             playerDataBase.DailyMissionClear = true;
 
-            lockReceiveObj.SetActive(true);
+            lockReceiveObj[0].SetActive(true);
+            lockReceiveObj[1].SetActive(true);
 
             alarmIndex = 0;
             alarm.SetActive(false);
         }
 
-        FirebaseAnalytics.LogEvent("DailyMission");
+        FirebaseAnalytics.LogEvent("DailyMission Reward");
+    }
+
+    public void SuccessRewardAd()
+    {
+        if (!lockReceiveObj[1].activeInHierarchy && !playerDataBase.DailyMissionClear)
+        {
+            NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
+
+            if (PlayfabManager.instance.isActive)
+            {
+                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 6000);
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("IconBox", 3);
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyMissionClear", 1);
+            }
+
+            playerDataBase.DailyMissionClear = true;
+
+            lockReceiveObj[0].SetActive(true);
+            lockReceiveObj[1].SetActive(true);
+
+            alarmIndex = 0;
+            alarm.SetActive(false);
+        }
+
+        FirebaseAnalytics.LogEvent("DailyMission Reward X3");
     }
 
     IEnumerator DailyMissionTimer()

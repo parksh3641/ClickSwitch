@@ -54,6 +54,9 @@ public class ItemManager : MonoBehaviour
 
             itemContents[i].Initialize(this, itemtype + i, playerDataBase.GetItemCount(itemtype + i));
         }
+
+        selectItemText.name = "SelectItem";
+        selectItemText.ReLoad();
     }
 
     public void UseItem(ItemType type)

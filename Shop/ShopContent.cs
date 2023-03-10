@@ -55,7 +55,7 @@ public class ShopContent : MonoBehaviour
             case ShopType.WatchAd:
                 titleText.name = "WatchAd";
 
-                coinText.text = "1000";
+                coinText.text = "1500";
 
                 coin.SetActive(true);
 
@@ -105,7 +105,7 @@ public class ShopContent : MonoBehaviour
             case ShopType.DailyReward:
                 titleText.name = "DailyReward";
 
-                coinText.text = "150";
+                coinText.text = "300";
 
                 coin.SetActive(true);
 

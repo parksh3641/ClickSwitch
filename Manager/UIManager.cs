@@ -1067,7 +1067,7 @@ public class UIManager : MonoBehaviour, IGameEvent
         UpdateTotalCombo();
 
 
-        money = (int)(score / 3) + plusCoin;
+        money = (int)(score / 2) + plusCoin;
 
         int level = playerDataBase.Level + 1;
 
@@ -1223,9 +1223,9 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         NotionManager.instance.UseNotion(NotionType.SuccessWatchAd);
 
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, (int)money);
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, (int)money * 2);
 
-        getGoldText.text = money + " + " + money.ToString();
+        getGoldText.text = money + " + " + (money * 2).ToString();
 
         SetWatchAd(true);
     }
