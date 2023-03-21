@@ -32,7 +32,7 @@ public class ShopItemContent : MonoBehaviour
     {
         vcArray = imageDataBase.GetVCArray();
 
-        titleText.name = "Item" + shop.itemId;
+        titleText.localizationName = "Item" + shop.itemId;
         titleText.ReLoad();
 
         shopManager = manager;
@@ -57,7 +57,7 @@ public class ShopItemContent : MonoBehaviour
     {
         vcArray = imageDataBase.GetVCArray();
 
-        titleText.name = shop.itemId;
+        titleText.localizationName = shop.itemId;
         titleText.ReLoad();
 
         shopManager = manager;

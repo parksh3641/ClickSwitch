@@ -13,7 +13,7 @@ public class ProfileContent : MonoBehaviour
     public void InitState(string txt, int score, int combo, Sprite sp)
     {
         icon.sprite = sp;
-        title.name = txt;
+        title.localizationName = txt;
         title.ReLoad();
         bestScoreText.text = score.ToString();
         bestComboText.text = combo.ToString();

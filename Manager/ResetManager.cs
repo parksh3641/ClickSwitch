@@ -93,7 +93,8 @@ public class ResetManager : MonoBehaviour
 
             GameStateManager.instance.TryCount = 1;
             GameStateManager.instance.EventWatchAd = false;
-            GameStateManager.instance.DailyReward = false;
+            GameStateManager.instance.DailyShopReward = false;
+            GameStateManager.instance.DailyShopAdsReward = false;
             GameStateManager.instance.CoinRushTryCount = 1;
             GameStateManager.instance.CoinRushWatchAd = false;
         }
@@ -129,8 +130,11 @@ public class ResetManager : MonoBehaviour
                     break;
             }
 
-            eventModeContent.Initialize(type, GameModeType.Perfect);
-            eventModeContent.SetClearInformation(type, GameModeType.Perfect);
+            if (eventModeContent.gameObject.activeInHierarchy)
+            {
+                eventModeContent.Initialize(type, GameModeType.Perfect);
+                eventModeContent.SetClearInformation(type, GameModeType.Perfect);
+            }
 
             playerDataBase.GameMode = ((int)type).ToString();
 
@@ -144,7 +148,8 @@ public class ResetManager : MonoBehaviour
 
             GameStateManager.instance.TryCount = 1;
             GameStateManager.instance.EventWatchAd = false;
-            GameStateManager.instance.DailyReward = false;
+            GameStateManager.instance.DailyShopReward = false;
+            GameStateManager.instance.DailyShopAdsReward = false;
             GameStateManager.instance.CoinRushTryCount = 1;
             GameStateManager.instance.CoinRushWatchAd = false;
         }
@@ -159,8 +164,11 @@ public class ResetManager : MonoBehaviour
                 OnCheckAttendanceDay();
             }
 
-            eventModeContent.Initialize(GamePlayType.GameChoice1 + int.Parse(playerDataBase.GameMode.ToString()), GameModeType.Perfect);
-            eventModeContent.SetClearInformation(GamePlayType.GameChoice1 + int.Parse(playerDataBase.GameMode.ToString()), GameModeType.Perfect);
+            if (eventModeContent.gameObject.activeInHierarchy)
+            {
+                eventModeContent.Initialize(GamePlayType.GameChoice1 + int.Parse(playerDataBase.GameMode.ToString()), GameModeType.Perfect);
+                eventModeContent.SetClearInformation(GamePlayType.GameChoice1 + int.Parse(playerDataBase.GameMode.ToString()), GameModeType.Perfect);
+            }
         }
     }
 

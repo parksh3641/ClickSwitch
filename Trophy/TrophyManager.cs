@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class TrophyData
@@ -18,6 +19,10 @@ public class TrophyManager : MonoBehaviour
     public TrophyContent trophyContent;
     public RectTransform trophyContentTransform;
 
+    public Text plusScoreText;
+
+
+    PlayerDataBase playerDataBase;
 
     List<TrophyContent> trophyContentList = new List<TrophyContent>();
 
@@ -25,6 +30,8 @@ public class TrophyManager : MonoBehaviour
 
     private void Awake()
     {
+        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+
         trophyView.SetActive(false);
 
         trophyContentTransform.anchoredPosition = new Vector2(0, -999);
@@ -64,5 +71,9 @@ public class TrophyManager : MonoBehaviour
         {
             trophyContentList[i].Initialize(GamePlayType.GameChoice1 + i);
         }
+
+        int plusScore = playerDataBase.GetTrophyHoldNumber();
+
+        plusScoreText.text = LocalizationManager.instance.GetString("PlusScoreInfo") + " +" + (1f * plusScore).ToString() + "%";
     }
 }

@@ -216,42 +216,42 @@ public class LocalizationManager : MonoBehaviour
             case LanguageType.English:
                 iso = "en";
                 break;
-            case LanguageType.Japanese:
-                iso = "ja";
-                break;
-            case LanguageType.Chinese:
-                iso = "en";
-                break;
-            case LanguageType.Indian:
-                iso = "hi";
-                break;
-            case LanguageType.Portuguese:
-                iso = "pt";
-                break;
-            case LanguageType.Russian:
-                iso = "ru";
-                break;
-            case LanguageType.German:
-                iso = "de";
-                break;
-            case LanguageType.Spanish:
-                iso = "es";
-                break;
-            case LanguageType.Arabic:
-                iso = "ar";
-                break;
-            case LanguageType.Bengali:
-                iso = "bn";
-                break;
-            case LanguageType.Indonesian:
-                iso = "id";
-                break;
-            case LanguageType.Italian:
-                iso = "it";
-                break;
-            case LanguageType.Dutch:
-                iso = "nl";
-                break;
+            //case LanguageType.Japanese:
+            //    iso = "ja";
+            //    break;
+            //case LanguageType.Chinese:
+            //    iso = "en";
+            //    break;
+            //case LanguageType.Indian:
+            //    iso = "hi";
+            //    break;
+            //case LanguageType.Portuguese:
+            //    iso = "pt";
+            //    break;
+            //case LanguageType.Russian:
+            //    iso = "ru";
+            //    break;
+            //case LanguageType.German:
+            //    iso = "de";
+            //    break;
+            //case LanguageType.Spanish:
+            //    iso = "es";
+            //    break;
+            //case LanguageType.Arabic:
+            //    iso = "ar";
+            //    break;
+            //case LanguageType.Bengali:
+            //    iso = "bn";
+            //    break;
+            //case LanguageType.Indonesian:
+            //    iso = "id";
+            //    break;
+            //case LanguageType.Italian:
+            //    iso = "it";
+            //    break;
+            //case LanguageType.Dutch:
+            //    iso = "nl";
+            //    break;
             default:
                 iso = "en";
                 break;

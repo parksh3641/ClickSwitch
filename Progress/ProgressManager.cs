@@ -88,7 +88,7 @@ public class ProgressManager : MonoBehaviour
         {
             sPurchaseView.SetActive(true);
 
-            priceText.name = "ShopPaidProgress";
+            priceText.localizationName = "ShopPaidProgress";
             priceText.ReLoad();
         }
         else
@@ -107,8 +107,8 @@ public class ProgressManager : MonoBehaviour
         CheckPurchaseButton();
 
         int score = playerDataBase.TotalScore;
-        int level = score / 300;
-        int goal = (level + 1) * 300;
+        int level = score / 500;
+        int goal = (level + 1) * 500;
 
         if (level >= 29) level = 29;
 

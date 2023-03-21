@@ -177,7 +177,7 @@ public class IconBoxManager : MonoBehaviour
         {
             int random = Random.Range(3, iconNumber);
 
-            if(shopDataBase.GetIconNumber(IconType.Icon_0 + random) + 1 < 4)
+            if(shopDataBase.GetIconNumber(IconType.Icon_0 + random) + 1 < 6)
             {
                 GetIcon(random);
             }
@@ -185,9 +185,9 @@ public class IconBoxManager : MonoBehaviour
             {
                 if (!goldContent.gameObject.activeInHierarchy) goldContent.gameObject.SetActive(true);
 
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 300);
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 500);
 
-                goldContent.AddGoldCount(300);
+                goldContent.AddGoldCount(500);
 
                 Debug.Log("Icon Coin Reward");
             }

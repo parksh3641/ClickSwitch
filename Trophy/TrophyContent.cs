@@ -44,7 +44,7 @@ public class TrophyContent : MonoBehaviour
     {
         gamePlayType = type;
 
-        titleText.name = type.ToString();
+        titleText.localizationName = type.ToString();
         titleText.ReLoad();
 
         icon.sprite = iconArray[(int)gamePlayType];

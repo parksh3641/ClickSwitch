@@ -31,6 +31,8 @@ public class ComboManager : MonoBehaviour
     private float waitTimer = 0;
     private float waitSaveTimer = 0;
 
+    private float critical = 0;
+
     bool pause = false;
 
     PlayerDataBase playerDataBase;
@@ -70,6 +72,8 @@ public class ComboManager : MonoBehaviour
         float comboTime = playerDataBase.ComboTimeLevel * upgradeDataBase.comboTime.addValue;
 
         comboTimer += comboTime;
+
+        critical = upgradeDataBase.GetValue(UpgradeType.ComboCritical, playerDataBase.ComboCriticalLevel);
     }
 
     public void OnStartCombo()
@@ -78,7 +82,7 @@ public class ComboManager : MonoBehaviour
 
         if (timer == 0) combo = 0;
 
-        combo += 1;
+        CheckPlusCombo();
 
         timer = comboTimer;
         fillamount.fillAmount = 1;
@@ -106,6 +110,20 @@ public class ComboManager : MonoBehaviour
         notion.gameObject.SetActive(false);
         notion.txt.text = "+" + 1.ToString();
         notion.gameObject.SetActive(true);
+    }
+
+    void CheckPlusCombo()
+    {
+        float random = Random.Range(0, 100f);
+
+        if (random <= critical)
+        {
+            combo += 2;
+        }
+        else
+        {
+            combo += 1;
+        }
     }
 
     public void OnStopCombo()

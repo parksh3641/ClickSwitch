@@ -11,7 +11,7 @@ public class ItemManager : MonoBehaviour
 
     public LocalizationContent selectItemText;
 
-
+    public GameManager gameManager;
     PlayerDataBase playerDataBase;
 
     private void Awake()
@@ -33,16 +33,23 @@ public class ItemManager : MonoBehaviour
 
     public void OpenItem()
     {
-        if (!itemView.activeSelf)
+        if(GameStateManager.instance.GamePlayType == GamePlayType.GameChoice8)
         {
-            itemView.SetActive(true);
-
-            Initialize();
-
+            gameManager.OnGameStartButton();
         }
         else
         {
-            itemView.SetActive(false);
+            if (!itemView.activeSelf)
+            {
+                itemView.SetActive(true);
+
+                Initialize();
+
+            }
+            else
+            {
+                itemView.SetActive(false);
+            }
         }
     }
 
@@ -53,10 +60,17 @@ public class ItemManager : MonoBehaviour
             ItemType itemtype = ItemType.Clock;
 
             itemContents[i].Initialize(this, itemtype + i, playerDataBase.GetItemCount(itemtype + i));
+            itemContents[i].gameObject.SetActive(true);
         }
 
-        selectItemText.name = "SelectItem";
+        selectItemText.localizationName = "SelectItem";
         selectItemText.ReLoad();
+
+        if(GameStateManager.instance.GameModeType == GameModeType.Perfect)
+        {
+            itemContents[0].gameObject.SetActive(false);
+            itemContents[4].gameObject.SetActive(false);
+        }
     }
 
     public void UseItem(ItemType type)
@@ -118,7 +132,7 @@ public class ItemManager : MonoBehaviour
                 break;
         }
 
-        selectItemText.name = "Information_" + type.ToString();
+        selectItemText.localizationName = "Information_" + type.ToString();
         selectItemText.ReLoad();
     }
 }

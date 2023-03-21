@@ -219,6 +219,8 @@ public class NormalContent : MonoBehaviour, IContentEvent
 
         leftRightImage.sprite = leftRightArray[number];
 
+        clickEvent.RemoveAllListeners();
+
         clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().CheckLeftRightAction(index); });
     }
 

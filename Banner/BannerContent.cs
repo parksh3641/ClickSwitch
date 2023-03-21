@@ -83,74 +83,74 @@ public class BannerContent : MonoBehaviour
     public void SetLockText(BannerType type)
     {
 
-        lockText.name = "";
+        lockText.localizationName = "";
         switch (type)
         {
             case BannerType.Banner_0:
-                lockText.name = "None";
+                lockText.localizationName = "None";
                 break;
             case BannerType.Banner_1:
-                lockText.name = "None";
+                lockText.localizationName = "None";
                 break;
             case BannerType.Banner_2:
-                lockText.name = "None";
+                lockText.localizationName = "None";
                 break;
             case BannerType.Banner_3:
-                lockText.name = "LockShop";
+                lockText.localizationName = "LockShop";
                 break;
             case BannerType.Banner_4:
-                lockText.name = "LockShop";
+                lockText.localizationName = "LockShop";
                 break;
             case BannerType.Banner_5:
-                lockText.name = "LockShop";
+                lockText.localizationName = "LockShop";
                 break;
             case BannerType.Banner_6:
-                lockText.name = "LockShop";
+                lockText.localizationName = "LockShop";
                 break;
             case BannerType.Banner_7:
-                lockText.name = "LockShop";
+                lockText.localizationName = "LockShop";
                 break;
             case BannerType.Banner_8:
-                lockText.name = "LockProgress";
+                lockText.localizationName = "LockProgress";
                 break;
             case BannerType.Banner_9:
-                lockText.name = "LockProgress";
+                lockText.localizationName = "LockProgress";
                 break;
             case BannerType.Banner_10:
-                lockText.name = "LockProgress";
+                lockText.localizationName = "LockProgress";
                 break;
             case BannerType.Banner_11:
-                lockText.name = "LockProgress";
+                lockText.localizationName = "LockProgress";
                 break;
             case BannerType.Banner_12:
-                lockText.name = "LockProgress";
+                lockText.localizationName = "LockProgress";
                 break;
             case BannerType.Banner_13:
-                lockText.name = "LockTrophy1";
+                lockText.localizationName = "LockTrophy1";
                 break;
             case BannerType.Banner_14:
-                lockText.name = "LockTrophy2";
+                lockText.localizationName = "LockTrophy2";
                 break;
             case BannerType.Banner_15:
-                lockText.name = "LockTrophy3";
+                lockText.localizationName = "LockTrophy3";
                 break;
             case BannerType.Banner_16:
-                lockText.name = "LockTrophy4";
+                lockText.localizationName = "LockTrophy4";
                 break;
             case BannerType.Banner_17:
-                lockText.name = "LockTrophy5";
+                lockText.localizationName = "LockTrophy5";
                 break;
             case BannerType.Banner_18:
-                lockText.name = "LockTrophy6";
+                lockText.localizationName = "LockTrophy6";
                 break;
             case BannerType.Banner_19:
-                lockText.name = "LockTrophy7";
+                lockText.localizationName = "LockTrophy7";
                 break;
             case BannerType.Banner_20:
-                lockText.name = "LockTrophy8";
+                lockText.localizationName = "LockTrophy8";
                 break;
             case BannerType.Banner_21:
-                lockText.name = "None";
+                lockText.localizationName = "None";
                 break;
         }
 

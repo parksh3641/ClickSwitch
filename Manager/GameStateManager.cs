@@ -70,7 +70,19 @@ public class GameStateManager : MonoBehaviour
 
         [Space]
         [Title("Daily")]
-        public bool dailyReward = false;
+        public bool dailyShopReward = false;
+        public bool dailyShopAdsReward = false;
+
+        [Space]
+        [Title("Tutorial")]
+        public bool gameChoice1Tutorial = false;
+        public bool gameChoice2Tutorial = false;
+        public bool gameChoice3Tutorial = false;
+        public bool gameChoice4Tutorial = false;
+        public bool gameChoice5Tutorial = false;
+        public bool gameChoice6Tutorial = false;
+        public bool gameChoice7Tutorial = false;
+        public bool gameChoice8Tutorial = false;
     }
 
     #region Data
@@ -414,15 +426,134 @@ public class GameStateManager : MonoBehaviour
         }
     }
 
-    public bool DailyReward
+    public bool DailyShopReward
     {
         get
         {
-            return gameSettings.dailyReward;
+            return gameSettings.dailyShopReward;
         }
         set
         {
-            gameSettings.dailyReward = value;
+            gameSettings.dailyShopReward = value;
+            SaveFile();
+        }
+    }
+
+    public bool DailyShopAdsReward
+    {
+        get
+        {
+            return gameSettings.dailyShopAdsReward;
+        }
+        set
+        {
+            gameSettings.dailyShopAdsReward = value;
+            SaveFile();
+        }
+    }
+
+    public bool GameChoice2Tutorial
+    {
+        get
+        {
+            return gameSettings.gameChoice2Tutorial;
+        }
+        set
+        {
+            gameSettings.gameChoice2Tutorial = value;
+            SaveFile();
+        }
+    }
+
+    public bool GameChoice3Tutorial
+    {
+        get
+        {
+            return gameSettings.gameChoice3Tutorial;
+        }
+        set
+        {
+            gameSettings.gameChoice3Tutorial = value;
+            SaveFile();
+        }
+    }
+
+    public bool GameChoice4Tutorial
+    {
+        get
+        {
+            return gameSettings.gameChoice4Tutorial;
+        }
+        set
+        {
+            gameSettings.gameChoice4Tutorial = value;
+            SaveFile();
+        }
+    }
+
+    public bool GameChoice5Tutorial
+    {
+        get
+        {
+            return gameSettings.gameChoice5Tutorial;
+        }
+        set
+        {
+            gameSettings.gameChoice5Tutorial = value;
+            SaveFile();
+        }
+    }
+
+    public bool GameChoice6Tutorial
+    {
+        get
+        {
+            return gameSettings.gameChoice6Tutorial;
+        }
+        set
+        {
+            gameSettings.gameChoice6Tutorial = value;
+            SaveFile();
+        }
+    }
+
+    public bool GameChoice7Tutorial
+    {
+        get
+        {
+            return gameSettings.gameChoice7Tutorial;
+        }
+        set
+        {
+            gameSettings.gameChoice7Tutorial = value;
+            SaveFile();
+        }
+    }
+
+    public bool GameChoice8Tutorial
+    {
+        get
+        {
+            return gameSettings.gameChoice8Tutorial;
+        }
+        set
+        {
+            gameSettings.gameChoice8Tutorial = value;
+            SaveFile();
+        }
+
+
+    }
+
+    public bool GameChoice1Tutorial
+    {
+        get
+        {
+            return gameSettings.gameChoice1Tutorial;
+        }
+        set
+        {
+            gameSettings.gameChoice1Tutorial = value;
             SaveFile();
         }
     }

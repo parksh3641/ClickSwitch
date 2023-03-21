@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour, IGameEvent
@@ -40,6 +41,11 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     [Title("ItemUI")]
     public ItemUseContent[] itemUseContentArray;
+
+    [Space]
+    [Title("TutorialUI")]
+    public GameObject tutorialUI;
+    public LocalizationContent tutorialText;
 
     [Space]
     [Title("EndUI")]
@@ -84,6 +90,8 @@ public class UIManager : MonoBehaviour, IGameEvent
     public LanguageContent[] languageContentArray;
     public Text versionText2;
     public RectTransform languageGrid;
+    public GameObject logOutView;
+    public GameObject repairView;
 
 
     [Space]
@@ -145,6 +153,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     public ProgressManager progressManager;
     public ReviewManager reviewManager;
     public ItemManager itemManager;
+    public LockManager lockManager;
 
     [Title("Animation")]
     public CoinAnimation goldAnimation;
@@ -201,6 +210,9 @@ public class UIManager : MonoBehaviour, IGameEvent
         gameOptionUI.SetActive(false);
         languageUI.SetActive(false);
 
+        logOutView.SetActive(false);
+        repairView.SetActive(false);
+
         gamePlayView.SetActive(false);
 
         for (int i = 0; i < gamePlayUI.Length; i ++)
@@ -210,6 +222,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         gameStartUI.SetActive(true);
         gameReadyUI.SetActive(false);
+        tutorialUI.SetActive(false);
         gameEndAnimView.SetActive(false);
         gameEndUI.SetActive(false);
         cancleWindowUI.SetActive(false);
@@ -495,9 +508,6 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         comboManager.SetBestCombo(bestCombo);
 
-        infoBestScoreText.OnReset();
-        infoBestComboText.OnReset();
-
         infoBestScoreText.SetNumber(bestScore);
         infoBestComboText.SetNumber(bestCombo);
 
@@ -519,6 +529,7 @@ public class UIManager : MonoBehaviour, IGameEvent
         }
     }
 
+    #region Option
     public void OpenOption()
     {
         if(gameOptionUI.activeSelf)
@@ -556,6 +567,42 @@ public class UIManager : MonoBehaviour, IGameEvent
         }
     }
 
+    public void OpenLogOutView()
+    {
+        logOutView.SetActive(true);
+    }
+
+    public void CloseLogOutView()
+    {
+        logOutView.SetActive(false);
+    }
+
+    public void LogOutButton()
+    {
+        CloseLogOutView();
+
+        PlayfabManager.instance.LogOut();
+    }
+
+    public void OpenRepairView()
+    {
+        repairView.SetActive(true);
+    }
+
+    public void CloseRepairView()
+    {
+        repairView.SetActive(false);
+    }
+
+    public void RepairButton()
+    {
+        CloseRepairView();
+
+        PlayerPrefs.SetInt("Version", 0);
+        SceneManager.LoadScene("LoginScene");
+    }
+
+    #endregion
     public void OpenRanking()
     {
         rankingManager.OpenRanking();
@@ -707,10 +754,101 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         SetEtcUI(false);
 
-        levelText.name = "Info_" + GameStateManager.instance.GameModeType.ToString();
+        levelText.localizationName = "Info_" + GameStateManager.instance.GameModeType.ToString();
         levelText.ReLoad();
 
         modeManager.OnMode();
+
+        CheckTutorial();
+    }
+
+    void CheckTutorial()
+    {
+        tutorialUI.SetActive(false);
+
+        switch (GameStateManager.instance.GamePlayType)
+        {
+            case GamePlayType.GameChoice1:
+                if(playerDataBase.BestSpeedTouchScore == 0 && !GameStateManager.instance.GameChoice1Tutorial)
+                {
+                    tutorialUI.SetActive(true);
+                    tutorialText.localizationName = "Information_GameChoice1";
+                    tutorialText.ReLoad();
+
+                    GameStateManager.instance.GameChoice1Tutorial = true;
+                }
+
+                break;
+            case GamePlayType.GameChoice2:
+                if (playerDataBase.BestMoleCatchScore == 0 && !GameStateManager.instance.GameChoice2Tutorial)
+                {
+                    tutorialUI.SetActive(true);
+                    tutorialText.localizationName = "Information_GameChoice2";
+                    tutorialText.ReLoad();
+
+                    GameStateManager.instance.GameChoice2Tutorial = true;
+                }
+
+                break;
+            case GamePlayType.GameChoice3:
+
+                break;
+            case GamePlayType.GameChoice4:
+                if (playerDataBase.BestButtonActionScore == 0 && !GameStateManager.instance.GameChoice4Tutorial)
+                {
+                    tutorialUI.SetActive(true);
+                    tutorialText.localizationName = "Information_GameChoice4";
+                    tutorialText.ReLoad();
+
+                    GameStateManager.instance.GameChoice4Tutorial = true;
+                }
+
+                break;
+            case GamePlayType.GameChoice5:
+                if (playerDataBase.BestTimingActionScore == 0 && !GameStateManager.instance.GameChoice5Tutorial)
+                {
+                    tutorialUI.SetActive(true);
+                    tutorialText.localizationName = "Information_GameChoice5";
+                    tutorialText.ReLoad();
+
+                    GameStateManager.instance.GameChoice5Tutorial = true;
+                }
+
+                break;
+            case GamePlayType.GameChoice6:
+                if (playerDataBase.BestDragActionScore == 0 && !GameStateManager.instance.GameChoice6Tutorial)
+                {
+                    tutorialUI.SetActive(true);
+                    tutorialText.localizationName = "Information_GameChoice6";
+                    tutorialText.ReLoad();
+
+                    GameStateManager.instance.GameChoice6Tutorial = true;
+                }
+
+                break;
+            case GamePlayType.GameChoice7:
+                if (playerDataBase.BestLeftRightScore == 0 && !GameStateManager.instance.GameChoice7Tutorial)
+                {
+                    tutorialUI.SetActive(true);
+                    tutorialText.localizationName = "Information_GameChoice7";
+                    tutorialText.ReLoad();
+
+                    GameStateManager.instance.GameChoice7Tutorial = true;
+                }
+
+                break;
+            case GamePlayType.GameChoice8:
+                if (playerDataBase.BestCoinRushCombo == 0 && !GameStateManager.instance.GameChoice8Tutorial)
+                {
+                    tutorialUI.SetActive(true);
+                    tutorialText.localizationName = "Information_GameChoice8";
+                    tutorialText.ReLoad();
+
+                    GameStateManager.instance.GameChoice8Tutorial = true;
+                }
+
+                break;
+        }
     }
 
     public void GamePause()
@@ -727,8 +865,6 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void GameEndAnimation()
     {
-        GameStateManager.instance.PlayGame = false;
-
         gameEndAnimView.SetActive(true);
         gameEndAnimation.PlayAnimation();
 
@@ -786,9 +922,11 @@ public class UIManager : MonoBehaviour, IGameEvent
                 break;
         }
 
-        int plusScore = shopDataBase.GetIconHoldNumber();
+        float plusIcon = shopDataBase.GetIconHoldNumber() * 0.005f;
+        float plusTrophy = playerDataBase.GetTrophyHoldNumber() * 0.01f;
+        float plusLevel = playerDataBase.AddScoreLevel * 0.003f;
 
-        score = score + (score * (plusScore * 0.005f));
+        score = score + (score * plusIcon) + (score * plusTrophy) + (score * plusLevel);
 
         GameModeLevel gameModeLevel = playerDataBase.GetGameMode(GameStateManager.instance.GamePlayType);
 
@@ -799,7 +937,7 @@ public class UIManager : MonoBehaviour, IGameEvent
                 {
                     gameModeView.SetActive(true);
 
-                    gameModeText.name = "Normal";
+                    gameModeText.localizationName = "Normal";
                     gameModeText.ReLoad();
 
                     gameModeLevel.normal = true;
@@ -816,7 +954,7 @@ public class UIManager : MonoBehaviour, IGameEvent
                 {
                     gameModeView.SetActive(true);
 
-                    gameModeText.name = "Hard";
+                    gameModeText.localizationName = "Hard";
                     gameModeText.ReLoad();
 
                     gameModeLevel.hard = true;
@@ -1071,23 +1209,23 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         int level = playerDataBase.Level + 1;
 
-        if (level > 30) level = 30;
+        if (level > 50) level = 50;
 
         if (money > 0)
         {
             if (playerDataBase.Level > 0)
             {
-                if (playerDataBase.Level > 30)
+                if (playerDataBase.Level > 50)
                 {
-                    playerDataBase.Level = 30;
+                    playerDataBase.Level = 50;
                 }
 
                 doubleCoinObj.SetActive(true);
 
                 plus = (level + playerDataBase.AddGoldLevel) / 100.0f;
-
-                plusGoldText.text = "+" + level + "%";
             }
+
+            plusGoldText.text = "+ " + level + "%";
 
             if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, (int)(money + (money * plus)));
 
@@ -1223,9 +1361,9 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         NotionManager.instance.UseNotion(NotionType.SuccessWatchAd);
 
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, (int)money * 2);
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, (int)money);
 
-        getGoldText.text = money + " + " + (money * 2).ToString();
+        getGoldText.text = money + " + " + money.ToString();
 
         SetWatchAd(true);
     }
@@ -1308,6 +1446,8 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     void GameReset()
     {
+        GameStateManager.instance.PlayGame = false;
+
         score = 0;
 
         SetEtcUI(true);
@@ -1335,12 +1475,12 @@ public class UIManager : MonoBehaviour, IGameEvent
         gameStartUI.SetActive(true);
         gameEndUI.SetActive(false);
 
+        lockManager.Initialize();
 
         if (!GameStateManager.instance.InAppReview && playerDataBase.TotalScore >= 1000)
         {
             reviewManager.OpenReview();
         }
-
     }
 
 
@@ -1350,6 +1490,11 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         score += index;
         scoreText.text = LocalizationManager.instance.GetString("Score") + " : " + score.ToString();
+
+        if(score > 100 && tutorialUI.activeInHierarchy)
+        {
+            tutorialUI.SetActive(false);
+        }
 
         if (bestScore != 0)
         {
@@ -1454,9 +1599,12 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         float timer = ValueManager.instance.GetGamePlayTime();
 
-        timer += upgradeDataBase.GetValue(UpgradeType.StartTime, playerDataBase.StartTimeLevel);
+        if(GameStateManager.instance.GameModeType != GameModeType.Perfect)
+        {
+            timer += upgradeDataBase.GetValue(UpgradeType.StartTime, playerDataBase.StartTimeLevel);
 
-        if (GameStateManager.instance.Clock) timer += ValueManager.instance.GetClockAddTime();
+            if (GameStateManager.instance.Clock) timer += ValueManager.instance.GetClockAddTime();
+        }
 
         StartCoroutine("TimerCorution", timer);
     }

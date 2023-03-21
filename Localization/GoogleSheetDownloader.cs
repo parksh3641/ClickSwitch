@@ -420,6 +420,12 @@ public class GoogleSheetDownloader : MonoBehaviour
                 case "ComboTime":
                     upgradeDataBase.ComboTime = upgradeInformation;
                     break;
+                case "ComboCritical":
+                    upgradeDataBase.ComboCritical = upgradeInformation;
+                    break;
+                case "AddScore":
+                    upgradeDataBase.AddScore = upgradeInformation;
+                    break;
             }
         }
     }

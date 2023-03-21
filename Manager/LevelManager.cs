@@ -95,10 +95,10 @@ public class LevelManager : MonoBehaviour
         showVCView.SetActive(true);
 
         levelUpText.text = (level + 1).ToString();
-        if (level + 1 > 29) level = 29;
+        if (level + 1 > 59) level = 59;
         bounsInfoText.text = LocalizationManager.instance.GetString("PlusCoinInfo") + " +" + (level + 1) + "%";
 
-        coin = 500 + ((level + 1) * 100);
+        coin = 1000 + ((level + 1) * 200);
 
         coinText.text = "x" + coin.ToString();
 

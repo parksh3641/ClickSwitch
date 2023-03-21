@@ -35,8 +35,8 @@ public class HelpManager : MonoBehaviour
 
         helpView.SetActive(false);
 
-        helpGameTransform.anchoredPosition = new Vector2(0, -9999);
-        helpItemTransform.anchoredPosition = new Vector2(0, -9999);
+        helpGameTransform.anchoredPosition = new Vector2(0, -999);
+        helpItemTransform.anchoredPosition = new Vector2(0, -999);
 
         topNumber = -1;
     }

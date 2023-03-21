@@ -357,6 +357,13 @@ public class PlayfabManager : MonoBehaviour
 #endif
     }
 
+    public void OnClickAppleLink()
+    {
+#if UNITY_IOS
+        OnClickAppleLink(true);
+#endif
+    }
+
 #if UNITY_IOS
     void SignInWithApple()
     {
@@ -468,7 +475,7 @@ public class PlayfabManager : MonoBehaviour
         , DisplayPlayfabError);
     }
 #endif
-#endregion
+    #endregion
 
     public void OnLoginSuccess(PlayFab.ClientModels.LoginResult result)
     {
@@ -620,14 +627,14 @@ public class PlayfabManager : MonoBehaviour
             int gold = result.VirtualCurrency["GO"]; //Get Money
             int crystal = result.VirtualCurrency["ST"]; //Get Money
 
-            if(gold > 1000000)
+            if(gold > 10000000)
             {
-                gold = 1000000;
+                gold = 10000000;
             }
 
-            if(crystal > 100000)
+            if(crystal > 1000000)
             {
-                crystal = 100000;
+                crystal = 1000000;
             }
 
             playerDataBase.Coin = gold;
@@ -680,6 +687,7 @@ public class PlayfabManager : MonoBehaviour
                     if (list.ItemId.Contains("Icon_"))
                     {
                         IconType icon = (IconType)Enum.Parse(typeof(IconType), list.ItemId);
+
                         shopDataBase.SetIcon(icon, (int)list.RemainingUses);
                     }
 
@@ -868,11 +876,20 @@ public class PlayfabManager : MonoBehaviour
                        case "ComboTimeLevel":
                            playerDataBase.ComboTimeLevel = statistics.Value;
                            break;
+                       case "ComboCriticalLevel":
+                           playerDataBase.ComboCriticalLevel = statistics.Value;
+                           break;
+                       case "AddScoreLevel":
+                           playerDataBase.AddScoreLevel = statistics.Value;
+                           break;
                        case "IconBox":
                            playerDataBase.IconBox = statistics.Value;
                            break;
                        case "Banner":
                            playerDataBase.Banner = statistics.Value;
+                           break;
+                       case "LockTutorial":
+                           playerDataBase.LockTutorial = statistics.Value;
                            break;
                    }
                }

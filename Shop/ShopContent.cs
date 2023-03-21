@@ -16,12 +16,14 @@ public class ShopContent : MonoBehaviour
     public GameObject price;
     public GameObject coin;
     public GameObject crystal;
+    public GameObject buyCrystal;
 
     [Space]
     [Title("Text")]
     public LocalizationContent priceText;
     public Text coinText;
     public Text crystalText;
+    public Text buyCrystalText;
 
     Sprite[] mainIconArray;
 
@@ -36,6 +38,7 @@ public class ShopContent : MonoBehaviour
         price.SetActive(false);
         coin.SetActive(false);
         crystal.SetActive(false);
+        buyCrystal.SetActive(false);
     }
 
     void Start()
@@ -45,75 +48,75 @@ public class ShopContent : MonoBehaviour
         switch (shopType)
         {
             case ShopType.RemoveAds:
-                titleText.name = "RemoveAds";
+                titleText.localizationName = "RemoveAds";
 
-                priceText.name = "ShopRemoveAds";
+                priceText.localizationName = "ShopRemoveAds";
 
                 price.SetActive(true);
 
                 break;
             case ShopType.WatchAd:
-                titleText.name = "WatchAd";
+                titleText.localizationName = "WatchAd";
 
-                coinText.text = "1500";
+                crystalText.text = "30";
 
-                coin.SetActive(true);
+                crystal.SetActive(true);
 
                 break;
             case ShopType.Coin1000:
-                titleText.name = "Coin1000";
+                titleText.localizationName = "Coin1000";
 
-                crystalText.text = "60";
+                buyCrystalText.text = "60";
 
-                crystal.SetActive(true);
+                buyCrystal.SetActive(true);
                 break;
             case ShopType.Coin2000:
-                titleText.name = "Coin2000";
+                titleText.localizationName = "Coin2000";
 
-                crystalText.text = "500";
+                buyCrystalText.text = "500";
 
-                crystal.SetActive(true);
+                buyCrystal.SetActive(true);
                 break;
             case ShopType.Coin3000:
-                titleText.name = "Coin3000";
+                titleText.localizationName = "Coin3000";
 
-                crystalText.text = "4500";
+                buyCrystalText.text = "4500";
 
-                crystal.SetActive(true);
+                buyCrystal.SetActive(true);
                 break;
             case ShopType.Crystal100:
-                titleText.name = "Crystal100";
+                titleText.localizationName = "Crystal100";
 
-                priceText.name = "ShopCrystal100";
+                priceText.localizationName = "ShopCrystal100";
 
                 price.SetActive(true);
                 break;
             case ShopType.Crystal200:
-                titleText.name = "Crystal200";
+                titleText.localizationName = "Crystal200";
 
-                priceText.name = "ShopCrystal200";
+                priceText.localizationName = "ShopCrystal200";
 
                 price.SetActive(true);
                 break;
             case ShopType.Crystal300:
-                titleText.name = "Crystal300";
+                titleText.localizationName = "Crystal300";
 
-                priceText.name = "ShopCrystal300";
+                priceText.localizationName = "ShopCrystal300";
 
                 price.SetActive(true);
                 break;
-            case ShopType.DailyReward:
-                titleText.name = "DailyReward";
+            case ShopType.DailyShopReward:
+                titleText.localizationName = "DailyReward";
 
-                coinText.text = "300";
+                crystalText.text = "30";
 
-                coin.SetActive(true);
+                crystal.SetActive(true);
 
                 break;
             case ShopType.PaidProgress:
-                titleText.name = "PaidProgress";
+                titleText.localizationName = "PaidProgress";
 
-                priceText.name = "ShopPaidProgress";
+                priceText.localizationName = "ShopPaidProgress";
 
                 price.SetActive(true);
                 break;

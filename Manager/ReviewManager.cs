@@ -28,6 +28,8 @@ public class ReviewManager : MonoBehaviour
     {
         appReviewView.SetActive(false);
 
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 100);
+
 #if UNITY_ANDROID
         Application.OpenURL("https://play.google.com/store/apps/details?id=com.unity3d.toucharcade");
 #elif UNITY_IOS

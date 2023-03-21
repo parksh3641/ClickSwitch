@@ -27,7 +27,7 @@ public class HelpContent : MonoBehaviour
     {
         icon.sprite = iconArray[(int)type];
 
-        text.name = "Information_" + type.ToString();
+        text.localizationName = "Information_" + type.ToString();
         text.ReLoad();
     }
 
@@ -35,7 +35,7 @@ public class HelpContent : MonoBehaviour
     {
         icon.sprite = itemArray[(int)type];
 
-        text.name = "Information_" + type.ToString();
+        text.localizationName = "Information_" + type.ToString();
         text.ReLoad();
     }
 }

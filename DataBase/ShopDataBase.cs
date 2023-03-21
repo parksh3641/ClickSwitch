@@ -59,6 +59,7 @@ public class ShopDataBase : ScriptableObject
             IconClass iconClass = new IconClass();
             IconType iconType = IconType.Icon_0 + i;
             iconClass.iconType = iconType;
+            iconClass.count = 0;
             iconList.Add(iconClass);
         }
 
@@ -241,9 +242,19 @@ public class ShopDataBase : ScriptableObject
         int number = 0;
         for (int i = 0; i < iconList.Count; i++)
         {
-            if(iconList[i].count >= 5)
+            if(i >= 19)
             {
-                number++;
+                if (iconList[i].count >= 1)
+                {
+                    number++;
+                }
+            }
+            else
+            {
+                if (iconList[i].count >= 5)
+                {
+                    number++;
+                }
             }
         }
         return number + 3;

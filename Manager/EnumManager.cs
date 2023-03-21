@@ -34,7 +34,8 @@ public enum OptionType
     Logout,
     Vibration,
     SleepMode,
-    RestorePurchases
+    RestorePurchases,
+    Repair
 }
 
 public enum LanguageType
@@ -106,8 +107,8 @@ public enum ShopType
     Crystal100,
     Crystal200,
     Crystal300,
-    DailyReward,
-    PaidProgress
+    DailyShopReward,
+    PaidProgress,
 }
 
 public enum ItemType
@@ -219,7 +220,9 @@ public enum UpgradeType
     Burning,
     AddExp,
     AddGold,
-    ComboTime
+    ComboTime,
+    ComboCritical,
+    AddScore,
 }
 
 public enum RewardReceiveType

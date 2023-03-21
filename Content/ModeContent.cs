@@ -32,7 +32,7 @@ public class ModeContent : MonoBehaviour
 
     private void Awake()
     {
-        playTypeText.name = gamePlayType.ToString();
+        playTypeText.localizationName = gamePlayType.ToString();
         //modeTypeText.name = gameModeType.ToString();
 
         clickEvent.AddListener(() => { GameObject.FindWithTag("GameManager").GetComponent<GameManager>().ChoiceGameType(gamePlayType, gameModeType); });
@@ -110,8 +110,8 @@ public class ModeContent : MonoBehaviour
         gamePlayType = play;
         gameModeType = mode;
 
-        playTypeText.name = gamePlayType.ToString();
-        modeTypeText.name = gameModeType.ToString();
+        playTypeText.localizationName = gamePlayType.ToString();
+        modeTypeText.localizationName = gameModeType.ToString();
 
         playTypeText.ReLoad();
         modeTypeText.ReLoad();
@@ -128,7 +128,7 @@ public class ModeContent : MonoBehaviour
     {
         gameModeType = mode;
 
-        modeTypeText.name = gameModeType.ToString();
+        modeTypeText.localizationName = gameModeType.ToString();
         modeTypeText.ReLoad();
 
         backgroundImg.sprite = modeBackgroundImgArray[(int)gameModeType];

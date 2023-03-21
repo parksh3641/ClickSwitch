@@ -147,6 +147,10 @@ public class PlayerDataBase : ScriptableObject
     private int addGoldLevel = 0;
     [SerializeField]
     private int comboTimeLevel = 0;
+    [SerializeField]
+    private int comboCriticalLevel = 0;
+    [SerializeField]
+    private int addScoreLevel = 0;
 
     [Space]
     [Title("Progress")]
@@ -155,6 +159,10 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private string paidProgressData = "";
 
+    [Space]
+    [Title("Tutorial")]
+    [SerializeField]
+    private int lockTutorial = 0;
 
     public delegate void BoxEvent();
     public static event BoxEvent eGetBox;
@@ -236,6 +244,8 @@ public class PlayerDataBase : ScriptableObject
         addExpLevel = 0;
         addGoldLevel = 0;
         comboTimeLevel = 0;
+        comboCriticalLevel = 0;
+        addScoreLevel = 0;
 
         gameModeLevelList.Clear();
 
@@ -725,6 +735,18 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public int LockTutorial
+    {
+        get
+        {
+            return lockTutorial;
+        }
+        set
+        {
+            lockTutorial = value;
+        }
+    }
+
 
     public void SetTrophyData(TrophyData data)
     {
@@ -759,6 +781,11 @@ public class PlayerDataBase : ScriptableObject
         }
 
         return trophyData;
+    }
+
+    public int GetTrophyHoldNumber()
+    {
+        return trophyDataList.Count;
     }
 
     public int GetActiveTrophyNumber()
@@ -979,6 +1006,30 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public int ComboCriticalLevel
+    {
+        get
+        {
+            return comboCriticalLevel;
+        }
+        set
+        {
+            comboCriticalLevel = value;
+        }
+    }
+
+    public int AddScoreLevel
+    {
+        get
+        {
+            return addScoreLevel;
+        }
+        set
+        {
+            addScoreLevel = value;
+        }
+    }
+
     public int GetLevel(UpgradeType type)
     {
         int level = 0;
@@ -1002,6 +1053,12 @@ public class PlayerDataBase : ScriptableObject
                 break;
             case UpgradeType.ComboTime:
                 level = ComboTimeLevel;
+                break;
+            case UpgradeType.ComboCritical:
+                level = ComboCriticalLevel;
+                break;
+            case UpgradeType.AddScore:
+                level = AddScoreLevel;
                 break;
         }
 

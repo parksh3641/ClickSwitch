@@ -10,7 +10,7 @@ public class EventModeContent : ModeContent
 
     public void SetClearInformation(GamePlayType type, GameModeType mode)
     {
-        infomation.name = type.ToString() + mode.ToString();
+        infomation.localizationName = type.ToString() + mode.ToString();
         infomation.ReLoad();
     }
 

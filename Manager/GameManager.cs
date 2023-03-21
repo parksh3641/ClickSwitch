@@ -328,21 +328,11 @@ public class GameManager : MonoBehaviour
             content.gameObject.SetActive(false);
             dragActionList.Add(content);
         }
-
-        for (int i = 0; i < 8; i++)
-        {
-            LeftRightActionContent content = Instantiate(leftRightActionContent);
-            content.transform.parent = leftRightActionUpTransform;
-            content.transform.localPosition = Vector3.zero;
-            content.transform.localScale = Vector3.one;
-            content.gameObject.SetActive(false);
-            leftRightActionUpList.Add(content);
-        }
     }
 
     private void Start()
     {
-        gameModeText.name = GameStateManager.instance.GamePlayType.ToString();
+        gameModeText.localizationName = GameStateManager.instance.GamePlayType.ToString();
         gameModeText.ReLoad();
 
         ChoiceGameType(GameStateManager.instance.GamePlayType, GameStateManager.instance.GameModeType);
@@ -504,6 +494,23 @@ public class GameManager : MonoBehaviour
 
     private void CreateLeftRightActionRandom()
     {
+        for(int i = 0; i < leftRightActionUpList.Count; i ++)
+        {
+            Destroy(leftRightActionUpList[i].gameObject);
+        }
+
+        leftRightActionUpList.Clear();
+
+        for (int i = 0; i < 8; i++)
+        {
+            LeftRightActionContent content = Instantiate(leftRightActionContent);
+            content.transform.parent = leftRightActionUpTransform;
+            content.transform.localPosition = Vector3.zero;
+            content.transform.localScale = Vector3.one;
+            content.gameObject.SetActive(false);
+            leftRightActionUpList.Add(content);
+        }
+
         numberList.Clear();
 
         int number = 0;
@@ -606,7 +613,7 @@ public class GameManager : MonoBehaviour
         GameStateManager.instance.GamePlayType = gamePlayType;
         GameStateManager.instance.GameModeType = gameModeType;
 
-        gameModeText.name = gamePlayType.ToString();
+        gameModeText.localizationName = gamePlayType.ToString();
         gameModeText.ReLoad();
 
         tryCountView.SetActive(false);

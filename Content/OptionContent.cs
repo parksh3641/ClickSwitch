@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class OptionContent : MonoBehaviour
@@ -15,6 +16,7 @@ public class OptionContent : MonoBehaviour
     public UnityEvent eAppleLink;
     public UnityEvent eFacebookLogout;
     public UnityEvent eRestorePurchases;
+    public UnityEvent eRepair;
 
     public Image iconImg;
     public Text iconText;
@@ -59,7 +61,7 @@ public class OptionContent : MonoBehaviour
 
                 buttonImg.sprite = buttonList[0];
 
-                buttonText.name = "Change";
+                buttonText.localizationName = "Change";
                 buttonText.ReLoad();
                 buttonText.TextColor(new Color(39 / 255f, 220 / 255f, 149 / 255f));
 
@@ -70,7 +72,7 @@ public class OptionContent : MonoBehaviour
 
                 buttonImg.sprite = buttonList[1];
 
-                buttonText.name = "DeleteAccount";
+                buttonText.localizationName = "DeleteAccount";
                 buttonText.ReLoad();
                 buttonText.TextColor(new Color(225 / 255f, 34 / 255f, 12 / 255f));
 
@@ -87,10 +89,10 @@ public class OptionContent : MonoBehaviour
                         switch (Application.platform)
                         {
                             case RuntimePlatform.Android:
-                                buttonText.name = "GoogleLink";
+                                buttonText.localizationName = "GoogleLink";
                                 break;
                             case RuntimePlatform.IPhonePlayer:
-                                buttonText.name = "AppleLink";
+                                buttonText.localizationName = "AppleLink";
                                 break;
                             default:
                                 button.SetActive(false);
@@ -118,9 +120,15 @@ public class OptionContent : MonoBehaviour
                 break;
             case OptionType.RestorePurchases:
                 iconImg.sprite = iconList[6];
-     
 
-                buttonText.name = "RestorePurchases";
+                buttonText.localizationName = "RestorePurchases";
+                buttonText.ReLoad();
+                buttonText.TextColor(new Color(39 / 255f, 220 / 255f, 149 / 255f));
+                break;
+            case OptionType.Repair:
+                iconImg.sprite = iconList[7];
+
+                buttonText.localizationName = "Repair";
                 buttonText.ReLoad();
                 buttonText.TextColor(new Color(39 / 255f, 220 / 255f, 149 / 255f));
                 break;
@@ -222,6 +230,9 @@ public class OptionContent : MonoBehaviour
             case OptionType.RestorePurchases:
                 eRestorePurchases.Invoke();
                 break;
+            case OptionType.Repair:
+                eRepair.Invoke();             
+                break;
         }
     }
 
@@ -231,7 +242,7 @@ public class OptionContent : MonoBehaviour
         {
             iconImg.sprite = iconList[0];
             buttonImg.sprite = buttonList[0];
-            buttonText.name = "ON";
+            buttonText.localizationName = "ON";
             buttonText.ReLoad();
             buttonText.TextColor(new Color(39 / 255f, 220 / 255f, 149 / 255f));
 
@@ -240,7 +251,7 @@ public class OptionContent : MonoBehaviour
         {
             iconImg.sprite = iconList[1];
             buttonImg.sprite = buttonList[1];
-            buttonText.name = "OFF";
+            buttonText.localizationName = "OFF";
             buttonText.ReLoad();
             buttonText.TextColor(new Color(225 / 255f, 34 / 255f, 12 / 255f));
         }
@@ -252,7 +263,7 @@ public class OptionContent : MonoBehaviour
         {
             iconImg.sprite = iconList[2];
             buttonImg.sprite = buttonList[0];
-            buttonText.name = "ON";
+            buttonText.localizationName = "ON";
             buttonText.ReLoad();
             buttonText.TextColor(new Color(39 / 255f, 220 / 255f, 149 / 255f));
         }
@@ -260,7 +271,7 @@ public class OptionContent : MonoBehaviour
         {
             iconImg.sprite = iconList[3];
             buttonImg.sprite = buttonList[1];
-            buttonText.name = "OFF";
+            buttonText.localizationName = "OFF";
             buttonText.ReLoad();
             buttonText.TextColor(new Color(225 / 255f, 34 / 255f, 12 / 255f));
         }
@@ -272,7 +283,7 @@ public class OptionContent : MonoBehaviour
         {
             iconImg.sprite = iconList[4];
             buttonImg.sprite = buttonList[0];
-            buttonText.name = "ON";
+            buttonText.localizationName = "ON";
             buttonText.ReLoad();
             buttonText.TextColor(new Color(39 / 255f, 220 / 255f, 149 / 255f));
         }
@@ -280,7 +291,7 @@ public class OptionContent : MonoBehaviour
         {
             iconImg.sprite = iconList[4];
             buttonImg.sprite = buttonList[1];
-            buttonText.name = "OFF";
+            buttonText.localizationName = "OFF";
             buttonText.ReLoad();
             buttonText.TextColor(new Color(225 / 255f, 34 / 255f, 12 / 255f));
         }
@@ -292,7 +303,7 @@ public class OptionContent : MonoBehaviour
         {
             iconImg.sprite = iconList[5];
             buttonImg.sprite = buttonList[0];
-            buttonText.name = "ON";
+            buttonText.localizationName = "ON";
             buttonText.ReLoad();
             buttonText.TextColor(new Color(39 / 255f, 220 / 255f, 149 / 255f));
         }
@@ -300,7 +311,7 @@ public class OptionContent : MonoBehaviour
         {
             iconImg.sprite = iconList[5];
             buttonImg.sprite = buttonList[1];
-            buttonText.name = "OFF";
+            buttonText.localizationName = "OFF";
             buttonText.ReLoad();
             buttonText.TextColor(new Color(225 / 255f, 34 / 255f, 12 / 255f));
         }
@@ -313,7 +324,7 @@ public class OptionContent : MonoBehaviour
 
         buttonImg.sprite = buttonList[1];
 
-        buttonText.name = "DeleteAccount";
+        buttonText.localizationName = "DeleteAccount";
         buttonText.ReLoad();
         buttonText.TextColor(new Color(225 / 255f, 34 / 255f, 12 / 255f));
     }

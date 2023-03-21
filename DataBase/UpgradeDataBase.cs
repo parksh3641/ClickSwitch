@@ -27,6 +27,10 @@ public class UpgradeDataBase : ScriptableObject
 
     public UpgradeInformation comboTime;
 
+    public UpgradeInformation comboCritical;
+
+    public UpgradeInformation addScore;
+
     public void Initialize()
     {
         startTime = new UpgradeInformation();
@@ -35,6 +39,8 @@ public class UpgradeDataBase : ScriptableObject
         addExp = new UpgradeInformation();
         addGold = new UpgradeInformation();
         comboTime = new UpgradeInformation();
+        comboCritical = new UpgradeInformation();
+        addScore = new UpgradeInformation();
     }
 
     public UpgradeInformation StartTime
@@ -109,6 +115,30 @@ public class UpgradeDataBase : ScriptableObject
         }
     }
 
+    public UpgradeInformation ComboCritical
+    {
+        get
+        {
+            return comboCritical;
+        }
+        set
+        {
+            comboCritical = value;
+        }
+    }
+
+    public UpgradeInformation AddScore
+    {
+        get
+        {
+            return addScore;
+        }
+        set
+        {
+            addScore = value;
+        }
+    }
+
     public float GetValue(UpgradeType type, int level)
     {
         float value = 0;
@@ -131,6 +161,12 @@ public class UpgradeDataBase : ScriptableObject
                 break;
             case UpgradeType.ComboTime:
                 value = comboTime.value + (comboTime.addValue * level);
+                break;
+            case UpgradeType.ComboCritical:
+                value = comboCritical.value + (comboCritical.addValue * level);
+                break;
+            case UpgradeType.AddScore:
+                value = addScore.value + (addScore.addValue * level);
                 break;
         }
 

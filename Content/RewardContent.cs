@@ -66,7 +66,7 @@ public class RewardContent : MonoBehaviour
 
     private void OnEnable()
     {
-        if (nameText.name.Length > 0) nameText.ReLoad();
+        if (nameText.localizationName.Length > 0) nameText.ReLoad();
     }
 
     public void Initialize(ProgressManager manager, RewardClass _rewardClass, int number)
@@ -79,7 +79,7 @@ public class RewardContent : MonoBehaviour
 
         countText.text = "x" + rewardClass.count.ToString();
 
-        nameText.name = "";
+        nameText.localizationName = "";
 
         switch (rewardClass.rewardType)
         {
@@ -128,7 +128,7 @@ public class RewardContent : MonoBehaviour
                 mainBackground.sprite = rankArray[2];
 
                 countText.text = "";
-                nameText.name = LocalizationManager.instance.GetString("Icon");
+                nameText.localizationName = LocalizationManager.instance.GetString("Icon");
                 break;
             case RewardType.Banner:
                 icon.gameObject.SetActive(false);
@@ -151,7 +151,7 @@ public class RewardContent : MonoBehaviour
                 }
 
                 countText.text = "";
-                nameText.name = LocalizationManager.instance.GetString("Banner");
+                nameText.localizationName = LocalizationManager.instance.GetString("Banner");
                 break;
         }
 
