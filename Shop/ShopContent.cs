@@ -17,6 +17,7 @@ public class ShopContent : MonoBehaviour
     public GameObject coin;
     public GameObject crystal;
     public GameObject buyCrystal;
+    public GameObject onTime;
 
     [Space]
     [Title("Text")]
@@ -24,14 +25,17 @@ public class ShopContent : MonoBehaviour
     public Text coinText;
     public Text crystalText;
     public Text buyCrystalText;
+    public Text onTimeText;
 
     Sprite[] mainIconArray;
 
     ImageDataBase imageDataBase;
+    PlayerDataBase playerDataBase;
 
     private void Awake()
     {
         if (imageDataBase == null) imageDataBase = Resources.Load("ImageDatabase") as ImageDataBase;
+        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
 
         mainIconArray = imageDataBase.GetShopArray();
 
@@ -39,6 +43,7 @@ public class ShopContent : MonoBehaviour
         coin.SetActive(false);
         crystal.SetActive(false);
         buyCrystal.SetActive(false);
+        onTime.SetActive(false);
     }
 
     void Start()
@@ -90,6 +95,13 @@ public class ShopContent : MonoBehaviour
                 priceText.localizationName = "ShopCrystal100";
 
                 price.SetActive(true);
+
+                if (!playerDataBase.Crystal100)
+                {
+                    onTime.SetActive(true);
+
+                    onTimeText.text = "+80";
+                }
                 break;
             case ShopType.Crystal200:
                 titleText.localizationName = "Crystal200";
@@ -97,6 +109,13 @@ public class ShopContent : MonoBehaviour
                 priceText.localizationName = "ShopCrystal200";
 
                 price.SetActive(true);
+
+                if (!playerDataBase.Crystal200)
+                {
+                    onTime.SetActive(true);
+
+                    onTimeText.text = "+500";
+                }
                 break;
             case ShopType.Crystal300:
                 titleText.localizationName = "Crystal300";
@@ -104,6 +123,13 @@ public class ShopContent : MonoBehaviour
                 priceText.localizationName = "ShopCrystal300";
 
                 price.SetActive(true);
+
+                if (!playerDataBase.Crystal300)
+                {
+                    onTime.SetActive(true);
+
+                    onTimeText.text = "+1200";
+                }
                 break;
             case ShopType.DailyShopReward:
                 titleText.localizationName = "DailyReward";
@@ -111,12 +137,79 @@ public class ShopContent : MonoBehaviour
                 crystalText.text = "30";
 
                 crystal.SetActive(true);
-
                 break;
             case ShopType.PaidProgress:
                 titleText.localizationName = "PaidProgress";
 
                 priceText.localizationName = "ShopPaidProgress";
+
+                price.SetActive(true);
+
+                break;
+            case ShopType.Crystal400:
+                titleText.localizationName = "Crystal400";
+
+                priceText.localizationName = "ShopCrystal400";
+
+                price.SetActive(true);
+
+                if (!playerDataBase.Crystal400)
+                {
+                    onTime.SetActive(true);
+
+                    onTimeText.text = "+2500";
+                }
+                break;
+            case ShopType.Crystal500:
+                titleText.localizationName = "Crystal500";
+
+                priceText.localizationName = "ShopCrystal500";
+
+                price.SetActive(true);
+
+                if (!playerDataBase.Crystal500)
+                {
+                    onTime.SetActive(true);
+
+                    onTimeText.text = "+6500";
+                }
+                break;
+            case ShopType.Crystal600:
+                titleText.localizationName = "Crystal600";
+
+                priceText.localizationName = "ShopCrystal600";
+
+                price.SetActive(true);
+
+                if (!playerDataBase.Crystal600)
+                {
+                    onTime.SetActive(true);
+
+                    onTimeText.text = "+14000";
+                }
+                break;
+            case ShopType.StartPack1:
+                titleText.localizationName = "StartPack1";
+
+                priceText.localizationName = "ShopStartPack1";
+
+                price.SetActive(true);
+                break;
+            case ShopType.StartPack2:
+                break;
+            case ShopType.StartPack3:
+                break;
+            case ShopType.CoinX2:
+                titleText.localizationName = "CoinX2";
+
+                priceText.localizationName = "ShopCoinX2";
+
+                price.SetActive(true);
+                break;
+            case ShopType.ExpX2:
+                titleText.localizationName = "ExpX2";
+
+                priceText.localizationName = "ShopExpX2";
 
                 price.SetActive(true);
                 break;

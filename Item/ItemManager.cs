@@ -63,13 +63,31 @@ public class ItemManager : MonoBehaviour
             itemContents[i].gameObject.SetActive(true);
         }
 
-        selectItemText.localizationName = "SelectItem";
-        selectItemText.ReLoad();
-
-        if(GameStateManager.instance.GameModeType == GameModeType.Perfect)
+        if (GameStateManager.instance.GameModeType == GameModeType.Perfect)
         {
             itemContents[0].gameObject.SetActive(false);
             itemContents[4].gameObject.SetActive(false);
+        }
+
+        selectItemText.localizationName = "SelectItem";
+        selectItemText.ReLoad();
+
+
+        if(GameStateManager.instance.WatchAdItem)
+        {
+            selectItemText.localizationName = "BoastItemUse";
+            selectItemText.ReLoad();
+
+            for (int i = 0; i < itemContents.Length; i++)
+            {
+                itemContents[i].UseItem();
+            }
+
+            GameStateManager.instance.Clock = true;
+            GameStateManager.instance.Shield = true;
+            GameStateManager.instance.Combo = true;
+            GameStateManager.instance.Exp = true;
+            GameStateManager.instance.Slow = true;
         }
     }
 
@@ -133,6 +151,25 @@ public class ItemManager : MonoBehaviour
         }
 
         selectItemText.localizationName = "Information_" + type.ToString();
+        selectItemText.ReLoad();
+    }
+
+    public void SuccessWatchAd()
+    {
+        GameStateManager.instance.WatchAdItem = true;
+
+        GameStateManager.instance.Clock = true;
+        GameStateManager.instance.Shield = true;
+        GameStateManager.instance.Combo = true;
+        GameStateManager.instance.Exp = true;
+        GameStateManager.instance.Slow = true;
+
+        for (int i = 0; i < itemContents.Length; i ++)
+        {
+            itemContents[i].UseItem();
+        }
+
+        selectItemText.localizationName = "BoastItemUse";
         selectItemText.ReLoad();
     }
 }

@@ -58,6 +58,12 @@ public class StateManager : MonoBehaviour
         }
 
         GameStateManager.instance.PlayGame = false;
+
+        GameStateManager.instance.Clock = false;
+        GameStateManager.instance.Shield = false;
+        GameStateManager.instance.Combo = false;
+        GameStateManager.instance.Exp = false;
+        GameStateManager.instance.Slow = false;
     }
 
     public void ChangeNumber()

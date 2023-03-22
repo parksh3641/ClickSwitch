@@ -185,9 +185,9 @@ public class IconBoxManager : MonoBehaviour
             {
                 if (!goldContent.gameObject.activeInHierarchy) goldContent.gameObject.SetActive(true);
 
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 500);
+                if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 300);
 
-                goldContent.AddGoldCount(500);
+                goldContent.AddGoldCount(300);
 
                 Debug.Log("Icon Coin Reward");
             }

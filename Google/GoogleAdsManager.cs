@@ -6,15 +6,18 @@ using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
 using System.Collections;
+using Firebase.Analytics;
 
 public class GoogleAdsManager : MonoBehaviour
 {
-    public AdType adType = AdType.CoinX3;
+    public AdType adType = AdType.CoinX2;
 
     public UIManager uIManager;
     public GameManager gameManager;
     public ShopManager shopManager;
     public DailyManager dailyManager;
+    public ItemManager itemManager;
+
 
     string adUnitId;
 
@@ -60,13 +63,12 @@ public class GoogleAdsManager : MonoBehaviour
 
     public void Show(int number)
     {
-        adType = AdType.CoinX3;
+        adType = AdType.CoinX2;
         adType += number;
 
-
-        if(playerDataBase.RemoveAd)
+        if (playerDataBase.RemoveAd)
         {
-            switch(number)
+            switch (number)
             {
                 case 0:
                     uIManager.SuccessWatchAd();
@@ -85,10 +87,20 @@ public class GoogleAdsManager : MonoBehaviour
 
                     break;
                 case 4:
-                    dailyManager.SuccessRewardAd();
+                    dailyManager.SuccessWatchAd();
+
+                    break;
+                case 5:
+                    itemManager.SuccessWatchAd();
 
                     break;
             }
+            return;
+        }
+
+        if(number == 5 && GameStateManager.instance.WatchAdItem)
+        {
+            NotionManager.instance.UseNotion(NotionType.NowBoastItemNotion);
             return;
         }
 
@@ -169,7 +181,7 @@ public class GoogleAdsManager : MonoBehaviour
     {
         switch (adType)
         {
-            case AdType.CoinX3:
+            case AdType.CoinX2:
                 uIManager.SuccessWatchAd();
                 break;
             case AdType.TryCount:
@@ -181,9 +193,14 @@ public class GoogleAdsManager : MonoBehaviour
             case AdType.CoinRushTryCount:
                 gameManager.SuccessCoinRushAd();
                 break;
-            case AdType.DailyMissonX3:
-                dailyManager.SuccessRewardAd();
+            case AdType.DailyMissonX2:
+                dailyManager.SuccessWatchAd();
+                break;
+            case AdType.Item:
+                itemManager.SuccessWatchAd();
                 break;
         }
+
+        FirebaseAnalytics.LogEvent("Ad : " + adType.ToString());
     }
 }

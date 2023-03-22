@@ -21,6 +21,8 @@ public class ShopDataBase : ScriptableObject
     [Title("GooglePlay")]
     public ShopClass removeAds;
     public ShopClass paidProgress;
+    public ShopClass coinX2;
+    public ShopClass expX2;
 
     [Space]
     [Title("Item")]
@@ -109,6 +111,30 @@ public class ShopDataBase : ScriptableObject
         set
         {
             paidProgress = value;
+        }
+    }
+
+    public ShopClass CoinX2
+    {
+        get
+        {
+            return coinX2;
+        }
+        set
+        {
+            coinX2 = value;
+        }
+    }
+
+    public ShopClass ExpX2
+    {
+        get
+        {
+            return expX2;
+        }
+        set
+        {
+            expX2 = value;
         }
     }
 

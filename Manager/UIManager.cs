@@ -386,25 +386,35 @@ public class UIManager : MonoBehaviour, IGameEvent
             itemUseContentArray[i].Initialize(itemArray[i]);
         }
 
-        if (GameStateManager.instance.Clock)
+        if(GameStateManager.instance.WatchAdItem)
         {
-            itemUseContentArray[0].UseItem();
+            for (int i = 0; i < itemUseContentArray.Length; i++)
+            {
+                itemUseContentArray[i].UseItem();
+            }
         }
-        if (GameStateManager.instance.Shield)
+        else
         {
-            itemUseContentArray[1].UseItem();
-        }
-        if (GameStateManager.instance.Combo)
-        {
-            itemUseContentArray[2].UseItem();
-        }
-        if (GameStateManager.instance.Exp)
-        {
-            itemUseContentArray[3].UseItem();
-        }
-        if (GameStateManager.instance.Slow)
-        {
-            itemUseContentArray[4].UseItem();
+            if (GameStateManager.instance.Clock)
+            {
+                itemUseContentArray[0].UseItem();
+            }
+            if (GameStateManager.instance.Shield)
+            {
+                itemUseContentArray[1].UseItem();
+            }
+            if (GameStateManager.instance.Combo)
+            {
+                itemUseContentArray[2].UseItem();
+            }
+            if (GameStateManager.instance.Exp)
+            {
+                itemUseContentArray[3].UseItem();
+            }
+            if (GameStateManager.instance.Slow)
+            {
+                itemUseContentArray[4].UseItem();
+            }
         }
     }
 
@@ -669,6 +679,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     public void OpenDailyMission()
     {
         dailyManager.OpenDaily();
+        resetManager.OnCheckAttendanceDay();
 
         FirebaseAnalytics.LogEvent("OpenDailyMission");
     }
@@ -1204,6 +1215,7 @@ public class UIManager : MonoBehaviour, IGameEvent
         UpdateTotalScore();
         UpdateTotalCombo();
 
+        doubleCoinObj.SetActive(false);
 
         money = (int)(score / 2) + plusCoin;
 
@@ -1211,23 +1223,21 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         if (level > 50) level = 50;
 
+        if (playerDataBase.CoinX2) level += 100;
+
         if (money > 0)
         {
-            if (playerDataBase.Level > 0)
+            if (level > 0)
             {
-                if (playerDataBase.Level > 50)
-                {
-                    playerDataBase.Level = 50;
-                }
-
                 doubleCoinObj.SetActive(true);
+                plusGoldText.text = "+ " + level + "%";
 
                 plus = (level + playerDataBase.AddGoldLevel) / 100.0f;
             }
 
-            plusGoldText.text = "+ " + level + "%";
+            money = money + (money * plus);
 
-            if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, (int)(money + (money * plus)));
+            if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, (int)(money));
 
             getGoldText.text = money.ToString();
         }
@@ -1236,34 +1246,34 @@ public class UIManager : MonoBehaviour, IGameEvent
             getGoldText.text = "0";
         }
 
-        doubleExpObj.SetActive(false);
-
         exp = 0;
 
         if(score >= 100) exp += 100;
-
         exp += ((int)score / 20);
-
         exp += (combo / 10);
 
-
+        doubleExpObj.SetActive(false);
         float expPlus = 0;
 
-        expPlus += upgradeDataBase.GetValue(UpgradeType.AddExp, playerDataBase.AddExpLevel);
-
-        if (GameStateManager.instance.Exp || playerDataBase.AddExpLevel > 0)
-        {
-            doubleExpObj.SetActive(true);
-        }
+        expPlus = upgradeDataBase.GetValue(UpgradeType.AddExp, playerDataBase.AddExpLevel);
 
         if(GameStateManager.instance.Exp)
         {
-            expPlus += 30;
+            expPlus += 15;
         }
 
-        plusExpText.text = "+" + expPlus + "%";
+        if(playerDataBase.ExpX2)
+        {
+            expPlus += 100;
+        }
 
-        exp = exp + (exp * (expPlus /100));
+        if(exp > 0)
+        {
+            doubleExpObj.SetActive(true);
+            plusExpText.text = "+" + Mathf.Round(expPlus) + "%";
+        }
+
+        exp = exp + (exp * (expPlus /100.0f));
 
 
         levelManager.CheckLevelUp(exp);

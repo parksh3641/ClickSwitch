@@ -95,8 +95,6 @@ public class LevelManager : MonoBehaviour
         showVCView.SetActive(true);
 
         levelUpText.text = (level + 1).ToString();
-        if (level + 1 > 59) level = 59;
-        bounsInfoText.text = LocalizationManager.instance.GetString("PlusCoinInfo") + " +" + (level + 1) + "%";
 
         coin = 1000 + ((level + 1) * 200);
 
@@ -105,6 +103,9 @@ public class LevelManager : MonoBehaviour
         if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, coin);
 
         soundManager.PlaySFX(GameSfxType.LevelUp);
+
+        if (level + 1 > 49) level = 49;
+        bounsInfoText.text = LocalizationManager.instance.GetString("PlusCoinInfo") + " +" + (level + 1) + "%";
     }
 
     public void CloseLevelView()

@@ -659,6 +659,16 @@ public class PlayfabManager : MonoBehaviour
                         playerDataBase.PaidProgress = true;
                     }
 
+                    if (list.ItemId.Equals("CoinX2"))
+                    {
+                        playerDataBase.CoinX2 = true;
+                    }
+
+                    if (list.ItemId.Equals("ExpX2"))
+                    {
+                        playerDataBase.ExpX2 = true;
+                    }
+
                     if (list.ItemId.Equals("Clock"))
                     {
                         playerDataBase.Clock = (int)list.RemainingUses;
@@ -749,6 +759,14 @@ public class PlayfabManager : MonoBehaviour
                 else if (catalog.ItemId.Equals("PaidProgress"))
                 {
                     shopDataBase.PaidProgress = shopClass;
+                }
+                else if (catalog.ItemId.Equals("CoinX2"))
+                {
+                    shopDataBase.CoinX2 = shopClass;
+                }
+                else if (catalog.ItemId.Equals("ExpX2"))
+                {
+                    shopDataBase.ExpX2 = shopClass;
                 }
 
             }
@@ -890,6 +908,69 @@ public class PlayfabManager : MonoBehaviour
                            break;
                        case "LockTutorial":
                            playerDataBase.LockTutorial = statistics.Value;
+                           break;
+                       case "AccessDate":
+                           playerDataBase.AccessDate = statistics.Value;
+                           break;
+                       case "Crystal100":
+                           if (statistics.Value == 0)
+                           {
+                               playerDataBase.Crystal100 = false;
+                           }
+                           else
+                           {
+                               playerDataBase.Crystal100 = true;
+                           }
+                           break;
+                       case "Crystal200":
+                           if (statistics.Value == 0)
+                           {
+                               playerDataBase.Crystal200 = false;
+                           }
+                           else
+                           {
+                               playerDataBase.Crystal200 = true;
+                           }
+                           break;
+                       case "Crystal300":
+                           if (statistics.Value == 0)
+                           {
+                               playerDataBase.Crystal300 = false;
+                           }
+                           else
+                           {
+                               playerDataBase.Crystal300 = true;
+                           }
+                           break;
+                       case "Crystal400":
+                           if (statistics.Value == 0)
+                           {
+                               playerDataBase.Crystal400 = false;
+                           }
+                           else
+                           {
+                               playerDataBase.Crystal400 = true;
+                           }
+                           break;
+                       case "Crystal500":
+                           if (statistics.Value == 0)
+                           {
+                               playerDataBase.Crystal500 = false;
+                           }
+                           else
+                           {
+                               playerDataBase.Crystal500 = true;
+                           }
+                           break;
+                       case "Crystal600":
+                           if (statistics.Value == 0)
+                           {
+                               playerDataBase.Crystal600 = false;
+                           }
+                           else
+                           {
+                               playerDataBase.Crystal600 = true;
+                           }
                            break;
                    }
                }
@@ -1078,11 +1159,11 @@ public class PlayfabManager : MonoBehaviour
                 switch (type)
                 {
                     case MoneyType.Coin:
-                        uiManager.goldAnimation.OnPlayCoinAnimation(MoneyType.Coin, playerDataBase.Coin, number);
+                        uiManager.goldAnimation.OnPlayMoneyAnimation(MoneyType.Coin, playerDataBase.Coin, number);
                         playerDataBase.Coin += number;
                         break;
                     case MoneyType.Crystal:
-                        uiManager.goldAnimation.OnPlayCoinAnimation(MoneyType.Crystal, playerDataBase.Crystal, number);
+                        uiManager.goldAnimation.OnPlayMoneyAnimation(MoneyType.Crystal, playerDataBase.Crystal, number);
                         playerDataBase.Crystal += number;
                         break;
                 }
@@ -1374,11 +1455,139 @@ public class PlayfabManager : MonoBehaviour
 
     public void PurchaseCrystal(int number)
     {
-        UpdateAddCurrency(MoneyType.Crystal, number);
+        switch(number)
+        {
+            case 80:
+                if (!playerDataBase.Crystal100)
+                {
+                    playerDataBase.Crystal100 = true;
+
+                    UpdatePlayerStatisticsInsert("Crystal100", 1);
+
+                    shopManager.BuyCrystal(0);
+
+                    UpdateAddCurrency(MoneyType.Crystal, number * 2);
+                }
+                else
+                {
+                    UpdateAddCurrency(MoneyType.Crystal, number);
+                }
+                break;
+            case 500:
+                if (!playerDataBase.Crystal200)
+                {
+                    playerDataBase.Crystal200 = true;
+
+                    UpdatePlayerStatisticsInsert("Crystal200", 1);
+
+                    shopManager.BuyCrystal(1);
+
+                    UpdateAddCurrency(MoneyType.Crystal, number * 2);
+                }
+                else
+                {
+                    UpdateAddCurrency(MoneyType.Crystal, number);
+                }
+                break;
+            case 1200:
+                if (!playerDataBase.Crystal300)
+                {
+                    playerDataBase.Crystal300 = true;
+
+                    UpdatePlayerStatisticsInsert("Crystal300", 1);
+
+                    shopManager.BuyCrystal(2);
+
+                    UpdateAddCurrency(MoneyType.Crystal, number * 2);
+                }
+                else
+                {
+                    UpdateAddCurrency(MoneyType.Crystal, number);
+                }
+                break;
+            case 2500:
+                if (!playerDataBase.Crystal400)
+                {
+                    playerDataBase.Crystal400 = true;
+
+                    UpdatePlayerStatisticsInsert("Crystal400", 1);
+
+                    shopManager.BuyCrystal(3);
+
+                    UpdateAddCurrency(MoneyType.Crystal, number * 2);
+                }
+                else
+                {
+                    UpdateAddCurrency(MoneyType.Crystal, number);
+                }
+                break;
+            case 6500:
+                if (!playerDataBase.Crystal500)
+                {
+                    playerDataBase.Crystal500 = true;
+
+                    UpdatePlayerStatisticsInsert("Crystal500", 1);
+
+                    shopManager.BuyCrystal(4);
+
+                    UpdateAddCurrency(MoneyType.Crystal, number * 2);
+                }
+                else
+                {
+                    UpdateAddCurrency(MoneyType.Crystal, number);
+                }
+                break;
+            case 14000:
+                if (!playerDataBase.Crystal600)
+                {
+                    playerDataBase.Crystal600 = true;
+
+                    UpdatePlayerStatisticsInsert("Crystal600", 1);
+
+                    shopManager.BuyCrystal(5);
+
+                    UpdateAddCurrency(MoneyType.Crystal, number * 2);
+                }
+                else
+                {
+                    UpdateAddCurrency(MoneyType.Crystal, number);
+                }
+                break;
+        }
+
 
         FirebaseAnalytics.LogEvent("PurchaseCrystal : " + number);
 
         NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
+    }
+
+    public void PurchaseStartPack1()
+    {
+        UpdateAddCurrency(MoneyType.Crystal, 350);
+        UpdateAddCurrency(MoneyType.Coin, 7500);
+
+        shopManager.BuyStartPack();
+
+        FirebaseAnalytics.LogEvent("Purchase : StartPack1");
+
+        NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
+    }
+    public void PurchaseCoinX2()
+    {
+        PurchaseItemToRM(shopDataBase.CoinX2);
+
+        playerDataBase.CoinX2 = true;
+
+        FirebaseAnalytics.LogEvent("Purchase : CoinX2");
+    }
+
+    public void PurchaseExpX2()
+    {
+        PurchaseItemToRM(shopDataBase.ExpX2);
+
+        playerDataBase.ExpX2 = true;
+
+        FirebaseAnalytics.LogEvent("Purchase : ExpX2");
     }
 
     public void PurchaseItemToRM(ShopClass shopClass)
@@ -1502,48 +1711,60 @@ public class PlayfabManager : MonoBehaviour
     {
         if (GameStateManager.instance.Clock)
         {
-            playerDataBase.Clock -= 1;
-
-            ConsumeItem(shopDataBase.GetItemInstanceId("Clock"));
+            if(!GameStateManager.instance.WatchAdItem)
+            {
+                playerDataBase.Clock -= 1;
+                ConsumeItem(shopDataBase.GetItemInstanceId("Clock"));
+            }
         }
 
         yield return new WaitForSeconds(0.5f);
 
         if (GameStateManager.instance.Shield)
         {
-            playerDataBase.Shield -= 1;
-
-            ConsumeItem(shopDataBase.GetItemInstanceId("Shield"));
+            if (!GameStateManager.instance.WatchAdItem)
+            {
+                playerDataBase.Shield -= 1;
+                ConsumeItem(shopDataBase.GetItemInstanceId("Shield"));
+            }
         }
 
         yield return new WaitForSeconds(0.5f);
 
         if (GameStateManager.instance.Combo)
         {
-            playerDataBase.Combo -= 1;
-
-            ConsumeItem(shopDataBase.GetItemInstanceId("Combo"));
+            if (!GameStateManager.instance.WatchAdItem)
+            {
+                playerDataBase.Combo -= 1;
+                ConsumeItem(shopDataBase.GetItemInstanceId("Combo"));
+            }
         }
 
         yield return new WaitForSeconds(0.5f);
 
         if (GameStateManager.instance.Exp)
         {
-            playerDataBase.Exp -= 1;
-
-            ConsumeItem(shopDataBase.GetItemInstanceId("Exp"));
+            if (!GameStateManager.instance.WatchAdItem)
+            {
+                playerDataBase.Exp -= 1;
+                ConsumeItem(shopDataBase.GetItemInstanceId("Exp"));
+            }
         }
 
         yield return new WaitForSeconds(0.5f);
 
         if (GameStateManager.instance.Slow)
         {
-            playerDataBase.Slow -= 1;
-
-            ConsumeItem(shopDataBase.GetItemInstanceId("Slow"));
+            if (!GameStateManager.instance.WatchAdItem)
+            {
+                playerDataBase.Slow -= 1;
+                ConsumeItem(shopDataBase.GetItemInstanceId("Slow"));
+            }
         }
 
         yield return new WaitForSeconds(0.5f);
+
+        GameStateManager.instance.WatchAdItem = false;
 
         StateManager.instance.ChangeNumber();
     }

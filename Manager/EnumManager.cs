@@ -109,6 +109,14 @@ public enum ShopType
     Crystal300,
     DailyShopReward,
     PaidProgress,
+    Crystal400,
+    Crystal500,
+    Crystal600,
+    StartPack1,
+    StartPack2,
+    StartPack3,
+    CoinX2,
+    ExpX2,
 }
 
 public enum ItemType
@@ -185,11 +193,12 @@ public enum BannerType
 
 public enum AdType
 {
-    CoinX3,
+    CoinX2,
     TryCount,
     ShopWatchAd,
     CoinRushTryCount,
-    DailyMissonX3
+    DailyMissonX2,
+    Item,
 }
 
 public enum MissionType

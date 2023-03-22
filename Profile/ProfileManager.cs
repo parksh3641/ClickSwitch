@@ -10,6 +10,8 @@ public class ProfileManager : MonoBehaviour
 
     public GameObject removeAd;
     public GameObject paidProgress;
+    public GameObject coinX2;
+    public GameObject expX2;
 
     [Space]
     [Title("Main")]
@@ -28,6 +30,7 @@ public class ProfileManager : MonoBehaviour
     public Text plusCoinText;
     public Text totalScoreText;
     public Text totalComboText;
+    public Text totalDateText;
 
 
     [Space]
@@ -72,10 +75,13 @@ public class ProfileManager : MonoBehaviour
         plusCoinText.text = "0%";
         totalScoreText.text = "0";
         totalComboText.text = "0";
+        totalDateText.text = "0";
 
         profileView.SetActive(false);
         removeAd.SetActive(false);
         paidProgress.SetActive(false);
+        coinX2.SetActive(false);
+        expX2.SetActive(false);
 
         profileTransform.anchoredPosition = new Vector2(0, -999);
     }
@@ -131,6 +137,7 @@ public class ProfileManager : MonoBehaviour
 
         totalScoreText.text = playerDataBase.TotalScore.ToString();
         totalComboText.text = playerDataBase.TotalCombo.ToString();
+        totalDateText.text = playerDataBase.AccessDate.ToString();
 
         int plusIcon = shopDataBase.GetIconHoldNumber();
         int plusTrophy = playerDataBase.GetTrophyHoldNumber();
@@ -144,9 +151,14 @@ public class ProfileManager : MonoBehaviour
 
         int plusCoin = playerDataBase.Level + 1;
 
-        if(plusCoin >= 30)
+        if(plusCoin >= 50)
         {
-            plusCoin = 30;
+            plusCoin = 50;
+        }
+
+        if(playerDataBase.CoinX2)
+        {
+            plusCoin += 100;
         }
 
         plusCoin += playerDataBase.AddGoldLevel;
@@ -166,6 +178,16 @@ public class ProfileManager : MonoBehaviour
         if (playerDataBase.PaidProgress)
         {
             paidProgress.SetActive(true);
+        }
+
+        if (playerDataBase.CoinX2)
+        {
+            coinX2.SetActive(true);
+        }
+
+        if (playerDataBase.ExpX2)
+        {
+            expX2.SetActive(true);
         }
     }
 }

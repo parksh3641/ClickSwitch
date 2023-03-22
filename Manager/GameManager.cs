@@ -344,13 +344,7 @@ public class GameManager : MonoBehaviour
         else
         {
             Application.targetFrameRate = 60;
-        }
-
-        GameStateManager.instance.Clock = false;
-        GameStateManager.instance.Shield = false;
-        GameStateManager.instance.Combo = false;
-        GameStateManager.instance.Exp = false;
-        GameStateManager.instance.Slow = false;
+        };
     }
 
     #region Setting
@@ -1044,15 +1038,15 @@ public class GameManager : MonoBehaviour
                 switch (gameModeType)
                 {
                     case GameModeType.Easy:
-                        coinRushMax = 200;
+                        coinRushMax = 2000;
 
                         break;
                     case GameModeType.Normal:
-                        coinRushMax = 300;
+                        coinRushMax = 3000;
 
                         break;
                     case GameModeType.Hard:
-                        coinRushMax = 500;
+                        coinRushMax = 4000;
 
                         break;
                 }
@@ -1454,7 +1448,7 @@ public class GameManager : MonoBehaviour
 
     public void CheckCoinRush()
     {
-        PlusScore(3);
+        PlusScore(1);
 
         soundManager.PlaySFX(GameSfxType.GetMoney);
 

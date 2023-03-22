@@ -18,11 +18,19 @@ public class ShopManager : MonoBehaviour
 
     [Space]
     [Title("InAppPurchase")]
+    public ShopContent[] crystalContent;
     public GameObject removeAd;
     public GameObject paidProgress;
+    public GameObject coinX2;
+    public GameObject expX2;
 
     public ShopItemContent shopItemContent;
     public RectTransform[] scrollViewTransform;
+
+    [Space]
+    [Title("StartPack")]
+    public GameObject purchaseView;
+    public LocalizationContent priceText;
 
     [Space]
     [Title("TopMenu")]
@@ -53,6 +61,7 @@ public class ShopManager : MonoBehaviour
     public GameObject watchAdLock;
     public GameObject dailyLock;
     public GameObject dailyAdLock;
+    public GameObject startPackLock;
     public Text watchAdCountText;
 
     private int topNumber = 0;
@@ -75,14 +84,15 @@ public class ShopManager : MonoBehaviour
 
     private void Awake()
     {
+        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
+        if (shopDataBase == null) shopDataBase = Resources.Load("ShopDataBase") as ShopDataBase;
+        if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+
         shopView.SetActive(false);
         showVCView.SetActive(false);
         buyWindow.SetActive(false);
         alarm.SetActive(false);
-
-        if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
-        if (shopDataBase == null) shopDataBase = Resources.Load("ShopDataBase") as ShopDataBase;
-        if (imageDataBase == null) imageDataBase = Resources.Load("ImageDataBase") as ImageDataBase;
+        purchaseView.SetActive(false);
     }
 
     void Start()
@@ -100,7 +110,7 @@ public class ShopManager : MonoBehaviour
         for (int i = 0; i < shopDataBase.etcList.Count; i++)
         {
             ShopItemContent monster = Instantiate(shopItemContent);
-            monster.transform.parent = scrollViewTransform[1];
+            monster.transform.parent = scrollViewTransform[2];
             monster.transform.position = Vector3.zero;
             monster.transform.rotation = Quaternion.identity;
             monster.transform.localScale = Vector3.one;
@@ -113,7 +123,7 @@ public class ShopManager : MonoBehaviour
         for (int i = 0; i < shopDataBase.ItemList.Count; i++)
         {
             ShopItemContent monster = Instantiate(shopItemContent);
-            monster.transform.parent = scrollViewTransform[1];
+            monster.transform.parent = scrollViewTransform[2];
             monster.transform.position = Vector3.zero;
             monster.transform.rotation = Quaternion.identity;
             monster.transform.localScale = Vector3.one;
@@ -146,10 +156,28 @@ public class ShopManager : MonoBehaviour
             dailyAdLock.SetActive(true);
         }
 
+        if (!GameStateManager.instance.StartPack)
+        {
+            startPackLock.SetActive(false);
+        }
+        else
+        {
+            startPackLock.SetActive(true);
+        }
+
         topNumber = -1;
         ChangeTopMenu(0);
 
         CheckPurchaseItem();
+    }
+
+    public void DailyInitialize()
+    {
+        dailyLock.SetActive(false);
+        dailyAdLock.SetActive(false);
+        startPackLock.SetActive(false);
+
+        alarm.SetActive(true);
     }
 
     public void CheckPurchaseItem()
@@ -162,6 +190,16 @@ public class ShopManager : MonoBehaviour
         if(playerDataBase.PaidProgress)
         {
             paidProgress.SetActive(false);
+        }
+
+        if (playerDataBase.CoinX2)
+        {
+            coinX2.SetActive(false);
+        }
+
+        if (playerDataBase.ExpX2)
+        {
+            expX2.SetActive(false);
         }
     }
 
@@ -191,13 +229,13 @@ public class ShopManager : MonoBehaviour
     public void OpenShopGold()
     {
         OpenShop();
-        ChangeTopMenu(2);
+        ChangeTopMenu(3);
     }
 
     public void OpenShopCrystal()
     {
         OpenShop();
-        ChangeTopMenu(0);
+        ChangeTopMenu(1);
     }
 
     public void OpenBuyWindow(ShopClass _shopClass, Sprite icon)
@@ -515,4 +553,33 @@ public class ShopManager : MonoBehaviour
     }
 
     #endregion
+
+    public void OpenPurchaseView()
+    {
+        if (!purchaseView.activeSelf)
+        {
+            purchaseView.SetActive(true);
+
+            priceText.localizationName = "ShopStartPack1";
+            priceText.ReLoad();
+        }
+        else
+        {
+            purchaseView.SetActive(false);
+        }
+    }
+
+    public void BuyStartPack()
+    {
+        GameStateManager.instance.StartPack = true;
+
+        startPackLock.SetActive(true);
+
+        purchaseView.SetActive(false);
+    }
+
+    public void BuyCrystal(int number)
+    {
+        crystalContent[number].onTime.SetActive(false);
+    }
 }

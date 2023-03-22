@@ -40,6 +40,8 @@ public class ResetManager : MonoBehaviour
     public GameObject waitForNextEventObj;
 
 
+    public ShopManager shopManager;
+
     PlayerDataBase playerDataBase;
 
     private void Awake()
@@ -89,12 +91,18 @@ public class ResetManager : MonoBehaviour
             playerDataBase.AttendanceDay = System.DateTime.Now.ToString("yyyyMMdd");
 
             if (PlayfabManager.instance.isActive)
+            {
+                playerDataBase.AccessDate += 1;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("AccessDate", playerDataBase.AccessDate);
+
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceDay", int.Parse(playerDataBase.AttendanceDay));
+            }
 
             GameStateManager.instance.TryCount = 1;
             GameStateManager.instance.EventWatchAd = false;
             GameStateManager.instance.DailyShopReward = false;
             GameStateManager.instance.DailyShopAdsReward = false;
+            GameStateManager.instance.StartPack = false;
             GameStateManager.instance.CoinRushTryCount = 1;
             GameStateManager.instance.CoinRushWatchAd = false;
         }
@@ -137,21 +145,28 @@ public class ResetManager : MonoBehaviour
             }
 
             playerDataBase.GameMode = ((int)type).ToString();
-
-            if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("GameMode", (int)type);
-
-
             playerDataBase.AttendanceDay = System.DateTime.Now.AddDays(1).ToString("yyyyMMdd");
 
             if (PlayfabManager.instance.isActive)
+            {
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("GameMode", (int)type);
+
+                playerDataBase.AccessDate += 1;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("AccessDate", playerDataBase.AccessDate);
+
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceDay", int.Parse(playerDataBase.AttendanceDay));
+            }
 
             GameStateManager.instance.TryCount = 1;
             GameStateManager.instance.EventWatchAd = false;
             GameStateManager.instance.DailyShopReward = false;
             GameStateManager.instance.DailyShopAdsReward = false;
+            GameStateManager.instance.StartPack = false;
             GameStateManager.instance.CoinRushTryCount = 1;
             GameStateManager.instance.CoinRushWatchAd = false;
+
+
+            shopManager.DailyInitialize();
         }
         else
         {

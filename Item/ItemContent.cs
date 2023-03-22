@@ -10,6 +10,7 @@ public class ItemContent : MonoBehaviour
 
     public Image background;
     public Image icon;
+    public GameObject countObj;
     public TextMeshProUGUI countText;
 
     public GameObject frame;
@@ -59,23 +60,37 @@ public class ItemContent : MonoBehaviour
         icon.sprite = itemArray[(int)itemType];
         countText.text = count.ToString();
 
+        countObj.SetActive(true);
         frame.SetActive(false);
+
+        if(GameStateManager.instance.WatchAdItem)
+        {
+            frame.SetActive(true);
+        }
     }
 
     public void OnClick()
     {
         if (count <= 0) return;
 
-        ItemManager.UseItem(itemType);
+        if (!GameStateManager.instance.WatchAdItem)
+        {
+            ItemManager.UseItem(itemType);
 
-        if(frame.activeInHierarchy)
-        {
-            frame.SetActive(false);
-        }
-        else
-        {
-            frame.SetActive(true);
+            if (frame.activeInHierarchy)
+            {
+                frame.SetActive(false);
+            }
+            else
+            {
+                frame.SetActive(true);
+            }
         }
     }
 
+    public void UseItem()
+    {
+        countObj.SetActive(false);
+        frame.SetActive(true);
+    }
 }

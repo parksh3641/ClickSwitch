@@ -29,14 +29,19 @@ public class CoinAnimation : MonoBehaviour
     public Text[] crystalText;
 
     [Space]
+    [Title("Bool")]
+    public bool isCoin = false;
+    public bool isCrystal = false;
+
+    [Space]
     [Title("Prefab")]
     public CoinContent goldPrefab;
     public CoinContent expPrefab;
     public CoinContent crystalPrefab;
 
     List<CoinContent> coinPrefabList = new List<CoinContent>();
-    List<CoinContent> expPrefabList = new List<CoinContent>();
     List<CoinContent> crystalPrefabList = new List<CoinContent>();
+    List<CoinContent> expPrefabList = new List<CoinContent>();
 
     private void Awake()
     {
@@ -71,23 +76,50 @@ public class CoinAnimation : MonoBehaviour
         }
     }
 
-    public void OnPlayCoinAnimation(MoneyType type, int money, int plus)
+    public void OnPlayMoneyAnimation(MoneyType type, int money, int plus)
     {
         switch (type)
         {
             case MoneyType.Coin:
-                StopAllCoroutines();
 
-                for (int i = 0; i < coinPrefabList.Count; i++)
+                if(!isCoin)
                 {
-                    coinPrefabList[i].gameObject.SetActive(false);
-                }
+                    isCoin = true;
 
-                StartCoroutine(OnPlayCoinCoroution(money, plus, coinPrefabList, goldTarget, coinText));
+                    for (int i = 0; i < coinPrefabList.Count; i++)
+                    {
+                        coinPrefabList[i].gameObject.SetActive(false);
+                    }
+
+                    StartCoroutine(OnPlayCoinCoroution(money, plus, coinPrefabList, goldTarget, coinText));
+                }
+                else
+                {
+                    isCoin = false;
+
+                    OnPlayMoneyAnimation(type, money, plus);
+                }
 
                 break;
             case MoneyType.Crystal:
-                StartCoroutine(OnPlayCoinCoroution(money, plus, crystalPrefabList, crystaltarget, crystalText));
+
+                if (!isCrystal)
+                {
+                    isCrystal = true;
+
+                    for (int i = 0; i < crystalPrefabList.Count; i++)
+                    {
+                        crystalPrefabList[i].gameObject.SetActive(false);
+                    }
+
+                    StartCoroutine(OnPlayCrystalCoroution(money, plus, crystalPrefabList, crystaltarget, crystalText));
+                }
+                else
+                {
+                    isCrystal = false;
+
+                    OnPlayMoneyAnimation(type, money, plus);
+                }
                 break;
         }
     }
@@ -101,7 +133,7 @@ public class CoinAnimation : MonoBehaviour
     [Button]
     public void OnPlayCrystal()
     {
-        StartCoroutine(OnPlayCoinCoroution(0, 100, crystalPrefabList, crystaltarget, crystalText));
+        StartCoroutine(OnPlayCrystalCoroution(0, 100, crystalPrefabList, crystaltarget, crystalText));
     }
 
     [Button]
@@ -112,62 +144,135 @@ public class CoinAnimation : MonoBehaviour
 
     IEnumerator OnPlayCoinCoroution(int money, int plus, List<CoinContent> list, Transform target, Text[] text)
     {
-        for (int i = 0; i < list.Count; i++)
+        while (isCoin)
         {
-            list[i].gameObject.SetActive(false);
-        }
 
-        if (plus >= list.Count)
-        {
             for (int i = 0; i < list.Count; i++)
             {
-                list[i].gameObject.SetActive(true);
+                list[i].gameObject.SetActive(false);
             }
-        }
-        else
-        {
-            for (int i = 0; i < plus; i++)
+
+            if (plus >= list.Count)
             {
-                list[i].gameObject.SetActive(true);
-            }
-        }
-
-        yield return new WaitForSeconds(1.0f);
-
-        if (plus >= list.Count)
-        {
-            for (int i = 0; i < list.Count; i++)
-            {
-                list[i].GoToTarget(target.localPosition - new Vector3(coinPosX, coinPosY, 0));
-            }
-        }
-        else
-        {
-            for (int i = 0; i < plus; i++)
-            {
-                list[i].GoToTarget(target.localPosition - new Vector3(coinPosX, coinPosY, 0));
-            }
-        }
-
-        yield return new WaitForSeconds(0.5f);
-
-        int max = money + plus;
-
-        while (money < max)
-        {
-            if (money + 100 < max)
-            {
-                money += 100;
+                for (int i = 0; i < list.Count; i++)
+                {
+                    list[i].gameObject.SetActive(true);
+                }
             }
             else
             {
-                money += 1;
+                for (int i = 0; i < plus; i++)
+                {
+                    list[i].gameObject.SetActive(true);
+                }
             }
 
-            text[0].text = money.ToString();
-            text[1].text = money.ToString();
+            yield return new WaitForSeconds(1.0f);
 
-            yield return new WaitForSeconds(0.01f);
+            if (plus >= list.Count)
+            {
+                for (int i = 0; i < list.Count; i++)
+                {
+                    list[i].GoToTarget(target.localPosition - new Vector3(coinPosX, coinPosY, 0));
+                }
+            }
+            else
+            {
+                for (int i = 0; i < plus; i++)
+                {
+                    list[i].GoToTarget(target.localPosition - new Vector3(coinPosX, coinPosY, 0));
+                }
+            }
+
+            yield return new WaitForSeconds(0.5f);
+
+            int max = money + plus;
+
+            while (money < max)
+            {
+                if (money + 100 < max)
+                {
+                    money += 100;
+                }
+                else
+                {
+                    money += 1;
+                }
+
+                text[0].text = money.ToString();
+                text[1].text = money.ToString();
+
+                yield return new WaitForSeconds(0.01f);
+            }
+
+            isCoin = false;
+        }
+    }
+
+    IEnumerator OnPlayCrystalCoroution(int money, int plus, List<CoinContent> list, Transform target, Text[] text)
+    {
+        while (isCrystal)
+        {
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                list[i].gameObject.SetActive(false);
+            }
+
+            if (plus >= list.Count)
+            {
+                for (int i = 0; i < list.Count; i++)
+                {
+                    list[i].gameObject.SetActive(true);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < plus; i++)
+                {
+                    list[i].gameObject.SetActive(true);
+                }
+            }
+
+            yield return new WaitForSeconds(1.0f);
+
+            if (plus >= list.Count)
+            {
+                for (int i = 0; i < list.Count; i++)
+                {
+                    list[i].GoToTarget(target.localPosition - new Vector3(coinPosX, coinPosY, 0));
+                }
+            }
+            else
+            {
+                for (int i = 0; i < plus; i++)
+                {
+                    list[i].GoToTarget(target.localPosition - new Vector3(coinPosX, coinPosY, 0));
+                }
+            }
+
+            yield return new WaitForSeconds(0.5f);
+
+            int max = money + plus;
+
+            while (money < max)
+            {
+                if (money + 100 < max)
+                {
+                    money += 100;
+                }
+                else
+                {
+                    money += 1;
+                }
+
+                text[0].text = money.ToString();
+                text[1].text = money.ToString();
+
+                yield return new WaitForSeconds(0.01f);
+            }
+
+            isCrystal = false;
         }
     }
 

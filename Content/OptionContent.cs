@@ -128,7 +128,7 @@ public class OptionContent : MonoBehaviour
             case OptionType.Repair:
                 iconImg.sprite = iconList[7];
 
-                buttonText.localizationName = "Repair";
+                buttonText.localizationName = "Confirm";
                 buttonText.ReLoad();
                 buttonText.TextColor(new Color(39 / 255f, 220 / 255f, 149 / 255f));
                 break;

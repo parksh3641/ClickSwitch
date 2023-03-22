@@ -132,22 +132,5 @@ public class ModeContent : MonoBehaviour
         modeTypeText.ReLoad();
 
         backgroundImg.sprite = modeBackgroundImgArray[(int)gameModeType];
-
-        playTypeText.GetComponent<Text>().color = new Color(0, 122 / 255f, 89 / 255f);
-        modeTypeText.GetComponent<Text>().color = new Color(0, 122 / 255f, 89 / 255f);
-
-        switch (mode)
-        {
-            case GameModeType.Easy:
-                break;
-            case GameModeType.Normal:
-                break;
-            case GameModeType.Hard:
-                playTypeText.GetComponent<Text>().color = new Color(67 / 255f, 83/ 255f, 108 / 255f);
-                modeTypeText.GetComponent<Text>().color = new Color(67 / 255f, 83 / 255f, 108 / 255f);
-                break;
-            case GameModeType.Perfect:
-                break;
-        }
     }
 }

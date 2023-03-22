@@ -80,6 +80,8 @@ public class PlayerDataBase : ScriptableObject
     private int icon = 0;
     [SerializeField]
     private int banner = 0;
+    [SerializeField]
+    private int accessDate = 0;
 
     [Space]
     [Title("Item")]
@@ -109,6 +111,25 @@ public class PlayerDataBase : ScriptableObject
     private bool removeAd = false;
     [SerializeField]
     private bool paidProgress = false;
+    [SerializeField]
+    private bool coinX2 = false;
+    [SerializeField]
+    private bool expX2 = false;
+
+    [Space]
+    [Title("OneTimeDouble")]
+    [SerializeField]
+    private bool crystal100 = false;
+    [SerializeField]
+    private bool crystal200 = false;
+    [SerializeField]
+    private bool crystal300 = false;
+    [SerializeField]
+    private bool crystal400 = false;
+    [SerializeField]
+    private bool crystal500 = false;
+    [SerializeField]
+    private bool crystal600 = false;
 
     [Space]
     [Title("Trophy")]
@@ -204,6 +225,7 @@ public class PlayerDataBase : ScriptableObject
         experience = 0;
         icon = 0;
         banner = 0;
+        accessDate = 0;
 
         clock = 0;
         shield = 0;
@@ -217,6 +239,16 @@ public class PlayerDataBase : ScriptableObject
 
         removeAd = false;
         paidProgress = false;
+        coinX2 = false;
+        expX2 = false;
+        crystal100 = false;
+        crystal200 = false;
+        crystal300 = false;
+        crystal400 = false;
+        crystal500 = false;
+        crystal600 = false;
+
+        lockTutorial = 0;
 
         trophyDataList.Clear();
 
@@ -548,6 +580,18 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public int AccessDate
+    {
+        get
+        {
+            return accessDate;
+        }
+        set
+        {
+            accessDate = value;
+        }
+    }
+
     public int Clock
     {
         get
@@ -696,6 +740,102 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             paidProgress = value;
+        }
+    }
+
+    public bool CoinX2
+    {
+        get
+        {
+            return coinX2;
+        }
+        set
+        {
+            coinX2 = value;
+        }
+    }
+
+    public bool ExpX2
+    {
+        get
+        {
+            return expX2;
+        }
+        set
+        {
+            expX2 = value;
+        }
+    }
+
+    public bool Crystal100
+    {
+        get
+        {
+            return crystal100;
+        }
+        set
+        {
+            crystal100 = value;
+        }
+    }
+
+    public bool Crystal200
+    {
+        get
+        {
+            return crystal200;
+        }
+        set
+        {
+            crystal200 = value;
+        }
+    }
+
+    public bool Crystal300
+    {
+        get
+        {
+            return crystal300;
+        }
+        set
+        {
+            crystal300 = value;
+        }
+    }
+
+    public bool Crystal400
+    {
+        get
+        {
+            return crystal400;
+        }
+        set
+        {
+            crystal400 = value;
+        }
+    }
+
+    public bool Crystal500
+    {
+        get
+        {
+            return crystal500;
+        }
+        set
+        {
+            crystal500 = value;
+        }
+    }
+
+    public bool Crystal600
+    {
+        get
+        {
+            return crystal600;
+        }
+        set
+        {
+            crystal600 = value;
         }
     }
 

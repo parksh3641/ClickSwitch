@@ -156,5 +156,6 @@ public enum NotionType
     SaveNotion,
     CorrectNotion,
     WrongNotion,
-    TouchTreasureNotion
+    TouchTreasureNotion,
+    NowBoastItemNotion
 }

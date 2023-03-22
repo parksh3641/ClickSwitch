@@ -65,6 +65,7 @@ public class GameStateManager : MonoBehaviour
         [Space]
         [Title("Ad")]
         public bool watchAd = true;
+        public bool watchAdItem = false;
         public bool eventWatchAd = false;
         public bool coinRushWatchAd = false;
 
@@ -72,6 +73,7 @@ public class GameStateManager : MonoBehaviour
         [Title("Daily")]
         public bool dailyShopReward = false;
         public bool dailyShopAdsReward = false;
+        public bool startPack = false;
 
         [Space]
         [Title("Tutorial")]
@@ -309,6 +311,19 @@ public class GameStateManager : MonoBehaviour
         }
     }
 
+    public bool WatchAdItem
+    {
+        get
+        {
+            return gameSettings.watchAdItem;
+        }
+        set
+        {
+            gameSettings.watchAdItem = value;
+            SaveFile();
+        }
+    }
+
     public bool Clock
     {
         get
@@ -448,6 +463,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.dailyShopAdsReward = value;
+            SaveFile();
+        }
+    }
+
+    public bool StartPack
+    {
+        get
+        {
+            return gameSettings.startPack;
+        }
+        set
+        {
+            gameSettings.startPack = value;
             SaveFile();
         }
     }

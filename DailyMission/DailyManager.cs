@@ -12,6 +12,14 @@ public class DailyManager : MonoBehaviour
 
     public GameObject alarm;
 
+    [Space]
+    [Title("TopMenu")]
+    public Image[] topMenuImgArray;
+    public Sprite[] topMenuSpriteArray;
+
+    [Title("ScrollView")]
+    public GameObject[] scrollVeiwArray;
+
     public Text timerText;
 
     string localization = "";
@@ -23,6 +31,7 @@ public class DailyManager : MonoBehaviour
     public GameObject[] lockReceiveObj;
 
     private int alarmIndex = 0;
+    private int topNumber = 0;
     private bool open = false;
 
     List<int> missionIndexs = new List<int>();
@@ -56,6 +65,9 @@ public class DailyManager : MonoBehaviour
     private void Start()
     {
         StartCoroutine(DailyMissionTimer());
+
+        topNumber = -1;
+        ChangeTopMenu(0);
     }
 
     private void OnEnable()
@@ -280,7 +292,7 @@ public class DailyManager : MonoBehaviour
             if (PlayfabManager.instance.isActive)
             {
                 PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 1500);
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 20);
+                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 30);
                 //PlayfabManager.instance.UpdatePlayerStatisticsInsert("IconBox", 1);
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyMissionClear", 1);
             }
@@ -297,7 +309,7 @@ public class DailyManager : MonoBehaviour
         FirebaseAnalytics.LogEvent("DailyMission Reward");
     }
 
-    public void SuccessRewardAd()
+    public void SuccessWatchAd()
     {
         if (!lockReceiveObj[1].activeInHierarchy && !playerDataBase.DailyMissionClear)
         {
@@ -306,7 +318,7 @@ public class DailyManager : MonoBehaviour
             if (PlayfabManager.instance.isActive)
             {
                 PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 3000);
-                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 40);
+                PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 60);
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyMissionClear", 1);
             }
 
@@ -365,5 +377,26 @@ public class DailyManager : MonoBehaviour
 
         yield return new WaitForSeconds(1);
         StartCoroutine(DailyMissionTimer());
+    }
+
+    public void ChangeTopMenu(int number)
+    {
+        if (topNumber != number)
+        {
+            topNumber = number;
+
+            for (int i = 0; i < topMenuImgArray.Length; i++)
+            {
+                topMenuImgArray[i].sprite = topMenuSpriteArray[0];
+            }
+            topMenuImgArray[number].sprite = topMenuSpriteArray[1];
+
+            for (int i = 0; i < scrollVeiwArray.Length; i++)
+            {
+                scrollVeiwArray[i].SetActive(false);
+            }
+
+            scrollVeiwArray[number].SetActive(true);
+        }
     }
 }
