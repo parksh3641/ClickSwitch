@@ -13,7 +13,7 @@ public class DailyMissionList : ScriptableObject
 public class DailyMission
 {
     public GamePlayType gamePlayType = GamePlayType.GameChoice1;
-    public MissionType missionType = MissionType.QuestDoPlay;
+    public DailyMissionType missionType = DailyMissionType.QuestDoPlay;
     public int goal = 0;
     public bool clear = false;
 }

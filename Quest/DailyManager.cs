@@ -1,9 +1,11 @@
 using Firebase.Analytics;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class DailyManager : MonoBehaviour
 {
@@ -20,10 +22,14 @@ public class DailyManager : MonoBehaviour
     [Title("ScrollView")]
     public GameObject[] scrollVeiwArray;
 
-    public Text timerText;
+    public Text dailyMissionTimerText;
+    public Text weeklyMissionTimerText;
 
-    string localization = "";
-    string localization2 = "";
+    string localization_NextQuest = "";
+    string localization_GetClearReward = "";
+    string localization_Days = "";
+    string localization_Hours = "";
+    string localization_Minutes = "";
 
     public DailyContent[] dailyContents;
 
@@ -34,10 +40,13 @@ public class DailyManager : MonoBehaviour
     private int topNumber = 0;
     private bool open = false;
 
+    WaitForSeconds waitForSeconds = new WaitForSeconds(1);
+
     List<int> missionIndexs = new List<int>();
     Dictionary<string, string> dailyMissionData = new Dictionary<string, string>();
 
 
+    public WeeklyManager weeklyManager;
     DailyMissionList dailyMissionList;
     PlayerDataBase playerDataBase;
 
@@ -54,17 +63,10 @@ public class DailyManager : MonoBehaviour
         lockReceiveObj[1].SetActive(true);
     }
 
-    public void Initialize()
-    {
-        dailyView.SetActive(true);
-        dailyView.GetComponent<RectTransform>().anchoredPosition = new Vector2(4000, 0);
-
-        CheckDailyMission();
-    }
-
     private void Start()
     {
         StartCoroutine(DailyMissionTimer());
+        StartCoroutine(WeeklyMissionTimer());
 
         topNumber = -1;
         ChangeTopMenu(0);
@@ -81,26 +83,39 @@ public class DailyManager : MonoBehaviour
         GameManager.eGameEnd -= UpdateDailyMission;
     }
 
+    public void Initialize()
+    {
+        dailyView.SetActive(true);
+        dailyView.GetComponent<RectTransform>().anchoredPosition = new Vector2(4000, 0);
+    }
+
+
     void GameStart()
     {
         dailyView.SetActive(false);
     }
 
-    public void OpenDaily()
+    public void OpenDailyView()
     {
         if (!open)
         {
+            LoadDailyMission();
+
             open = true;
             dailyView.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
 
             showVCView.SetActive(true);
 
-            timerText.text = "";
+            dailyMissionTimerText.text = "";
+            weeklyMissionTimerText.text = "";
 
-            localization = LocalizationManager.instance.GetString("NextQuest");
-            localization2 = LocalizationManager.instance.GetString("GetClearReward");
+            localization_NextQuest = LocalizationManager.instance.GetString("NextQuest");
+            localization_GetClearReward = LocalizationManager.instance.GetString("GetClearReward");
+            localization_Days = LocalizationManager.instance.GetString("Days");
+            localization_Hours = LocalizationManager.instance.GetString("Hours");
+            localization_Minutes = LocalizationManager.instance.GetString("Minutes");
 
-            clearText.text = localization2 + " " + playerDataBase.DailyMissionCount + " / 3";
+            clearText.text = localization_GetClearReward + " " + playerDataBase.DailyMissionCount + " / 3";
         }
         else
         {
@@ -122,24 +137,13 @@ public class DailyManager : MonoBehaviour
         PlayerPrefs.SetInt(System.DateTime.Today.ToString(), 0);
     }
 
-    public void CheckDailyMission()
+    public void InitializeMission()
     {
-        int number = PlayerPrefs.GetInt(System.DateTime.Today.ToString());
+        RandomDailyMission();
 
-        if (number == 0)
-        {
-            Debug.Log("New DailyMission Appeard!");
+        OnSetAlarm();
 
-            RandomDailyMission();
-
-            OnSetAlarm();
-        }
-        else
-        {
-            Debug.Log("Now DailyMission");
-
-            LoadDailyMission();
-        }
+        Debug.Log("일일 미션이 갱신되었습니다");
     }
 
     void RandomDailyMission()
@@ -178,6 +182,7 @@ public class DailyManager : MonoBehaviour
         for (int i = 0; i < missionIndexs.Count; i++)
         {
             dailyContents[i].Initialize(dailyMissionList.dailyMissions[missionIndexs[i]], i, this);
+
             playerDataBase.SetDailyMission(dailyMissionList.dailyMissions[missionIndexs[i]],i);
 
 
@@ -196,18 +201,20 @@ public class DailyManager : MonoBehaviour
             if(PlayfabManager.instance.isActive) PlayfabManager.instance.SetPlayerData(dailyMissionData);
         }
 
+        weeklyManager.UpdateWeeklyMissionReport(WeeklyMissionType.DailyMissonClear, 1);
+
         UpdateDailyMission();
     }
 
 
-    void LoadDailyMission()
+    public void LoadDailyMission()
     {
         for(int i = 0; i < dailyContents.Length; i ++)
         {
             dailyContents[i].Initialize(playerDataBase.GetDailyMission(i), i, this);
         }
 
-        clearText.text = localization2 + " " + playerDataBase.DailyMissionCount + " / 3";
+        clearText.text = localization_GetClearReward + " " + playerDataBase.DailyMissionCount + " / 3";
 
         if (playerDataBase.DailyMissionCount >= 3 && !playerDataBase.DailyMissionClear)
         {
@@ -224,12 +231,12 @@ public class DailyManager : MonoBehaviour
     {
         dailyView.SetActive(true);
 
-        Debug.Log("Update DailyMission");
-
         for(int i = 0; i < dailyContents.Length; i ++)
         {
             dailyContents[i].UpdateState(playerDataBase.GetDailyMissionReportValue(i));
         }
+
+        Debug.Log("일일 미션 업데이트 완료");
     }
 
     public void OnSetAlarm()
@@ -270,7 +277,7 @@ public class DailyManager : MonoBehaviour
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("DailyMissionCount", playerDataBase.DailyMissionCount);
         }
 
-        clearText.text = localization2 + " " + playerDataBase.DailyMissionCount + " / 3";
+        clearText.text = localization_GetClearReward + " " + playerDataBase.DailyMissionCount + " / 3";
 
         if (playerDataBase.DailyMissionCount >= 3)
         {
@@ -336,47 +343,40 @@ public class DailyManager : MonoBehaviour
 
     IEnumerator DailyMissionTimer()
     {
-        System.DateTime f = System.DateTime.Now;
-        System.DateTime g = System.DateTime.Today.AddDays(1);
-        System.TimeSpan h = g - f;
-
-        int i = h.Hours;
-        int j = h.Minutes;
-        int k = h.Seconds;
-        int total = i + j + k;
-        string l, m, n;
-
-        if (i > 9)
+        if (dailyMissionTimerText.gameObject.activeInHierarchy)
         {
-            l = i.ToString();
-        }
-        else
-        {
-            l = "0" + i.ToString();
+            System.DateTime f = System.DateTime.Now;
+            System.DateTime g = System.DateTime.Today.AddDays(1);
+            System.TimeSpan h = g - f;
+
+            dailyMissionTimerText.text = localization_NextQuest + " : " + h.Hours.ToString("D2") + localization_Hours + " " + h.Minutes.ToString("D2") + localization_Minutes;
         }
 
-        if (j > 9)
-        {
-            m = j.ToString();
-        }
-        else
-        {
-            m = "0" + j.ToString();
-        }
-
-        if (k > 9)
-        {
-            n = k.ToString();
-        }
-        else
-        {
-            n = "0" + k.ToString();
-        }
-
-        timerText.text = localization + " : " + l + ":" + m + ":" + n;
-
-        yield return new WaitForSeconds(1);
+        yield return waitForSeconds;
         StartCoroutine(DailyMissionTimer());
+    }
+
+    IEnumerator WeeklyMissionTimer()
+    {
+        if (weeklyMissionTimerText.gameObject.activeInHierarchy)
+        {
+            System.DateTime f = System.DateTime.Now;
+            System.DateTime g = DateTime.Today.AddDays(((int)DayOfWeek.Monday - (int)DateTime.Today.DayOfWeek + 7) % 7);
+            System.TimeSpan h = g - f;
+
+            if (h.Days > 0)
+            {
+
+                weeklyMissionTimerText.text = localization_NextQuest + " : " + h.Days.ToString("D2") + localization_Days + " " + h.Hours.ToString("D2") + localization_Hours;
+            }
+            else
+            {
+                weeklyMissionTimerText.text = localization_NextQuest + " : " + h.Hours.ToString("D2") + localization_Hours + " " + h.Minutes.ToString("D2") + localization_Minutes;
+            }
+        }
+
+        yield return waitForSeconds;
+        StartCoroutine(WeeklyMissionTimer());
     }
 
     public void ChangeTopMenu(int number)
@@ -394,6 +394,24 @@ public class DailyManager : MonoBehaviour
             for (int i = 0; i < scrollVeiwArray.Length; i++)
             {
                 scrollVeiwArray[i].SetActive(false);
+            }
+
+            if(number == 0)
+            {
+                dailyMissionTimerText.gameObject.SetActive(true);
+                weeklyMissionTimerText.gameObject.SetActive(false);
+            }
+            else if(number == 1)
+            {
+                dailyMissionTimerText.gameObject.SetActive(false);
+                weeklyMissionTimerText.gameObject.SetActive(true);
+
+                weeklyManager.OpenWeeklyView();
+            }
+            else
+            {
+                dailyMissionTimerText.gameObject.SetActive(false);
+                weeklyMissionTimerText.gameObject.SetActive(false);
             }
 
             scrollVeiwArray[number].SetActive(true);

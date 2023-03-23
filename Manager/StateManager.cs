@@ -8,6 +8,7 @@ public class StateManager : MonoBehaviour
 
     public bool isInit = false;
 
+    public ResetManager resetManager;
     public ProfileManager profileManager;
     public NickNameManager nickNameManager;
     public ShopManager shopManager;
@@ -18,7 +19,6 @@ public class StateManager : MonoBehaviour
     public TrophyManager trophyManager;
     public HelpManager helpManager;
     public MailBoxManager mailBoxManager;
-    public DailyManager dailyManager;
     public UpgradeManager upgradeManager;
     public IconBoxManager iconBoxManager;
     public BannerManager bannerManager;
@@ -39,6 +39,7 @@ public class StateManager : MonoBehaviour
         {
             isInit = true;
 
+            resetManager.Initialize();
             profileManager.Initialize();
             nickNameManager.Initialize();
             shopManager.Initialize();
@@ -49,7 +50,6 @@ public class StateManager : MonoBehaviour
             trophyManager.Initialize();
             helpManager.Initialize();
             mailBoxManager.Initialize();
-            dailyManager.Initialize();
             upgradeManager.Initialize();
             iconBoxManager.Initialize();
             bannerManager.Initialize();

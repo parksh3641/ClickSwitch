@@ -104,6 +104,8 @@ public class PlayerDataBase : ScriptableObject
     private string attendanceDay = "";
     [SerializeField]
     private string gameMode = "";
+    [SerializeField]
+    private string nextMonday = "";
 
     [Space]
     [Title("Purchase")]
@@ -153,6 +155,10 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private List<DailyMissionReport> dailyMissionReportList = new List<DailyMissionReport>();
 
+    [Space]
+    [Title("DailyMission")]
+    [SerializeField]
+    private int weeklyMissionKey = 0;
 
     [Space]
     [Title("Upgrade")]
@@ -236,6 +242,7 @@ public class PlayerDataBase : ScriptableObject
 
         attendanceDay = "";
         gameMode = "";
+        nextMonday = "";
 
         removeAd = false;
         paidProgress = false;
@@ -269,6 +276,8 @@ public class PlayerDataBase : ScriptableObject
         {
             OnResetDailyMissionReport();
         }
+
+        weeklyMissionKey = 0;
 
         startTimeLevel = 0;
         criticalLevel = 0;
@@ -681,6 +690,18 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public string NextMonday
+    {
+        get
+        {
+            return nextMonday;
+        }
+        set
+        {
+            nextMonday = value;
+        }
+    }
+
     public string GameMode
     {
         get
@@ -993,6 +1014,19 @@ public class PlayerDataBase : ScriptableObject
             dailyMissionClear = value;
         }
     }
+
+    public int WeeklyMissionKey
+    {
+        get
+        {
+            return weeklyMissionKey;
+        }
+        set
+        {
+            weeklyMissionKey = value;
+        }
+    }
+
     public void OnResetDailyMissionReport()
     {
         DailyMissionCount = 0;
@@ -1054,13 +1088,13 @@ public class PlayerDataBase : ScriptableObject
             {
                 switch (dailyMissionList[number].missionType)
                 {
-                    case MissionType.QuestDoPlay:
+                    case DailyMissionType.QuestDoPlay:
                         value = dailyMissionReportList[i].doPlay;
                         break;
-                    case MissionType.QuestScore:
+                    case DailyMissionType.QuestScore:
                         value = dailyMissionReportList[i].getScore;
                         break;
-                    case MissionType.QuestCombo:
+                    case DailyMissionType.QuestCombo:
                         value = dailyMissionReportList[i].getCombo;
                         break;
                 }

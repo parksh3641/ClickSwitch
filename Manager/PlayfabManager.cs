@@ -51,6 +51,7 @@ public class PlayfabManager : MonoBehaviour
 
     PlayerDataBase playerDataBase;
     ShopDataBase shopDataBase;
+    WeeklyMissionList weeklyMissionList;
 
 
     [Header("Entity")]
@@ -76,6 +77,9 @@ public class PlayfabManager : MonoBehaviour
 
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
         if (shopDataBase == null) shopDataBase = Resources.Load("ShopDataBase") as ShopDataBase;
+        if (weeklyMissionList == null) weeklyMissionList = Resources.Load("WeeklyMissionList") as WeeklyMissionList;
+
+        weeklyMissionList.Initialize();
     }
 
     private void Start()
@@ -860,6 +864,9 @@ public class PlayfabManager : MonoBehaviour
                        case "GameMode":
                            playerDataBase.GameMode = statistics.Value.ToString();
                            break;
+                       case "NextMonday":
+                           playerDataBase.NextMonday = statistics.Value.ToString();
+                           break;
                        case "NewsAlarm":
                            playerDataBase.NewsAlarm = statistics.Value;
                            break;
@@ -972,6 +979,9 @@ public class PlayfabManager : MonoBehaviour
                                playerDataBase.Crystal600 = true;
                            }
                            break;
+                       case "WeeklyMissionKey":
+                           playerDataBase.WeeklyMissionKey = statistics.Value;
+                           break;
                    }
                }
            })
@@ -1009,6 +1019,8 @@ public class PlayfabManager : MonoBehaviour
             TrophyData trophyData = new TrophyData();
             DailyMission dailyMission = new DailyMission();
             GameModeLevel level = new GameModeLevel();
+            WeeklyMission weeklyMisson = new WeeklyMission();
+            WeeklyMissionReport weeklyMissionReport = new WeeklyMissionReport();
 
             foreach (var eachData in result.Data)
             {
@@ -1038,6 +1050,17 @@ public class PlayfabManager : MonoBehaviour
                 else if (key.Contains("PaidProgress"))
                 {
                     playerDataBase.SetProgress(RewardReceiveType.Paid, eachData.Value.Value);
+                }
+                else if(key.Contains("WeeklyMission_"))
+                {
+                    string[] number = key.Split('_');
+                    weeklyMisson = JsonUtility.FromJson<WeeklyMission>(eachData.Value.Value);
+                    weeklyMissionList.SetWeeklyMission(weeklyMisson, int.Parse(number[1]));
+                }
+                else if (key.Contains("WeeklyMissionReport"))
+                {
+                    weeklyMissionReport = JsonUtility.FromJson<WeeklyMissionReport>(eachData.Value.Value);
+                    weeklyMissionList.SetWeeklyMissionReport(weeklyMissionReport);
                 }
             }
         }, DisplayPlayfabError);
@@ -1564,7 +1587,7 @@ public class PlayfabManager : MonoBehaviour
     public void PurchaseStartPack1()
     {
         UpdateAddCurrency(MoneyType.Crystal, 350);
-        UpdateAddCurrency(MoneyType.Coin, 7500);
+        UpdateAddCurrency(MoneyType.Coin, 6000);
 
         shopManager.BuyStartPack();
 

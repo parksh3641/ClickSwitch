@@ -39,6 +39,11 @@ public class ResetManager : MonoBehaviour
     public EventModeContent eventModeContent;
     public GameObject waitForNextEventObj;
 
+    [Space]
+    [Title("Quest")]
+    public DailyManager dailyManager;
+    public WeeklyManager weeklyManager;
+
 
     public ShopManager shopManager;
 
@@ -55,18 +60,23 @@ public class ResetManager : MonoBehaviour
         waitForNextEventObj.SetActive(false);
     }
 
-    public void OpenMenu()
+    public void Initialize()
+    {
+        dailyManager.Initialize();
+        weeklyManager.Initialize();
+
+        OnCheckAttendanceDay();
+
+        //CheckGameMode();
+    }
+
+    public void OpenGameMenu()
     {
         if (!gameMenuView.activeSelf)
         {
             gameMenuView.SetActive(true);
 
-            OnCheckAttendanceDay();
-
-            CheckGameMode();
-
             nextEventText.text = "";
-
             localization = LocalizationManager.instance.GetString("NextEvent");
         }
         else
@@ -86,9 +96,9 @@ public class ResetManager : MonoBehaviour
 
         if (playerDataBase.AttendanceDay.Length < 2)
         {
-            Debug.Log("처음 로그인");
+            Debug.Log("데일리 미션 초기화");
 
-            playerDataBase.AttendanceDay = System.DateTime.Now.ToString("yyyyMMdd");
+            playerDataBase.AttendanceDay = DateTime.Now.ToString("yyyyMMdd");
 
             if (PlayfabManager.instance.isActive)
             {
@@ -105,84 +115,111 @@ public class ResetManager : MonoBehaviour
             GameStateManager.instance.StartPack = false;
             GameStateManager.instance.CoinRushTryCount = 1;
             GameStateManager.instance.CoinRushWatchAd = false;
-        }
 
-        if (ComparisonDate(playerDataBase.AttendanceDay, time))
-        {
-            Debug.Log("날짜 초기화");
-
-            type = GamePlayType.GameChoice1;
-
-            switch (System.DateTime.Now.DayOfWeek)
-            {
-                case System.DayOfWeek.Friday:
-                    type = GamePlayType.GameChoice5;
-                    break;
-                case System.DayOfWeek.Monday:
-                    type = GamePlayType.GameChoice1;
-                    break;
-                case System.DayOfWeek.Saturday:
-                    type = GamePlayType.GameChoice6;
-                    break;
-                case System.DayOfWeek.Sunday:
-                    type = GamePlayType.GameChoice7;
-                    break;
-                case System.DayOfWeek.Thursday:
-                    type = GamePlayType.GameChoice4;
-                    break;
-                case System.DayOfWeek.Tuesday:
-                    type = GamePlayType.GameChoice2;
-                    break;
-                case System.DayOfWeek.Wednesday:
-                    type = GamePlayType.GameChoice3;
-                    break;
-            }
-
-            if (eventModeContent.gameObject.activeInHierarchy)
-            {
-                eventModeContent.Initialize(type, GameModeType.Perfect);
-                eventModeContent.SetClearInformation(type, GameModeType.Perfect);
-            }
-
-            playerDataBase.GameMode = ((int)type).ToString();
-            playerDataBase.AttendanceDay = System.DateTime.Now.AddDays(1).ToString("yyyyMMdd");
-
-            if (PlayfabManager.instance.isActive)
-            {
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("GameMode", (int)type);
-
-                playerDataBase.AccessDate += 1;
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("AccessDate", playerDataBase.AccessDate);
-
-                PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceDay", int.Parse(playerDataBase.AttendanceDay));
-            }
-
-            GameStateManager.instance.TryCount = 1;
-            GameStateManager.instance.EventWatchAd = false;
-            GameStateManager.instance.DailyShopReward = false;
-            GameStateManager.instance.DailyShopAdsReward = false;
-            GameStateManager.instance.StartPack = false;
-            GameStateManager.instance.CoinRushTryCount = 1;
-            GameStateManager.instance.CoinRushWatchAd = false;
-
-
-            shopManager.DailyInitialize();
+            dailyManager.InitializeMission();
         }
         else
         {
-            Debug.Log("아직 하루가 안 지났습니다.");
-
-            if(playerDataBase.GameMode == "")
+            if (ComparisonDate(playerDataBase.AttendanceDay, time))
             {
-                Debug.Log("강제 초기화");
-                playerDataBase.AttendanceDay = "";
-                OnCheckAttendanceDay();
+                Debug.Log("하루가 지났습니다");
+
+                type = GamePlayType.GameChoice1;
+
+                switch (System.DateTime.Now.DayOfWeek)
+                {
+                    case System.DayOfWeek.Friday:
+                        type = GamePlayType.GameChoice5;
+                        break;
+                    case System.DayOfWeek.Monday:
+                        type = GamePlayType.GameChoice1;
+                        break;
+                    case System.DayOfWeek.Saturday:
+                        type = GamePlayType.GameChoice6;
+                        break;
+                    case System.DayOfWeek.Sunday:
+                        type = GamePlayType.GameChoice7;
+                        break;
+                    case System.DayOfWeek.Thursday:
+                        type = GamePlayType.GameChoice4;
+                        break;
+                    case System.DayOfWeek.Tuesday:
+                        type = GamePlayType.GameChoice2;
+                        break;
+                    case System.DayOfWeek.Wednesday:
+                        type = GamePlayType.GameChoice3;
+                        break;
+                }
+
+                playerDataBase.GameMode = ((int)type).ToString();
+                playerDataBase.AttendanceDay = System.DateTime.Now.AddDays(1).ToString("yyyyMMdd");
+
+                if (PlayfabManager.instance.isActive)
+                {
+                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("GameMode", (int)type);
+
+                    playerDataBase.AccessDate += 1;
+                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("AccessDate", playerDataBase.AccessDate);
+
+                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceDay", int.Parse(playerDataBase.AttendanceDay));
+                }
+
+                GameStateManager.instance.TryCount = 1;
+                GameStateManager.instance.EventWatchAd = false;
+                GameStateManager.instance.DailyShopReward = false;
+                GameStateManager.instance.DailyShopAdsReward = false;
+                GameStateManager.instance.StartPack = false;
+                GameStateManager.instance.CoinRushTryCount = 1;
+                GameStateManager.instance.CoinRushWatchAd = false;
+
+                shopManager.DailyInitialize();
+
+                dailyManager.InitializeMission();
             }
-
-            if (eventModeContent.gameObject.activeInHierarchy)
+            else
             {
-                eventModeContent.Initialize(GamePlayType.GameChoice1 + int.Parse(playerDataBase.GameMode.ToString()), GameModeType.Perfect);
-                eventModeContent.SetClearInformation(GamePlayType.GameChoice1 + int.Parse(playerDataBase.GameMode.ToString()), GameModeType.Perfect);
+                Debug.Log("아직 하루가 안 지났습니다.");
+
+                if (playerDataBase.GameMode == "")
+                {
+                    Debug.Log("데일리 미션 강제 초기화");
+
+                    playerDataBase.AttendanceDay = "";
+
+                    OnCheckAttendanceDay();
+                }
+
+                if (eventModeContent.gameObject.activeInHierarchy)
+                {
+                    eventModeContent.Initialize(GamePlayType.GameChoice1 + int.Parse(playerDataBase.GameMode.ToString()), GameModeType.Perfect);
+                    eventModeContent.SetClearInformation(GamePlayType.GameChoice1 + int.Parse(playerDataBase.GameMode.ToString()), GameModeType.Perfect);
+                }
+            }
+        }
+
+        if (playerDataBase.NextMonday.Length < 2)
+        {
+            Debug.Log("위클리 미션 초기화");
+
+            playerDataBase.NextMonday = DateTime.Today.AddDays(((int)DayOfWeek.Monday - (int)DateTime.Today.DayOfWeek + 7) % 7).ToString("yyyyMMdd");
+
+            PlayfabManager.instance.UpdatePlayerStatisticsInsert("NextMonday", int.Parse(playerDataBase.NextMonday));
+
+            weeklyManager.InitializeMission();
+        }
+        else
+        {
+            if (ComparisonDate(playerDataBase.NextMonday, time))
+            {
+                Debug.Log("월요일이 되었습니다");
+
+                playerDataBase.NextMonday = DateTime.Today.AddDays(((int)DayOfWeek.Monday - (int)DateTime.Today.DayOfWeek + 7) % 7).ToString("yyyyMMdd");
+
+                weeklyManager.InitializeMission();
+            }
+            else
+            {
+                Debug.Log("아직 다음주 월요일이 안 됬습니다");
             }
         }
     }
@@ -268,6 +305,11 @@ public class ResetManager : MonoBehaviour
             {
                 gameModeContentArray[i].ChangeGameMode(gameModeLevel.gameModeType);
             }
+        }
+        if (eventModeContent.gameObject.activeInHierarchy)
+        {
+            eventModeContent.Initialize((GamePlayType)Enum.Parse(typeof(GamePlayType), playerDataBase.GameMode), GameModeType.Perfect);
+            eventModeContent.SetClearInformation((GamePlayType)Enum.Parse(typeof(GamePlayType), playerDataBase.GameMode), GameModeType.Perfect);
         }
     }
 }

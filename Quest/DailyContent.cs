@@ -43,6 +43,7 @@ public class DailyContent : MonoBehaviour
 
         icon.sprite = iconArray[(int)mission.gamePlayType];
         titleText.localizationName = mission.missionType.ToString();
+        titleText.ReLoad();
 
         goal = mission.goal;
 

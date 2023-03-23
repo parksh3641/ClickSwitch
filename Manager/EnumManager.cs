@@ -201,12 +201,38 @@ public enum AdType
     Item,
 }
 
-public enum MissionType
+public enum DailyMissionType
 {
     QuestDoPlay,
     QuestScore,
     QuestCombo
 }
+
+public enum WeeklyMissionType
+{
+    GetScore,
+    GetCombo,
+    UseItem,
+    GamePlay,
+    DailyMissonClear,
+    ChallengeCoinRush,
+}
+
+public enum AchievementType
+{
+    Login,
+    TotalScore,
+    TotalCombo,
+    GamePlay,
+    OpenBox,
+    UserLevel,
+    UseCrystal,
+    UseItem,
+    Upgrade,
+    DailyMissonClear,
+    ChallengeCoinRush
+}
+
 
 public enum RewardType
 {

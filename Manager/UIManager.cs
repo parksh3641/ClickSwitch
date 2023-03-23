@@ -154,6 +154,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     public ReviewManager reviewManager;
     public ItemManager itemManager;
     public LockManager lockManager;
+    public WeeklyManager weeklyManager;
 
     [Title("Animation")]
     public CoinAnimation goldAnimation;
@@ -352,14 +353,14 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     private void OnApplicationFocus(bool focus)
     {
+        //if (GameStateManager.instance.DontStopGame) return;
+
         if (focus)
         {
 
         }
         else
         {
-            if (GameStateManager.instance.DontStopGame) return;
-
             if (cancleUI.activeSelf)
             {
                 OpenGameStop();
@@ -379,6 +380,8 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void SetItem()
     {
+        int useItem = 0;
+
         Sprite[] itemArray = imageDataBase.GetItemArray();
 
         for(int i = 0; i < itemUseContentArray.Length; i ++)
@@ -391,6 +394,7 @@ public class UIManager : MonoBehaviour, IGameEvent
             for (int i = 0; i < itemUseContentArray.Length; i++)
             {
                 itemUseContentArray[i].UseItem();
+                useItem++;
             }
         }
         else
@@ -398,24 +402,30 @@ public class UIManager : MonoBehaviour, IGameEvent
             if (GameStateManager.instance.Clock)
             {
                 itemUseContentArray[0].UseItem();
+                useItem++;
             }
             if (GameStateManager.instance.Shield)
             {
                 itemUseContentArray[1].UseItem();
+                useItem++;
             }
             if (GameStateManager.instance.Combo)
             {
                 itemUseContentArray[2].UseItem();
+                useItem++;
             }
             if (GameStateManager.instance.Exp)
             {
                 itemUseContentArray[3].UseItem();
+                useItem++;
             }
             if (GameStateManager.instance.Slow)
             {
                 itemUseContentArray[4].UseItem();
+                useItem++;
             }
         }
+        weeklyManager.UpdateWeeklyMissionReport(WeeklyMissionType.UseItem, useItem);
     }
 
     public void UsedItem(ItemType type)
@@ -441,12 +451,12 @@ public class UIManager : MonoBehaviour, IGameEvent
 #region Button
     public void OpenMenu()
     {
-        resetManager.OpenMenu();
+        resetManager.OpenGameMenu();
     }
 
     public void OpenMenuToTrophy()
     {
-        resetManager.OpenMenu();
+        resetManager.OpenGameMenu();
         trophyManager.OpenTrophy();
     }
 
@@ -678,10 +688,9 @@ public class UIManager : MonoBehaviour, IGameEvent
     }
     public void OpenDailyMission()
     {
-        dailyManager.OpenDaily();
-        resetManager.OnCheckAttendanceDay();
+        dailyManager.OpenDailyView();
 
-        FirebaseAnalytics.LogEvent("OpenDailyMission");
+        FirebaseAnalytics.LogEvent("OpenQuest");
     }
 
     public void OpenUpgrade()
@@ -941,6 +950,8 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         GameModeLevel gameModeLevel = playerDataBase.GetGameMode(GameStateManager.instance.GamePlayType);
 
+        weeklyManager.UpdateWeeklyMissionReport(WeeklyMissionType.GetScore, (int)score);
+
         switch (GameStateManager.instance.GameModeType)
         {
             case GameModeType.Easy:
@@ -1041,6 +1052,8 @@ public class UIManager : MonoBehaviour, IGameEvent
                 if (GameStateManager.instance.CoinRushTryCount > 0)
                 {
                     GameStateManager.instance.CoinRushTryCount -= 1;
+
+                    weeklyManager.UpdateWeeklyMissionReport(WeeklyMissionType.ChallengeCoinRush, 1);
                 }
                 break;
         }
@@ -1055,12 +1068,12 @@ public class UIManager : MonoBehaviour, IGameEvent
         }
 
         DailyMissionReport report = new DailyMissionReport();
-
         report = playerDataBase.GetDailyMissionReport(GameStateManager.instance.GamePlayType);
-
         report.doPlay += 1;
 
-        if(report.getScore < (int)score)
+        weeklyManager.UpdateWeeklyMissionReport(WeeklyMissionType.GamePlay, 1);
+
+        if (report.getScore < (int)score)
         {
             report.getScore = (int)score;
         }
@@ -1081,6 +1094,8 @@ public class UIManager : MonoBehaviour, IGameEvent
         int bestScore = 0;
         int bestCombo = 0;
         int combo = comboManager.GetCombo();
+
+        weeklyManager.UpdateWeeklyMissionReport(WeeklyMissionType.GetCombo, combo);
 
         switch (GameStateManager.instance.GamePlayType)
         {
