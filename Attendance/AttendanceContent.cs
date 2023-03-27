@@ -20,6 +20,7 @@ public class AttendanceContent : MonoBehaviour
     private void Awake()
     {
 
+
     }
 
     public void Initialize(int number, bool check, AttendanceManager manager)
