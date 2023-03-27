@@ -24,9 +24,6 @@ public class WeeklyContent : MonoBehaviour
     private void Awake()
     {
         if (weeklyMissionList == null) weeklyMissionList = Resources.Load("WeeklyMissionList") as WeeklyMissionList;
-
-        lockReceiveObj.SetActive(true);
-        clearObj.SetActive(false);
     }
 
     public void Initialize(WeeklyMissionType type, WeeklyManager manager)
@@ -41,17 +38,26 @@ public class WeeklyContent : MonoBehaviour
         value = weeklyMissionList.GetWeeklyData(type);
         goal = weeklyMission.goal;
 
-        if(value >= goal)
+        lockReceiveObj.SetActive(true);
+
+        if (value >= goal)
         {
             value = goal;
 
             lockReceiveObj.SetActive(false);
+
+            if(!weeklyMission.clear)
+            {
+                manager.OnSetAlarm();
+            }
         }
 
         fillAmount.fillAmount = value / (goal * 1.0f);
         goalText.text = value + "/" + goal;
 
-        if(weeklyMission.clear)
+        clearObj.SetActive(false);
+
+        if (weeklyMission.clear)
         {
             clearObj.SetActive(true);
         }

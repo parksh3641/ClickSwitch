@@ -93,6 +93,8 @@ public class UIManager : MonoBehaviour, IGameEvent
     public GameObject logOutView;
     public GameObject repairView;
 
+    public GameObject etcView;
+
 
     [Space]
     [Title("CancleUI")]
@@ -155,6 +157,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     public ItemManager itemManager;
     public LockManager lockManager;
     public WeeklyManager weeklyManager;
+    public AttendanceManager attendanceManager;
 
     [Title("Animation")]
     public CoinAnimation goldAnimation;
@@ -213,6 +216,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         logOutView.SetActive(false);
         repairView.SetActive(false);
+        etcView.SetActive(false);
 
         gamePlayView.SetActive(false);
 
@@ -618,7 +622,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         CloseRepairView();
 
-        PlayerPrefs.SetInt("Version", 0);
+        PlayerPrefs.SetInt("Repair", 1);
         SceneManager.LoadScene("LoginScene");
     }
 
@@ -660,11 +664,12 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void OpenNews()
     {
+        etcView.SetActive(false);
+
         newsManager.OpenNews();
 
         FirebaseAnalytics.LogEvent("OpenNews");
     }
-
 
     public void OpenTrophy()
     {
@@ -675,6 +680,8 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void OpenHelp()
     {
+        etcView.SetActive(false);
+
         helpManager.OpenHelp();
 
         FirebaseAnalytics.LogEvent("OpenHelp");
@@ -682,10 +689,13 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void OpenMailBox()
     {
+        etcView.SetActive(false);
+
         mailBoxManager.OpenMail();
 
         FirebaseAnalytics.LogEvent("OpenMail");
     }
+
     public void OpenDailyMission()
     {
         dailyManager.OpenDailyView();
@@ -721,6 +731,27 @@ public class UIManager : MonoBehaviour, IGameEvent
         }
 
         FirebaseAnalytics.LogEvent("OpenProgress");
+    }
+
+    public void OpenETC()
+    {
+        if(!etcView.activeInHierarchy)
+        {
+            etcView.SetActive(true);
+        }
+        else
+        {
+            etcView.SetActive(false);
+        }
+
+        FirebaseAnalytics.LogEvent("OpenETC");
+    }
+
+    public void OpenAttendance()
+    {
+        attendanceManager.OpenAttendanceView();
+
+        FirebaseAnalytics.LogEvent("OpenAttendance");
     }
 
     public void OnLoginSuccess()
@@ -933,10 +964,10 @@ public class UIManager : MonoBehaviour, IGameEvent
             case GameModeType.Easy:
                 break;
             case GameModeType.Normal:
-                score = score + (score * 0.15f);
+                score = score + (score * 0.2f);
                 break;
             case GameModeType.Hard:
-                score = score + (score * 0.3f);
+                score = score + (score * 0.4f);
                 break;
             case GameModeType.Perfect:
                 break;
@@ -1274,7 +1305,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         if(GameStateManager.instance.Exp)
         {
-            expPlus += 15;
+            expPlus += 30;
         }
 
         if(playerDataBase.ExpX2)

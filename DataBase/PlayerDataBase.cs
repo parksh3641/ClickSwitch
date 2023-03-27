@@ -103,6 +103,10 @@ public class PlayerDataBase : ScriptableObject
     [SerializeField]
     private string attendanceDay = "";
     [SerializeField]
+    private int attendanceCount = 0;
+    [SerializeField]
+    private bool attendanceCheck = false;
+    [SerializeField]
     private string gameMode = "";
     [SerializeField]
     private string nextMonday = "";
@@ -241,6 +245,8 @@ public class PlayerDataBase : ScriptableObject
         iconBox = 0;
 
         attendanceDay = "";
+        attendanceCount = 0;
+        attendanceCheck = false;
         gameMode = "";
         nextMonday = "";
 
@@ -690,6 +696,30 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public int AttendanceCount
+    {
+        get
+        {
+            return attendanceCount;
+        }
+        set
+        {
+            attendanceCount = value;
+        }
+    }
+
+    public bool AttendanceCheck
+    {
+        get
+        {
+            return attendanceCheck;
+        }
+        set
+        {
+            attendanceCheck = value;
+        }
+    }
+
     public string NextMonday
     {
         get
@@ -984,8 +1014,6 @@ public class PlayerDataBase : ScriptableObject
                 Slow += number;
                 break;
         }
-
-        StateManager.instance.ChangeNumber();
     }
 
 

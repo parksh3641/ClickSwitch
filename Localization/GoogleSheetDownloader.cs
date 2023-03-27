@@ -15,6 +15,7 @@ public class GoogleSheetDownloader : MonoBehaviour
 
     public bool isActive = false;
     public bool isLocalization = false;
+    public bool isDownload = false;
 
     public float percent = 0;
 
@@ -55,9 +56,9 @@ public class GoogleSheetDownloader : MonoBehaviour
     }
 
     [Button]
-    void OnResetVersion()
+    void GoogleSheetDownload()
     {
-        PlayerPrefs.SetInt("Version", 0);
+        PlayerPrefs.SetInt("Repair", 1);
     }
 
     IEnumerator LoadingCoroution()
@@ -91,9 +92,10 @@ public class GoogleSheetDownloader : MonoBehaviour
     IEnumerator DownloadFile()
     {
         int saveVersion = PlayerPrefs.GetInt("Version");
+        int repair = PlayerPrefs.GetInt("Repair");
         int version = int.Parse(Application.version.Replace(".", "").ToString());
 
-        if (saveVersion < version)
+        if (saveVersion < version || repair == 1)
         {
             Debug.Log("Localization File Downloading...");
             UnityWebRequest www = UnityWebRequest.Get(LocalizationURL);
@@ -120,8 +122,6 @@ public class GoogleSheetDownloader : MonoBehaviour
             Debug.Log("Upgrade File Download Complete!");
 
             CheckPercent(75);
-
-            PlayerPrefs.SetInt("Version", version);
         }
         else
         {
@@ -136,8 +136,6 @@ public class GoogleSheetDownloader : MonoBehaviour
                 Debug.Log("Localization File Download Complete!");
 
                 CheckPercent(25);
-
-                PlayerPrefs.SetInt("Version", version);
             }
             else
             {
@@ -209,6 +207,9 @@ public class GoogleSheetDownloader : MonoBehaviour
         }
 
         bar.SetActive(false);
+
+        PlayerPrefs.SetInt("Version", version);
+        PlayerPrefs.SetInt("Repair", 0);
 
         CheckPercent(100);
 

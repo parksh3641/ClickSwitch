@@ -616,8 +616,8 @@ public class GameManager : MonoBehaviour
         //levelText.name = gameModeType.ToString();
         //levelText.ReLoad();
 
-        playText.color = new Color(0, 122 / 255f, 89 / 255f);
-        gameModeText.GetComponent<Text>().color = new Color(0, 122 / 255f, 89 / 255f);
+        //playText.color = new Color(0, 122 / 255f, 89 / 255f);
+        //gameModeText.GetComponent<Text>().color = new Color(0, 122 / 255f, 89 / 255f);
 
         switch (gameModeType)
         {
@@ -626,8 +626,8 @@ public class GameManager : MonoBehaviour
             case GameModeType.Normal:
                 break;
             case GameModeType.Hard:
-                playText.color = new Color(67 / 255f, 83 / 255f, 108 / 255f);
-                gameModeText.GetComponent<Text>().color = new Color(67 / 255f, 83 / 255f, 108 / 255f);
+                //playText.color = new Color(67 / 255f, 83 / 255f, 108 / 255f);
+                //gameModeText.GetComponent<Text>().color = new Color(67 / 255f, 83 / 255f, 108 / 255f);
                 break;
             case GameModeType.Perfect:
                 if (GameStateManager.instance.TryCount > 0)

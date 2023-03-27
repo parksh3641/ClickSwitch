@@ -1,9 +1,13 @@
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ButtonScaleAnimation : MonoBehaviour
 {
+    [Title("일정하게 반복")]
+    public bool regular = false;
+
     private float minScale = 0.9f;
     private float maxScale = 1.15f;
 
@@ -60,7 +64,14 @@ public class ButtonScaleAnimation : MonoBehaviour
 
         transform.localScale = Vector3.one;
 
-        yield return new WaitForSeconds(Random.Range(delay * 0.8f, delay * 1.2f));
+        if(regular)
+        {
+            yield return new WaitForSeconds(delay);
+        }
+        else
+        {
+            yield return new WaitForSeconds(Random.Range(delay * 0.8f, delay * 1.2f));
+        }
 
         StartCoroutine(ButtonAnimation());
     }

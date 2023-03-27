@@ -111,7 +111,7 @@ public class WeeklyMissionList : ScriptableObject
             case WeeklyMissionType.GamePlay:
                 number = weeklyMissionReport.gamePlay;
                 break;
-            case WeeklyMissionType.DailyMissonClear:
+            case WeeklyMissionType.DailyMissionClear:
                 number = weeklyMissionReport.dailyMissonClear;
                 break;
             case WeeklyMissionType.ChallengeCoinRush:

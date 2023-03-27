@@ -163,8 +163,6 @@ public class PlayfabManager : MonoBehaviour
 
         Debug.Log("Logout");
 
-        PlayerPrefs.SetInt("Version", 0);
-
         SceneManager.LoadScene("LoginScene");
     }
 
@@ -918,6 +916,19 @@ public class PlayfabManager : MonoBehaviour
                            break;
                        case "AccessDate":
                            playerDataBase.AccessDate = statistics.Value;
+                           break;
+                       case "AttendanceCount":
+                           playerDataBase.AttendanceCount = statistics.Value;
+                           break;
+                       case "AttendanceCheck":
+                           if (statistics.Value == 0)
+                           {
+                               playerDataBase.AttendanceCheck = false;
+                           }
+                           else
+                           {
+                               playerDataBase.AttendanceCheck = true;
+                           }
                            break;
                        case "Crystal100":
                            if (statistics.Value == 0)
@@ -1719,9 +1730,8 @@ public class PlayfabManager : MonoBehaviour
         }
 
         uiManager.RenewalVC();
-        StateManager.instance.ChangeNumber();
 
-        action.Invoke(true);
+        if(action != null) action.Invoke(true);
         Debug.Log(shopClass.itemId + " Buy Success!");
     }
 
@@ -1788,8 +1798,6 @@ public class PlayfabManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         GameStateManager.instance.WatchAdItem = false;
-
-        StateManager.instance.ChangeNumber();
     }
 
     public void ConsumeItem(string itemInstanceID)

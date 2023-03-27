@@ -65,9 +65,4 @@ public class StateManager : MonoBehaviour
         GameStateManager.instance.Exp = false;
         GameStateManager.instance.Slow = false;
     }
-
-    public void ChangeNumber()
-    {
-        eChangeNumber();
-    }
 }

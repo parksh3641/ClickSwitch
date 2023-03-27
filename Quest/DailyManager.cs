@@ -3,6 +3,7 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -46,6 +47,7 @@ public class DailyManager : MonoBehaviour
     Dictionary<string, string> dailyMissionData = new Dictionary<string, string>();
 
 
+    public ResetManager resetManager;
     public WeeklyManager weeklyManager;
     DailyMissionList dailyMissionList;
     PlayerDataBase playerDataBase;
@@ -59,6 +61,7 @@ public class DailyManager : MonoBehaviour
         dailyView.SetActive(false);
         showVCView.SetActive(false);
         alarm.SetActive(false);
+
         lockReceiveObj[0].SetActive(true);
         lockReceiveObj[1].SetActive(true);
     }
@@ -99,6 +102,11 @@ public class DailyManager : MonoBehaviour
     {
         if (!open)
         {
+            if(playerDataBase.AttendanceDay == DateTime.Today.ToString("yyyyMMdd"))
+            {
+                resetManager.Initialize();
+            }
+
             LoadDailyMission();
 
             open = true;
@@ -143,7 +151,7 @@ public class DailyManager : MonoBehaviour
 
         OnSetAlarm();
 
-        Debug.Log("일일 미션이 갱신되었습니다");
+        Debug.Log("일일 미션 목록이 갱신되었습니다");
     }
 
     void RandomDailyMission()
@@ -201,7 +209,7 @@ public class DailyManager : MonoBehaviour
             if(PlayfabManager.instance.isActive) PlayfabManager.instance.SetPlayerData(dailyMissionData);
         }
 
-        weeklyManager.UpdateWeeklyMissionReport(WeeklyMissionType.DailyMissonClear, 1);
+        weeklyManager.UpdateWeeklyMissionReport(WeeklyMissionType.DailyMissionClear, 1);
 
         UpdateDailyMission();
     }
@@ -361,7 +369,7 @@ public class DailyManager : MonoBehaviour
         if (weeklyMissionTimerText.gameObject.activeInHierarchy)
         {
             System.DateTime f = System.DateTime.Now;
-            System.DateTime g = DateTime.Today.AddDays(((int)DayOfWeek.Monday - (int)DateTime.Today.DayOfWeek + 7) % 7);
+            System.DateTime g = DateTime.ParseExact(playerDataBase.NextMonday, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None);
             System.TimeSpan h = g - f;
 
             if (h.Days > 0)

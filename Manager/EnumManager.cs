@@ -214,7 +214,7 @@ public enum WeeklyMissionType
     GetCombo,
     UseItem,
     GamePlay,
-    DailyMissonClear,
+    DailyMissionClear,
     ChallengeCoinRush,
 }
 

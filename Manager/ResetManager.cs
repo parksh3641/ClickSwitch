@@ -30,6 +30,7 @@ public class ResetManager : MonoBehaviour
     string localization = "";
 
     DateTime serverTime;
+    DateTime nextMondey;
 
     [Title("Normal Mode")]
     public ModeContent[] gameModeContentArray;
@@ -43,6 +44,10 @@ public class ResetManager : MonoBehaviour
     [Title("Quest")]
     public DailyManager dailyManager;
     public WeeklyManager weeklyManager;
+
+    [Space]
+    [Title("Attendance")]
+    public AttendanceManager attendanceManager;
 
 
     public ShopManager shopManager;
@@ -64,6 +69,11 @@ public class ResetManager : MonoBehaviour
     {
         dailyManager.Initialize();
         weeklyManager.Initialize();
+
+        if(!playerDataBase.AttendanceCheck)
+        {
+            attendanceManager.OnSetAlarm();
+        }
 
         OnCheckAttendanceDay();
 
@@ -117,6 +127,24 @@ public class ResetManager : MonoBehaviour
             GameStateManager.instance.CoinRushWatchAd = false;
 
             dailyManager.InitializeMission();
+
+            if (playerDataBase.AttendanceCheck)
+            {
+                playerDataBase.AttendanceCheck = false;
+
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceCheck", 0);
+
+                if (playerDataBase.AttendanceCount >= 7)
+                {
+                    playerDataBase.AttendanceCount = 0;
+
+                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceCount", 0);
+                }
+
+                attendanceManager.OnSetAlarm();
+
+                Debug.Log("출석 체크 초기화");
+            }
         }
         else
         {
@@ -175,6 +203,24 @@ public class ResetManager : MonoBehaviour
                 shopManager.DailyInitialize();
 
                 dailyManager.InitializeMission();
+
+                if(playerDataBase.AttendanceCheck)
+                {
+                    playerDataBase.AttendanceCheck = false;
+
+                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceCheck", 0);
+
+                    if(playerDataBase.AttendanceCount >= 7)
+                    {
+                        playerDataBase.AttendanceCount = 0;
+
+                        PlayfabManager.instance.UpdatePlayerStatisticsInsert("AttendanceCount", 0);
+                    }
+
+                    attendanceManager.OnSetAlarm();
+
+                    Debug.Log("출석 체크 초기화");
+                }
             }
             else
             {
@@ -201,7 +247,14 @@ public class ResetManager : MonoBehaviour
         {
             Debug.Log("위클리 미션 초기화");
 
-            playerDataBase.NextMonday = DateTime.Today.AddDays(((int)DayOfWeek.Monday - (int)DateTime.Today.DayOfWeek + 7) % 7).ToString("yyyyMMdd");
+            nextMondey = DateTime.Today.AddDays(((int)DayOfWeek.Monday - (int)DateTime.Today.DayOfWeek + 7) % 7);
+
+            if(nextMondey == DateTime.Today)
+            {
+                nextMondey = nextMondey.AddDays(7);
+            }
+
+            playerDataBase.NextMonday = nextMondey.ToString("yyyyMMdd");
 
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("NextMonday", int.Parse(playerDataBase.NextMonday));
 
@@ -213,7 +266,16 @@ public class ResetManager : MonoBehaviour
             {
                 Debug.Log("월요일이 되었습니다");
 
-                playerDataBase.NextMonday = DateTime.Today.AddDays(((int)DayOfWeek.Monday - (int)DateTime.Today.DayOfWeek + 7) % 7).ToString("yyyyMMdd");
+                nextMondey = DateTime.Today.AddDays(((int)DayOfWeek.Monday - (int)DateTime.Today.DayOfWeek + 7) % 7);
+
+                if (nextMondey == DateTime.Today)
+                {
+                    nextMondey = nextMondey.AddDays(7);
+                }
+
+                playerDataBase.NextMonday = nextMondey.ToString("yyyyMMdd");
+
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("NextMonday", int.Parse(playerDataBase.NextMonday));
 
                 weeklyManager.InitializeMission();
             }

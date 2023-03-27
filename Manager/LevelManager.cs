@@ -10,6 +10,9 @@ public class LevelManager : MonoBehaviour
     public Text profileLevelText;
     public Image profileFillamount;
 
+    public Text mainLevelText;
+    public Image mainFillamount;
+
     public GameObject levelupView;
     public GameObject showVCView;
 
@@ -38,8 +41,10 @@ public class LevelManager : MonoBehaviour
     public void Initialize()
     {
         profileLevelText.text = "Lv." + (playerDataBase.Level + 1);
-
         profileFillamount.fillAmount = playerDataBase.Experience / CheckNeedExp();
+
+        mainLevelText.text = "Lv." + (playerDataBase.Level + 1);
+        mainFillamount.fillAmount = playerDataBase.Experience / CheckNeedExp();
     }
 
     public void CheckLevelUp(float getExp)
