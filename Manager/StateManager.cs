@@ -24,6 +24,7 @@ public class StateManager : MonoBehaviour
     public BannerManager bannerManager;
     public ProgressManager progressManager;
     public LockManager lockManager;
+    public EventManager eventManager;
 
     public delegate void PurchasEvent();
     public static event PurchasEvent eChangeNumber;
@@ -55,6 +56,7 @@ public class StateManager : MonoBehaviour
             bannerManager.Initialize();
             progressManager.Initialize();
             lockManager.Initialize();
+            eventManager.Initialize();
         }
 
         GameStateManager.instance.PlayGame = false;

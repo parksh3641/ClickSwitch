@@ -54,14 +54,16 @@ public class UpgradeContent : MonoBehaviour
 
         level = playerDataBase.GetLevel(type);
 
-        if(playerDataBase.Level + 1 >= maxLevel)
-        {
-            levelText.text = "Lv. " + level + "/" + maxLevel.ToString();
-        }
-        else
-        {
-            levelText.text = "Lv. " + level + "/" + (playerDataBase.Level + 1).ToString();
-        }
+        //if(playerDataBase.Level + 1 >= maxLevel)
+        //{
+        //    levelText.text = "Lv. " + level + "/" + maxLevel.ToString();
+        //}
+        //else
+        //{
+        //    levelText.text = "Lv. " + level + "/" + (playerDataBase.Level + 1).ToString();
+        //}
+
+        levelText.text = "Lv. " + level + "/" + maxLevel.ToString();
 
         titleText.localizationName = type.ToString();
         titleText.ReLoad();
@@ -143,7 +145,13 @@ public class UpgradeContent : MonoBehaviour
         switch (upgradeType)
         {
             case UpgradeType.StartTime:
-                if (playerDataBase.StartTimeLevel >= maxLevel || playerDataBase.StartTimeLevel >= (playerDataBase.Level + 1))
+                //if (playerDataBase.StartTimeLevel >= maxLevel || playerDataBase.StartTimeLevel >= (playerDataBase.Level + 1))
+                //{
+                //    NotionManager.instance.UseNotion(NotionType.UpgradeMax);
+                //    return;
+                //}
+
+                if (playerDataBase.StartTimeLevel >= maxLevel)
                 {
                     NotionManager.instance.UseNotion(NotionType.UpgradeMax);
                     return;
@@ -154,71 +162,120 @@ public class UpgradeContent : MonoBehaviour
                 if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("StartTimeLevel", playerDataBase.StartTimeLevel);
                 break;
             case UpgradeType.Critical:
-                if (playerDataBase.CriticalLevel >= maxLevel || playerDataBase.CriticalLevel >= (playerDataBase.Level + 1))
+                //if (playerDataBase.CriticalLevel >= maxLevel || playerDataBase.CriticalLevel >= (playerDataBase.Level + 1))
+                //{
+                //    NotionManager.instance.UseNotion(NotionType.UpgradeMax);
+                //    return;
+                //}
+
+                if (playerDataBase.CriticalLevel >= maxLevel)
                 {
                     NotionManager.instance.UseNotion(NotionType.UpgradeMax);
                     return;
                 }
+
                 playerDataBase.CriticalLevel += 1;
 
                 if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("CriticalLevel", playerDataBase.CriticalLevel);
                 break;
             case UpgradeType.Burning:
-                if (playerDataBase.BurningLevel >= maxLevel || playerDataBase.BurningLevel >= (playerDataBase.Level + 1))
+                //if (playerDataBase.BurningLevel >= maxLevel || playerDataBase.BurningLevel >= (playerDataBase.Level + 1))
+                //{
+                //    NotionManager.instance.UseNotion(NotionType.UpgradeMax);
+                //    return;
+                //}
+
+                if (playerDataBase.BurningLevel >= maxLevel)
                 {
                     NotionManager.instance.UseNotion(NotionType.UpgradeMax);
                     return;
                 }
+
                 playerDataBase.BurningLevel += 1;
 
                 if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("BurningLevel", playerDataBase.BurningLevel);
                 break;
             case UpgradeType.AddExp:
-                if (playerDataBase.AddExpLevel >= maxLevel || playerDataBase.AddExpLevel >= (playerDataBase.Level + 1))
+                //if (playerDataBase.AddExpLevel >= maxLevel || playerDataBase.AddExpLevel >= (playerDataBase.Level + 1))
+                //{
+                //    NotionManager.instance.UseNotion(NotionType.UpgradeMax);
+                //    return;
+                //}
+
+                if (playerDataBase.AddExpLevel >= maxLevel)
                 {
                     NotionManager.instance.UseNotion(NotionType.UpgradeMax);
                     return;
                 }
+
                 playerDataBase.AddExpLevel += 1;
 
                 if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("AddExpLevel", playerDataBase.AddExpLevel);
                 break;
             case UpgradeType.AddGold:
-                if (playerDataBase.AddGoldLevel >= maxLevel || playerDataBase.AddGoldLevel >= (playerDataBase.Level + 1))
+                //if (playerDataBase.AddGoldLevel >= maxLevel || playerDataBase.AddGoldLevel >= (playerDataBase.Level + 1))
+                //{
+                //    NotionManager.instance.UseNotion(NotionType.UpgradeMax);
+                //    return;
+                //}
+
+                if (playerDataBase.AddGoldLevel >= maxLevel)
                 {
                     NotionManager.instance.UseNotion(NotionType.UpgradeMax);
                     return;
                 }
+
                 playerDataBase.AddGoldLevel += 1;
 
                 if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("AddGoldLevel", playerDataBase.AddGoldLevel);
                 break;
             case UpgradeType.ComboTime:
-                if (playerDataBase.ComboTimeLevel >= maxLevel || playerDataBase.ComboTimeLevel >= (playerDataBase.Level + 1))
+                //if (playerDataBase.ComboTimeLevel >= maxLevel || playerDataBase.ComboTimeLevel >= (playerDataBase.Level + 1))
+                //{
+                //    NotionManager.instance.UseNotion(NotionType.UpgradeMax);
+                //    return;
+                //}
+
+                if (playerDataBase.ComboTimeLevel >= maxLevel)
                 {
                     NotionManager.instance.UseNotion(NotionType.UpgradeMax);
                     return;
                 }
+
                 playerDataBase.ComboTimeLevel += 1;
 
                 if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("ComboTimeLevel", playerDataBase.ComboTimeLevel);
                 break;
             case UpgradeType.ComboCritical:
-                if (playerDataBase.ComboCriticalLevel >= maxLevel || playerDataBase.ComboCriticalLevel >= (playerDataBase.Level + 1))
+                //if (playerDataBase.ComboCriticalLevel >= maxLevel || playerDataBase.ComboCriticalLevel >= (playerDataBase.Level + 1))
+                //{
+                //    NotionManager.instance.UseNotion(NotionType.UpgradeMax);
+                //    return;
+                //}
+
+                if (playerDataBase.ComboCriticalLevel >= maxLevel)
                 {
                     NotionManager.instance.UseNotion(NotionType.UpgradeMax);
                     return;
                 }
+
                 playerDataBase.ComboCriticalLevel += 1;
 
                 if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("ComboCriticalLevel", playerDataBase.ComboCriticalLevel);
                 break;
             case UpgradeType.AddScore:
-                if (playerDataBase.AddScoreLevel >= maxLevel || playerDataBase.AddScoreLevel >= (playerDataBase.Level + 1))
+                //if (playerDataBase.AddScoreLevel >= maxLevel || playerDataBase.AddScoreLevel >= (playerDataBase.Level + 1))
+                //{
+                //    NotionManager.instance.UseNotion(NotionType.UpgradeMax);
+                //    return;
+                //}
+
+                if (playerDataBase.AddScoreLevel >= maxLevel)
                 {
                     NotionManager.instance.UseNotion(NotionType.UpgradeMax);
                     return;
                 }
+
                 playerDataBase.AddScoreLevel += 1;
 
                 if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("AddScoreLevel", playerDataBase.AddScoreLevel);

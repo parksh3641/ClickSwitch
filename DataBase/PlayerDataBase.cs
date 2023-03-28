@@ -112,6 +112,17 @@ public class PlayerDataBase : ScriptableObject
     private string nextMonday = "";
 
     [Space]
+    [Title("Event")]
+    [SerializeField]
+    private int welcomeCount = 0;
+    [SerializeField]
+    private bool welcomeCheck = false;
+    [SerializeField]
+    private int season = 0;
+    [SerializeField]
+    private int worldScore1, worldScore2, worldScore3 = 0;
+
+    [Space]
     [Title("Purchase")]
     [SerializeField]
     private bool removeAd = false;
@@ -249,6 +260,14 @@ public class PlayerDataBase : ScriptableObject
         attendanceCheck = false;
         gameMode = "";
         nextMonday = "";
+
+        welcomeCount = 0;
+        welcomeCheck = false;
+
+        season = 0;
+        worldScore1 = 0;
+        worldScore2 = 0;
+        worldScore3 = 0;
 
         removeAd = false;
         paidProgress = false;
@@ -720,6 +739,18 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
+    public string GameMode
+    {
+        get
+        {
+            return gameMode;
+        }
+        set
+        {
+            gameMode = value;
+        }
+    }
+
     public string NextMonday
     {
         get
@@ -732,15 +763,75 @@ public class PlayerDataBase : ScriptableObject
         }
     }
 
-    public string GameMode
+    public int WelcomeCount
     {
         get
         {
-            return gameMode;
+            return welcomeCount;
         }
         set
         {
-            gameMode = value;
+            welcomeCount = value;
+        }
+    }
+
+    public bool WelcomeCheck
+    {
+        get
+        {
+            return welcomeCheck;
+        }
+        set
+        {
+            welcomeCheck = value;
+        }
+    }
+
+    public int Season
+    {
+        get
+        {
+            return season;
+        }
+        set
+        {
+            season = value;
+        }
+    }
+
+    public int WorldScore1
+    {
+        get
+        {
+            return worldScore1;
+        }
+        set
+        {
+            worldScore1 = value;
+        }
+    }
+
+    public int WorldScore2
+    {
+        get
+        {
+            return worldScore2;
+        }
+        set
+        {
+            worldScore2 = value;
+        }
+    }
+
+    public int WorldScore3
+    {
+        get
+        {
+            return worldScore3;
+        }
+        set
+        {
+            worldScore3 = value;
         }
     }
 

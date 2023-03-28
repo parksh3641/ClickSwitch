@@ -158,6 +158,8 @@ public class UIManager : MonoBehaviour, IGameEvent
     public LockManager lockManager;
     public WeeklyManager weeklyManager;
     public AttendanceManager attendanceManager;
+    public EventManager eventManager;
+    public CastleManager castleManager;
 
     [Title("Animation")]
     public CoinAnimation goldAnimation;
@@ -754,6 +756,20 @@ public class UIManager : MonoBehaviour, IGameEvent
         FirebaseAnalytics.LogEvent("OpenAttendance");
     }
 
+    public void OpenEvent()
+    {
+        eventManager.OpenEventView();
+
+        FirebaseAnalytics.LogEvent("OpenEvent");
+    }
+
+    public void OpenCastle()
+    {
+        castleManager.OpenCastleView();
+
+        FirebaseAnalytics.LogEvent("OpenCastle");
+    }
+
     public void OnLoginSuccess()
     {
         loadingUI.FadeIn();
@@ -982,6 +998,31 @@ public class UIManager : MonoBehaviour, IGameEvent
         GameModeLevel gameModeLevel = playerDataBase.GetGameMode(GameStateManager.instance.GamePlayType);
 
         weeklyManager.UpdateWeeklyMissionReport(WeeklyMissionType.GetScore, (int)score);
+
+
+        switch(playerDataBase.Season)
+        {
+            case 1:
+                playerDataBase.WorldScore1 += (int)score;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("WorldScore1", playerDataBase.WorldScore1);
+
+                break;
+            case 2:
+                playerDataBase.WorldScore2 += (int)score;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("WorldScore1", playerDataBase.WorldScore2);
+
+                break;
+            case 3:
+                playerDataBase.WorldScore3 += (int)score;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("WorldScore1", playerDataBase.WorldScore3);
+
+                break;
+            default:
+                playerDataBase.WorldScore1 += (int)score;
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("WorldScore1", playerDataBase.WorldScore1);
+
+                break;
+        }
 
         switch (GameStateManager.instance.GameModeType)
         {
@@ -1278,10 +1319,12 @@ public class UIManager : MonoBehaviour, IGameEvent
                 doubleCoinObj.SetActive(true);
                 plusGoldText.text = "+ " + level + "%";
 
-                plus = (level + playerDataBase.AddGoldLevel) / 100.0f;
+                plus = Mathf.Round((level + playerDataBase.AddGoldLevel) / 100.0f);
             }
 
             money = money + (money * plus);
+
+            money = MathF.Round(money);
 
             if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, (int)(money));
 
@@ -1313,7 +1356,7 @@ public class UIManager : MonoBehaviour, IGameEvent
             expPlus += 100;
         }
 
-        if(exp > 0)
+        if(expPlus > 0)
         {
             doubleExpObj.SetActive(true);
             plusExpText.text = "+" + Mathf.Round(expPlus) + "%";
@@ -1321,6 +1364,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         exp = exp + (exp * (expPlus /100.0f));
 
+        exp = MathF.Round(exp);
 
         levelManager.CheckLevelUp(exp);
 
@@ -1508,6 +1552,8 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         SetEtcUI(true);
         modeManager.OffMode();
+
+        tutorialUI.SetActive(false);
 
         eGameEnd.Invoke();
     }

@@ -90,6 +90,8 @@ public class DailyManager : MonoBehaviour
     {
         dailyView.SetActive(true);
         dailyView.GetComponent<RectTransform>().anchoredPosition = new Vector2(4000, 0);
+
+        LoadDailyMission();
     }
 
 

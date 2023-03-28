@@ -1635,7 +1635,7 @@ public class GameManager : MonoBehaviour
             targetContentList[i].MoleReset();
         }
 
-        if(countIndex <= 8)
+        if(countIndex <= 5)
         {
             waitForMoleCatchSeconds = new WaitForSeconds(ValueManager.instance.GetMoleCatchTime() - (0.05f * countIndex));
             waitForMoleNextSeconds = new WaitForSeconds(ValueManager.instance.GetMoleNextTime() - (0.1f * countIndex));

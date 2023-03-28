@@ -145,6 +145,13 @@ public class ResetManager : MonoBehaviour
 
                 Debug.Log("출석 체크 초기화");
             }
+
+            if(playerDataBase.WelcomeCheck)
+            {
+                playerDataBase.WelcomeCheck = false;
+
+                PlayfabManager.instance.UpdatePlayerStatisticsInsert("WelcomeCheck", 0);
+            }
         }
         else
         {
@@ -220,6 +227,13 @@ public class ResetManager : MonoBehaviour
                     attendanceManager.OnSetAlarm();
 
                     Debug.Log("출석 체크 초기화");
+                }
+
+                if (playerDataBase.WelcomeCheck)
+                {
+                    playerDataBase.WelcomeCheck = false;
+
+                    PlayfabManager.instance.UpdatePlayerStatisticsInsert("WelcomeCheck", 0);
                 }
             }
             else

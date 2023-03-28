@@ -33,6 +33,7 @@ public class PlayfabManager : MonoBehaviour
     public ShopManager shopManager;
     public ProfileManager profileManager;
     public ProgressManager progressManager;
+    public EventManager eventManager;
 
     public SoundManager soundManager;
     public OptionContent optionContent;
@@ -930,6 +931,19 @@ public class PlayfabManager : MonoBehaviour
                                playerDataBase.AttendanceCheck = true;
                            }
                            break;
+                       case "WelcomeCount":
+                           playerDataBase.WelcomeCount = statistics.Value;
+                           break;
+                       case "WelcomeCheck":
+                           if (statistics.Value == 0)
+                           {
+                               playerDataBase.WelcomeCheck = false;
+                           }
+                           else
+                           {
+                               playerDataBase.WelcomeCheck = true;
+                           }
+                           break;
                        case "Crystal100":
                            if (statistics.Value == 0)
                            {
@@ -993,6 +1007,15 @@ public class PlayfabManager : MonoBehaviour
                        case "WeeklyMissionKey":
                            playerDataBase.WeeklyMissionKey = statistics.Value;
                            break;
+                       case "WorldScore1":
+                           playerDataBase.WorldScore1 = statistics.Value;
+                           break;
+                       case "WorldScore2":
+                           playerDataBase.WorldScore2 = statistics.Value;
+                           break;
+                       case "WorldScore3":
+                           playerDataBase.WorldScore3 = statistics.Value;
+                           break;
                    }
                }
            })
@@ -1032,6 +1055,7 @@ public class PlayfabManager : MonoBehaviour
             GameModeLevel level = new GameModeLevel();
             WeeklyMission weeklyMisson = new WeeklyMission();
             WeeklyMissionReport weeklyMissionReport = new WeeklyMissionReport();
+            WorldScoreInformation worldScoreInformation = new WorldScoreInformation();
 
             foreach (var eachData in result.Data)
             {
@@ -1072,6 +1096,13 @@ public class PlayfabManager : MonoBehaviour
                 {
                     weeklyMissionReport = JsonUtility.FromJson<WeeklyMissionReport>(eachData.Value.Value);
                     weeklyMissionList.SetWeeklyMissionReport(weeklyMissionReport);
+                }
+                else if (key.Contains("WorldScoreSeason_"))
+                {
+                    string[] number = key.Split('_');
+                    worldScoreInformation = JsonUtility.FromJson<WorldScoreInformation>(eachData.Value.Value);
+                    worldScoreInformation.season = int.Parse(number[1]);
+                    eventManager.SetWorldScoreInformation(worldScoreInformation);
                 }
             }
         }, DisplayPlayfabError);
@@ -1345,6 +1376,28 @@ public class PlayfabManager : MonoBehaviour
                 Debug.Log(error.GenerateErrorReport());
 
                 action?.Invoke(false);
+            }
+        );
+    }
+
+    public void GetTitleInternalData(string name, Action<string> action)
+    {
+        PlayFabServerAPI.GetTitleInternalData(new PlayFab.ServerModels.GetTitleDataRequest(),
+            result =>
+            {
+                if(result.Data.ContainsKey(name))
+                {
+                    action.Invoke(result.Data[name]);
+                }
+                else
+                {
+                    Debug.Log(name + " 의 플레이어 내부 데이터를 가져올 수 없습니다");
+                }
+            },
+            error =>
+            {
+                Debug.Log("Got error getting titleData:");
+                Debug.Log(error.GenerateErrorReport());
             }
         );
     }
@@ -1885,6 +1938,22 @@ public class PlayfabManager : MonoBehaviour
                         shopManager.CheckPurchaseItem();
                         profileManager.CheckPurchaseItem();
                         progressManager.BuyPaidProgress();
+                    }
+
+                    if (list.ItemId.Equals("CoinX2"))
+                    {
+                        playerDataBase.CoinX2 = true;
+
+                        shopManager.CheckPurchaseItem();
+                        profileManager.CheckPurchaseItem();
+                    }
+
+                    if (list.ItemId.Equals("ExpX2"))
+                    {
+                        playerDataBase.ExpX2 = true;
+
+                        shopManager.CheckPurchaseItem();
+                        profileManager.CheckPurchaseItem();
                     }
                 }
             }

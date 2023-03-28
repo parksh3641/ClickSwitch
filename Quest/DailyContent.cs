@@ -6,9 +6,6 @@ using UnityEngine.UI;
 
 public class DailyContent : MonoBehaviour
 {
-    DailyMission dailyMission;
-    DailyManager dailyManager;
-
     public Image icon;
     public LocalizationContent titleText;
     public Text goalText;
@@ -24,6 +21,9 @@ public class DailyContent : MonoBehaviour
     ImageDataBase imageDataBase;
     Sprite[] iconArray;
 
+    public DailyMission dailyMission;
+    public DailyManager dailyManager;
+
 
     private void Awake()
     {
@@ -37,8 +37,9 @@ public class DailyContent : MonoBehaviour
 
     public void Initialize(DailyMission mission, int number, DailyManager manager)
     {
-        dailyMission = mission;
         index = number;
+
+        dailyMission = mission;
         dailyManager = manager;
 
         icon.sprite = iconArray[(int)mission.gamePlayType];

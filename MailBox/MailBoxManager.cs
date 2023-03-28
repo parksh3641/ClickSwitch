@@ -12,8 +12,9 @@ public class MailBoxManager : MonoBehaviour
     public GameObject mailView;
     public GameObject showVCView;
 
-
     public GameObject alarm;
+    public GameObject mainAlarm;
+
     public GameObject noMailObj;
 
     public MailContent mailContent;
@@ -45,6 +46,7 @@ public class MailBoxManager : MonoBehaviour
         showVCView.SetActive(false);
 
         alarm.SetActive(false);
+        mainAlarm.SetActive(false);
         noMailObj.SetActive(false);
     }
 
@@ -106,6 +108,7 @@ public class MailBoxManager : MonoBehaviour
         bundleInstanceIdList.Add(instanceid);
 
         alarm.SetActive(true);
+        mainAlarm.SetActive(true);
 
         count++;
     }
@@ -116,6 +119,7 @@ public class MailBoxManager : MonoBehaviour
         {
             noMailObj.SetActive(true);
             alarm.SetActive(false);
+            mainAlarm.SetActive(false);
             return;
         }
 

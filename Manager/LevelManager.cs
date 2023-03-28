@@ -16,6 +16,9 @@ public class LevelManager : MonoBehaviour
     public GameObject levelupView;
     public GameObject showVCView;
 
+    public ButtonScaleAnimation button;
+    public GameObject lockObj;
+
     public Text levelUpText; //¥Ÿ¿Ω ∑π∫ß
     public Text bounsInfoText; //ƒ⁄¿Œ »πµÊ∑Æ
     public Text coinText;
@@ -26,6 +29,8 @@ public class LevelManager : MonoBehaviour
 
     private float defaultExp = 1000;
     private float addExp = 100;
+
+    public bool adsActive = false;
 
     public PlayerDataBase playerDataBase;
     public SoundManager soundManager;
@@ -99,11 +104,15 @@ public class LevelManager : MonoBehaviour
         levelupView.SetActive(true);
         showVCView.SetActive(true);
 
+        lockObj.SetActive(false);
+
+        adsActive = false;
+
         levelUpText.text = (level + 1).ToString();
 
-        coin = 1000 + ((level + 1) * 200);
+        coin = 1000 + ((level + 1) * 300);
 
-        coinText.text = "x" + coin.ToString();
+        coinText.text = coin.ToString();
 
         if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, coin);
 
@@ -117,5 +126,18 @@ public class LevelManager : MonoBehaviour
     {
         levelupView.SetActive(false);
         showVCView.SetActive(false);
+    }
+
+    public void SuccessWatchAd()
+    {
+        lockObj.SetActive(true);
+
+        button.StopAnim();
+
+        adsActive = true;
+
+        coinText.text = coin + " +" + coin.ToString();
+
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, coin);
     }
 }

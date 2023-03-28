@@ -199,6 +199,7 @@ public enum AdType
     CoinRushTryCount,
     DailyMissonX2,
     Item,
+    LevelCoinX2
 }
 
 public enum DailyMissionType

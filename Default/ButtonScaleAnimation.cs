@@ -7,6 +7,7 @@ public class ButtonScaleAnimation : MonoBehaviour
 {
     [Title("일정하게 반복")]
     public bool regular = false;
+    [Space]
 
     private float minScale = 0.9f;
     private float maxScale = 1.15f;

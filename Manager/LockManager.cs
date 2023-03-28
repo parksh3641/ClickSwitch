@@ -35,6 +35,7 @@ public class LockManager : MonoBehaviour
     public void Test()
     {
         level += 1;
+        playerDataBase.LockTutorial = level - 1;
         Initialize();
     }
 

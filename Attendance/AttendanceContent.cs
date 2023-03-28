@@ -17,17 +17,13 @@ public class AttendanceContent : MonoBehaviour
 
     public AttendanceManager attendanceManager;
 
-    private void Awake()
-    {
-
-
-    }
 
     public void Initialize(int number, bool check, AttendanceManager manager)
     {
         attendanceManager = manager;
 
         titleText.localizationName = LocalizationManager.instance.GetString((index + 1) + "Day");
+        titleText.ReLoad();
 
         clearObj.SetActive(false);
 

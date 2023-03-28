@@ -17,6 +17,7 @@ public class GoogleAdsManager : MonoBehaviour
     public ShopManager shopManager;
     public DailyManager dailyManager;
     public ItemManager itemManager;
+    public LevelManager levelManager;
 
 
     string adUnitId;
@@ -94,6 +95,10 @@ public class GoogleAdsManager : MonoBehaviour
                     itemManager.SuccessWatchAd();
 
                     break;
+                case 6:
+                    levelManager.SuccessWatchAd();
+
+                    break;
             }
             return;
         }
@@ -101,6 +106,11 @@ public class GoogleAdsManager : MonoBehaviour
         if(number == 5 && GameStateManager.instance.WatchAdItem)
         {
             NotionManager.instance.UseNotion(NotionType.NowBoastItemNotion);
+            return;
+        }
+
+        if(number == 6 && levelManager.adsActive)
+        {
             return;
         }
 
@@ -198,6 +208,9 @@ public class GoogleAdsManager : MonoBehaviour
                 break;
             case AdType.Item:
                 itemManager.SuccessWatchAd();
+                break;
+            case AdType.LevelCoinX2:
+                levelManager.SuccessWatchAd();
                 break;
         }
 

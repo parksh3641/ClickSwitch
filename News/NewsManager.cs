@@ -10,6 +10,7 @@ public class NewsManager : MonoBehaviour
     public GameObject newsView;
 
     public GameObject alarm;
+    public GameObject mainAlarm;
 
     public NewsContent newsContent;
     public RectTransform newsContentTransform;
@@ -37,6 +38,7 @@ public class NewsManager : MonoBehaviour
         infoView.SetActive(false);
 
         alarm.SetActive(false);
+        mainAlarm.SetActive(false);
 
         newsContentList.Clear();
 
@@ -59,6 +61,7 @@ public class NewsManager : MonoBehaviour
         if(playerDataBase.NewsAlarm > 0)
         {
             alarm.SetActive(true);
+            mainAlarm.SetActive(true);
         }
     }
 
@@ -113,6 +116,7 @@ public class NewsManager : MonoBehaviour
         PlayfabManager.instance.UpdatePlayerStatisticsInsert("NewsAlarm", 0);
 
         alarm.SetActive(false);
+        mainAlarm.SetActive(false);
     }
 
     public void OpenReadMore(int number, string title)

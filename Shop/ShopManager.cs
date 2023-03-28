@@ -296,7 +296,7 @@ public class ShopManager : MonoBehaviour
 
     public void UpBuyCount()
     {
-        if (buyCount + 1 < 100)
+        if (buyCount + 1 < 21)
         {
             buyCount++;
         }
@@ -317,7 +317,7 @@ public class ShopManager : MonoBehaviour
         }
         else
         {
-            buyCount = 99;
+            buyCount = 20;
         }
 
         buyCountText.text = buyCount.ToString();
