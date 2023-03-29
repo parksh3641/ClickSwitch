@@ -43,6 +43,7 @@ public class PlayfabManager : MonoBehaviour
 
     public bool isActive = false;
     public bool isDelay = false;
+    public bool isLogin = false;
 
 #if UNITY_IOS
     private string AppleUserIdKey = "";
@@ -69,18 +70,19 @@ public class PlayfabManager : MonoBehaviour
 
         isActive = false;
         isDelay = false;
-
-#if UNITY_ANDROID
-        GoogleActivate();
-#elif UNITY_IOS
-        IOSActivate();
-#endif
+        isLogin = false;
 
         if (playerDataBase == null) playerDataBase = Resources.Load("PlayerDataBase") as PlayerDataBase;
         if (shopDataBase == null) shopDataBase = Resources.Load("ShopDataBase") as ShopDataBase;
         if (weeklyMissionList == null) weeklyMissionList = Resources.Load("WeeklyMissionList") as WeeklyMissionList;
 
         weeklyMissionList.Initialize();
+
+#if UNITY_ANDROID
+        GoogleActivate();
+#elif UNITY_IOS
+        IOSActivate();
+#endif
     }
 
     private void Start()
@@ -155,14 +157,14 @@ public class PlayfabManager : MonoBehaviour
         OnClickGoogleLogout();
 #endif
 
-        //uiManager.OnLogout();
-
         GameStateManager.instance.PlayfabId = "";
         GameStateManager.instance.CustomId = "";
         GameStateManager.instance.AutoLogin = false;
         GameStateManager.instance.Login = LoginType.None;
 
         SceneManager.LoadScene("LoginScene");
+
+        isLogin = false;
 
         Debug.LogError("Logout");
     }
@@ -182,6 +184,10 @@ public class PlayfabManager : MonoBehaviour
 #region GuestLogin
     public void OnClickGuestLogin()
     {
+        if (isLogin) return;
+
+        isLogin = true;
+
         customId = GameStateManager.instance.CustomId;
 
         if (string.IsNullOrEmpty(customId))
@@ -210,6 +216,8 @@ public class PlayfabManager : MonoBehaviour
         }, error =>
         {
             Debug.LogError("Login Fail - Guest");
+
+            isLogin = false;
         });
     }
 
@@ -220,6 +228,7 @@ public class PlayfabManager : MonoBehaviour
             .Select(x => input[UnityEngine.Random.Range(0, input.Length)]);
         return new string(chars.ToArray());
     }
+
     private void LoginGuestId()
     {
         Debug.Log("Guest Login");
@@ -246,9 +255,14 @@ public class PlayfabManager : MonoBehaviour
     }
 
 #endregion
+
 #region Google Login
     public void OnClickGoogleLogin()
     {
+        if (isLogin) return;
+
+        isLogin = true;
+
 #if UNITY_ANDROID
         LoginGoogleAuthenticate();
 #else
@@ -260,13 +274,6 @@ public class PlayfabManager : MonoBehaviour
     {
 #if UNITY_ANDROID
 
-        Debug.Log("???????????? ?????????????? ??????????????");
-
-        //if (Social.localUser.authenticated)
-        //{
-        //    Debug.Log("???????? ???????????? ?????????????? ???????????????? ??????????????????????.");
-        //    return;
-        //}
         Social.localUser.Authenticate((bool success) =>
         {
             if (!success)
@@ -283,8 +290,6 @@ public class PlayfabManager : MonoBehaviour
             },
             result =>
             {
-                Debug.Log("???????????????????? ???????????? ?????????????? ????????????!");
-
                 GameStateManager.instance.AutoLogin = true;
                 GameStateManager.instance.Login = LoginType.Google;
 
@@ -292,9 +297,9 @@ public class PlayfabManager : MonoBehaviour
             },
             error =>
             {
-                Debug.Log("???????????????????? ???????????? ?????????????? ????????????!");
-
                 DisplayPlayfabError(error);
+
+                isLogin = false;
             });
         });
 
@@ -350,10 +355,15 @@ public class PlayfabManager : MonoBehaviour
 #endif
     }
 #endregion
+
 #region Apple Login
 
     public void OnClickAppleLogin()
     {
+        if (isLogin) return;
+
+        isLogin = true;
+
 #if UNITY_IOS
         Debug.Log("Try Apple Login");
         StartCoroutine(AppleLoginCor());
@@ -414,6 +424,8 @@ public class PlayfabManager : MonoBehaviour
                     _newAppleUser = true;
                     SignInWithApple();
                     var authorizationErrorCode = error.GetAuthorizationErrorCode();
+                    
+                    isLogin = false;
                 });
         }
         else
@@ -1659,8 +1671,8 @@ public class PlayfabManager : MonoBehaviour
 
     public void PurchaseStartPack1()
     {
-        UpdateAddCurrency(MoneyType.Crystal, 350);
-        UpdateAddCurrency(MoneyType.Coin, 6000);
+        UpdateAddCurrency(MoneyType.Crystal, 170);
+        UpdateAddCurrency(MoneyType.Coin, 3000);
 
         shopManager.BuyStartPack();
 

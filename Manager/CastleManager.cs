@@ -43,6 +43,9 @@ public class CastleManager : MonoBehaviour
 
     public ReceiveContent[] receiveContents;
 
+    [Title("Animation")]
+    public CoinAnimation goldAnimation;
+
     DateTime time; //적립을 한 시점
     DateTime serverTime; //최대 적립 날짜
     TimeSpan timeSpan;
@@ -80,6 +83,16 @@ public class CastleManager : MonoBehaviour
             localization_Minutes = LocalizationManager.instance.GetString("Minutes");
             localization_Seconds = LocalizationManager.instance.GetString("Seconds");
 
+            if (!GameStateManager.instance.DailyCastleReward)
+            {
+                quickLockObj.SetActive(false);
+            }
+            else
+            {
+                quickLockObj.SetActive(true);
+                button.StopAnim();
+            }
+
             CheckCastle();
         }
         else
@@ -112,16 +125,6 @@ public class CastleManager : MonoBehaviour
             }
 
             StartCoroutine(TimerCoroution());
-
-            if (!GameStateManager.instance.DailyCastleReward)
-            {
-                quickLockObj.SetActive(false);
-                button.enabled = false;
-            }
-            else
-            {
-                quickLockObj.SetActive(true);
-            }
 
             timeSpan = DateTime.Now - time;
 
@@ -213,6 +216,8 @@ public class CastleManager : MonoBehaviour
             PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, addCoin);
             levelManager.CheckLevelUp(addExp);
 
+            goldAnimation.OnPlayExpAnimation();
+
             StopAllCoroutines();
             StartCoroutine(TimerCoroution());
 
@@ -261,7 +266,19 @@ public class CastleManager : MonoBehaviour
         else
         {
             lockObj.SetActive(true);
-            lockTimerText.text = (9 - timeSpan.Minutes).ToString("D2") + ":" + (60 - timeSpan.Seconds).ToString("D2");
+
+            if(timeSpan.Seconds == 0)
+            {
+                lockTimerText.text = (10 - timeSpan.Minutes).ToString("D2") + ":00";
+            }
+            else if(timeSpan.Seconds == 60)
+            {
+                lockTimerText.text = (9 - timeSpan.Minutes).ToString("D2") + ":00";
+            }
+            else
+            {
+                lockTimerText.text = (9 - timeSpan.Minutes).ToString("D2") + ":" + (60 - timeSpan.Seconds).ToString("D2");
+            }
         }
 
         yield return waitForSeconds;
@@ -280,7 +297,9 @@ public class CastleManager : MonoBehaviour
         int quickExp = addExp * 6;
 
         PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, quickCoin);
-        levelManager.CheckLevelUp(quickExp);
+        levelManager.CheckLevelUp(addExp);
+
+        goldAnimation.OnPlayExpAnimation();
 
         NotionManager.instance.UseNotion(NotionType.SuccessWatchAd);
     }
