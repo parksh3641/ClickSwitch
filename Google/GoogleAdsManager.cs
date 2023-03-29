@@ -18,6 +18,7 @@ public class GoogleAdsManager : MonoBehaviour
     public DailyManager dailyManager;
     public ItemManager itemManager;
     public LevelManager levelManager;
+    public CastleManager castleManager;
 
 
     string adUnitId;
@@ -67,6 +68,22 @@ public class GoogleAdsManager : MonoBehaviour
         adType = AdType.CoinX2;
         adType += number;
 
+        if (number == 5 && GameStateManager.instance.WatchAdItem)
+        {
+            NotionManager.instance.UseNotion(NotionType.NowBoastItemNotion);
+            return;
+        }
+
+        if (number == 6 && levelManager.adsActive)
+        {
+            return;
+        }
+
+        if (number == 7 && GameStateManager.instance.DailyCastleReward)
+        {
+            return;
+        }
+
         if (playerDataBase.RemoveAd)
         {
             switch (number)
@@ -99,18 +116,11 @@ public class GoogleAdsManager : MonoBehaviour
                     levelManager.SuccessWatchAd();
 
                     break;
+                case 7:
+                    castleManager.SuccessWatchAd();
+
+                    break;
             }
-            return;
-        }
-
-        if(number == 5 && GameStateManager.instance.WatchAdItem)
-        {
-            NotionManager.instance.UseNotion(NotionType.NowBoastItemNotion);
-            return;
-        }
-
-        if(number == 6 && levelManager.adsActive)
-        {
             return;
         }
 

@@ -199,7 +199,8 @@ public enum AdType
     CoinRushTryCount,
     DailyMissonX2,
     Item,
-    LevelCoinX2
+    LevelCoinX2,
+    CastleQuick
 }
 
 public enum DailyMissionType
@@ -247,6 +248,7 @@ public enum RewardType
     IconBox,
     Icon,
     Banner,
+    Experience
 }
 
 public enum UpgradeType

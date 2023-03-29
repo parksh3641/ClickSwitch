@@ -36,6 +36,8 @@ public class ButtonScaleAnimation : MonoBehaviour
     {
         scale = 1;
 
+        yield return new WaitForSeconds(Random.Range(delay * 0.8f, delay * 1.2f));
+
         while (transform.localScale.x > minScale)
         {
             scale -= speed;

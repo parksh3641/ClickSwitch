@@ -82,6 +82,12 @@ public class PlayerDataBase : ScriptableObject
     private int banner = 0;
     [SerializeField]
     private int accessDate = 0;
+    [SerializeField]
+    private int castleLevel = 0;
+    [SerializeField]
+    private string castleDate = "";
+    [SerializeField]
+    private string castleServerDate = "";
 
     [Space]
     [Title("Item")]
@@ -247,6 +253,9 @@ public class PlayerDataBase : ScriptableObject
         icon = 0;
         banner = 0;
         accessDate = 0;
+        castleLevel = 0;
+        castleDate = "";
+        castleServerDate = "";
 
         clock = 0;
         shield = 0;
@@ -623,6 +632,41 @@ public class PlayerDataBase : ScriptableObject
         set
         {
             accessDate = value;
+        }
+    }
+
+    public int CastleLevel
+    {
+        get
+        {
+            return castleLevel;
+        }
+        set
+        {
+            castleLevel = value;
+        }
+    }
+    public string CastleDate
+    {
+        get
+        {
+            return castleDate;
+        }
+        set
+        {
+            castleDate = value;
+        }
+    }
+
+    public string CastleServerDate
+    {
+        get
+        {
+            return castleServerDate;
+        }
+        set
+        {
+            castleServerDate = value;
         }
     }
 

@@ -72,6 +72,10 @@ public class ReceiveContent : MonoBehaviour
                 mainBackground.sprite = rankArray[1];
 
                 break;
+            case RewardType.Experience:
+                icon.sprite = etcArray[1];
+                mainBackground.sprite = rankArray[1];
+                break;
         }
 
         countText.text = "x" + count.ToString();

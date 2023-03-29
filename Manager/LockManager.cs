@@ -22,6 +22,7 @@ public class LockManager : MonoBehaviour
 
     private int level = 0;
 
+    public CastleManager castleManager;
     PlayerDataBase playerDataBase;
 
     private void Awake()
@@ -72,8 +73,6 @@ public class LockManager : MonoBehaviour
                 lockIcon[0].SetActive(true);
 
                 playerDataBase.LockTutorial = 1;
-
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("LockTutorial", playerDataBase.LockTutorial);
             }
         }
 
@@ -88,8 +87,6 @@ public class LockManager : MonoBehaviour
                 lockIcon[1].SetActive(true);
 
                 playerDataBase.LockTutorial = 2;
-
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("LockTutorial", playerDataBase.LockTutorial);
             }
         }
 
@@ -109,8 +106,6 @@ public class LockManager : MonoBehaviour
                 lockIcon[3].SetActive(true);
 
                 playerDataBase.LockTutorial = 3;
-
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("LockTutorial", playerDataBase.LockTutorial);
             }
         }
 
@@ -130,25 +125,36 @@ public class LockManager : MonoBehaviour
                 lockIcon[4].SetActive(true);
 
                 playerDataBase.LockTutorial = 4;
-
-                if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("LockTutorial", playerDataBase.LockTutorial);
             }
         }
 
         if (level >= 5)
         {
+            menuIcon[5].SetActive(true); //¼º º¹±¸
 
+            if (playerDataBase.LockTutorial == 4)
+            {
+                lockView.SetActive(true);
+
+                lockIcon[5].SetActive(true);
+
+                playerDataBase.LockTutorial = 5;
+
+                castleManager.RewardStart();
+            }
         }
 
         if (level >= 6)
         {
-
+            lockView.SetActive(false);
         }
 
         if (level >= 7)
         {
-
+            lockView.SetActive(false);
         }
+
+        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("LockTutorial", playerDataBase.LockTutorial);
     }
 
     public void CloseLockView()

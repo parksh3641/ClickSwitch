@@ -155,16 +155,16 @@ public class PlayfabManager : MonoBehaviour
         OnClickGoogleLogout();
 #endif
 
-        uiManager.OnLogout();
+        //uiManager.OnLogout();
 
         GameStateManager.instance.PlayfabId = "";
         GameStateManager.instance.CustomId = "";
         GameStateManager.instance.AutoLogin = false;
         GameStateManager.instance.Login = LoginType.None;
 
-        Debug.Log("Logout");
-
         SceneManager.LoadScene("LoginScene");
+
+        Debug.LogError("Logout");
     }
 
 
@@ -917,6 +917,15 @@ public class PlayfabManager : MonoBehaviour
                            break;
                        case "AccessDate":
                            playerDataBase.AccessDate = statistics.Value;
+                           break;
+                       case "CastleLevel":
+                           playerDataBase.CastleLevel = statistics.Value;
+                           break;
+                       case "CastleDate":
+                           playerDataBase.CastleDate = statistics.Value.ToString();
+                           break;
+                       case "CastleServerDate":
+                           playerDataBase.CastleServerDate = statistics.Value.ToString();
                            break;
                        case "AttendanceCount":
                            playerDataBase.AttendanceCount = statistics.Value;

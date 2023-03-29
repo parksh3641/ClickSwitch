@@ -63,7 +63,6 @@ public class OptionContent : MonoBehaviour
 
                 buttonText.localizationName = "Change";
                 buttonText.ReLoad();
-                buttonText.TextColor(new Color(39 / 255f, 220 / 255f, 149 / 255f));
 
                 break;
             case OptionType.Logout:
@@ -74,7 +73,6 @@ public class OptionContent : MonoBehaviour
 
                 buttonText.localizationName = "DeleteAccount";
                 buttonText.ReLoad();
-                buttonText.TextColor(new Color(225 / 255f, 34 / 255f, 12 / 255f));
 
                 button.SetActive(true);
 
@@ -100,8 +98,6 @@ public class OptionContent : MonoBehaviour
                         }
                         buttonText.ReLoad();
 
-                        buttonText.TextColor(new Color(39 / 255f, 220 / 255f, 149 / 255f));
-
                         break;
                     case LoginType.Google:
                         break;
@@ -123,14 +119,12 @@ public class OptionContent : MonoBehaviour
 
                 buttonText.localizationName = "RestorePurchases";
                 buttonText.ReLoad();
-                buttonText.TextColor(new Color(39 / 255f, 220 / 255f, 149 / 255f));
                 break;
             case OptionType.Repair:
                 iconImg.sprite = iconList[7];
 
                 buttonText.localizationName = "Confirm";
                 buttonText.ReLoad();
-                buttonText.TextColor(new Color(39 / 255f, 220 / 255f, 149 / 255f));
                 break;
         }
     }
@@ -244,7 +238,6 @@ public class OptionContent : MonoBehaviour
             buttonImg.sprite = buttonList[0];
             buttonText.localizationName = "ON";
             buttonText.ReLoad();
-            buttonText.TextColor(new Color(39 / 255f, 220 / 255f, 149 / 255f));
 
         }
         else
@@ -253,7 +246,6 @@ public class OptionContent : MonoBehaviour
             buttonImg.sprite = buttonList[1];
             buttonText.localizationName = "OFF";
             buttonText.ReLoad();
-            buttonText.TextColor(new Color(225 / 255f, 34 / 255f, 12 / 255f));
         }
     }
 
@@ -265,7 +257,6 @@ public class OptionContent : MonoBehaviour
             buttonImg.sprite = buttonList[0];
             buttonText.localizationName = "ON";
             buttonText.ReLoad();
-            buttonText.TextColor(new Color(39 / 255f, 220 / 255f, 149 / 255f));
         }
         else
         {
@@ -273,7 +264,6 @@ public class OptionContent : MonoBehaviour
             buttonImg.sprite = buttonList[1];
             buttonText.localizationName = "OFF";
             buttonText.ReLoad();
-            buttonText.TextColor(new Color(225 / 255f, 34 / 255f, 12 / 255f));
         }
     }
 
@@ -285,7 +275,6 @@ public class OptionContent : MonoBehaviour
             buttonImg.sprite = buttonList[0];
             buttonText.localizationName = "ON";
             buttonText.ReLoad();
-            buttonText.TextColor(new Color(39 / 255f, 220 / 255f, 149 / 255f));
         }
         else
         {
@@ -293,7 +282,6 @@ public class OptionContent : MonoBehaviour
             buttonImg.sprite = buttonList[1];
             buttonText.localizationName = "OFF";
             buttonText.ReLoad();
-            buttonText.TextColor(new Color(225 / 255f, 34 / 255f, 12 / 255f));
         }
     }
 
@@ -305,7 +293,6 @@ public class OptionContent : MonoBehaviour
             buttonImg.sprite = buttonList[0];
             buttonText.localizationName = "ON";
             buttonText.ReLoad();
-            buttonText.TextColor(new Color(39 / 255f, 220 / 255f, 149 / 255f));
         }
         else
         {
@@ -313,7 +300,6 @@ public class OptionContent : MonoBehaviour
             buttonImg.sprite = buttonList[1];
             buttonText.localizationName = "OFF";
             buttonText.ReLoad();
-            buttonText.TextColor(new Color(225 / 255f, 34 / 255f, 12 / 255f));
         }
     }
 
@@ -326,6 +312,5 @@ public class OptionContent : MonoBehaviour
 
         buttonText.localizationName = "DeleteAccount";
         buttonText.ReLoad();
-        buttonText.TextColor(new Color(225 / 255f, 34 / 255f, 12 / 255f));
     }
 }

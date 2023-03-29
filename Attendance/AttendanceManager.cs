@@ -22,13 +22,13 @@ public class AttendanceManager : MonoBehaviour
     public GameObject lockObj;
     public GameObject clearObj;
 
-
     string localization_NextQuest = "";
     string localization_Hours = "";
     string localization_Minutes = "";
 
     WaitForSeconds waitForSeconds = new WaitForSeconds(1);
 
+    public ResetManager resetManager;
     PlayerDataBase playerDataBase;
 
     private void Awake()
@@ -58,6 +58,11 @@ public class AttendanceManager : MonoBehaviour
     {
         if(!attendanceView.activeInHierarchy)
         {
+            if (playerDataBase.AttendanceDay == DateTime.Today.ToString("yyyyMMdd"))
+            {
+                resetManager.Initialize();
+            }
+
             attendanceView.SetActive(true);
             showVCView.SetActive(true);
 

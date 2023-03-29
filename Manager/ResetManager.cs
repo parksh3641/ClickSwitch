@@ -123,6 +123,7 @@ public class ResetManager : MonoBehaviour
             GameStateManager.instance.DailyShopReward = false;
             GameStateManager.instance.DailyShopAdsReward = false;
             GameStateManager.instance.StartPack = false;
+            GameStateManager.instance.DailyCastleReward = false;
             GameStateManager.instance.CoinRushTryCount = 1;
             GameStateManager.instance.CoinRushWatchAd = false;
 
@@ -204,6 +205,7 @@ public class ResetManager : MonoBehaviour
                 GameStateManager.instance.DailyShopReward = false;
                 GameStateManager.instance.DailyShopAdsReward = false;
                 GameStateManager.instance.StartPack = false;
+                GameStateManager.instance.DailyCastleReward = false;
                 GameStateManager.instance.CoinRushTryCount = 1;
                 GameStateManager.instance.CoinRushWatchAd = false;
 

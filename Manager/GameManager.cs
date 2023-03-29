@@ -777,7 +777,10 @@ public class GameManager : MonoBehaviour
         FirebaseAnalytics.LogEvent(gameModeType.ToString());
         FirebaseAnalytics.LogEvent(gamePlayType + " / " + gameModeType);
 
-        if (PlayfabManager.instance.isActive) PlayfabManager.instance.CheckConsumeItem();
+        if(GameStateManager.instance.GamePlayType != GamePlayType.GameChoice8)
+        {
+            if (PlayfabManager.instance.isActive) PlayfabManager.instance.CheckConsumeItem();
+        }
 
         switch (gamePlayType)
         {
@@ -1448,7 +1451,7 @@ public class GameManager : MonoBehaviour
 
     public void CheckCoinRush()
     {
-        PlusScore(1);
+        CheckPlusScore(1);
 
         soundManager.PlaySFX(GameSfxType.GetMoney);
 
@@ -1536,8 +1539,6 @@ public class GameManager : MonoBehaviour
                 coinRushLockObject.SetActive(true);
                 break;
         }
-
-        if (GameStateManager.instance.Slow) Time.timeScale = 0.9f;
     }
 
     public void OnGamePause()

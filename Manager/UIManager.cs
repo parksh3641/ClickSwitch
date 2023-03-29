@@ -243,13 +243,16 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         if (languageGrid != null) languageGrid.anchoredPosition = new Vector2(0, -9999);
 
+        loginUI.SetActive(false);
         loadingUI.gameObject.SetActive(true);
 
         StartCoroutine(LoadingCoroution());
 
-        loginUI.SetActive(!GameStateManager.instance.AutoLogin);
-
-        SetLoginUI();
+        if(!GameStateManager.instance.AutoLogin)
+        {
+            loginUI.SetActive(true);
+            SetLoginUI();
+        }
     }
 
     IEnumerator LoadingCoroution()
@@ -332,7 +335,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void SetLoginUI()
     {
-        platformText.text = LocalizationManager.instance.GetString("Platform");
+        //platformText.text = LocalizationManager.instance.GetString("Platform");
 
         for (int i = 0; i < loginButtonList.Length; i++)
         {
@@ -397,10 +400,23 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         if(GameStateManager.instance.WatchAdItem)
         {
-            for (int i = 0; i < itemUseContentArray.Length; i++)
+            if(GameStateManager.instance.GameModeType == GameModeType.Perfect)
             {
-                itemUseContentArray[i].UseItem();
-                useItem++;
+                itemUseContentArray[1].UseItem();
+                itemUseContentArray[2].UseItem();
+                itemUseContentArray[3].UseItem();
+                useItem += 3;
+            }
+            else
+            {
+                if(GameStateManager.instance.GamePlayType != GamePlayType.GameChoice8)
+                {
+                    for (int i = 0; i < itemUseContentArray.Length; i++)
+                    {
+                        itemUseContentArray[i].UseItem();
+                        useItem++;
+                    }
+                }
             }
         }
         else
@@ -458,12 +474,6 @@ public class UIManager : MonoBehaviour, IGameEvent
     public void OpenMenu()
     {
         resetManager.OpenGameMenu();
-    }
-
-    public void OpenMenuToTrophy()
-    {
-        resetManager.OpenGameMenu();
-        trophyManager.OpenTrophy();
     }
 
     public void CloseMenu()
@@ -991,7 +1001,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         float plusIcon = shopDataBase.GetIconHoldNumber() * 0.005f;
         float plusTrophy = playerDataBase.GetTrophyHoldNumber() * 0.01f;
-        float plusLevel = playerDataBase.AddScoreLevel * 0.003f;
+        float plusLevel = playerDataBase.AddScoreLevel * 0.002f;
 
         score = score + (score * plusIcon) + (score * plusTrophy) + (score * plusLevel);
 
@@ -1548,6 +1558,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         GameStateManager.instance.PlayGame = false;
 
+        timerText.text = "";
         score = 0;
 
         SetEtcUI(true);
@@ -1596,6 +1607,14 @@ public class UIManager : MonoBehaviour, IGameEvent
         if(score > 100 && tutorialUI.activeInHierarchy)
         {
             tutorialUI.SetActive(false);
+        }
+
+        if(GameStateManager.instance.GamePlayType == GamePlayType.GameChoice8)
+        {
+            if(score > 1000)
+            {
+                score = 1000;
+            }
         }
 
         if (bestScore != 0)
@@ -1675,7 +1694,7 @@ public class UIManager : MonoBehaviour, IGameEvent
         comboManager.WaitNotionUI(type);
     }
 
-#region Corution
+#region Coroution
 
     private IEnumerator ReadyTimerCorution(float time)
     {
@@ -1701,11 +1720,19 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         float timer = ValueManager.instance.GetGamePlayTime();
 
-        if(GameStateManager.instance.GameModeType != GameModeType.Perfect)
+        if(GameStateManager.instance.GameModeType != GameModeType.Perfect && GameStateManager.instance.GamePlayType != GamePlayType.GameChoice8)
         {
             timer += upgradeDataBase.GetValue(UpgradeType.StartTime, playerDataBase.StartTimeLevel);
 
-            if (GameStateManager.instance.Clock) timer += ValueManager.instance.GetClockAddTime();
+            if (GameStateManager.instance.Clock)
+            {
+                timer += ValueManager.instance.GetClockAddTime();
+            }
+
+            if (GameStateManager.instance.Slow)
+            {
+                Time.timeScale = 0.9f;
+            }
         }
 
         StartCoroutine("TimerCorution", timer);
@@ -1737,7 +1764,7 @@ public class UIManager : MonoBehaviour, IGameEvent
             yield return waitForSeconds2;
         }
 
-        timerText.text = "";
+        timerText.text = "0";
         soundManager.HighTimer();
 
         //GameEnd();

@@ -143,7 +143,7 @@ public class ProfileManager : MonoBehaviour
         int plusTrophy = playerDataBase.GetTrophyHoldNumber();
         int plusLevel = playerDataBase.AddScoreLevel;
 
-        plusScoreText.text = ((0.5f * plusIcon) + (1.0 * plusTrophy) + (0.3f * plusLevel)).ToString("F1") + "%";
+        plusScoreText.text = ((0.5f * plusIcon) + (1.0 * plusTrophy) + (0.2f * plusLevel)).ToString("F1") + "%";
 
         float plusExp = playerDataBase.AddExpLevel * upgradeDataBase.addExp.addValue;
 

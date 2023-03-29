@@ -74,6 +74,7 @@ public class GameStateManager : MonoBehaviour
         public bool dailyShopReward = false;
         public bool dailyShopAdsReward = false;
         public bool startPack = false;
+        public bool dailyCastleReward = false;
 
         [Space]
         [Title("Tutorial")]
@@ -476,6 +477,19 @@ public class GameStateManager : MonoBehaviour
         set
         {
             gameSettings.startPack = value;
+            SaveFile();
+        }
+    }
+
+    public bool DailyCastleReward
+    {
+        get
+        {
+            return gameSettings.dailyCastleReward;
+        }
+        set
+        {
+            gameSettings.dailyCastleReward = value;
             SaveFile();
         }
     }
