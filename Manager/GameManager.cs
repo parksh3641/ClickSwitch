@@ -1455,14 +1455,41 @@ public class GameManager : MonoBehaviour
 
         soundManager.PlaySFX(GameSfxType.GetMoney);
 
-        if (coinRushNumber + 2 <= coinRushMax)
+        switch (gameModeType)
         {
-            coinRushNumber += 2;
-            PlusCoin(2);
-        }
-        else
-        {
-            coinRushNumber = coinRushMax;
+            case GameModeType.Easy:
+                if (coinRushNumber + 2 <= coinRushMax)
+                {
+                    coinRushNumber += 2;
+                    PlusCoin(2);
+                }
+                else
+                {
+                    coinRushNumber = coinRushMax;
+                }
+                break;
+            case GameModeType.Normal:
+                if (coinRushNumber + 3 <= coinRushMax)
+                {
+                    coinRushNumber += 3;
+                    PlusCoin(3);
+                }
+                else
+                {
+                    coinRushNumber = coinRushMax;
+                }
+                break;
+            case GameModeType.Hard:
+                if (coinRushNumber + 4 <= coinRushMax)
+                {
+                    coinRushNumber += 4;
+                    PlusCoin(4);
+                }
+                else
+                {
+                    coinRushNumber = coinRushMax;
+                }
+                break;
         }
 
         plusCoinText.text = coinRushNumber.ToString();

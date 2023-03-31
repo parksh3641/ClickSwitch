@@ -126,11 +126,11 @@ public class EventManager : MonoBehaviour
             {
                 OnSetWelcomeAlarm();
             }
-        }
 
-        PlayfabManager.instance.GetTitleInternalData("WorldScoreDate", SetDate);
-        PlayfabManager.instance.GetTitleInternalData("WorldScoreNeed", SetNeed);
-        PlayfabManager.instance.GetTitleInternalData("Season", SetSeason);
+            PlayfabManager.instance.GetTitleInternalData("WorldScoreDate", SetDate);
+            PlayfabManager.instance.GetTitleInternalData("WorldScoreNeed", SetNeed);
+            PlayfabManager.instance.GetTitleInternalData("Season", SetSeason);
+        }
     }
 
     public void SetDate(string date)

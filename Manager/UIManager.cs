@@ -635,7 +635,8 @@ public class UIManager : MonoBehaviour, IGameEvent
         CloseRepairView();
 
         PlayerPrefs.SetInt("Repair", 1);
-        SceneManager.LoadScene("LoginScene");
+
+        PlayfabManager.instance.LogOut();
     }
 
     #endregion
@@ -915,7 +916,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
                 break;
             case GamePlayType.GameChoice8:
-                if (playerDataBase.BestCoinRushCombo == 0 && !GameStateManager.instance.GameChoice8Tutorial)
+                if (playerDataBase.BestCoinRushScore == 0 && !GameStateManager.instance.GameChoice8Tutorial)
                 {
                     tutorialUI.SetActive(true);
                     tutorialText.localizationName = "Information_GameChoice8";
@@ -1735,10 +1736,10 @@ public class UIManager : MonoBehaviour, IGameEvent
             }
         }
 
-        StartCoroutine("TimerCorution", timer);
+        StartCoroutine("TimerCoroution", timer);
     }
 
-    private IEnumerator TimerCorution(float time)
+    private IEnumerator TimerCoroution(float time)
     {
         float number = time;
 

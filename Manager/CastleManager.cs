@@ -45,6 +45,7 @@ public class CastleManager : MonoBehaviour
 
     [Title("Animation")]
     public CoinAnimation goldAnimation;
+    public SoundManager soundManager;
 
     DateTime time; //적립을 한 시점
     DateTime serverTime; //최대 적립 날짜
@@ -140,15 +141,15 @@ public class CastleManager : MonoBehaviour
         castleLevelText.text = LocalizationManager.instance.GetString("CastleLevel") + " : " + playerDataBase.CastleLevel + " / " + (playerDataBase.Level + 1);
 
         addCrystal = ((playerDataBase.CastleLevel + 1) * 10);
-        addCoin = (100 + ((playerDataBase.CastleLevel) * 10));
+        addCoin = (100 + ((playerDataBase.CastleLevel) * 5));
         addExp = (20 + ((playerDataBase.CastleLevel) * 2));
 
         levelUpCostText.text = addCrystal.ToString();
         coinText.text = addCoin.ToString() + "/" + localization_Hours;
         expText.text = addExp.ToString() + "/" + localization_Hours;
 
-        receiveContents[0].Initialize(RewardType.Coin, 0);
-        receiveContents[1].Initialize(RewardType.Experience, 0);
+        receiveContents[0].Initialize(RewardType.Coin, saveCoin);
+        receiveContents[1].Initialize(RewardType.Experience, saveExp);
 
         if (DateTime.Compare(DateTime.Now, serverTime) == 1)
         {
@@ -187,6 +188,8 @@ public class CastleManager : MonoBehaviour
 
                 CheckCastle();
 
+                soundManager.PlaySFX(GameSfxType.LevelUp);
+
                 NotionManager.instance.UseNotion(NotionType.UpgradeSuccess);
             }
             else
@@ -213,8 +216,8 @@ public class CastleManager : MonoBehaviour
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("CastleDate", int.Parse("1" + playerDataBase.CastleDate));
             PlayfabManager.instance.UpdatePlayerStatisticsInsert("CastleServerDate", int.Parse("1" + playerDataBase.CastleServerDate));
 
-            PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, addCoin);
-            levelManager.CheckLevelUp(addExp);
+            PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, saveCoin);
+            levelManager.CheckLevelUp(saveExp);
 
             goldAnimation.OnPlayExpAnimation();
 

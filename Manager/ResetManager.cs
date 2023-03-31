@@ -44,6 +44,7 @@ public class ResetManager : MonoBehaviour
     [Title("Quest")]
     public DailyManager dailyManager;
     public WeeklyManager weeklyManager;
+    public EventManager eventManager;
 
     [Space]
     [Title("Attendance")]
@@ -152,6 +153,8 @@ public class ResetManager : MonoBehaviour
                 playerDataBase.WelcomeCheck = false;
 
                 PlayfabManager.instance.UpdatePlayerStatisticsInsert("WelcomeCheck", 0);
+
+                eventManager.OnSetWelcomeAlarm();
             }
         }
         else
@@ -236,6 +239,8 @@ public class ResetManager : MonoBehaviour
                     playerDataBase.WelcomeCheck = false;
 
                     PlayfabManager.instance.UpdatePlayerStatisticsInsert("WelcomeCheck", 0);
+
+                    eventManager.OnSetWelcomeAlarm();
                 }
             }
             else

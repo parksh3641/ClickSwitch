@@ -473,12 +473,12 @@ public class ShopManager : MonoBehaviour
         switch (type)
         {
             case ShopType.Coin1000:
-                if(playerDataBase.Coin + 2000 < 10000000)
+                if(playerDataBase.Coin + 1000 < 10000000)
                 {
                     if (playerDataBase.Crystal >= 60)
                     {
                         if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Crystal, 60);
-                        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 2000);
+                        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 1000);
 
                         NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
                     }
@@ -493,12 +493,12 @@ public class ShopManager : MonoBehaviour
                 }
                 break;
             case ShopType.Coin2000:
-                if (playerDataBase.Coin + 20000 < 10000000)
+                if (playerDataBase.Coin + 10000 < 10000000)
                 {
                     if (playerDataBase.Crystal >= 500)
                     {
                         if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Crystal, 500);
-                        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 20000);
+                        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 10000);
 
                         NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
                     }
@@ -513,12 +513,12 @@ public class ShopManager : MonoBehaviour
                 }
                 break;
             case ShopType.Coin3000:
-                if (playerDataBase.Coin + 200000 < 10000000)
+                if (playerDataBase.Coin + 1000000 < 10000000)
                 {
                     if (playerDataBase.Crystal >= 4500)
                     {
                         if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateSubtractCurrency(MoneyType.Crystal, 4500);
-                        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 200000);
+                        if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, 100000);
 
                         NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
                     }

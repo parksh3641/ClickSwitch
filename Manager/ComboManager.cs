@@ -213,13 +213,11 @@ public class ComboManager : MonoBehaviour
         waitObject.SetActive(true);
         waitNotionText.text = LocalizationManager.instance.GetString("WaitNotion_" + gamePlayType);
 
-        while (waitTimer > 0)
+        while (waitFillAmount.fillAmount > 0)
         {
-            waitTimer -= 0.0167f;
+            waitFillAmount.fillAmount -= 1 * Time.smoothDeltaTime / waitTimer;
 
-            waitFillAmount.fillAmount = waitTimer / waitSaveTimer;
-
-            yield return new WaitForSeconds(0.01f);
+            yield return null;
         }
 
         waitObject.SetActive(false);

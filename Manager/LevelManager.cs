@@ -45,7 +45,7 @@ public class LevelManager : MonoBehaviour
 
     public void Initialize()
     {
-        profileLevelText.text = "Lv." + (playerDataBase.Level + 1);
+        profileLevelText.text = "Lv." + (playerDataBase.Level + 1) + "   (" + playerDataBase.Experience + "/" + CheckNeedExp() + ")";
         profileFillamount.fillAmount = playerDataBase.Experience / CheckNeedExp();
 
         mainLevelText.text = "Lv." + (playerDataBase.Level + 1);

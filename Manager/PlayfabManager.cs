@@ -1671,8 +1671,8 @@ public class PlayfabManager : MonoBehaviour
 
     public void PurchaseStartPack1()
     {
-        UpdateAddCurrency(MoneyType.Crystal, 170);
-        UpdateAddCurrency(MoneyType.Coin, 3000);
+        UpdateAddCurrency(MoneyType.Crystal, 130);
+        UpdateAddCurrency(MoneyType.Coin, 1000);
 
         shopManager.BuyStartPack();
 
