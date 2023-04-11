@@ -45,6 +45,12 @@ public class LevelManager : MonoBehaviour
 
     public void Initialize()
     {
+        if (playerDataBase.Experience < 0)
+        {
+            playerDataBase.Experience = 0;
+            if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Exp", 0);
+        }
+
         profileLevelText.text = "Lv." + (playerDataBase.Level + 1) + "   (" + playerDataBase.Experience + "/" + CheckNeedExp() + ")";
         profileFillamount.fillAmount = playerDataBase.Experience / CheckNeedExp();
 
@@ -57,6 +63,7 @@ public class LevelManager : MonoBehaviour
         level = playerDataBase.Level;
         exp = playerDataBase.Experience;
         int plusExp = (int)getExp;
+
         if (defaultExp == 0 || addExp == 0)
         {
             Debug.Log("레벨업 오류");
@@ -126,6 +133,8 @@ public class LevelManager : MonoBehaviour
     {
         levelupView.SetActive(false);
         showVCView.SetActive(false);
+
+        CheckLevelUp(0);
     }
 
     public void SuccessWatchAd()

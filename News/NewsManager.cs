@@ -143,4 +143,9 @@ public class NewsManager : MonoBehaviour
     {
         infoView.SetActive(false);
     }
+
+    public void OpenDiscord()
+    {
+        Application.OpenURL("https://discord.gg/pE9yNASZ3P");
+    }
 }

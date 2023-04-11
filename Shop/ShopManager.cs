@@ -1,3 +1,4 @@
+using Firebase.Analytics;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
@@ -469,7 +470,6 @@ public class ShopManager : MonoBehaviour
 
     public void CustomReward(ShopType type)
     {
-        Debug.Log(type);
         switch (type)
         {
             case ShopType.Coin1000:
@@ -541,6 +541,8 @@ public class ShopManager : MonoBehaviour
 
                     dailyLock.SetActive(true);
                     GameStateManager.instance.DailyShopReward = true;
+
+                    FirebaseAnalytics.LogEvent("Get DailyShopReward");
                 }
                 else
                 {

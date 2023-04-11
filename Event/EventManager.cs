@@ -58,6 +58,7 @@ public class EventManager : MonoBehaviour
     public GameObject welcomeView;
     public RectTransform welcomGrid;
     public GameObject welcomeAlarm;
+    public GameObject welcomeAlarm2;
     public WelcomeContent[] welcomeContentArray;
 
     [Space]
@@ -102,6 +103,7 @@ public class EventManager : MonoBehaviour
         worldScoreView.SetActive(false);
 
         welcomeAlarm.SetActive(false);
+        welcomeAlarm2.SetActive(false);
         worldScoreAlarm.SetActive(false);
 
         welcomGrid.anchoredPosition = new Vector2(0, -999);
@@ -269,11 +271,13 @@ public class EventManager : MonoBehaviour
     public void OnSetWelcomeAlarm()
     {
         welcomeAlarm.SetActive(true);
+        welcomeAlarm2.SetActive(true);
     }
 
     public void OnCheckWelcomeAlarm()
     {
         welcomeAlarm.SetActive(false);
+        welcomeAlarm2.SetActive(false);
     }
 
     #endregion

@@ -18,7 +18,6 @@ public class ModeContent : MonoBehaviour
     public LocalizationContent modeTypeText;
 
     [Title("UI")]
-    public Outline outline;
     public Image backgroundImg;
     public Image iconImg;
 
@@ -50,41 +49,6 @@ public class ModeContent : MonoBehaviour
     {
         backgroundImg.sprite = modeBackgroundImgArray[(int)gameModeType];
         iconImg.sprite = iconImgArray[(int)gamePlayType];
-
-        CheckIconOutline();
-    }
-
-    void CheckIconOutline()
-    {
-        outline.enabled = false;
-
-        switch (gamePlayType)
-        {
-            case GamePlayType.GameChoice1:
-                outline.enabled = true;
-                break;
-            case GamePlayType.GameChoice2:
-
-                break;
-            case GamePlayType.GameChoice3:
-                outline.enabled = true;
-                break;
-            case GamePlayType.GameChoice4:
-
-                break;
-            case GamePlayType.GameChoice5:
-                outline.enabled = true;
-                break;
-            case GamePlayType.GameChoice6:
-                outline.enabled = true;
-                break;
-            case GamePlayType.GameChoice7:
-                outline.enabled = true;
-                break;
-            case GamePlayType.GameChoice8:
-                outline.enabled = true;
-                break;
-        }
     }
 
     private void OnDisable()
@@ -115,8 +79,6 @@ public class ModeContent : MonoBehaviour
 
         playTypeText.ReLoad();
         modeTypeText.ReLoad();
-
-        CheckIconOutline();
     }
 
     public void UnLock()

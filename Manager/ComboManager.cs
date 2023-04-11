@@ -67,11 +67,13 @@ public class ComboManager : MonoBehaviour
     {
         bestCombo = number;
 
+        comboTimer = ValueManager.instance.GetComboTime();
+
         if (GameStateManager.instance.Combo) comboTimer += 0.5f;
 
-        float comboTime = playerDataBase.ComboTimeLevel * upgradeDataBase.comboTime.addValue;
+        float addComboTime = playerDataBase.ComboTimeLevel * 0.02f;
 
-        comboTimer += comboTime;
+        comboTimer += addComboTime;
 
         critical = upgradeDataBase.GetValue(UpgradeType.ComboCritical, playerDataBase.ComboCriticalLevel);
     }
@@ -80,7 +82,10 @@ public class ComboManager : MonoBehaviour
     {
         comboObject.SetActive(true);
 
-        if (timer == 0) combo = 0;
+        if (timer == 0)
+        {
+            if (GameStateManager.instance.PlayGame) combo = 0;
+        }
 
         CheckPlusCombo();
 
@@ -128,23 +133,19 @@ public class ComboManager : MonoBehaviour
 
     public void OnStopCombo()
     {
+        StopAllCoroutines();
+
         pause = false;
 
         comboObject.SetActive(false);
+        waitObject.SetActive(false);
 
         timer = 0;
         fillamount.fillAmount = 0;
-
-        waitObject.SetActive(false);
-
-        StopAllCoroutines();
-        StartCoroutine(TimerCoroutine());
     }
 
     public int GetCombo()
     {
-        comboText.text = "";
-
         return combo;
     }
 
@@ -178,10 +179,6 @@ public class ComboManager : MonoBehaviour
                 timer -= 0.01f;
 
                 if(GameStateManager.instance.PlayGame) fillamount.fillAmount = timer / comboTimer;
-            }
-            else
-            {
-                if(GameStateManager.instance.PlayGame) combo = 0;
             }
         }
 

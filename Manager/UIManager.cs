@@ -1723,7 +1723,8 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         if(GameStateManager.instance.GameModeType != GameModeType.Perfect && GameStateManager.instance.GamePlayType != GamePlayType.GameChoice8)
         {
-            timer += upgradeDataBase.GetValue(UpgradeType.StartTime, playerDataBase.StartTimeLevel);
+            //timer += upgradeDataBase.GetValue(UpgradeType.StartTime, playerDataBase.StartTimeLevel);
+            timer += playerDataBase.StartTimeLevel * 0.1f;
 
             if (GameStateManager.instance.Clock)
             {

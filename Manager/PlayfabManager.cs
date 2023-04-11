@@ -29,6 +29,7 @@ public class PlayfabManager : MonoBehaviour
 {
     public static PlayfabManager instance;
 
+    public NickNameManager nickNameManager;
     public UIManager uiManager;
     public ShopManager shopManager;
     public ProfileManager profileManager;
@@ -575,6 +576,7 @@ public class PlayfabManager : MonoBehaviour
             if (GameStateManager.instance.NickName == null)
             {
                 UpdateDisplayName(GameStateManager.instance.PlayfabId);
+                nickNameManager.nickNameFirstView.SetActive(true);
             }
             // GameStateManager.Instance.SavePlayerData();
         },

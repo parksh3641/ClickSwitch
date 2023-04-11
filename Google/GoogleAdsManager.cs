@@ -222,8 +222,11 @@ public class GoogleAdsManager : MonoBehaviour
             case AdType.LevelCoinX2:
                 levelManager.SuccessWatchAd();
                 break;
+            case AdType.CastleQuick:
+                castleManager.SuccessWatchAd();
+                break;
         }
 
-        FirebaseAnalytics.LogEvent("Ad : " + adType.ToString());
+        FirebaseAnalytics.LogEvent("Watch Ad : " + adType.ToString());
     }
 }
