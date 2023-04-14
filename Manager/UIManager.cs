@@ -59,9 +59,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     public Text plusGoldText;
     public Text plusExpText;
     public Text nowScoreText;
-    public Text bestScoreText;
     public Text nowComboText;
-    public Text bestComboText;
     public Text getGoldText;
     public Text getExpText;
 
@@ -1485,7 +1483,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         int nowTotalScore = playerDataBase.BestSpeedTouchScore + playerDataBase.BestMoleCatchScore + playerDataBase.BestFilpCardScore + 
             playerDataBase.BestButtonActionScore + playerDataBase.BestTimingActionScore + playerDataBase.BestDragActionScore
-            + playerDataBase.BestLeftRightScore + playerDataBase.BestCoinRushScore;
+            + playerDataBase.BestLeftRightScore;
 
         if (Comparison(nowTotalScore, playerDataBase.TotalScore))
         {
@@ -1500,7 +1498,7 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         int nowTotalCombo = playerDataBase.BestSpeedTouchCombo + playerDataBase.BestMoleCatchCombo + playerDataBase.BestFilpCardCombo + 
             playerDataBase.BestButtonActionCombo + playerDataBase.BestTimingActionCombo + playerDataBase.BestDragActionCombo
-            + playerDataBase.BestLeftRightCombo + playerDataBase.BestCoinRushCombo;
+            + playerDataBase.BestLeftRightCombo;
 
         if (Comparison(nowTotalCombo, playerDataBase.TotalCombo))
         {
@@ -1608,14 +1606,6 @@ public class UIManager : MonoBehaviour, IGameEvent
         if(score > 100 && tutorialUI.activeInHierarchy)
         {
             tutorialUI.SetActive(false);
-        }
-
-        if(GameStateManager.instance.GamePlayType == GamePlayType.GameChoice8)
-        {
-            if(score > 1000)
-            {
-                score = 1000;
-            }
         }
 
         if (bestScore != 0)

@@ -23,6 +23,7 @@ public class UpgradeContent : MonoBehaviour
     private int level = 0;
     private int upgradeValue = 0;
     private int maxLevel = 60;
+    private bool delay = false;
 
     SoundManager soundManager;
 
@@ -125,6 +126,11 @@ public class UpgradeContent : MonoBehaviour
 
     public void UpgradeButton()
     {
+        if (delay) return;
+
+        delay = true;
+        Invoke("CheckDelay", 0.3f);
+
         if (upgradeType != UpgradeType.AddScore)
         {
             if (playerDataBase.Coin <= upgradeValue || upgradeValue == 0)
@@ -298,6 +304,11 @@ public class UpgradeContent : MonoBehaviour
         NotionManager.instance.UseNotion(NotionType.UpgradeSuccess);
 
         CheckUpgrade();
+    }
+
+    void CheckDelay()
+    {
+        delay = false;
     }
 
     public void CheckUpgrade()

@@ -157,15 +157,18 @@ public class PlayfabManager : MonoBehaviour
 #elif UNITY_ANDROID
         OnClickGoogleLogout();
 #endif
+    }
 
+    public void SuccessLogOut()
+    {
         GameStateManager.instance.PlayfabId = "";
         GameStateManager.instance.CustomId = "";
         GameStateManager.instance.AutoLogin = false;
         GameStateManager.instance.Login = LoginType.None;
 
-        SceneManager.LoadScene("LoginScene");
-
         isLogin = false;
+
+        SceneManager.LoadScene("LoginScene");
 
         Debug.LogError("Logout");
     }
@@ -249,10 +252,11 @@ public class PlayfabManager : MonoBehaviour
 
     public void OnClickGuestLogout()
     {
-        Debug.LogError("Guest Logout");
-
-        LogOut();
         PlayFabClientAPI.ForgetAllCredentials();
+
+        SuccessLogOut();
+
+        Debug.LogError("Guest Logout");
     }
 
 #endregion
@@ -312,6 +316,8 @@ public class PlayfabManager : MonoBehaviour
 #if UNITY_ANDROID
         ((PlayGamesPlatform)Social.Active).SignOut();
 #endif
+
+        SuccessLogOut();
     }
 
     public void OnClickGoogleLink()

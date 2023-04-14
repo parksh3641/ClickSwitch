@@ -84,7 +84,7 @@ public class IconManager : MonoBehaviour
 
         int plusScore = shopDataBase.GetIconHoldNumber();
 
-        plusScoreText.text = LocalizationManager.instance.GetString("PlusScoreInfo") + " +" + (0.5f * plusScore).ToString() + "%";
+        plusScoreText.text = LocalizationManager.instance.GetString("PlusScoreInfo") + " +" + (0.5f * plusScore).ToString() + "%  (+0.5%)";
 
         Initialize();
     }

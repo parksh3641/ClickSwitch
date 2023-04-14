@@ -145,8 +145,8 @@ public class CastleManager : MonoBehaviour
         addExp = (10 + ((playerDataBase.CastleLevel) * 1));
 
         levelUpCostText.text = addCrystal.ToString();
-        coinText.text = addCoin.ToString() + "/" + localization_Hours;
-        expText.text = addExp.ToString() + "/" + localization_Hours;
+        coinText.text = addCoin.ToString() + "/" + localization_Hours + "  (+5)";
+        expText.text = addExp.ToString() + "/" + localization_Hours + "  (+1)";
 
         receiveContents[0].Initialize(RewardType.Coin, saveCoin);
         receiveContents[1].Initialize(RewardType.Experience, saveExp);
@@ -262,7 +262,7 @@ public class CastleManager : MonoBehaviour
             }
         }
 
-        if (timeSpan.Minutes >= 10)
+        if (timeSpan.Minutes >= 10 || timeSpan.Hours >= 1)
         {
             lockObj.SetActive(false);
         }
@@ -296,8 +296,8 @@ public class CastleManager : MonoBehaviour
 
         button.StopAnim();
 
-        int quickCoin = addCoin * 6;
-        int quickExp = addExp * 6;
+        int quickCoin = addCoin * 12;
+        int quickExp = addExp * 12;
 
         PlayfabManager.instance.UpdateAddCurrency(MoneyType.Coin, quickCoin);
         levelManager.CheckLevelUp(addExp);

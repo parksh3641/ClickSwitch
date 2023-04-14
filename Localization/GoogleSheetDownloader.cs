@@ -58,21 +58,22 @@ public class GoogleSheetDownloader : MonoBehaviour
     [Button]
     void GoogleSheetDownload()
     {
-        PlayerPrefs.SetInt("Repair", 1);
+        PlayerPrefs.GetInt("FirstOpen", 1);
+        PlayerPrefs.SetInt("Version", 100);
     }
 
     IEnumerator LoadingCoroution()
     {
         if(!isLocalization)
         {
-            if(percent <= 0.25f)
+            if(percent <= 0.5f)
             {
                 percent += 0.01f;
                 barFillAmount.fillAmount = percent;
                 barPercentText.text = ((int)(percent * 100)).ToString() + "%";
                 messageText.text = "Downloading...";
             }
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.5f);
             StartCoroutine(LoadingCoroution());
         }
         else
@@ -91,125 +92,137 @@ public class GoogleSheetDownloader : MonoBehaviour
 
     IEnumerator DownloadFile()
     {
+        int firstOpen = PlayerPrefs.GetInt("FirstOpen");
         int saveVersion = PlayerPrefs.GetInt("Version");
-        int repair = PlayerPrefs.GetInt("Repair");
+
         int version = int.Parse(Application.version.Replace(".", "").ToString());
 
-        if (saveVersion < version || repair == 1)
+        if (firstOpen == 0 && saveVersion == 0)
         {
-            Debug.Log("Localization File Downloading...");
-            UnityWebRequest www = UnityWebRequest.Get(LocalizationURL);
-            yield return www.SendWebRequest();
-            SetLocalization(www.downloadHandler.text);
-            Debug.Log("Localization File Download Complete!");
+            Debug.Log("맨 처음 로그인시에는 파일을 다운로드 받지 않습니다");
 
-            isLocalization = true;
-
-            CheckPercent(25);
-
-            Debug.Log("Value File Downloading...");
-            UnityWebRequest www2 = UnityWebRequest.Get(ValueURL);
-            yield return www2.SendWebRequest();
-            SetValue(www2.downloadHandler.text);
-            Debug.Log("Value File Download Complete!");
-
-            CheckPercent(50);
-
-            Debug.Log("Upgrade File Downloading...");
-            UnityWebRequest www3 = UnityWebRequest.Get(UpgradeURL);
-            yield return www3.SendWebRequest();
-            SetUpgrade(www3.downloadHandler.text);
-            Debug.Log("Upgrade File Download Complete!");
-
-            CheckPercent(75);
+            PlayerPrefs.GetInt("FirstOpen", 1);
         }
         else
         {
-            if (!File.Exists(SystemPath.GetPath() + "Localization.txt"))
+            if (saveVersion < version)
             {
                 Debug.Log("Localization File Downloading...");
-
                 UnityWebRequest www = UnityWebRequest.Get(LocalizationURL);
                 yield return www.SendWebRequest();
-                SetLocalization(www.downloadHandler.text);
-
                 Debug.Log("Localization File Download Complete!");
 
-                CheckPercent(25);
-            }
-            else
-            {
-                StreamReader reader = new StreamReader(SystemPath.GetPath() + "Localization.txt");
-                string value = reader.ReadToEnd();
-                reader.Close();
-                SetLocalization(value);
-                Debug.Log("Localization File is exists");
+                SetLocalization(www.downloadHandler.text);
 
-                CheckPercent(25);
-            }
+                isLocalization = true;
 
-            isLocalization = true;
+                CheckPercent(50);
 
-            if (!File.Exists(SystemPath.GetPath() + "Value.txt"))
-            {
                 Debug.Log("Value File Downloading...");
                 UnityWebRequest www2 = UnityWebRequest.Get(ValueURL);
                 yield return www2.SendWebRequest();
-                SetValue(www2.downloadHandler.text);
                 Debug.Log("Value File Download Complete!");
 
-                CheckPercent(50);
-            }
-            else
-            {
-                StreamReader reader = new StreamReader(SystemPath.GetPath() + "Value.txt");
-                string value = reader.ReadToEnd();
-                reader.Close();
-                SetValue(value);
-                Debug.Log("Value File is exists");
+                SetValue(www2.downloadHandler.text);
 
-                CheckPercent(50);
-            }
+                CheckPercent(75);
 
-            if (!File.Exists(SystemPath.GetPath() + "Upgrade.txt"))
-            {
                 Debug.Log("Upgrade File Downloading...");
                 UnityWebRequest www3 = UnityWebRequest.Get(UpgradeURL);
                 yield return www3.SendWebRequest();
-                SetUpgrade(www3.downloadHandler.text);
                 Debug.Log("Upgrade File Download Complete!");
 
-                CheckPercent(75);
+                SetUpgrade(www3.downloadHandler.text);
+
+                CheckPercent(100);
             }
             else
             {
-                StreamReader reader = new StreamReader(SystemPath.GetPath() + "Upgrade.txt");
-                string value = reader.ReadToEnd();
-                reader.Close();
-                SetUpgrade(value);
-                Debug.Log("Upgrade File is exists");
+                if (!File.Exists(SystemPath.GetPath() + "Localization.txt"))
+                {
+                    Debug.Log("Localization File Downloading...");
 
-                CheckPercent(75);
+                    UnityWebRequest www = UnityWebRequest.Get(LocalizationURL);
+                    yield return www.SendWebRequest();
+                    SetLocalization(www.downloadHandler.text);
+
+                    Debug.Log("Localization File Download Complete!");
+
+                    CheckPercent(50);
+                }
+                else
+                {
+                    StreamReader reader = new StreamReader(SystemPath.GetPath() + "Localization.txt");
+                    string value = reader.ReadToEnd();
+                    reader.Close();
+                    SetLocalization(value);
+                    Debug.Log("Localization File is exists");
+
+                    CheckPercent(50);
+                }
+
+                isLocalization = true;
+
+                if (!File.Exists(SystemPath.GetPath() + "Value.txt"))
+                {
+                    Debug.Log("Value File Downloading...");
+                    UnityWebRequest www2 = UnityWebRequest.Get(ValueURL);
+                    yield return www2.SendWebRequest();
+                    SetValue(www2.downloadHandler.text);
+                    Debug.Log("Value File Download Complete!");
+
+                    CheckPercent(75);
+                }
+                else
+                {
+                    StreamReader reader = new StreamReader(SystemPath.GetPath() + "Value.txt");
+                    string value = reader.ReadToEnd();
+                    reader.Close();
+                    SetValue(value);
+                    Debug.Log("Value File is exists");
+
+                    CheckPercent(75);
+                }
+
+                if (!File.Exists(SystemPath.GetPath() + "Upgrade.txt"))
+                {
+                    Debug.Log("Upgrade File Downloading...");
+                    UnityWebRequest www3 = UnityWebRequest.Get(UpgradeURL);
+                    yield return www3.SendWebRequest();
+                    SetUpgrade(www3.downloadHandler.text);
+                    Debug.Log("Upgrade File Download Complete!");
+
+                    CheckPercent(75);
+                }
+                else
+                {
+                    StreamReader reader = new StreamReader(SystemPath.GetPath() + "Upgrade.txt");
+                    string value = reader.ReadToEnd();
+                    reader.Close();
+                    SetUpgrade(value);
+                    Debug.Log("Upgrade File is exists");
+
+                    CheckPercent(100);
+                }
             }
-        }
 
-        if (!File.Exists(SystemPath.GetPath() + "BadWord.txt"))
-        {
-            Debug.Log("BadWord File Downloading...");
-            UnityWebRequest www3 = UnityWebRequest.Get(BadWordURL);
-            yield return www3.SendWebRequest();
-            File.WriteAllText(SystemPath.GetPath() + "BadWord.txt", www3.downloadHandler.text);
-            Debug.Log("BadWord File Download Complete!");
+            //if (!File.Exists(SystemPath.GetPath() + "BadWord.txt"))
+            //{
+            //    Debug.Log("BadWord File Downloading...");
+            //    UnityWebRequest www3 = UnityWebRequest.Get(BadWordURL);
+            //    yield return www3.SendWebRequest();
+            //    File.WriteAllText(SystemPath.GetPath() + "BadWord.txt", www3.downloadHandler.text);
+            //    Debug.Log("BadWord File Download Complete!");
+            //}
+            //else
+            //{
+            //    Debug.Log("BadWord File is exists");
+            //}
         }
-        else
-        {
-            Debug.Log("BadWord File is exists");
-        }
-
-        bar.SetActive(false);
 
         PlayerPrefs.SetInt("Version", version);
-        PlayerPrefs.SetInt("Repair", 0);
+
+        bar.SetActive(false);
 
         CheckPercent(100);
 
@@ -446,11 +459,11 @@ public class GoogleSheetDownloader : MonoBehaviour
         {
             StopAllCoroutines();
             messageText.text = LocalizationManager.instance.GetString("NetworkConnectNotion");
-            StartCoroutine(DelayCorution());
+            StartCoroutine(DelayCoroution());
         }
     }
 
-    IEnumerator DelayCorution()
+    IEnumerator DelayCoroution()
     {
         yield return new WaitForSeconds(3f);
         SyncFile();

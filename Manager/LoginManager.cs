@@ -12,7 +12,7 @@ public class LoginManager : MonoBehaviour
 
     private void Awake()
     {
-        numberText.text = "0";
+        numberText.text = "0 / 100";
 
         buttonObj.SetActive(true);
     }
@@ -23,7 +23,7 @@ public class LoginManager : MonoBehaviour
 
         number += 1;
 
-        numberText.text = number.ToString();
+        numberText.text = number.ToString() + " / 100";
     }
 
     public void NowLoaded()

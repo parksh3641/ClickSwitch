@@ -146,6 +146,8 @@ public class ComboManager : MonoBehaviour
 
     public int GetCombo()
     {
+        comboText.text = "";
+
         return combo;
     }
 

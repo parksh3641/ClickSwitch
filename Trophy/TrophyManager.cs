@@ -74,6 +74,6 @@ public class TrophyManager : MonoBehaviour
 
         int plusScore = playerDataBase.GetTrophyHoldNumber();
 
-        plusScoreText.text = LocalizationManager.instance.GetString("PlusScoreInfo") + " +" + (1f * plusScore).ToString() + "%";
+        plusScoreText.text = LocalizationManager.instance.GetString("PlusScoreInfo") + " +" + (1f * plusScore).ToString() + "%  (+1%)";
     }
 }
