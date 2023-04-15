@@ -33,10 +33,15 @@ public class LockManager : MonoBehaviour
     }
 
     [Button]
-    public void Test()
+    public void OnReset()
     {
-        level += 1;
-        playerDataBase.LockTutorial = level - 1;
+        playerDataBase.LockTutorial = 0;
+    }
+
+    [Button]
+    public void LevelUp()
+    {
+        playerDataBase.Level += 1;
         Initialize();
     }
 

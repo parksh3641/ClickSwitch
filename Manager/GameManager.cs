@@ -547,13 +547,13 @@ public class GameManager : MonoBehaviour
 
                 break;
             case GameModeType.Normal:
-                first = Random.Range(100, 1000);
-                second = Random.Range(100, 1000);
+                first = Random.Range(100, 300);
+                second = Random.Range(100, 300);
 
                 break;
             case GameModeType.Hard:
-                first = Random.Range(1000, 5000);
-                second = Random.Range(1000, 5000);
+                first = Random.Range(300, 500);
+                second = Random.Range(300, 500);
 
                 break;
         }

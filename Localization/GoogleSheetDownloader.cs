@@ -91,33 +91,68 @@ public class GoogleSheetDownloader : MonoBehaviour
 
     IEnumerator DownloadFile()
     {
-        int saveVersion = PlayerPrefs.GetInt("Version");
         int repair = PlayerPrefs.GetInt("Repair");
-        int version = int.Parse(Application.version.Replace(".", "").ToString());
 
-        if (saveVersion < version || repair == 1)
+        if (!File.Exists(SystemPath.GetPath() + "Localization.txt") || repair == 1)
         {
             Debug.Log("Localization File Downloading...");
+
             UnityWebRequest www = UnityWebRequest.Get(LocalizationURL);
             yield return www.SendWebRequest();
+
+            File.WriteAllText(SystemPath.GetPath() + "Localization.txt", www.downloadHandler.text);
+
             SetLocalization(www.downloadHandler.text);
+
             Debug.Log("Localization File Download Complete!");
+
+            CheckPercent(50);
+        }
+        else
+        {
+            StreamReader reader = new StreamReader(SystemPath.GetPath() + "Localization.txt");
+            string value = reader.ReadToEnd();
+            reader.Close();
+            SetLocalization(value);
+            Debug.Log("Localization File is exists");
+
+            CheckPercent(50);
+        }
 
             isLocalization = true;
 
-            CheckPercent(50);
-
+        if (!File.Exists(SystemPath.GetPath() + "Value.txt") || repair == 1)
+        {
             Debug.Log("Value File Downloading...");
             UnityWebRequest www2 = UnityWebRequest.Get(ValueURL);
             yield return www2.SendWebRequest();
+
+            File.WriteAllText(SystemPath.GetPath() + "Value.txt", www2.downloadHandler.text);
+
             SetValue(www2.downloadHandler.text);
             Debug.Log("Value File Download Complete!");
 
             CheckPercent(75);
+        }
+        else
+        {
+            StreamReader reader = new StreamReader(SystemPath.GetPath() + "Value.txt");
+            string value = reader.ReadToEnd();
+            reader.Close();
+            SetValue(value);
+            Debug.Log("Value File is exists");
 
+            CheckPercent(75);
+        }
+
+        if (!File.Exists(SystemPath.GetPath() + "Upgrade.txt") || repair == 1)
+        {
             Debug.Log("Upgrade File Downloading...");
             UnityWebRequest www3 = UnityWebRequest.Get(UpgradeURL);
             yield return www3.SendWebRequest();
+
+            File.WriteAllText(SystemPath.GetPath() + "Upgrade.txt", www3.downloadHandler.text);
+
             SetUpgrade(www3.downloadHandler.text);
             Debug.Log("Upgrade File Download Complete!");
 
@@ -125,72 +160,13 @@ public class GoogleSheetDownloader : MonoBehaviour
         }
         else
         {
-            if (!File.Exists(SystemPath.GetPath() + "Localization.txt"))
-            {
-                Debug.Log("Localization File Downloading...");
+            StreamReader reader = new StreamReader(SystemPath.GetPath() + "Upgrade.txt");
+            string value = reader.ReadToEnd();
+            reader.Close();
+            SetUpgrade(value);
+            Debug.Log("Upgrade File is exists");
 
-                UnityWebRequest www = UnityWebRequest.Get(LocalizationURL);
-                yield return www.SendWebRequest();
-                SetLocalization(www.downloadHandler.text);
-
-                Debug.Log("Localization File Download Complete!");
-
-                CheckPercent(50);
-            }
-            else
-            {
-                StreamReader reader = new StreamReader(SystemPath.GetPath() + "Localization.txt");
-                string value = reader.ReadToEnd();
-                reader.Close();
-                SetLocalization(value);
-                Debug.Log("Localization File is exists");
-
-                CheckPercent(50);
-            }
-
-            isLocalization = true;
-
-            if (!File.Exists(SystemPath.GetPath() + "Value.txt"))
-            {
-                Debug.Log("Value File Downloading...");
-                UnityWebRequest www2 = UnityWebRequest.Get(ValueURL);
-                yield return www2.SendWebRequest();
-                SetValue(www2.downloadHandler.text);
-                Debug.Log("Value File Download Complete!");
-
-                CheckPercent(75);
-            }
-            else
-            {
-                StreamReader reader = new StreamReader(SystemPath.GetPath() + "Value.txt");
-                string value = reader.ReadToEnd();
-                reader.Close();
-                SetValue(value);
-                Debug.Log("Value File is exists");
-
-                CheckPercent(75);
-            }
-
-            if (!File.Exists(SystemPath.GetPath() + "Upgrade.txt"))
-            {
-                Debug.Log("Upgrade File Downloading...");
-                UnityWebRequest www3 = UnityWebRequest.Get(UpgradeURL);
-                yield return www3.SendWebRequest();
-                SetUpgrade(www3.downloadHandler.text);
-                Debug.Log("Upgrade File Download Complete!");
-
-                CheckPercent(100);
-            }
-            else
-            {
-                StreamReader reader = new StreamReader(SystemPath.GetPath() + "Upgrade.txt");
-                string value = reader.ReadToEnd();
-                reader.Close();
-                SetUpgrade(value);
-                Debug.Log("Upgrade File is exists");
-
-                CheckPercent(100);
-            }
+            CheckPercent(100);
         }
 
         //if (!File.Exists(SystemPath.GetPath() + "BadWord.txt"))
@@ -206,12 +182,9 @@ public class GoogleSheetDownloader : MonoBehaviour
         //    Debug.Log("BadWord File is exists");
         //}
 
-        bar.SetActive(false);
-
-        PlayerPrefs.SetInt("Version", version);
         PlayerPrefs.SetInt("Repair", 0);
 
-        CheckPercent(100);
+        bar.SetActive(false);
 
         loginManager.NowLoaded();
 
@@ -220,8 +193,6 @@ public class GoogleSheetDownloader : MonoBehaviour
 
     void SetLocalization(string tsv)
     {
-        File.WriteAllText(SystemPath.GetPath() + "Localization.txt", tsv);
-
         string[] row = tsv.Split('\n');
         int rowSize = row.Length;
         //int columnSize = row[0].Split('\t').Length;
@@ -253,8 +224,6 @@ public class GoogleSheetDownloader : MonoBehaviour
 
     void SetValue(string tsv)
     {
-        File.WriteAllText(SystemPath.GetPath() + "Value.txt", tsv);
-
         string[] row = tsv.Split('\n');
         int rowSize = row.Length;
 
@@ -385,8 +354,6 @@ public class GoogleSheetDownloader : MonoBehaviour
 
     void SetUpgrade(string tsv)
     {
-        File.WriteAllText(SystemPath.GetPath() + "Upgrade.txt", tsv);
-
         string[] row = tsv.Split('\n');
         int rowSize = row.Length;
 
