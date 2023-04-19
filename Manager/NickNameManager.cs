@@ -37,18 +37,20 @@ public class NickNameManager : MonoBehaviour
             nickNameFirstView.SetActive(true);
         }
 
-        string file = SystemPath.GetPath() + "BadWord.txt";
+        TextAsset textAsset = Resources.Load<TextAsset>("BadWord");
 
-        string source;
+        lines = Regex.Split(textAsset.ToString(), LINE_SPLIT_RE);
 
-        if (File.Exists(file))
-        {
-            StreamReader word = new StreamReader(file);
-            source = word.ReadToEnd();
-            word.Close();
+        //string source;
 
-            lines = Regex.Split(source, LINE_SPLIT_RE);
-        }
+        //if (File.Exists(file))
+        //{
+        //    StreamReader word = new StreamReader(file);
+        //    source = word.ReadToEnd();
+        //    word.Close();
+
+        //    lines = Regex.Split(textAsset.ToString(), LINE_SPLIT_RE);
+        //}
     }
 
     public void OpenNickName()
@@ -70,7 +72,6 @@ public class NickNameManager : MonoBehaviour
         if (playerDataBase.Coin >= 100)
         {
             string Check = Regex.Replace(inputField.text, @"[^a-zA-Z0-9가-힣]", "", RegexOptions.Singleline);
-            Check = Regex.Replace(inputField.text, @"[^\w\.@-]", "", RegexOptions.Singleline);
 
             for(int i = 0; i < lines.Length; i ++)
             {
@@ -125,7 +126,6 @@ public class NickNameManager : MonoBehaviour
     public void CheckFreeNickName()
     {
             string Check = Regex.Replace(inputFieldFree.text, @"[^a-zA-Z0-9가-힣]", "", RegexOptions.Singleline);
-            Check = Regex.Replace(inputFieldFree.text, @"[^\w\.@-]", "", RegexOptions.Singleline);
 
             for (int i = 0; i < lines.Length; i++)
             {
