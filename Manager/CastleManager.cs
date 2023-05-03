@@ -27,6 +27,9 @@ public class CastleManager : MonoBehaviour
     public Text coinText;
     public Text expText;
 
+    public Text adCoinText;
+    public Text adExpText;
+
     private int timer = 0;
 
     private int addCoin = 0;
@@ -147,6 +150,9 @@ public class CastleManager : MonoBehaviour
         levelUpCostText.text = addCrystal.ToString();
         coinText.text = addCoin.ToString() + "/" + localization_Hours + "  (+5)";
         expText.text = addExp.ToString() + "/" + localization_Hours + "  (+1)";
+
+        adCoinText.text = (addCoin * 12).ToString();
+        adExpText.text = (addExp * 12).ToString();
 
         receiveContents[0].Initialize(RewardType.Coin, saveCoin);
         receiveContents[1].Initialize(RewardType.Experience, saveExp);
