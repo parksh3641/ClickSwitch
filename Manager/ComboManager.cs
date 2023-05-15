@@ -134,6 +134,7 @@ public class ComboManager : MonoBehaviour
     public void OnStopCombo()
     {
         StopAllCoroutines();
+        StartCoroutine(TimerCoroutine());
 
         pause = false;
 
@@ -181,6 +182,10 @@ public class ComboManager : MonoBehaviour
                 timer -= 0.01f;
 
                 if(GameStateManager.instance.PlayGame) fillamount.fillAmount = timer / comboTimer;
+            }
+            else
+            {
+                if (GameStateManager.instance.PlayGame) combo = 0;
             }
         }
 
