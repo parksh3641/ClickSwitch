@@ -542,18 +542,18 @@ public class GameManager : MonoBehaviour
         switch (gameModeType)
         {
             case GameModeType.Easy:
-                first = Random.Range(1, 100);
-                second = Random.Range(1, 100);
+                first = Random.Range(1, 50);
+                second = Random.Range(1, 50);
 
                 break;
             case GameModeType.Normal:
-                first = Random.Range(100, 300);
-                second = Random.Range(100, 300);
+                first = Random.Range(50, 100);
+                second = Random.Range(50, 100);
 
                 break;
             case GameModeType.Hard:
-                first = Random.Range(300, 500);
-                second = Random.Range(300, 500);
+                first = Random.Range(100, 200);
+                second = Random.Range(100, 200);
 
                 break;
         }

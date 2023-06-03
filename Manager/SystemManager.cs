@@ -56,6 +56,10 @@ public class SystemManager : MonoBehaviour
             {
                 GameStateManager.instance.Language = LanguageType.Dutch;
             }
+            else if (Application.systemLanguage.ToString() == "Hindi")
+            {
+                GameStateManager.instance.Language = LanguageType.Indian;
+            }
             else
             {
                 GameStateManager.instance.Language = LanguageType.English;

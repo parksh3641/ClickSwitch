@@ -1313,7 +1313,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         doubleCoinObj.SetActive(false);
 
-        money = (int)(score / 2) + plusCoin;
+        money = (int)(score * 2) + plusCoin;
 
         int level = playerDataBase.Level + 1;
 
@@ -1346,9 +1346,24 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         exp = 0;
 
-        if(score >= 100) exp += 100;
-        exp += ((int)score / 20);
-        exp += (combo / 10);
+        if(score > 100)
+        {
+            if(score >= 1000)
+            {
+                exp += 200;
+            }
+            else
+            {
+                exp += 100;
+            }
+        }
+        else
+        {
+            exp += 30;
+        }
+        
+        exp += ((int)score / 10);
+        exp += (combo / 5);
 
         doubleExpObj.SetActive(false);
         float expPlus = 0;

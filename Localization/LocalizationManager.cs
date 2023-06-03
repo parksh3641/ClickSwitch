@@ -216,15 +216,15 @@ public class LocalizationManager : MonoBehaviour
             case LanguageType.English:
                 iso = "en";
                 break;
-            //case LanguageType.Japanese:
-            //    iso = "ja";
-            //    break;
+            case LanguageType.Japanese:
+                iso = "ja";
+                break;
             //case LanguageType.Chinese:
             //    iso = "en";
             //    break;
-            //case LanguageType.Indian:
-            //    iso = "hi";
-            //    break;
+            case LanguageType.Indian:
+                iso = "hi";
+                break;
             //case LanguageType.Portuguese:
             //    iso = "pt";
             //    break;
