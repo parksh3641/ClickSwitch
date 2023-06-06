@@ -27,6 +27,8 @@ public class ShopContent : MonoBehaviour
     public Text buyCrystalText;
     public Text onTimeText;
 
+    string platform = "";
+
     Sprite[] mainIconArray;
 
     ImageDataBase imageDataBase;
@@ -50,12 +52,17 @@ public class ShopContent : MonoBehaviour
     {
         mainIcon.sprite = mainIconArray[(int)shopType];
 
+#if UNITY_ANDROID || UNITY_EDITOR
+        platform = "_AOS";
+#endif
+        platform = "_IOS";
+
         switch (shopType)
         {
             case ShopType.RemoveAds:
                 titleText.localizationName = "RemoveAds";
 
-                priceText.localizationName = "ShopRemoveAds";
+                priceText.localizationName = "ShopRemoveAds" + platform;
 
                 price.SetActive(true);
 
@@ -92,7 +99,7 @@ public class ShopContent : MonoBehaviour
             case ShopType.Crystal100:
                 titleText.localizationName = "Crystal100";
 
-                priceText.localizationName = "ShopCrystal100";
+                priceText.localizationName = "ShopCrystal100" + platform;
 
                 price.SetActive(true);
 
@@ -106,7 +113,7 @@ public class ShopContent : MonoBehaviour
             case ShopType.Crystal200:
                 titleText.localizationName = "Crystal200";
 
-                priceText.localizationName = "ShopCrystal200";
+                priceText.localizationName = "ShopCrystal200" + platform;
 
                 price.SetActive(true);
 
@@ -120,7 +127,7 @@ public class ShopContent : MonoBehaviour
             case ShopType.Crystal300:
                 titleText.localizationName = "Crystal300";
 
-                priceText.localizationName = "ShopCrystal300";
+                priceText.localizationName = "ShopCrystal300" + platform;
 
                 price.SetActive(true);
 
@@ -141,7 +148,7 @@ public class ShopContent : MonoBehaviour
             case ShopType.PaidProgress:
                 titleText.localizationName = "PaidProgress";
 
-                priceText.localizationName = "ShopPaidProgress";
+                priceText.localizationName = "ShopPaidProgress" + platform;
 
                 price.SetActive(true);
 
@@ -149,7 +156,7 @@ public class ShopContent : MonoBehaviour
             case ShopType.Crystal400:
                 titleText.localizationName = "Crystal400";
 
-                priceText.localizationName = "ShopCrystal400";
+                priceText.localizationName = "ShopCrystal400" + platform;
 
                 price.SetActive(true);
 
@@ -163,7 +170,7 @@ public class ShopContent : MonoBehaviour
             case ShopType.Crystal500:
                 titleText.localizationName = "Crystal500";
 
-                priceText.localizationName = "ShopCrystal500";
+                priceText.localizationName = "ShopCrystal500" + platform;
 
                 price.SetActive(true);
 
@@ -177,7 +184,7 @@ public class ShopContent : MonoBehaviour
             case ShopType.Crystal600:
                 titleText.localizationName = "Crystal600";
 
-                priceText.localizationName = "ShopCrystal600";
+                priceText.localizationName = "ShopCrystal600" + platform;
 
                 price.SetActive(true);
 
@@ -191,7 +198,7 @@ public class ShopContent : MonoBehaviour
             case ShopType.StartPack1:
                 titleText.localizationName = "StartPack1";
 
-                priceText.localizationName = "ShopStartPack1";
+                priceText.localizationName = "ShopStartPack1" + platform;
 
                 price.SetActive(true);
                 break;
@@ -202,14 +209,14 @@ public class ShopContent : MonoBehaviour
             case ShopType.CoinX2:
                 titleText.localizationName = "CoinX2";
 
-                priceText.localizationName = "ShopCoinX2";
+                priceText.localizationName = "ShopCoinX2" + platform;
 
                 price.SetActive(true);
                 break;
             case ShopType.ExpX2:
                 titleText.localizationName = "ExpX2";
 
-                priceText.localizationName = "ShopExpX2";
+                priceText.localizationName = "ShopExpX2" + platform;
 
                 price.SetActive(true);
                 break;

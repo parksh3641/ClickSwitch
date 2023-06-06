@@ -20,6 +20,8 @@ public class ProgressManager : MonoBehaviour
     public LocalizationContent priceText;
     public GameObject[] purchaseObj;
 
+    string platform = "";
+
     public ProgressContent progressContent;
     public RectTransform progressContentTransform;
 
@@ -84,11 +86,16 @@ public class ProgressManager : MonoBehaviour
 
     public void OpenPurchaseView()
     {
+#if UNITY_ANDROID || UNITY_EDITOR
+        platform = "_AOS";
+#endif
+        platform = "_IOS";
+
         if (!sPurchaseView.activeSelf)
         {
             sPurchaseView.SetActive(true);
 
-            priceText.localizationName = "ShopPaidProgress";
+            priceText.localizationName = "ShopPaidProgress" + platform;
             priceText.ReLoad();
         }
         else
