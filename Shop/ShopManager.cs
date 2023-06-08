@@ -57,6 +57,8 @@ public class ShopManager : MonoBehaviour
     private int buyCount = 0;
     private int buyPrice = 0;
 
+    string platform = "";
+
     [Space]
     [Title("Ad")]
     public GameObject watchAdLock;
@@ -558,11 +560,16 @@ public class ShopManager : MonoBehaviour
 
     public void OpenPurchaseView()
     {
+#if UNITY_ANDROID || UNITY_EDITOR
+        platform = "_AOS";
+#endif
+        platform = "_IOS";
+
         if (!purchaseView.activeSelf)
         {
             purchaseView.SetActive(true);
 
-            priceText.localizationName = "ShopStartPack1";
+            priceText.localizationName = "ShopStartPack1" + platform;
             priceText.ReLoad();
         }
         else

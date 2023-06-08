@@ -212,20 +212,20 @@ public class GoogleSheetDownloader : MonoBehaviour
             LocalizationData content = new LocalizationData();
 
             content.key = column[0];
-            content.korean = column[1].Replace('$','\n');
-            content.english = column[2].Replace('$', '\n');
-            content.japanese = column[3].Replace('$', '\n');
-            content.chinese = column[4].Replace('$', '\n');
-            content.indian = column[5].Replace('$', '\n');
-            content.portuguese = column[6].Replace('$', '\n');
-            content.russian = column[7].Replace('$', '\n');
-            content.german = column[8].Replace('$', '\n');
-            content.spanish = column[9].Replace('$', '\n');
-            content.arabic = column[10].Replace('$', '\n');
-            content.bengali = column[11].Replace('$', '\n');
-            content.indonesian = column[12].Replace('$', '\n');
-            content.italian = column[13].Replace('$', '\n');
-            content.dutch = column[14].Replace('$', '\n');
+            content.korean = column[1].Replace('#','\n');
+            content.english = column[2].Replace('#', '\n');
+            content.japanese = column[3].Replace('#', '\n');
+            content.chinese = column[4].Replace('#', '\n');
+            content.indian = column[5].Replace('#', '\n');
+            content.portuguese = column[6].Replace('#', '\n');
+            content.russian = column[7].Replace('#', '\n');
+            content.german = column[8].Replace('#', '\n');
+            content.spanish = column[9].Replace('#', '\n');
+            content.arabic = column[10].Replace('#', '\n');
+            content.bengali = column[11].Replace('#', '\n');
+            content.indonesian = column[12].Replace('#', '\n');
+            content.italian = column[13].Replace('#', '\n');
+            content.dutch = column[14].Replace('#', '\n');
 
             localizationDataBase.SetLocalization(content);
         }
