@@ -575,6 +575,8 @@ public class UIManager : MonoBehaviour, IGameEvent
         {
             gameOptionUI.SetActive(true);
 
+            FirebaseAnalytics.LogEvent("OpenSetting");
+
             if(GameStateManager.instance.PlayGame)
             {
                 Time.timeScale = 0;
@@ -591,6 +593,8 @@ public class UIManager : MonoBehaviour, IGameEvent
         else
         {
             languageUI.SetActive(true);
+
+            FirebaseAnalytics.LogEvent("OpenLanguage");
 
             for (int i = 0; i < languageContentArray.Length; i++)
             {
@@ -989,17 +993,17 @@ public class UIManager : MonoBehaviour, IGameEvent
             case GameModeType.Easy:
                 break;
             case GameModeType.Normal:
-                score = score + (score * 0.2f);
+                score = score + (score * 0.3f);
                 break;
             case GameModeType.Hard:
-                score = score + (score * 0.4f);
+                score = score + (score * 0.5f);
                 break;
             case GameModeType.Perfect:
                 break;
         }
 
         float plusIcon = shopDataBase.GetIconHoldNumber() * 0.005f;
-        float plusTrophy = playerDataBase.GetTrophyHoldNumber() * 0.01f;
+        float plusTrophy = playerDataBase.GetTrophyHoldNumber() * 0.02f;
         float plusLevel = playerDataBase.AddScoreLevel * 0.002f;
 
         score = score + (score * plusIcon) + (score * plusTrophy) + (score * plusLevel);

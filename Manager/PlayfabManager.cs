@@ -1548,7 +1548,7 @@ public class PlayfabManager : MonoBehaviour
 
         playerDataBase.RemoveAd = true;
 
-        FirebaseAnalytics.LogEvent("Purchase : RemoveAds");
+        FirebaseAnalytics.LogEvent("RemoveAds");
     }
 
     public void PurchasePaidProgress()
@@ -1557,14 +1557,12 @@ public class PlayfabManager : MonoBehaviour
 
         playerDataBase.PaidProgress = true;
 
-        FirebaseAnalytics.LogEvent("Purchase : PaidProgress");
+        FirebaseAnalytics.LogEvent("PaidProgress");
     }
 
     public void PurchaseCoin(int number)
     {
         UpdateAddCurrency(MoneyType.Coin, number);
-
-        FirebaseAnalytics.LogEvent("PurchaseCoin : " + number);
 
         NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
     }
@@ -1671,9 +1669,6 @@ public class PlayfabManager : MonoBehaviour
                 break;
         }
 
-
-        FirebaseAnalytics.LogEvent("PurchaseCrystal : " + number);
-
         NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
     }
 
@@ -1684,7 +1679,7 @@ public class PlayfabManager : MonoBehaviour
 
         shopManager.BuyStartPack();
 
-        FirebaseAnalytics.LogEvent("Purchase : StartPack1");
+        FirebaseAnalytics.LogEvent("StartPack1");
 
         NotionManager.instance.UseNotion(NotionType.ReceiveNotion);
     }
@@ -1694,7 +1689,7 @@ public class PlayfabManager : MonoBehaviour
 
         playerDataBase.CoinX2 = true;
 
-        FirebaseAnalytics.LogEvent("Purchase : CoinX2");
+        FirebaseAnalytics.LogEvent("CoinX2");
     }
 
     public void PurchaseExpX2()
@@ -1703,7 +1698,7 @@ public class PlayfabManager : MonoBehaviour
 
         playerDataBase.ExpX2 = true;
 
-        FirebaseAnalytics.LogEvent("Purchase : ExpX2");
+        FirebaseAnalytics.LogEvent("ExpX2");
     }
 
     public void PurchaseItemToRM(ShopClass shopClass)

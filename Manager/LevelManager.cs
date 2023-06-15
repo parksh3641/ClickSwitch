@@ -82,7 +82,7 @@ public class LevelManager : MonoBehaviour
             playerDataBase.Experience -= ((int)CheckNeedExp() - plusExp);
             if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdatePlayerStatisticsInsert("Exp", playerDataBase.Experience);
 
-            FirebaseAnalytics.LogEvent("Level Up");
+            FirebaseAnalytics.LogEvent("LevelUp");
         }
         else
         {

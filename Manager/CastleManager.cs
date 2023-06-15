@@ -144,12 +144,12 @@ public class CastleManager : MonoBehaviour
         castleLevelText.text = LocalizationManager.instance.GetString("CastleLevel") + " : " + playerDataBase.CastleLevel + " / " + (playerDataBase.Level + 1);
 
         addCrystal = ((playerDataBase.CastleLevel + 1) * 10);
-        addCoin = (50 + ((playerDataBase.CastleLevel) * 5));
-        addExp = (10 + ((playerDataBase.CastleLevel) * 1));
+        addCoin = (200 + ((playerDataBase.CastleLevel) * 20));
+        addExp = (30 + ((playerDataBase.CastleLevel) * 3));
 
         levelUpCostText.text = addCrystal.ToString();
-        coinText.text = addCoin.ToString() + "/" + localization_Hours + "  (+5)";
-        expText.text = addExp.ToString() + "/" + localization_Hours + "  (+1)";
+        coinText.text = addCoin.ToString() + "/" + localization_Hours + "  (+20)";
+        expText.text = addExp.ToString() + "/" + localization_Hours + "  (+3)";
 
         adCoinText.text = (addCoin * 12).ToString();
         adExpText.text = (addExp * 12).ToString();

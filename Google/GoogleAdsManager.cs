@@ -227,6 +227,6 @@ public class GoogleAdsManager : MonoBehaviour
                 break;
         }
 
-        FirebaseAnalytics.LogEvent("Watch Ad : " + adType.ToString());
+        FirebaseAnalytics.LogEvent(adType.ToString());
     }
 }

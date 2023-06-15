@@ -348,7 +348,7 @@ public class DailyManager : MonoBehaviour
             alarm.SetActive(false);
         }
 
-        FirebaseAnalytics.LogEvent("DailyMission Reward X3");
+        FirebaseAnalytics.LogEvent("DailyMissionX3");
     }
 
     IEnumerator DailyMissionTimer()

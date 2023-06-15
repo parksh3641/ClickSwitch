@@ -1843,4 +1843,15 @@ public class GameManager : MonoBehaviour
     }
 
     #endregion
+
+    public void OpenURL()
+    {
+        FirebaseAnalytics.LogEvent("OpenMoreGame");
+
+#if UNITY_ANDROID || UNITY_EDITOR
+        Application.OpenURL("https://play.google.com/store/apps/dev?id=8493220400768769623&hl=ko&gl=US");
+#else
+        Application.OpenURL("https://apps.apple.com/us/developer/seong-hyeon-park/id1637056031");
+#endif
+    }
 }

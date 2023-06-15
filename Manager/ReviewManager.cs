@@ -30,10 +30,8 @@ public class ReviewManager : MonoBehaviour
 
         if (PlayfabManager.instance.isActive) PlayfabManager.instance.UpdateAddCurrency(MoneyType.Crystal, 100);
 
-#if UNITY_ANDROID
+#if UNITY_ANDROID || UNITY_EDITOR
         Application.OpenURL("https://play.google.com/store/apps/details?id=com.unity3d.toucharcade");
-#elif UNITY_IOS
-        Application.OpenURL("https://apps.apple.com/us/app/gosu-of-touch-tap-arcade/id1637056029");
 #else
         Application.OpenURL("https://apps.apple.com/us/app/gosu-of-touch-tap-arcade/id1637056029");
 #endif
