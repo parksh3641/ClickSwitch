@@ -185,7 +185,15 @@ public class ComboManager : MonoBehaviour
             }
             else
             {
-                if (GameStateManager.instance.PlayGame) combo = 0;
+                if (GameStateManager.instance.PlayGame)
+                {
+                    combo = 0;
+
+                    if (comboObject.activeInHierarchy)
+                    {
+                        comboText.text = LocalizationManager.instance.GetString("Combo") + " : 0";
+                    }
+                }
             }
         }
 

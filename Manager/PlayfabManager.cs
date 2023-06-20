@@ -56,6 +56,7 @@ public class PlayfabManager : MonoBehaviour
     ShopDataBase shopDataBase;
     WeeklyMissionList weeklyMissionList;
 
+    WaitForSeconds waitForSeconds = new WaitForSeconds(0.05f);
 
     [Header("Entity")]
     private string entityId;
@@ -1322,9 +1323,6 @@ public class PlayfabManager : MonoBehaviour
         {
             Debug.LogError("Error : Internet Disconnected\nCheck Internet State");
         }
-
-
-        uiManager.RenewalVC();
     }
 
     public void UpdateDisplayName(string nickname, Action successAction, Action failAction)
@@ -1751,8 +1749,42 @@ public class PlayfabManager : MonoBehaviour
 
     public void PurchaseItem(ShopClass shopClass, Action<bool> action, int number)
     {
-        bool failed = false;
+        //bool failed = false;
 
+        switch (shopClass.itemId)
+        {
+            case "Clock":
+                playerDataBase.Clock += number;
+                break;
+            case "Shield":
+                playerDataBase.Shield += number;
+                break;
+            case "Combo":
+                playerDataBase.Combo += number;
+                break;
+            case "Exp":
+                playerDataBase.Exp += number;
+                break;
+            case "Slow":
+                playerDataBase.Slow += number;
+                break;
+        }
+
+        switch (shopClass.virtualCurrency)
+        {
+            case "GO":
+                playerDataBase.Coin -= (int)shopClass.price * number;
+                break;
+            case "ST":
+                playerDataBase.Crystal -= (int)shopClass.price * number;
+                break;
+        }
+
+        StartCoroutine(PuchaseItemCoroution(shopClass, action, number));
+    }
+
+    IEnumerator PuchaseItemCoroution(ShopClass shopClass, Action<bool> action, int number)
+    {
         for (int i = 0; i < number; i++)
         {
             var request = new PurchaseItemRequest()
@@ -1765,50 +1797,18 @@ public class PlayfabManager : MonoBehaviour
 
             PlayFabClientAPI.PurchaseItem(request, (result) =>
             {
-                switch (shopClass.itemId)
-                {
-                    case "Clock":
-                        playerDataBase.Clock += 1;
-                        break;
-                    case "Shield":
-                        playerDataBase.Shield += 1;
-                        break;
-                    case "Combo":
-                        playerDataBase.Combo += 1;
-                        break;
-                    case "Exp":
-                        playerDataBase.Exp += 1;
-                        break;
-                    case "Slow":
-                        playerDataBase.Slow += 1;
-                        break;
-                }
-
-                switch (shopClass.virtualCurrency)
-                {
-                    case "GO":
-                        playerDataBase.Coin -= (int)shopClass.price;
-                        break;
-                    case "ST":
-                        playerDataBase.Crystal -= (int)shopClass.price;
-                        break;
-                }
+                Debug.Log(shopClass.itemId + " : " + i);
             }, error =>
             {
-                failed = true;
             });
 
-            if(failed)
-            {
-                action.Invoke(false);
-                Debug.Log(shopClass.itemId + " Buy Failed!");
-                break;
-            }
+            yield return waitForSeconds;
         }
 
         uiManager.RenewalVC();
 
-        if(action != null) action.Invoke(true);
+        if (action != null) action.Invoke(true);
+
         Debug.Log(shopClass.itemId + " Buy Success!");
     }
 
@@ -1991,7 +1991,7 @@ public class PlayfabManager : MonoBehaviour
         NotionManager.instance.UseNotion(NotionType.RestorePurchasesNotion);
 
         isDelay = true;
-        Invoke("WaitDelay", 2f);
+        Invoke("WaitDelay", 1.5f);
     }
 
     void WaitDelay()

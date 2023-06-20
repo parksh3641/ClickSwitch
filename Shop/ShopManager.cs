@@ -57,6 +57,8 @@ public class ShopManager : MonoBehaviour
     private int buyCount = 0;
     private int buyPrice = 0;
 
+    private bool isDelay = false;
+
     string platform = "";
 
     [Space]
@@ -213,6 +215,8 @@ public class ShopManager : MonoBehaviour
             shopView.SetActive(true);
             showVCView.SetActive(true);
 
+            isDelay = false;
+
             if (!GameStateManager.instance.WatchAd)
             {
                 LoadWatchAd();
@@ -329,6 +333,8 @@ public class ShopManager : MonoBehaviour
 
     public void OnBuyItem()
     {
+        if (isDelay) return;
+
         int price = buyPrice * buyCount;
 
         switch (shopClass.virtualCurrency)
@@ -369,6 +375,14 @@ public class ShopManager : MonoBehaviour
         {
             if (PlayfabManager.instance.isActive) PlayfabManager.instance.PurchaseItem(shopClass, CheckBuyItem, buyCount);
         }
+
+        isDelay = true;
+        Invoke("WaitDelay", 1.5f);
+    }
+
+    void WaitDelay()
+    {
+        isDelay = false;
     }
 
     public void CheckBuyItem(bool check)

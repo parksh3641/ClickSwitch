@@ -830,7 +830,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
         pause = false;
 
-        StartCoroutine("ReadyTimerCorution", ValueManager.instance.GetReadyTime());
+        StartCoroutine("ReadyTimerCoroution", ValueManager.instance.GetReadyTime());
 
         SetEtcUI(false);
 
@@ -1619,6 +1619,8 @@ public class UIManager : MonoBehaviour, IGameEvent
     {
         if (index == 0 || gameEndAnimView.activeInHierarchy) return;
 
+        if (pause) pause = false;
+
         score += index;
         scoreText.text = LocalizationManager.instance.GetString("Score") + " : " + score.ToString();
 
@@ -1706,7 +1708,7 @@ public class UIManager : MonoBehaviour, IGameEvent
 
 #region Coroution
 
-    private IEnumerator ReadyTimerCorution(float time)
+    private IEnumerator ReadyTimerCoroution(float time)
     {
         float number = time;
 
