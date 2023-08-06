@@ -135,8 +135,11 @@ public class GoogleAdsManager : MonoBehaviour
 
         while (!rewardedAd.IsLoaded())
         {
+            ReloadAd();
+
             yield return null;
         }
+
         rewardedAd.Show();
     }
 
