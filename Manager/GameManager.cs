@@ -1055,7 +1055,7 @@ public class GameManager : MonoBehaviour
                 }
 
                 questionText.text = "";
-                plusCoinText.text = "0";
+                plusCoinText.text = "0 / " + coinRushMax;
 
                 coinRushLockObject.SetActive(false);
                 plusCoinObject.SetActive(false);
@@ -1492,7 +1492,7 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
-        plusCoinText.text = coinRushNumber.ToString();
+        plusCoinText.text = coinRushNumber.ToString() + " / " + coinRushMax;
     }
 
     public void CheckCoinRushAnswer()

@@ -46,6 +46,11 @@ public class PlayfabManager : MonoBehaviour
     public bool isDelay = false;
     public bool isLogin = false;
 
+    private bool catalogData = false;
+    private bool playerData = false;
+    private bool statisticsData = false;
+    private bool inventoryData = false;
+
 #if UNITY_IOS
     private string AppleUserIdKey = "";
     private IAppleAuthManager _appleAuthManager;
@@ -167,7 +172,11 @@ public class PlayfabManager : MonoBehaviour
         GameStateManager.instance.AutoLogin = false;
         GameStateManager.instance.Login = LoginType.None;
 
+        PlayerPrefs.SetString("AppleLogin", "");
+
         isLogin = false;
+        isLogin = false;
+        isDelay = false;
 
         SceneManager.LoadScene("LoginScene");
 
@@ -222,6 +231,8 @@ public class PlayfabManager : MonoBehaviour
         {
             Debug.LogError("Login Fail - Guest");
 
+            uiManager.SetLoginUI();
+
             isLogin = false;
         });
     }
@@ -248,6 +259,10 @@ public class PlayfabManager : MonoBehaviour
         }, error =>
         {
             Debug.LogError("Login Fail - Guest");
+
+            uiManager.SetLoginUI();
+
+            isLogin = false;
         });
     }
 
@@ -304,6 +319,8 @@ public class PlayfabManager : MonoBehaviour
             error =>
             {
                 DisplayPlayfabError(error);
+
+                uiManager.SetLoginUI();
 
                 isLogin = false;
             });
@@ -402,45 +419,59 @@ public class PlayfabManager : MonoBehaviour
             }, error =>
             {
                 var authorizationErrorCode = error.GetAuthorizationErrorCode();
+
+                uiManager.SetLoginUI();
+
+                isLogin = false;
             });
     }
 
     IEnumerator AppleLoginCor()
     {
-        IOSActivate();
-
-        var _newAppleUser = false;
-
-        while (_appleAuthManager == null) yield return null;
-
-        if (!_newAppleUser)
+        if (SaveByte.LoadByteArrayToPlayerPrefs() != null)
         {
-            var quickLoginArgs = new AppleAuthQuickLoginArgs();
+            byte[] apple = SaveByte.LoadByteArrayToPlayerPrefs();
 
-            _appleAuthManager.QuickLogin(
-                quickLoginArgs,
-                credential =>
-                {
-                    var appleIdCredential = credential as IAppleIDCredential;
-                    if (appleIdCredential != null)
-                    {
-                        OnClickAppleLogin(appleIdCredential.IdentityToken);
-                    }
-                },
-                error =>
-                {
-                    _newAppleUser = true;
-                    SignInWithApple();
-                    var authorizationErrorCode = error.GetAuthorizationErrorCode();
-                    
-                    isLogin = false;
-                });
+            Debug.Log("Apple Auto Login");
+
+            OnClickAppleLogin(apple);
         }
         else
         {
-            SignInWithApple();
+            IOSActivate();
+
+            var _newAppleUser = false;
+
+            while (_appleAuthManager == null) yield return null;
+
+            if (!_newAppleUser)
+            {
+                var quickLoginArgs = new AppleAuthQuickLoginArgs();
+
+                _appleAuthManager.QuickLogin(
+                    quickLoginArgs,
+                    credential =>
+                    {
+                        var appleIdCredential = credential as IAppleIDCredential;
+                        if (appleIdCredential != null)
+                        {
+                            OnClickAppleLogin(appleIdCredential.IdentityToken);
+                        }
+                    },
+                    error =>
+                    {
+                        _newAppleUser = true;
+                        SignInWithApple();
+                        var authorizationErrorCode = error.GetAuthorizationErrorCode();
+
+                    });
+            }
+            else
+            {
+                SignInWithApple();
+            }
+            yield return null;
         }
-        yield return null;
     }
 
     public void OnClickAppleLogin(byte[] identityToken)
@@ -454,6 +485,8 @@ public class PlayfabManager : MonoBehaviour
         , result =>
         {
             Debug.Log("Apple Login Success");
+            
+            SaveByte.SaveByteArrayToPlayerPref(identityToken);
 
             GameStateManager.instance.AutoLogin = true;
             GameStateManager.instance.Login = LoginType.Apple;
@@ -615,24 +648,43 @@ public class PlayfabManager : MonoBehaviour
     {
         Debug.Log("Load Data...");
 
+        catalogData = false;
+        playerData = false;
+        statisticsData = false;
+        inventoryData = false;
+
         playerDataBase.Initialize();
         shopDataBase.Initialize();
 
         GetPlayerNickName();
 
-        yield return new WaitForSeconds(0.5f);
+        GetCatalog();
 
-        yield return GetCatalog();
+        while (!catalogData)
+        {
+            yield return null;
+        }
 
-        yield return new WaitForSeconds(0.5f);
+        GetUserInventory();
 
-        yield return GetUserInventory();
+        while (!inventoryData)
+        {
+            yield return null;
+        }
 
-        yield return GetStatistics();
+        GetStatistics();
 
-        yield return GetPlayerData();
+        while (!statisticsData)
+        {
+            yield return null;
+        }
 
-        yield return new WaitForSeconds(1.0f);
+        GetPlayerData();
+
+        while (!playerData)
+        {
+            yield return null;
+        }
 
         Debug.Log("Load Data Complete");
 
@@ -643,7 +695,7 @@ public class PlayfabManager : MonoBehaviour
         StateManager.instance.Initialize();
     }
 
-    public bool GetUserInventory()
+    public void GetUserInventory()
     {
         PlayFabClientAPI.GetUserInventory(new GetUserInventoryRequest(), result =>
         {
@@ -651,12 +703,12 @@ public class PlayfabManager : MonoBehaviour
             int gold = result.VirtualCurrency["GO"]; //Get Money
             int crystal = result.VirtualCurrency["ST"]; //Get Money
 
-            if(gold > 10000000)
+            if (gold > 10000000)
             {
                 gold = 10000000;
             }
 
-            if(crystal > 1000000)
+            if (crystal > 1000000)
             {
                 crystal = 1000000;
             }
@@ -673,7 +725,7 @@ public class PlayfabManager : MonoBehaviour
 
                 foreach (ItemInstance list in inventoryList)
                 {
-                    if(list.ItemId.Equals("RemoveAds"))
+                    if (list.ItemId.Equals("RemoveAds"))
                     {
                         playerDataBase.RemoveAd = true;
                     }
@@ -734,17 +786,13 @@ public class PlayfabManager : MonoBehaviour
                     shopDataBase.SetItemInstanceId(list.ItemId, list.ItemInstanceId);
                 }
             }
-            else
-            {
-                return;
-            }
+
+            inventoryData = true;
 
         }, DisplayPlayfabError);
-
-        return true;
     }
 
-    public bool GetCatalog()
+    public void GetCatalog()
     {
         PlayFabClientAPI.GetCatalogItems(new GetCatalogItemsRequest() { CatalogVersion = "Shop" }, shop =>
         {
@@ -792,17 +840,17 @@ public class PlayfabManager : MonoBehaviour
                 {
                     shopDataBase.ExpX2 = shopClass;
                 }
-
             }
+
+            catalogData = true;
+
         }, (error) =>
         {
 
         });
-
-        return true;
     }
 
-    public bool GetStatistics()
+    public void GetStatistics()
     {
         PlayFabClientAPI.GetPlayerStatistics(
            new GetPlayerStatisticsRequest(),
@@ -1048,13 +1096,13 @@ public class PlayfabManager : MonoBehaviour
                            break;
                    }
                }
+
+               statisticsData = true;
            })
            , (error) =>
            {
 
            });
-
-        return true;
     }
 
     public void SetPlayerData(Dictionary<string, string> data)
@@ -1074,7 +1122,7 @@ public class PlayfabManager : MonoBehaviour
         }
     }
 
-    public bool GetPlayerData()
+    public void GetPlayerData()
     {
         var request = new GetUserDataRequest() { PlayFabId = GameStateManager.instance.PlayfabId };
         PlayFabClientAPI.GetUserData(request, (result) =>
@@ -1135,9 +1183,10 @@ public class PlayfabManager : MonoBehaviour
                     eventManager.SetWorldScoreInformation(worldScoreInformation);
                 }
             }
-        }, DisplayPlayfabError);
 
-        return true;
+            playerData = true;
+
+        }, DisplayPlayfabError);
     }
 
     public void GetPlayerProfile(string playFabId, Action<string> action)
@@ -1418,7 +1467,7 @@ public class PlayfabManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log(name + " 의 플레이어 내부 데이터를 가져올 수 없습니다");
+                    Debug.Log(name + " ?? ???????? ???? ???????? ?????? ?? ????????");
                 }
             },
             error =>
