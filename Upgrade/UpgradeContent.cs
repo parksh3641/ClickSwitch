@@ -22,7 +22,7 @@ public class UpgradeContent : MonoBehaviour
 
     private int level = 0;
     private int upgradeValue = 0;
-    private int maxLevel = 60;
+    private int maxLevel = 120;
     private bool delay = false;
 
     SoundManager soundManager;

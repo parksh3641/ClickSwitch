@@ -56,7 +56,7 @@ public class ProgressManager : MonoBehaviour
             monster.name = "ProgressContent_" + i;
             monster.transform.position = Vector3.zero;
             monster.transform.localScale = Vector3.one;
-            monster.transform.parent = progressContentTransform;
+            monster.transform.SetParent(progressContentTransform);
 
             monster.Initialize(i, this, progressDataBase.freeRewardList[i], progressDataBase.paidRewardList[i]);
 

@@ -43,7 +43,7 @@ public class BannerManager : MonoBehaviour
         for (int i = 0; i < System.Enum.GetValues(typeof(BannerType)).Length; i++)
         {
             BannerContent monster = Instantiate(bannerContent);
-            monster.transform.parent = bannerContentTransform;
+            monster.transform.SetParent(bannerContentTransform);
             monster.transform.position = Vector3.zero;
             monster.transform.rotation = Quaternion.identity;
             monster.transform.localScale = Vector3.one;

@@ -370,6 +370,8 @@ public class UIManager : MonoBehaviour, IGameEvent
         {
             if (cancleUI.activeSelf)
             {
+                if (GameStateManager.instance.GamePlayType == GamePlayType.GameChoice8) return;
+
                 OpenGameStop();
             }
         }
@@ -933,6 +935,8 @@ public class UIManager : MonoBehaviour, IGameEvent
 
     public void GamePause()
     {
+        if (GameStateManager.instance.GamePlayType == GamePlayType.GameChoice8) return;
+
         if(pause)
         {
             pause = false;

@@ -284,6 +284,8 @@ public class PlayfabManager : MonoBehaviour
 
         isLogin = true;
 
+        Debug.Log("Try Google Login");
+
 #if UNITY_ANDROID
         LoginGoogleAuthenticate();
 #else
@@ -297,11 +299,6 @@ public class PlayfabManager : MonoBehaviour
 
         Social.localUser.Authenticate((bool success) =>
         {
-            if (!success)
-            {
-                return;
-            }
-
             var serverAuthCode = PlayGamesPlatform.Instance.GetServerAuthCode();
             PlayFabClientAPI.LoginWithGoogleAccount(new LoginWithGoogleAccountRequest()
             {
@@ -311,6 +308,8 @@ public class PlayfabManager : MonoBehaviour
             },
             result =>
             {
+                Debug.Log("Google Login Success");
+
                 GameStateManager.instance.AutoLogin = true;
                 GameStateManager.instance.Login = LoginType.Google;
 
@@ -318,6 +317,8 @@ public class PlayfabManager : MonoBehaviour
             },
             error =>
             {
+                Debug.Log("Google Login Fail");
+
                 DisplayPlayfabError(error);
 
                 uiManager.SetLoginUI();
@@ -334,7 +335,6 @@ public class PlayfabManager : MonoBehaviour
 #if UNITY_ANDROID
         ((PlayGamesPlatform)Social.Active).SignOut();
 #endif
-
         SuccessLogOut();
     }
 

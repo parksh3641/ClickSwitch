@@ -48,11 +48,11 @@ public class UpgradeManager : MonoBehaviour
 
             if(i < 7)
             {
-                monster.transform.parent = upgradeTransform;
+                monster.transform.SetParent(upgradeTransform);
             }
             else
             {
-                monster.transform.parent = upgradeSpeicalTransform;
+                monster.transform.SetParent(upgradeSpeicalTransform);
             }
 
             monster.transform.position = Vector3.zero;

@@ -1,6 +1,5 @@
 using Firebase;
 using Firebase.Analytics;
-using Firebase.Messaging;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,9 +10,6 @@ public class FirebaseManager : MonoBehaviour
     void Start()
     {
 #if !UNITY_EDITOR
-        FirebaseMessaging.TokenReceived += OnTokenReceived;
-        FirebaseMessaging.MessageReceived += OnMessageReceived;
-
         Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
             var dependencyStatus = task.Result;
             if (dependencyStatus == Firebase.DependencyStatus.Available)
@@ -30,24 +26,5 @@ public class FirebaseManager : MonoBehaviour
         });
 
 #endif
-    }
-
-    void OnTokenReceived(object sender, TokenReceivedEventArgs e)
-    {
-        if (e != null)
-        {
-            Debug.LogFormat("[FIREBASE] Token: {0}", e.Token);
-        }
-    }
-
-    void OnMessageReceived(object sender, MessageReceivedEventArgs e)
-    {
-        if (e != null && e.Message != null && e.Message.Notification != null)
-        {
-            Debug.LogFormat("[FIREBASE] From: {0}, Title: {1}, Text: {2}",
-                e.Message.From,
-                e.Message.Notification.Title,
-                e.Message.Notification.Body);
-        }
     }
 }

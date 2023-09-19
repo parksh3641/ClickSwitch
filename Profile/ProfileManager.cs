@@ -63,7 +63,7 @@ public class ProfileManager : MonoBehaviour
         for (int i = 0; i < 8; i ++)
         {
             ProfileContent monster = Instantiate(profileContent);
-            monster.transform.parent = profileTransform;
+            monster.transform.SetParent(profileTransform);
             monster.transform.position = Vector3.zero;
             monster.transform.localScale = new Vector3(1, 1, 1);
             monster.gameObject.SetActive(true);

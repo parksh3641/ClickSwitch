@@ -46,7 +46,7 @@ public class HelpManager : MonoBehaviour
         for (int i = 0; i < System.Enum.GetValues(typeof(GamePlayType)).Length; i++)
         {
             HelpContent content = Instantiate(helpContent);
-            content.transform.parent = helpGameTransform;
+            content.transform.SetParent(helpGameTransform);
             content.transform.position = Vector3.zero;
             content.transform.rotation = Quaternion.identity;
             content.transform.localScale = Vector3.one;
@@ -60,7 +60,7 @@ public class HelpManager : MonoBehaviour
         for (int i = 0; i < System.Enum.GetValues(typeof(ItemType)).Length; i++)
         {
             HelpContent content = Instantiate(helpContent);
-            content.transform.parent = helpItemTransform;
+            content.transform.SetParent(helpItemTransform);
             content.transform.position = Vector3.zero;
             content.transform.rotation = Quaternion.identity;
             content.transform.localScale = Vector3.one;

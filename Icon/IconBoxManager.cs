@@ -73,7 +73,7 @@ public class IconBoxManager : MonoBehaviour
         for (int i = 0; i < iconNumber; i++)
         {
             IconBoxContent monster = Instantiate(iconBoxContent);
-            monster.transform.parent = iconBoxContentTransform;
+            monster.transform.SetParent(iconBoxContentTransform);
             monster.transform.position = Vector3.zero;
             monster.transform.rotation = Quaternion.identity;
             monster.transform.localScale = Vector3.one;

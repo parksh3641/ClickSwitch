@@ -48,7 +48,7 @@ public class CoinAnimation : MonoBehaviour
         for (int i = 0; i < 10; i++)
         {
             CoinContent monster = Instantiate(goldPrefab);
-            monster.transform.parent = goldTransform;
+            monster.transform.SetParent(goldTransform);
             monster.transform.localPosition = Vector3.zero;
             monster.transform.localScale = new Vector3(1, 1, 1);
             monster.gameObject.SetActive(false);
@@ -58,7 +58,7 @@ public class CoinAnimation : MonoBehaviour
         for (int i = 0; i < 10; i++)
         {
             CoinContent monster = Instantiate(expPrefab);
-            monster.transform.parent = expTransform;
+            monster.transform.SetParent(expTransform);
             monster.transform.localPosition = Vector3.zero;
             monster.transform.localScale = new Vector3(1, 1, 1);
             monster.gameObject.SetActive(false);
@@ -68,7 +68,7 @@ public class CoinAnimation : MonoBehaviour
         for (int i = 0; i < 10; i++)
         {
             CoinContent monster = Instantiate(crystalPrefab);
-            monster.transform.parent = goldTransform;
+            monster.transform.SetParent(goldTransform);
             monster.transform.localPosition = Vector3.zero;
             monster.transform.localScale = new Vector3(1, 1, 1);
             monster.gameObject.SetActive(false);

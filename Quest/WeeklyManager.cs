@@ -54,7 +54,7 @@ public class WeeklyManager : MonoBehaviour
         for (int i = 0; i < System.Enum.GetValues(typeof(WeeklyMissionType)).Length; i ++)
         {
             WeeklyContent content = Instantiate(weeklyContent);
-            content.transform.parent = weeklyContentTransform;
+            content.transform.SetParent(weeklyContentTransform);
             content.transform.position = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.gameObject.SetActive(false);

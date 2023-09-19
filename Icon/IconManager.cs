@@ -43,7 +43,7 @@ public class IconManager : MonoBehaviour
         for (int i = 0; i < System.Enum.GetValues(typeof(IconType)).Length; i ++)
         {
             IconContent monster = Instantiate(iconContent);
-            monster.transform.parent = iconContentTransform;
+            monster.transform.SetParent(iconContentTransform);
             monster.transform.position = Vector3.zero;
             monster.transform.rotation = Quaternion.identity;
             monster.transform.localScale = Vector3.one;

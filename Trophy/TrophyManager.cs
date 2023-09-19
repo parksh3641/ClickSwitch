@@ -42,7 +42,7 @@ public class TrophyManager : MonoBehaviour
         for (int i = 0; i < 8; i++)
         {
             TrophyContent monster = Instantiate(trophyContent);
-            monster.transform.parent = trophyContentTransform;
+            monster.transform.SetParent(trophyContentTransform);
             monster.transform.position = Vector3.zero;
             monster.transform.rotation = Quaternion.identity;
             monster.transform.localScale = Vector3.one;

@@ -209,7 +209,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 9; i ++)
         {
             NormalContent content = Instantiate(normalContent);
-            content.transform.parent = speedTouchEasyTransform;
+            content.transform.SetParent(speedTouchEasyTransform);
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.gameObject.SetActive(false);
@@ -219,7 +219,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 16; i++)
         {
             NormalContent content = Instantiate(normalContent);
-            content.transform.parent = speedTouchNormalTransform;
+            content.transform.SetParent(speedTouchNormalTransform);
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.gameObject.SetActive(false);
@@ -229,7 +229,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 25; i++)
         {
             NormalContent content = Instantiate(normalContent);
-            content.transform.parent = speedTouchHardTransform;
+            content.transform.SetParent(speedTouchHardTransform);
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.gameObject.SetActive(false);
@@ -239,7 +239,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 9; i++)
         {
             NormalContent content = Instantiate(normalContent);
-            content.transform.parent = moleCatchEasyTransform;
+            content.transform.SetParent(moleCatchEasyTransform);
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.gameObject.SetActive(false);
@@ -249,7 +249,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 16; i++)
         {
             NormalContent content = Instantiate(normalContent);
-            content.transform.parent = moleCatchHardTransform;
+            content.transform.SetParent(moleCatchHardTransform);
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.gameObject.SetActive(false);
@@ -259,7 +259,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 16; i++)
         {
             NormalContent content = Instantiate(normalContent);
-            content.transform.parent = filpCardEasyTransform;
+            content.transform.SetParent(filpCardEasyTransform);
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.gameObject.SetActive(false);
@@ -269,7 +269,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 25; i++)
         {
             NormalContent content = Instantiate(normalContent);
-            content.transform.parent = filpCardNormalTransform;
+            content.transform.SetParent(filpCardNormalTransform);
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.gameObject.SetActive(false);
@@ -279,7 +279,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 36; i++)
         {
             NormalContent content = Instantiate(normalContent);
-            content.transform.parent = filpCardHardTransform;
+            content.transform.SetParent(filpCardHardTransform);
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.gameObject.SetActive(false);
@@ -289,7 +289,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 12; i++)
         {
             ButtonActionContent content = Instantiate(buttonActionContent);
-            content.transform.parent = buttonActionUpTransform;
+            content.transform.SetParent(buttonActionUpTransform);
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.gameObject.SetActive(false);
@@ -299,7 +299,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 6; i++)
         {
             NormalContent content = Instantiate(normalContent);
-            content.transform.parent = buttonActionDownEasyTransform;
+            content.transform.SetParent(buttonActionDownEasyTransform);
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.gameObject.SetActive(false);
@@ -309,7 +309,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 8; i++)
         {
             NormalContent content = Instantiate(normalContent);
-            content.transform.parent = buttonActionDownNormalTransform;
+            content.transform.SetParent(buttonActionDownNormalTransform);
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.gameObject.SetActive(false);
@@ -320,7 +320,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 10; i++)
         {
             NormalContent content = Instantiate(normalContent);
-            content.transform.parent = dragActionTransform;
+            content.transform.SetParent(dragActionTransform);
             content.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 250);
             content.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 250);
             content.transform.localPosition = Vector3.zero;
@@ -1041,11 +1041,11 @@ public class GameManager : MonoBehaviour
                 switch (gameModeType)
                 {
                     case GameModeType.Easy:
-                        coinRushMax = 2000;
+                        coinRushMax = 1500;
 
                         break;
                     case GameModeType.Normal:
-                        coinRushMax = 3000;
+                        coinRushMax = 2500;
 
                         break;
                     case GameModeType.Hard:
@@ -1458,10 +1458,10 @@ public class GameManager : MonoBehaviour
         switch (gameModeType)
         {
             case GameModeType.Easy:
-                if (coinRushNumber + 2 <= coinRushMax)
+                if (coinRushNumber + 10 <= coinRushMax)
                 {
-                    coinRushNumber += 2;
-                    PlusCoin(2);
+                    coinRushNumber += 10;
+                    PlusCoin(10);
                 }
                 else
                 {
@@ -1469,10 +1469,10 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case GameModeType.Normal:
-                if (coinRushNumber + 3 <= coinRushMax)
+                if (coinRushNumber + 10 <= coinRushMax)
                 {
-                    coinRushNumber += 3;
-                    PlusCoin(3);
+                    coinRushNumber += 10;
+                    PlusCoin(10);
                 }
                 else
                 {
@@ -1480,10 +1480,10 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case GameModeType.Hard:
-                if (coinRushNumber + 4 <= coinRushMax)
+                if (coinRushNumber + 10 <= coinRushMax)
                 {
-                    coinRushNumber += 4;
-                    PlusCoin(4);
+                    coinRushNumber += 10;
+                    PlusCoin(10);
                 }
                 else
                 {

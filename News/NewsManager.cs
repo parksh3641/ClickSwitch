@@ -45,7 +45,7 @@ public class NewsManager : MonoBehaviour
         for(int i = 0; i < 10; i ++)
         {
             NewsContent monster = Instantiate(newsContent);
-            monster.transform.parent = newsContentTransform;
+            monster.transform.SetParent(newsContentTransform);
             monster.transform.position = Vector3.zero;
             monster.transform.rotation = Quaternion.identity;
             monster.transform.localScale = Vector3.one;

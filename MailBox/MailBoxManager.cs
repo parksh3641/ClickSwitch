@@ -55,7 +55,7 @@ public class MailBoxManager : MonoBehaviour
         for (int i = 0; i < 20; i++)
         {
             MailContent content = Instantiate(mailContent);
-            content.transform.parent = mailTransform;
+            content.transform.SetParent(mailTransform);
             content.transform.localPosition = Vector3.zero;
             content.transform.localScale = Vector3.one;
             content.gameObject.SetActive(false);

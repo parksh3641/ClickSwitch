@@ -54,7 +54,7 @@ public class RankingManager : MonoBehaviour
             monster.name = "RankContent_" + i;
             monster.transform.position = Vector3.zero;
             monster.transform.localScale = Vector3.one;
-            monster.transform.parent = rankContentParent;
+            monster.transform.SetParent(rankContentParent);
             monster.gameObject.SetActive(false);
 
             rankContentList.Add(monster);
